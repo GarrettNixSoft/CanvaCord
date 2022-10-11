@@ -13,7 +13,7 @@ public class CanvaCord {
 		System.out.println("Hello world!");
 
 		// create a bot instance
-		DiscordBot bot = new DiscordBot();
+		DiscordBot bot = DiscordBot.getBotInstance();
 		System.out.println("Bot initialized!");
 
 		// connect it to Discord

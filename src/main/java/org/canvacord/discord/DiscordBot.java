@@ -9,28 +9,34 @@ import org.javacord.api.entity.server.Server;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 public class DiscordBot {
 
-	private final DiscordApiBuilder apiBuilder;
+	private static DiscordBot botInstance;
+
+	private final DiscordApiBuilder API_BUILDER;
 	private DiscordApi api;
 
-	public DiscordBot() {
+	private DiscordBot() {
 
 		// fetch the token
 		File tokenFile = Paths.get("resources/token_discord.txt").toFile();
 		String token = FileUtil.getFileData(tokenFile).get(0);
 
 		// prepare to log in
-		apiBuilder = new DiscordApiBuilder().setToken(token);
+		API_BUILDER = new DiscordApiBuilder().setToken(token);
 
+	}
+
+	public static DiscordBot getBotInstance() {
+		if (botInstance == null)
+			botInstance = new DiscordBot();
+		return botInstance;
 	}
 
 	public boolean login() {
 		try {
-			api = apiBuilder.login().get();
+			api = API_BUILDER.login().get();
 			return true;
 		}
 		catch (Exception e) {
@@ -40,7 +46,12 @@ public class DiscordBot {
 	}
 
 	public boolean disconnect() {
-		api.disconnect();
+		try {
+			api.disconnect().join();
+		}
+		catch (Exception e) {
+			return false;
+		}
 		return true;
 	}
 
