@@ -9,6 +9,8 @@ public class Instance {
 	private static final Set<String> courseIDs = new HashSet<>();
 	private static final Set<Long> serverIDs = new HashSet<>();
 
+	private final String instanceID;
+
 	// instance identity
 	private final String courseID;
 	private final long serverID;
@@ -27,9 +29,21 @@ public class Instance {
 		this.courseID = courseID;
 		serverIDs.add(serverID);
 		this.serverID = serverID;
+		// build the instance ID
+		this.instanceID = courseID + "-" + serverID;
+	}
+
+	// ******************************** OPERATIONS ********************************
+	public boolean initialize() {
+		// TODO
+		return false;
 	}
 
 	// ******************************** GETTERS ********************************
+	public String getInstanceID() {
+		return instanceID;
+	}
+
 	public String getCourseID() {
 		return courseID;
 	}
@@ -38,7 +52,6 @@ public class Instance {
 		return serverID;
 	}
 
-	// ******************************** OPERATIONS ********************************
 	public String getStatus() {
 		// TODO
 		return "Idle";

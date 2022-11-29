@@ -1,6 +1,7 @@
 package org.canvacord.main;
 
 import org.canvacord.discord.DiscordBot;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.server.Server;
 
 import java.util.Scanner;
@@ -27,19 +28,31 @@ public class CanvaCord {
 				System.out.println(server.getName());
 			}
 
-			Scanner input = new Scanner(System.in);
-			input.nextLine();
+			String input;
+			Scanner in = new Scanner(System.in);
+			input = in.nextLine();
+
+			TextChannel channel = bot.getApi().getChannelById(1039693805865152593L).get().asTextChannel().get();
+
+			while (!input.equalsIgnoreCase("q")) {
+
+				channel.sendMessage(input);
+				input = in.nextLine();
+
+			}
 
 			bot.disconnect();
 			System.out.println("Bot disconnected!");
 
-			input.close();
+			in.close();
 
 		}
 		else {
 			System.out.println("Login failed.");
 			System.exit(-1);
 		}
+
+
 
 	}
 

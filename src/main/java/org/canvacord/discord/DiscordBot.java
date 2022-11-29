@@ -9,6 +9,7 @@ import org.javacord.api.entity.server.Server;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.concurrent.CompletionException;
 
 public class DiscordBot {
 
@@ -20,7 +21,7 @@ public class DiscordBot {
 	private DiscordBot() {
 
 		// fetch the token
-		File tokenFile = Paths.get("resources/token_discord.txt").toFile();
+		File tokenFile = Paths.get("config/token_discord.txt").toFile();
 		String token = FileUtil.getFileData(tokenFile).get(0);
 
 		// prepare to log in
@@ -49,7 +50,8 @@ public class DiscordBot {
 		try {
 			api.disconnect().join();
 		}
-		catch (Exception e) {
+		catch (CompletionException e) {
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -65,6 +67,13 @@ public class DiscordBot {
 
 	public Collection<Server> getServerMemberships() {
 		return api.getServers();
+	}
+
+
+
+	// IDK
+	public DiscordApi getApi() {
+		return api;
 	}
 
 }
