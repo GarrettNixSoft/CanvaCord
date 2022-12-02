@@ -16,7 +16,7 @@ public class DevEnvironmentTest {
 		dbConnection.ifPresent(connection -> {
 
 			System.out.println("Successfully connected to the database!");
-			System.out.println("Checking stored regions (test):");
+			System.out.println("Checking stored regions...");
 
 			try {
 
@@ -39,7 +39,7 @@ public class DevEnvironmentTest {
 
 			if (response.toLowerCase().startsWith("y")) {
 
-				System.out.println("Recording timestamp to database...");
+				System.out.println("\nRecording timestamp to database...");
 
 				String sql = "INSERT INTO connections(timestamp) VALUES (?)";
 
@@ -64,6 +64,33 @@ public class DevEnvironmentTest {
 			else {
 				System.out.println("Test will not be recorded.");
 			}
+
+			System.out.println("\nFetch timestamp list from the database? (y/n)");
+			response = input.nextLine();
+
+			if (response.toLowerCase().startsWith("y")) {
+
+				System.out.println("\nFetching timestamps...\n");
+
+				try {
+					Statement statement = connection.createStatement();
+					ResultSet resultSet = statement.executeQuery("select * from connections");
+
+					System.out.println("\nFound timestamps:\n");
+					while (resultSet.next()) {
+						System.out.println(resultSet.getString("timestamp"));
+					}
+
+				}
+				catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+			}
+
+			System.out.println("\nDone.\n");
+
+			input.close();
 
 
 		});
