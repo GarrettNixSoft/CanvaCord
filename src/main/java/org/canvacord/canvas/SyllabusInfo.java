@@ -5,9 +5,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.nio.file.Paths;
 
-public class SyllabusInfo {
-
-	private final JSONObject syllabusJSON;
+public record SyllabusInfo(JSONObject syllabusJSON) {
 
 	public SyllabusInfo(JSONObject syllabusJSON) {
 		this.syllabusJSON = syllabusJSON;

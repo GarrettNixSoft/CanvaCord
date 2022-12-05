@@ -5,13 +5,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.nio.file.Paths;
 
-public class TextbookInfo {
-
-	private final JSONObject textbookJSON;
-
-	public TextbookInfo(JSONObject textbookJSON) {
-		this.textbookJSON = textbookJSON;
-	}
+public record TextbookInfo(JSONObject textbookJSON) {
 
 	public File getTextbookFile() {
 		if (textbookJSON.has("file_path")) {
