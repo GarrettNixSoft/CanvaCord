@@ -41,14 +41,16 @@ public class CanvaCord {
 
 			}
 
-			bot.disconnect();
-			System.out.println("Bot disconnected!");
+			if (bot.disconnect())
+				System.out.println("Bot disconnected!");
+			else
+				System.err.println("Disconnect failed!");
 
 			in.close();
 
 		}
 		else {
-			System.out.println("Login failed.");
+			System.err.println("Login failed.");
 			System.exit(-1);
 		}
 
