@@ -31,7 +31,7 @@ public class CanvasApi {
 		if (instance == null) {
 			// TODO: LOAD URL AND TOKEN FROM CONFIG
 			String url = "csulb.instructure.com";
-			String token = StringConverter.combineAll(FileUtil.getFileData(Paths.get("config/token-canvas.txt").toFile()));
+			String token = StringConverter.combineAll(FileUtil.getFileData(Paths.get("config/token_canvas.txt").toFile()));
 			instance = new CanvasApi(url, token);
 		}
 		return instance;
