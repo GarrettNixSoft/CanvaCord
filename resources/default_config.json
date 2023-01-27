@@ -1,0 +1,66 @@
+{
+	"past_assignments_log_channel": null,
+	"session_markers_channels": [
+	],
+	"do_custom_reminders": false,
+	"syllabus_file_path": null,
+	"textbook_files": [
+	],
+	"end_of_semester_action": "archive",
+	"generate_exam_events": false,
+	"canvas_fetch_interval": {
+		"duration": 1,
+		"unit": "hours"
+	},
+	"roles": [
+		{
+			"name": "Assignments All",
+			"separate": false,
+			"color": "white"
+		},
+		{
+			"name": "Assignments 1 Day",
+			"separate": false,
+			"color": "light blue"
+		},
+		{
+			"name": "Assignments 3 Hours",
+			"separate": false,
+			"color": "green"
+		},
+		{
+			"name": "Assignments 15 Minutes",
+			"separate": false,
+			"color": "red"
+		}
+	],
+	"assignment_due_reminders": [
+		{
+			"duration": 1,
+			"unit": "days",
+			"message": "Reminder: {title} is due tomorrow!",
+			"roles": [
+				"Assignments 1 Day",
+				"Assignments All"
+			]
+		},
+		{
+			"duration": 3,
+			"unit": "hours",
+			"message": "Reminder: {title} is due in 3 hours!",
+			"roles": [
+				"Assignments 3 Hours",
+				"Assignments All"
+			]
+		},
+		{
+			"duration": 15,
+			"unit": "minutes",
+			"message": "Last call! {title} is due in 15 minutes!",
+			"role": [
+				"Assignments 15 Minutes",
+				"Assignments All"
+			]
+		}
+	]
+}

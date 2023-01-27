@@ -16,7 +16,7 @@ public class Instance {
 	private final long serverID;
 
 	// components
-	// TODO
+	private InstanceConfiguration configuration;
 
 	public Instance(String courseID, long serverID) throws InstantiationException {
 		// enforce uniqueness
@@ -31,6 +31,13 @@ public class Instance {
 		this.serverID = serverID;
 		// build the instance ID
 		this.instanceID = courseID + "-" + serverID;
+		// set up a default configuration
+		this.configuration = InstanceConfiguration.defaultConfiguration();
+	}
+
+	public Instance(String courseID, long serverID, InstanceConfiguration configuration) throws InstantiationException {
+		this(courseID, serverID);
+		this.configuration = configuration;
 	}
 
 	// ******************************** OPERATIONS ********************************

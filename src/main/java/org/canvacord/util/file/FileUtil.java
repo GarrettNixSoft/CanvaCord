@@ -42,4 +42,17 @@ public class FileUtil {
 		return new JSONArray(combinedData);
 	}
 
+	public static String getFileName(File file) {
+		String fileName = file.getName();
+		int extensionIndex = fileName.lastIndexOf('.');
+		return fileName.substring(0, extensionIndex);
+	}
+
+	public static String getFileExtension(File file) {
+		String fileName = file.getName();
+		int extensionIndex = fileName.lastIndexOf('.');
+		if (extensionIndex == -1) return "";
+		else return fileName.substring(extensionIndex + 1);
+	}
+
 }
