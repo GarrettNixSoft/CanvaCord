@@ -10,6 +10,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+/**
+ * The FileUtil class contains various utility methods for working with and
+ * loading data from files. Most of these methods are copied from projects
+ * I've worked on in the past, but it's still code I wrote.
+ * -Garrett
+ */
 public class FileUtil {
 
 	public static ArrayList<String> getFileData(File file) {

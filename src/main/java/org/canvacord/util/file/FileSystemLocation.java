@@ -6,11 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-/*
-	Copied from the Slick2D library.
-
-	Only change: made ita Record.
-	IntelliJ warned me. I dislike warnings.
+/**
+ * NOTE: This class obtained from the Slick2D library -- <a href="https://slick.ninjacave.com/">available here</a>
  */
 public record FileSystemLocation(File root) implements ResourceLocation {
 

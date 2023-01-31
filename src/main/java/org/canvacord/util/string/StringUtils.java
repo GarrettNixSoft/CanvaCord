@@ -2,6 +2,7 @@ package org.canvacord.util.string;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class StringUtils {
 
@@ -44,6 +45,10 @@ public class StringUtils {
 
 		return list.toArray(new String[0]);
 
+	}
+
+	public static boolean isURL(String str) {
+		return Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]").matcher(str).find();
 	}
 
 }

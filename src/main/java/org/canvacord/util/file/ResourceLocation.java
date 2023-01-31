@@ -3,8 +3,8 @@ package org.canvacord.util.file;
 import java.io.InputStream;
 import java.net.URL;
 
-/*
-	Adapted from the Slick2D library.
+/**
+ * NOTE: This class obtained from the Slick2D library -- <a href="https://slick.ninjacave.com/">available here</a>
  */
 public interface ResourceLocation {
 

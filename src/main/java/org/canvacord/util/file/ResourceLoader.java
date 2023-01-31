@@ -6,13 +6,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
-/*
-	Adapted from the Slick2D library for ease of use. Works
-	for loading resources from both in-development and
-	in deployed JARs.
-
-	Slightly modified to get IntelliJ to shut up with all
-	the warnings. I like clean scroll bars with no yellow marks.
+/**
+ * NOTE: This class obtained from the Slick2D library -- <a href="https://slick.ninjacave.com/">available here</a>
  */
 public class ResourceLoader {
 
