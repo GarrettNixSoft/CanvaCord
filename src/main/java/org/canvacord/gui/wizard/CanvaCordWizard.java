@@ -8,6 +8,7 @@ import java.awt.*;
 
 public abstract class CanvaCordWizard extends JDialog {
 
+	public static final Font WIZARD_LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 12);
 	private JPanel contentPanel;
 
 	private JPanel cardPanel;
@@ -72,6 +73,7 @@ public abstract class CanvaCordWizard extends JDialog {
 		buttonBox.add(Box.createHorizontalStrut(30));
 		buttonBox.add(cancelButton);
 		buttonPanel.add(buttonBox, BorderLayout.EAST);
+		buttonPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
 		cardPanel = new JPanel();
 		cardPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
