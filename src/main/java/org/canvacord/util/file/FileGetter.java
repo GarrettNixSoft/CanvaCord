@@ -27,7 +27,9 @@ public class FileGetter {
 		FileFilter fileFilter = new FileFilter() {
 			@Override
 			public boolean accept(File f) {
-				for (String ext : extensions) {
+				if (extensions.length == 0)
+					return true;
+				else for (String ext : extensions) {
 					if (f.getName().toLowerCase().endsWith(ext)) return true;
 					else if (f.isDirectory()) return true;
 				}
