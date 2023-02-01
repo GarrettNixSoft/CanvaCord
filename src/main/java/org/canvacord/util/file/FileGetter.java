@@ -45,7 +45,7 @@ public class FileGetter {
 //		fileChooser.addChoosableFileFilter(fileFilter);
 		fileChooser.setFileFilter(fileFilter);
 
-		JFrame parent = new JFrame("Choose a Map File");
+		JFrame parent = new JFrame("Choose a File");
 //		parent.setIconImage(Config.ICON_IMAGE);
 		parent.setAlwaysOnTop(true);
 
