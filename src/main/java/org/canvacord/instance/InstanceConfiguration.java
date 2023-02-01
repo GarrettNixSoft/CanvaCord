@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 public class InstanceConfiguration {
 
@@ -21,8 +22,10 @@ public class InstanceConfiguration {
 
 	public static InstanceConfiguration defaultConfiguration() {
 		File defaultConfigJSONFile = Paths.get("resources/default_config.json").toFile();
-		JSONObject defaultConfigJSON = FileUtil.getJSON(defaultConfigJSONFile);
-		return new InstanceConfiguration(defaultConfigJSON);
+		Optional<JSONObject> defaultConfigJSON = FileUtil.getJSON(defaultConfigJSONFile);
+		if (defaultConfigJSON.isPresent())
+			return new InstanceConfiguration(defaultConfigJSON.get());
+		else throw new RuntimeException("Default configuration is missing!");
 	}
 
 }

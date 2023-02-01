@@ -1,14 +1,15 @@
 package org.canvacord.util.file;
 
 import org.canvacord.util.string.StringConverter;
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The FileUtil class contains various utility methods for working with and
@@ -18,8 +19,15 @@ import java.util.ArrayList;
  */
 public class FileUtil {
 
-	public static ArrayList<String> getFileData(File file) {
-		ArrayList<String> data = new ArrayList<>();
+	public static final String SEPARATOR;
+
+	static {
+		SEPARATOR = System.getProperty("file.separator");
+//		SEPARATOR = "/";
+	}
+
+	public static Optional<List<String>> getFileData(File file) {
+		List<String> data = new ArrayList<>();
 		try {
 			InputStream in = FileUtil.class.getResourceAsStream(file.getPath());
 			if (in == null)
@@ -33,19 +41,30 @@ public class FileUtil {
 			reader.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return data;
+			return Optional.empty();
 		}
-		return data;
+		return Optional.of(data);
 	}
 
-	public static JSONObject getJSON(File file) {
-		String combinedData = StringConverter.combineAll(getFileData(file));
-		return new JSONObject(combinedData);
+	public static Optional<JSONObject> getJSON(File file) {
+		Optional<List<String>> fileData = getFileData(file);
+		if (fileData.isEmpty())
+			return Optional.empty();
+		else {
+			String combined = StringConverter.combineAll(fileData.get());
+			return Optional.of(new JSONObject(combined));
+		}
+
 	}
 
-	public static JSONArray getJSONFileAsJSONArray(File file) {
-		String combinedData = StringConverter.combineAll(getFileData(file));
-		return new JSONArray(combinedData);
+	public static Optional<JSONArray> getJSONFileAsJSONArray(File file) {
+		Optional<List<String>> fileData = getFileData(file);
+		if (fileData.isEmpty())
+			return Optional.empty();
+		else {
+			String combinedData = StringConverter.combineAll(fileData.get());
+			return Optional.of(new JSONArray(combinedData));
+		}
 	}
 
 	public static String getFileName(File file) {
@@ -59,6 +78,76 @@ public class FileUtil {
 		int extensionIndex = fileName.lastIndexOf('.');
 		if (extensionIndex == -1) return "";
 		else return fileName.substring(extensionIndex + 1);
+	}
+
+	/**
+	 * Write all of the data in the given {@code JSONObject} into a file
+	 * at the path specified by the {@code file} String.
+	 * @param json the {@code JSONObject} to write to disk
+	 * @param file the path for the desired file
+	 */
+	public static boolean writeJSON(JSONObject json, File file) {
+		// wrap in a generic try/catch for any unexpected errors
+		try {
+			// if the file doesn't exist,
+			if (!file.exists()) {
+				// attempt to create it;
+				try {
+					boolean success = file.createNewFile();
+					if (success) {
+						// if the creation succeeds, write the JSON to it
+						writeJSONToFile(json, file);
+						return true;
+					}
+					else throw new IOException("move to catch block");
+				}
+				// if creation failed,
+				catch (IOException e) {
+					// it may be because the path specifies some number of parent directories that don't exist;
+					int sepIndex = file.getPath().lastIndexOf(SEPARATOR);
+					String directoryPath = file.getPath().substring(0, sepIndex);
+					File directory = new File(directoryPath);
+					// try creating those parent directories,
+					if (directory.mkdirs()) {
+						// then try creating the file again;
+						if (file.createNewFile()) {
+							// if succeeded, write to it
+							writeJSONToFile(json, file);
+							return true;
+						} else throw new RuntimeException("File " + file + " did not exist and could not be created");
+					}
+					else throw new RuntimeException("File " + file + " did not exist and could not be created");
+				}
+			}
+			// otherwise, if the file does exist, overwrite it
+			else {
+				writeJSONToFile(json, file);
+				return true;
+			}
+		} catch (Exception e) {
+			// generic fail state
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private static void writeJSONToFile(JSONObject json, File file) {
+		try {
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter writer = new BufferedWriter(fw);
+			String jsonStr = json.toString(4);
+//					Logger.log("JSON to write to file: " + jsonStr);
+			String[] data = jsonStr.split("\n");
+			for (String line : data) {
+				writer.write(line);
+				writer.write(System.lineSeparator());
+			}
+			// and done
+			writer.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

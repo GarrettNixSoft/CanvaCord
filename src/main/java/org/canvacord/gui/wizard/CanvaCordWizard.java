@@ -1,6 +1,7 @@
 package org.canvacord.gui.wizard;
 
 import org.canvacord.exception.CanvaCordException;
+import org.canvacord.gui.BooleanTask;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -26,6 +27,9 @@ public abstract class CanvaCordWizard extends JDialog {
 
 	// Cancel flag
 	private boolean cancelled = false;
+
+	// Finish action
+	private BooleanTask finishTask;
 
 	public CanvaCordWizard(String title) {
 
@@ -92,9 +96,10 @@ public abstract class CanvaCordWizard extends JDialog {
 		backButton.addActionListener(event -> currentCard.getPreviousCard().ifPresent(this::setCurrentCard));
 		nextButton.addActionListener(event -> {
 			currentCard.getNextCard().ifPresentOrElse(this::setCurrentCard, () -> {
-				// if there is no next card, and this is an end card, then close the wizard
+				// if there is no next card, and this is an end card, then check whether to close the wizard
 				if (currentCard.isEndCard()) {
-					this.setVisible(false);
+					if (finishTask != null && finishTask.execute())
+						this.setVisible(false);
 				}
 			});
 
@@ -130,6 +135,8 @@ public abstract class CanvaCordWizard extends JDialog {
 	protected void setCancelButtonEnabled(boolean enabled) {
 		this.cancelButton.setEnabled(enabled);
 	}
+
+	protected void setFinishTask(BooleanTask task) { this.finishTask = task; }
 
 	public void setCurrentCard(WizardCard currentCard) {
 		// If there is already a card showing, call its function for navigating away

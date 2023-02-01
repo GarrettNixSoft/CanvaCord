@@ -12,6 +12,12 @@ public class DangerousProgressBar extends JProgressBar {
 		setUI(ui);
 	}
 
+	public DangerousProgressBar(int min, int max) {
+		super(min, max);
+		ui = new DangerousProgressBarUI();
+		setUI(ui);
+	}
+
 	public void setFailed(boolean failed) {
 		ui.setFailed(failed);
 	}

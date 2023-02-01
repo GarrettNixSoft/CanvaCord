@@ -2,13 +2,18 @@ package org.canvacord.canvas;
 
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.interfaces.AssignmentReader;
+import edu.ksu.canvas.interfaces.CourseReader;
+import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
+import edu.ksu.canvas.requestOptions.ListUserCoursesOptions;
+import org.canvacord.persist.ConfigManager;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.string.StringConverter;
 import org.canvacord.util.string.StringUtils;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -29,12 +34,28 @@ public class CanvasApi {
 
 	public static CanvasApi getInstance() {
 		if (instance == null) {
-			// TODO: LOAD URL AND TOKEN FROM CONFIG
-			String url = "csulb.instructure.com";
-			String token = StringConverter.combineAll(FileUtil.getFileData(Paths.get("config/token_canvas.txt").toFile()));
+			JSONObject config = ConfigManager.getConfig();
+			String url = config.getString("url");
+			String token = config.getString("canvas_token");
 			instance = new CanvasApi(url, token);
 		}
 		return instance;
+	}
+
+	public static boolean testCanvasInfo(String url, String userID, String tokenStr) {
+
+		CanvasApi testInstance = new CanvasApi(url, tokenStr);
+
+		try {
+			testInstance.getCourses(userID);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+
 	}
 
 	// ******************************** CUSTOM SEARCHES ********************************
@@ -56,20 +77,24 @@ public class CanvasApi {
 
 
 	// ******************************** FETCHING CANVAS OBJECTS ********************************
-	public List<Assignment> getAssignments(String courseID) {
+	public List<Course> getCourses(String userID) throws IOException {
+
+		CourseReader reader = API.getReader(CourseReader.class, TOKEN);
+
+		ListUserCoursesOptions options = new ListUserCoursesOptions(userID);
+
+		return reader.listUserCourses(options);
+
+	}
+
+	public List<Assignment> getAssignments(String courseID) throws IOException {
 
 		// get an assignment reader
 		AssignmentReader reader = API.getReader(AssignmentReader.class, TOKEN);
 
 		ListCourseAssignmentsOptions options = new ListCourseAssignmentsOptions(courseID);
 
-		try {
-			return reader.listCourseAssignments(options);
-		}
-		catch (IOException e) {
-			// TODO: Warn Owner
-			return new ArrayList<>();
-		}
+		return reader.listCourseAssignments(options);
 
 	}
 

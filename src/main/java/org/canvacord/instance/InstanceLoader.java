@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 public class InstanceLoader {
 
@@ -49,8 +50,10 @@ public class InstanceLoader {
 			if (FileUtil.getFileName(file).equals(instanceID)) {
 
 				// If it's a match, send it to the parser and return the result
-				JSONObject instanceJSON = FileUtil.getJSON(file);
-				return InstanceParser.parseInstance(instanceID, instanceJSON);
+				Optional<JSONObject> instanceJSON = FileUtil.getJSON(file);
+				if (instanceJSON.isPresent())
+					return InstanceParser.parseInstance(instanceID, instanceJSON.get());
+				else throw new RuntimeException("Failed to load instance file! " + file.getPath());
 
 			}
 

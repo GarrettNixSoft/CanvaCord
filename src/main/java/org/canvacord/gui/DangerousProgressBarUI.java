@@ -14,15 +14,20 @@ public class DangerousProgressBarUI extends BasicProgressBarUI {
 
 	@Override
 	protected void paintDeterminate(Graphics g, JComponent component) {
+		Graphics2D g2 = (Graphics2D) g.create();
 		if (failed) {
-			Graphics2D g2 = (Graphics2D) g.create();
 			g2.setColor(Color.RED.darker());
 			g2.fillRect(0, 0, component.getWidth(), component.getHeight());
-			System.out.println("Drew red rect @ (" + component.getX() + ", " + component.getY() + "), size " + component.getWidth() + "x" + component.getHeight());
-			g2.dispose();
 		} else {
-			super.paintDeterminate(g, component);
-			System.out.println("Drew normally @ (" + component.getX() + ", " + component.getY() + "), size " + component.getWidth() + "x" + component.getHeight());
+			JProgressBar progressBar = (JProgressBar) component;
+			int progress = progressBar.getValue();
+			int min = progressBar.getMinimum();
+			int max = progressBar.getMaximum();
+			double ratio = (double) progress / (max - min);
+			int pixels = (int) (component.getWidth() * ratio);
+			g2.setColor(Color.GREEN.darker().darker());
+			g2.fillRect(0, 0, pixels, component.getHeight());
 		}
+		g2.dispose();
 	}
 }

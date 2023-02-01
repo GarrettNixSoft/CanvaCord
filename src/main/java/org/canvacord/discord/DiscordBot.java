@@ -1,5 +1,6 @@
 package org.canvacord.discord;
 
+import org.canvacord.persist.ConfigManager;
 import org.canvacord.util.file.FileUtil;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -21,12 +22,15 @@ public class DiscordBot {
 	private DiscordBot() {
 
 		// fetch the token
-		File tokenFile = Paths.get("config/token_discord.txt").toFile();
-		String token = FileUtil.getFileData(tokenFile).get(0);
+		String token = ConfigManager.getConfig().getString("discord_token");
 
 		// prepare to log in
 		API_BUILDER = new DiscordApiBuilder().setToken(token);
 
+	}
+
+	private DiscordBot(String tokenStr) {
+		API_BUILDER = new DiscordApiBuilder().setToken(tokenStr);
 	}
 
 	public static DiscordBot getBotInstance() {
@@ -74,6 +78,25 @@ public class DiscordBot {
 	// IDK
 	public DiscordApi getApi() {
 		return api;
+	}
+
+	/**
+	 * Used to verify users' bot tokens. Simply takes the
+	 * token, attempts to log into Discord with it, and
+	 * returns a boolean indicating whether that worked.
+	 * @param tokenStr the token to test
+	 * @return {@code true} if the token works for logging into Discord
+	 */
+	public static boolean testTokenString(String tokenStr) {
+
+		DiscordBot testBot = new DiscordBot(tokenStr);
+		boolean works = testBot.login();
+		if (works) {
+			testBot.disconnect();
+			return true;
+		}
+		else return false;
+
 	}
 
 }
