@@ -280,6 +280,8 @@ public class TokenSetupWizard extends CanvaCordWizard {
 			VerifyBackgroundTask verifyCanvasTokenTask = new VerifyBackgroundTask(this, canvasVerify, CANVAS_VERIFY);
 			verifyCanvasTokenTask.execute();
 
+			canvasTokenVerifyLabel.setText("Canvas Token: Verifying...");
+
 			// ================ DISCORD TOKEN VERIFICATION ================
 			discordProgressBar.setValue(0);
 			discordProgressBar.setIndeterminate(true);
@@ -287,6 +289,8 @@ public class TokenSetupWizard extends CanvaCordWizard {
 			BooleanTask discordVerify = () -> DiscordBot.testTokenString(discordTokenField.getText());
 			VerifyBackgroundTask verifyDiscordTokenTask = new VerifyBackgroundTask(this, discordVerify, DISCORD_VERIFY);
 			verifyDiscordTokenTask.execute();
+
+			discordTokenVerifyLabel.setText("Discord Token: Verifying...");
 
 		});
 
