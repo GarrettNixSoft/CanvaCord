@@ -273,24 +273,28 @@ public class TokenSetupWizard extends CanvaCordWizard {
 		verifyButton.addActionListener(event -> {
 
 			// ================ CANVAS TOKEN VERIFICATION ================
-			canvasProgressBar.setValue(0);
-			canvasProgressBar.setIndeterminate(true);
+			if (!verifiedCanvasToken) {
+				canvasProgressBar.setValue(0);
+				canvasProgressBar.setIndeterminate(true);
 
-			BooleanTask canvasVerify = () -> CanvasApi.testCanvasInfo(urlField.getText(), idField.getText(), canvasTokenField.getText());
-			VerifyBackgroundTask verifyCanvasTokenTask = new VerifyBackgroundTask(this, canvasVerify, CANVAS_VERIFY);
-			verifyCanvasTokenTask.execute();
+				BooleanTask canvasVerify = () -> CanvasApi.testCanvasInfo(urlField.getText(), idField.getText(), canvasTokenField.getText());
+				VerifyBackgroundTask verifyCanvasTokenTask = new VerifyBackgroundTask(this, canvasVerify, CANVAS_VERIFY);
+				verifyCanvasTokenTask.execute();
 
-			canvasTokenVerifyLabel.setText("Canvas Token: Verifying...");
+				canvasTokenVerifyLabel.setText("Canvas Token: Verifying...");
+			}
 
 			// ================ DISCORD TOKEN VERIFICATION ================
-			discordProgressBar.setValue(0);
-			discordProgressBar.setIndeterminate(true);
+			if (!verifiedDiscordToken) {
+				discordProgressBar.setValue(0);
+				discordProgressBar.setIndeterminate(true);
 
-			BooleanTask discordVerify = () -> DiscordBot.testTokenString(discordTokenField.getText());
-			VerifyBackgroundTask verifyDiscordTokenTask = new VerifyBackgroundTask(this, discordVerify, DISCORD_VERIFY);
-			verifyDiscordTokenTask.execute();
+				BooleanTask discordVerify = () -> DiscordBot.testTokenString(discordTokenField.getText());
+				VerifyBackgroundTask verifyDiscordTokenTask = new VerifyBackgroundTask(this, discordVerify, DISCORD_VERIFY);
+				verifyDiscordTokenTask.execute();
 
-			discordTokenVerifyLabel.setText("Discord Token: Verifying...");
+				discordTokenVerifyLabel.setText("Discord Token: Verifying...");
+			}
 
 		});
 

@@ -55,6 +55,9 @@ public abstract class CanvaCordWizard extends JDialog {
 
 		pack();
 
+		// The Back button should always be disabled on the first card
+		setBackButtonEnabled(false);
+
 	}
 
 	private void initComponents() {
@@ -149,12 +152,16 @@ public abstract class CanvaCordWizard extends JDialog {
 		this.currentCard = currentCard;
 		this.currentCard.navigateTo();
 
+		// determine if this card is the last card in a sequence
 		if (this.currentCard.isEndCard()) {
 			nextButton.setText("Finish");
 		}
 		else {
 			nextButton.setText("Next >");
 		}
+
+		// determine if this is the first card in a sequence
+		setBackButtonEnabled(this.currentCard.getPreviousCard().isPresent());
 	}
 
 	public abstract boolean completedSuccessfully();
