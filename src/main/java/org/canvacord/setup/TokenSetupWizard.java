@@ -307,11 +307,14 @@ public class TokenSetupWizard extends CanvaCordWizard {
 
 			if (verified) {
 				canvasProgressBar.setValue(100);
+				canvasProgressBar.setFailed(false);
 				canvasTokenVerifyLabel.setText("Canvas Token: Verified!");
 				verifiedCanvasToken = true;
 			}
 			else {
 				canvasProgressBar.setFailed(true);
+				UserInput.showErrorMessage("Canvas token verification failed.", "Bad Canvas Token");
+				canvasTokenVerifyLabel.setText("Canvas Token: Verification Failed");
 			}
 
 		}
@@ -321,11 +324,14 @@ public class TokenSetupWizard extends CanvaCordWizard {
 
 			if (verified) {
 				discordProgressBar.setValue(100);
+				discordProgressBar.setFailed(false);
 				discordTokenVerifyLabel.setText("Discord Token: Verified!");
 				verifiedDiscordToken = true;
 			}
 			else {
 				discordProgressBar.setFailed(true);
+				UserInput.showErrorMessage("Discord token verification failed.", "Bad Discord Token");
+				discordTokenVerifyLabel.setText("Discord Token: Verification Failed");
 			}
 
 		}
