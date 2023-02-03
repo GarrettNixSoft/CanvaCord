@@ -12,10 +12,24 @@ public class FileGetter {
 		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {}
 	}
 
+	/**
+	 * Prompt the user to select a file to open.
+	 * @param startingDir the directory to open the file dialog in by default
+	 * @param filterDesc the description that will show in the file type box at the bottom of the dialog
+	 * @param extensions the file extensions that should be visible in the file chooser. If no extensions are provided, all files will be visible.
+	 * @return the file the user selected, or an empty Optional if they cancel or close the dialog
+	 */
 	public static Optional<File> getFile(String startingDir, String filterDesc, String... extensions) {
 		return promptForFile(false, startingDir, filterDesc, extensions);
 	}
 
+	/**
+	 * Prompt the user to select a file to write to.
+	 * @param startingDir the directory to open the file dialog in by default
+	 * @param filterDesc the description that will show in the file type box at the bottom of the dialog
+	 * @param extensions the file extensions that should be visible in the file chooser. If no extensions are provided, all files will be visible.
+	 * @return the file the user selected, or an empty Optional if they cancel or close the dialog
+	 */
 	public static Optional<File> getSaveDestination(String startingDir, String filterDesc, String... extensions) {
 		return promptForFile(true, startingDir, filterDesc, extensions);
 	}
@@ -64,6 +78,11 @@ public class FileGetter {
 
 	}
 
+	/**
+	 * Prompt the user to choose a folder.
+	 * @param startingDir the directory to open the file dialog in by default
+	 * @return the folder the user chose, or an empty Optional if they cancel or close the dialog
+	 */
 	public static Optional<File> getDirectory(String startingDir) {
 
 		JFileChooser fileChooser = new JFileChooser(startingDir);
