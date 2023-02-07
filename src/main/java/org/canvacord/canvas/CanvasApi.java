@@ -3,21 +3,19 @@ package org.canvacord.canvas;
 import edu.ksu.canvas.CanvasApiFactory;
 import edu.ksu.canvas.interfaces.AssignmentReader;
 import edu.ksu.canvas.interfaces.CourseReader;
+import edu.ksu.canvas.interfaces.ModuleReader;
 import edu.ksu.canvas.model.Course;
+import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
+import edu.ksu.canvas.requestOptions.ListModulesOptions;
 import edu.ksu.canvas.requestOptions.ListUserCoursesOptions;
 import org.canvacord.persist.ConfigManager;
-import org.canvacord.util.file.FileUtil;
-import org.canvacord.util.string.StringConverter;
-import org.canvacord.util.string.StringUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasApi {
@@ -27,10 +25,13 @@ public class CanvasApi {
 	private final OauthToken TOKEN;
 	private final CanvasApiFactory API;
 
-	private CanvasApi(String canvasURL, String tokenStr) {
+	//constructor, made it not private for testing ]
+	public CanvasApi(String canvasURL, String tokenStr) {
 		TOKEN = new NonRefreshableOauthToken(tokenStr);
 		API = new CanvasApiFactory(canvasURL);
 	}
+
+
 
 	public static CanvasApi getInstance() {
 		if (instance == null) {
@@ -95,6 +96,17 @@ public class CanvasApi {
 		ListCourseAssignmentsOptions options = new ListCourseAssignmentsOptions(courseID);
 
 		return reader.listCourseAssignments(options);
+
+	}
+
+	public List<Module> getModules(Long courseID) throws IOException {
+
+		// get an assignment reader
+		ModuleReader reader = API.getReader(ModuleReader.class, TOKEN);
+
+		ListModulesOptions options = new ListModulesOptions(courseID);
+
+		return reader.getModulesInCourse(options);
 
 	}
 
