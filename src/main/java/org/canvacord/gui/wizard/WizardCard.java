@@ -21,6 +21,7 @@ public class WizardCard extends JPanel {
 		this.name = name;
 		this.isEndCard = isEndCard;
 		setLayout(new FlowLayout());
+		setMaximumSize(new Dimension(600, 450));
 	}
 
 	public void setOnNavigateTo(WizardAction onNavigateTo) {

@@ -9,7 +9,16 @@ import java.awt.*;
 
 public abstract class CanvaCordWizard extends JDialog {
 
+	public static final Font WIZARD_HEADER_FONT = new Font("Segoe UI", Font.BOLD, 20);
 	public static final Font WIZARD_LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 12);
+	public static final Font WIZARD_LABEL_FONT_MEDIUM = new Font("Segoe UI", Font.PLAIN, 14);
+	public static final Font WIZARD_LABEL_FONT_LARGE = new Font("Segoe UI", Font.PLAIN, 16);
+
+	public static Font getFont(int size) {
+		return new Font("Segoe UI", Font.PLAIN, size);
+	}
+
+
 	private JPanel contentPanel;
 
 	private JPanel cardPanel;
@@ -83,7 +92,7 @@ public abstract class CanvaCordWizard extends JDialog {
 		buttonPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
 		cardPanel = new JPanel();
-		cardPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+//		cardPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
 		cardLayout = new CardLayout();
 		cardPanel.setLayout(cardLayout);
