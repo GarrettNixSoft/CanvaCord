@@ -14,9 +14,11 @@ public class WizardCard extends JPanel {
 
 	private boolean configured = false;
 
-	private boolean isEndCard;
+	private final String name;
+	private final boolean isEndCard;
 
-	public WizardCard(boolean isEndCard) {
+	public WizardCard(String name, boolean isEndCard) {
+		this.name = name;
 		this.isEndCard = isEndCard;
 		setLayout(new FlowLayout());
 	}
@@ -60,5 +62,10 @@ public class WizardCard extends JPanel {
 
 	public boolean isEndCard() {
 		return isEndCard;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }

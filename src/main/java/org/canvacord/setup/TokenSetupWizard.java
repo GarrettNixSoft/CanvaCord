@@ -88,7 +88,7 @@ public class TokenSetupWizard extends CanvaCordWizard {
 
 	private WizardCard buildMainCard() {
 
-		WizardCard mainCard = new WizardCard(true);
+		WizardCard mainCard = new WizardCard("main", true);
 		mainCard.setLayout(new MigLayout("", "[grow]", "[grow][grow]"));
 
 		// ================================ INPUT PANEL ================================

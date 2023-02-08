@@ -101,7 +101,7 @@ public abstract class CanvaCordWizard extends JDialog {
 			currentCard.getNextCard().ifPresentOrElse(this::setCurrentCard, () -> {
 				// if there is no next card, and this is an end card, then check whether to close the wizard
 				if (currentCard.isEndCard()) {
-					if (finishTask != null && finishTask.execute())
+					if (finishTask == null || finishTask.execute())
 						this.setVisible(false);
 				}
 			});
@@ -118,7 +118,7 @@ public abstract class CanvaCordWizard extends JDialog {
 
 	protected void registerCard(WizardCard card) {
 		if (!card.isConfigured()) throw new CanvaCordException("Attempted to register a Wizard Card without configuring its navigator");
-		cardPanel.add(card);
+		cardPanel.add(card, card.toString());
 		cardLayout.addLayoutComponent(card, card.toString());
 		if (currentCard == null) {
 			setCurrentCard(card);
@@ -148,6 +148,7 @@ public abstract class CanvaCordWizard extends JDialog {
 		}
 		// tell the CardLayout to show the new card
 		cardLayout.show(cardPanel, currentCard.toString());
+		System.out.println("Show " + currentCard.toString());
 		// Assign the new current card and call its function for navigating to it
 		this.currentCard = currentCard;
 		this.currentCard.navigateTo();
