@@ -9,7 +9,16 @@ import java.awt.*;
 
 public abstract class CanvaCordWizard extends JDialog {
 
+	public static final Font WIZARD_HEADER_FONT = new Font("Segoe UI", Font.BOLD, 20);
 	public static final Font WIZARD_LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 12);
+	public static final Font WIZARD_LABEL_FONT_MEDIUM = new Font("Segoe UI", Font.PLAIN, 14);
+	public static final Font WIZARD_LABEL_FONT_LARGE = new Font("Segoe UI", Font.PLAIN, 16);
+
+	public static Font getFont(int size) {
+		return new Font("Segoe UI", Font.PLAIN, size);
+	}
+
+
 	private JPanel contentPanel;
 
 	private JPanel cardPanel;
@@ -83,7 +92,7 @@ public abstract class CanvaCordWizard extends JDialog {
 		buttonPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
 		cardPanel = new JPanel();
-		cardPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+//		cardPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
 		cardLayout = new CardLayout();
 		cardPanel.setLayout(cardLayout);
@@ -101,7 +110,7 @@ public abstract class CanvaCordWizard extends JDialog {
 			currentCard.getNextCard().ifPresentOrElse(this::setCurrentCard, () -> {
 				// if there is no next card, and this is an end card, then check whether to close the wizard
 				if (currentCard.isEndCard()) {
-					if (finishTask != null && finishTask.execute())
+					if (finishTask == null || finishTask.execute())
 						this.setVisible(false);
 				}
 			});
@@ -118,7 +127,7 @@ public abstract class CanvaCordWizard extends JDialog {
 
 	protected void registerCard(WizardCard card) {
 		if (!card.isConfigured()) throw new CanvaCordException("Attempted to register a Wizard Card without configuring its navigator");
-		cardPanel.add(card);
+		cardPanel.add(card, card.toString());
 		cardLayout.addLayoutComponent(card, card.toString());
 		if (currentCard == null) {
 			setCurrentCard(card);
@@ -148,6 +157,7 @@ public abstract class CanvaCordWizard extends JDialog {
 		}
 		// tell the CardLayout to show the new card
 		cardLayout.show(cardPanel, currentCard.toString());
+		System.out.println("Show " + currentCard.toString());
 		// Assign the new current card and call its function for navigating to it
 		this.currentCard = currentCard;
 		this.currentCard.navigateTo();
