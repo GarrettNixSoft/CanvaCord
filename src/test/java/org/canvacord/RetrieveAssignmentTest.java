@@ -10,6 +10,8 @@ import edu.ksu.canvas.interfaces.AssignmentReader;
 import edu.ksu.canvas.model.assignment.Assignment;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class RetrieveAssignmentTest {
@@ -18,7 +20,14 @@ public class RetrieveAssignmentTest {
 
         System.out.println("Assignment Test");
         String canvasBaseUrl = "https://csulb.instructure.com/";
-        String token  = "21139~NV9KQAAFTDNnebJe8UEbigucgfS08OlofVtLl5r1nnhRhUevKU1jCPdXKiNp5WsY";
+
+        // Get Path of Canvas Token
+        Path fileName = Path.of("config/Canvas_Token.txt");
+
+        // Now calling Files.readString() method to
+        // read the file
+        String token = Files.readString(fileName);
+
         CanvasApi canvasApi = new CanvasApi(canvasBaseUrl, token);
         List<Assignment> assignments = canvasApi.getAssignments("32202");
         for(int i = 0; i < assignments.size(); i++) {
