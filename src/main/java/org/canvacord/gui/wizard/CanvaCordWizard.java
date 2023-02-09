@@ -1,7 +1,7 @@
 package org.canvacord.gui.wizard;
 
 import org.canvacord.exception.CanvaCordException;
-import org.canvacord.gui.BooleanTask;
+import org.canvacord.gui.BackgroundTask;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -38,7 +38,7 @@ public abstract class CanvaCordWizard extends JDialog {
 	private boolean cancelled = false;
 
 	// Finish action
-	private BooleanTask finishTask;
+	private BackgroundTask<Boolean> finishTask;
 
 	public CanvaCordWizard(String title) {
 
@@ -56,6 +56,7 @@ public abstract class CanvaCordWizard extends JDialog {
 		initComponents();
 		initButtons();
 		initCards();
+		initLogic();
 
 		getContentPane().add(contentPanel);
 
@@ -86,7 +87,9 @@ public abstract class CanvaCordWizard extends JDialog {
 		buttonBox.add(backButton);
 		buttonBox.add(Box.createHorizontalStrut(10));
 		buttonBox.add(nextButton);
-		buttonBox.add(Box.createHorizontalStrut(30));
+		buttonBox.add(Box.createHorizontalStrut(10));
+		buttonBox.add(new JSeparator(SwingConstants.VERTICAL));
+		buttonBox.add(Box.createHorizontalStrut(10));
 		buttonBox.add(cancelButton);
 		buttonPanel.add(buttonBox, BorderLayout.EAST);
 		buttonPanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
@@ -136,6 +139,8 @@ public abstract class CanvaCordWizard extends JDialog {
 
 	protected abstract void initCards();
 
+	protected abstract void initLogic();
+
 	protected void setBackButtonEnabled(boolean enabled) {
 		this.backButton.setEnabled(enabled);
 	}
@@ -144,11 +149,13 @@ public abstract class CanvaCordWizard extends JDialog {
 		this.nextButton.setEnabled(enabled);
 	}
 
+	protected void setNextButtonTooltip(String tooltip) {this.nextButton.setToolTipText(tooltip); }
+
 	protected void setCancelButtonEnabled(boolean enabled) {
 		this.cancelButton.setEnabled(enabled);
 	}
 
-	protected void setFinishTask(BooleanTask task) { this.finishTask = task; }
+	protected void setFinishTask(BackgroundTask<Boolean> task) { this.finishTask = task; }
 
 	public void setCurrentCard(WizardCard currentCard) {
 		// If there is already a card showing, call its function for navigating away
@@ -157,7 +164,7 @@ public abstract class CanvaCordWizard extends JDialog {
 		}
 		// tell the CardLayout to show the new card
 		cardLayout.show(cardPanel, currentCard.toString());
-		System.out.println("Show " + currentCard.toString());
+		System.out.println("Show " + currentCard);
 		// Assign the new current card and call its function for navigating to it
 		this.currentCard = currentCard;
 		this.currentCard.navigateTo();

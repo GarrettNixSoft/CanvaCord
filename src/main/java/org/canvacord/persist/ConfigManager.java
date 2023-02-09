@@ -25,6 +25,7 @@ public class ConfigManager {
     }
 
     public static JSONObject getConfig() {
+        if (configJSON == null) loadConfig();
         return configJSON;
     }
 

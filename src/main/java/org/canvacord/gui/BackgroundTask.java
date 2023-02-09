@@ -1,7 +1,7 @@
 package org.canvacord.gui;
 
-public interface BackgroundTask {
+public interface BackgroundTask<T> {
 
-    void execute();
+    T execute();
 
 }

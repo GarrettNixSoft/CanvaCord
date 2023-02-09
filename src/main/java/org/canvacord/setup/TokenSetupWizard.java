@@ -3,10 +3,11 @@ package org.canvacord.setup;
 import net.miginfocom.swing.MigLayout;
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.DiscordBot;
-import org.canvacord.gui.BooleanTask;
+import org.canvacord.gui.BackgroundTask;
 import org.canvacord.gui.DangerousProgressBar;
 import org.canvacord.gui.TextPrompt;
 import org.canvacord.gui.VerifyBackgroundTask;
+import org.canvacord.gui.wizard.BackgroundTaskWizard;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.persist.ConfigManager;
@@ -22,7 +23,7 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.Optional;
 
-public class TokenSetupWizard extends CanvaCordWizard {
+public class TokenSetupWizard extends BackgroundTaskWizard<Boolean> {
 
 	private JTextField urlField;
 	private JTextField idField;
@@ -47,9 +48,6 @@ public class TokenSetupWizard extends CanvaCordWizard {
 
 		// Card for adding the institution's Canvas URL and Canvas/Discord API tokens
 		registerCard(buildMainCard());
-
-		// Prepare the interactive GUI elements for user interactions
-		initLogic();
 
 		setFinishTask(() -> {
 
@@ -214,28 +212,35 @@ public class TokenSetupWizard extends CanvaCordWizard {
 
 	}
 
-	private void initLogic() {
+	@Override
+	protected void initLogic() {
 
 		// any changes to the fields un-verify their contents
 		DocumentListener canvasInfoEditListener = new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				verifiedCanvasToken = false;
+				canvasProgressBar.setFailed(false);
 				canvasProgressBar.setValue(0);
+				canvasProgressBar.repaint();
 				canvasTokenVerifyLabel.setText("Canvas Token: Unverified");
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				verifiedCanvasToken = false;
+				canvasProgressBar.setFailed(false);
 				canvasProgressBar.setValue(0);
+				canvasProgressBar.repaint();
 				canvasTokenVerifyLabel.setText("Canvas Token: Unverified");
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				verifiedCanvasToken = false;
+				canvasProgressBar.setFailed(false);
 				canvasProgressBar.setValue(0);
+				canvasProgressBar.repaint();
 				canvasTokenVerifyLabel.setText("Canvas Token: Unverified");
 			}
 		};
@@ -244,21 +249,27 @@ public class TokenSetupWizard extends CanvaCordWizard {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				verifiedDiscordToken = false;
+				discordProgressBar.setFailed(false);
 				discordProgressBar.setValue(0);
+				discordProgressBar.repaint();
 				discordTokenVerifyLabel.setText("Discord Token: Unverified");
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				verifiedDiscordToken = false;
+				discordProgressBar.setFailed(false);
 				discordProgressBar.setValue(0);
+				discordProgressBar.repaint();
 				discordTokenVerifyLabel.setText("Discord Token: Unverified");
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				verifiedDiscordToken = false;
+				discordProgressBar.setFailed(false);
 				discordProgressBar.setValue(0);
+				discordProgressBar.repaint();
 				discordTokenVerifyLabel.setText("Discord Token: Unverified");
 			}
 		};
@@ -272,12 +283,33 @@ public class TokenSetupWizard extends CanvaCordWizard {
 		// react to the user clicking on the Verify button
 		verifyButton.addActionListener(event -> {
 
+			// ================ CHECK FOR EMPTY FIELDS ================
+			if (urlField.getText().isBlank()) {
+				UserInput.showMessage("You must provide a URL.", "Empty Field");
+				return;
+			}
+
+			if (idField.getText().isBlank()) {
+				UserInput.showMessage("You must provide a user ID.", "Empty Field");
+				return;
+			}
+
+			if (canvasTokenField.getText().isBlank()) {
+				UserInput.showMessage("You must provide a Canvas Token.", "Empty Field");
+				return;
+			}
+
+			if (discordTokenField.getText().isBlank()) {
+				UserInput.showMessage("You must provide a Discord Token.", "Empty Field");
+				return;
+			}
+
 			// ================ CANVAS TOKEN VERIFICATION ================
 			if (!verifiedCanvasToken) {
 				canvasProgressBar.setValue(0);
 				canvasProgressBar.setIndeterminate(true);
 
-				BooleanTask canvasVerify = () -> CanvasApi.testCanvasInfo(urlField.getText(), idField.getText(), canvasTokenField.getText());
+				BackgroundTask<Boolean> canvasVerify = () -> CanvasApi.testCanvasInfo(urlField.getText(), idField.getText(), canvasTokenField.getText());
 				VerifyBackgroundTask verifyCanvasTokenTask = new VerifyBackgroundTask(this, canvasVerify, CANVAS_VERIFY);
 				verifyCanvasTokenTask.execute();
 
@@ -289,7 +321,7 @@ public class TokenSetupWizard extends CanvaCordWizard {
 				discordProgressBar.setValue(0);
 				discordProgressBar.setIndeterminate(true);
 
-				BooleanTask discordVerify = () -> DiscordBot.testTokenString(discordTokenField.getText());
+				BackgroundTask<Boolean> discordVerify = () -> DiscordBot.testTokenString(discordTokenField.getText());
 				VerifyBackgroundTask verifyDiscordTokenTask = new VerifyBackgroundTask(this, discordVerify, DISCORD_VERIFY);
 				verifyDiscordTokenTask.execute();
 
@@ -303,7 +335,8 @@ public class TokenSetupWizard extends CanvaCordWizard {
 	private static final int CANVAS_VERIFY = 0;
 	private static final int DISCORD_VERIFY = 1;
 
-	public void updateVerifyTask(int typeCode, boolean verified) {
+	@Override
+	public void updateTask(int typeCode, Boolean verified) {
 
 		if (typeCode == CANVAS_VERIFY) {
 

@@ -1,14 +1,12 @@
 package org.canvacord.discord;
 
 import org.canvacord.persist.ConfigManager;
-import org.canvacord.util.file.FileUtil;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.server.Server;
+import org.json.JSONObject;
 
-import java.io.File;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.concurrent.CompletionException;
 
@@ -34,8 +32,10 @@ public class DiscordBot {
 	}
 
 	public static DiscordBot getBotInstance() {
-		if (botInstance == null)
-			botInstance = new DiscordBot();
+		if (botInstance == null) {
+			JSONObject config = ConfigManager.getConfig();
+			botInstance = new DiscordBot(config.getString("discord_token"));
+		}
 		return botInstance;
 	}
 

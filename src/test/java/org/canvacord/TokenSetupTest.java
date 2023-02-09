@@ -21,6 +21,7 @@ public class TokenSetupTest {
 		savedConfig.ifPresentOrElse(
 				config -> {
 					System.out.println("Loaded config: " + config);
+					new TokenSetupWizard().runWizard();
 				},
 				() -> {
 					TokenSetupWizard tokenSetupWizard = new TokenSetupWizard();
