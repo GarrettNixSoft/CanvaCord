@@ -4,7 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Optional;
 
-public class WizardCard extends JPanel {
+public abstract class WizardCard extends JPanel {
+
+	private CanvaCordWizard parent;
 
 	private WizardCard previousCard;
 	private WizardNavigator navigator;
@@ -17,12 +19,18 @@ public class WizardCard extends JPanel {
 	private final String name;
 	private final boolean isEndCard;
 
-	public WizardCard(String name, boolean isEndCard) {
+	public WizardCard(CanvaCordWizard parent, String name, boolean isEndCard) {
+		this.parent = parent;
 		this.name = name;
 		this.isEndCard = isEndCard;
 		setLayout(new FlowLayout());
 		setMaximumSize(new Dimension(600, 450));
 	}
+
+	protected abstract void buildGUI();
+	protected abstract void initLogic();
+
+	protected CanvaCordWizard getParentWizard() { return parent; }
 
 	public void setOnNavigateTo(WizardAction onNavigateTo) {
 		this.onNavigateTo = onNavigateTo;

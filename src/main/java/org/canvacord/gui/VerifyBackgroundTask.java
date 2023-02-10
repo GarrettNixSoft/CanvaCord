@@ -1,18 +1,18 @@
 package org.canvacord.gui;
 
-import org.canvacord.gui.wizard.BackgroundTaskWizard;
+import org.canvacord.gui.wizard.cards.BackgroundTaskCard;
 
 import javax.swing.*;
 import java.util.concurrent.ExecutionException;
 
 public class VerifyBackgroundTask extends SwingWorker<Boolean, Object> {
 
-    private final BackgroundTaskWizard<Boolean> parentWizard;
+    private final BackgroundTaskCard<Boolean> parentCard;
     private final BackgroundTask<Boolean> backgroundTask;
     private final int typeCode;
 
-    public VerifyBackgroundTask(BackgroundTaskWizard<Boolean> parentWizard, BackgroundTask<Boolean> backgroundTask, int typeCode) {
-        this.parentWizard = parentWizard;
+    public VerifyBackgroundTask(BackgroundTaskCard<Boolean> parentCard, BackgroundTask<Boolean> backgroundTask, int typeCode) {
+        this.parentCard = parentCard;
         this.backgroundTask = backgroundTask;
         this.typeCode = typeCode;
     }
@@ -25,7 +25,7 @@ public class VerifyBackgroundTask extends SwingWorker<Boolean, Object> {
     @Override
     protected void done() {
         try {
-            parentWizard.updateTask(typeCode, get());
+            parentCard.updateTask(typeCode, get());
         }
         catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
