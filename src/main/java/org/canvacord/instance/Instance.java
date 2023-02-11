@@ -1,5 +1,8 @@
 package org.canvacord.instance;
 
+import org.canvacord.discord.commands.Command;
+
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,6 +11,7 @@ public class Instance {
 	// enforcing uniqueness
 	private static final Set<String> courseIDs = new HashSet<>();
 	private static final Set<Long> serverIDs = new HashSet<>();
+	private static final HashMap<Long,Command> serverCommands = new HashMap<>();
 
 	private final String instanceID;
 
@@ -58,6 +62,8 @@ public class Instance {
 	public long getServerID() {
 		return serverID;
 	}
+
+	public HashMap<Long,Command> getRegisteredCommands(){ return serverCommands;} //TODO: actually populate this hashmap?
 
 	public String getStatus() {
 		// TODO
