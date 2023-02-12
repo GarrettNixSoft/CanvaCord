@@ -1,5 +1,6 @@
 package org.canvacord.gui.wizard.cards;
 
+import net.miginfocom.swing.MigLayout;
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.gui.BackgroundTask;
@@ -71,6 +72,8 @@ public class TokenSetupCard extends WizardCard implements BackgroundTaskCard<Boo
 
 	@Override
 	protected void buildGUI() {
+
+		setLayout(new MigLayout("", "[grow]", "[grow][grow]"));
 
 		// ================================ INPUT PANEL ================================
 		JPanel inputPanel = new JPanel();

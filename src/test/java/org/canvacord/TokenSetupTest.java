@@ -20,7 +20,7 @@ public class TokenSetupTest {
 		Optional<JSONObject> savedConfig = ConfigManager.loadConfig();
 		savedConfig.ifPresentOrElse(
 				config -> {
-					System.out.println("Loaded config: " + config);
+//					System.out.println("Loaded config: " + config);
 					new TokenSetupWizard().runWizard();
 				},
 				() -> {
