@@ -11,7 +11,7 @@ public class TextbookDirectory {
      * @param id
      * @return counter
      */
-    public static int latestNumber(String id) {
+    public static int getLatestNumber(String id) {
         int counter = 1;
         File outputFile = new File("./config/textbooks/" + id + "_" + counter + ".pdf");
         while(outputFile.exists())
@@ -19,6 +19,18 @@ public class TextbookDirectory {
             outputFile = new File("./config/textbooks/" + id + "_" + ++counter + ".pdf");
         }
         return counter;
+    }
+
+    /**
+     * Shows how many textbooks are in a given course
+     * @param id course id
+     * @return the number of textbooks in a given course
+     */
+    public static int getNumberOfTextbooks(String id){
+        if(!exists(id)){
+            return 0;
+        }
+        return getLatestNumber(id) - 1;
     }
 
     /**
@@ -34,7 +46,7 @@ public class TextbookDirectory {
             return Optional.empty();
         }
         File inputFile = testing.get();
-        File outputFile = new File("./config/textbooks/" + id + "_" + latestNumber(id) + ".pdf");
+        File outputFile = new File("./config/textbooks/" + id + "_" + getLatestNumber(id) + ".pdf");
         //copies inputFile to outputFile
         try {
             Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
@@ -47,11 +59,12 @@ public class TextbookDirectory {
     /**
      * Checks to see if a course already has a pdf associated with it in the /config/textbooks folder
      * @param id course id
-     * @return a boolean
+     * @return a boolean of whether the file exists or not
      */
-    public static boolean exists(String id)
-    {
+    public static boolean exists(String id){
         File outputFile = new File("./config/textbooks/" + id + "_1.pdf");
         return outputFile.exists();
     }
+
+
 }
