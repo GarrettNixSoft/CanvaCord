@@ -18,6 +18,7 @@ public class RetrieveAssignmentTest {
 
     public static void main(String[] args) throws IOException {
 
+
         System.out.println("Assignment Test");
         String canvasBaseUrl = "https://csulb.instructure.com/";
 
@@ -25,10 +26,13 @@ public class RetrieveAssignmentTest {
         Path fileName = Path.of("config/Canvas_Token.txt");
 
         // Now calling Files.readString() method to
-        // read the file
+        // Throw string into sting token
         String token = Files.readString(fileName);
 
+        // Use CSULB url and student token to access canvas api
         CanvasApi canvasApi = new CanvasApi(canvasBaseUrl, token);
+
+        // Retrieve assignment list from Canvas API
         List<Assignment> assignments = canvasApi.getAssignments("32202");
         for(int i = 0; i < assignments.size(); i++) {
             System.out.println(assignments.get(i).getName());

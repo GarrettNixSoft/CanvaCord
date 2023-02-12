@@ -50,26 +50,40 @@ public class RetrieveModulesTest {
         String token = Files.readString(fileName);
 
         //throw token in CanvasApi
+        // Throw string into sting token
         CanvasApi canvasApi = new CanvasApi(canvasBaseUrl, token);
 
-        //test
+        // Print Module Urls with course ID
         List<Module> modules = canvasApi.getModules(32202L);
         for(int i = 0; i < modules.size(); i++) {
             System.out.println(modules.get(i).getItemsUrl());
         }
 
-        String access_token= token;
+        // Test to request information from Canvas Module URL
+
+        // For simplification
         String url = modules.get(1).getItemsUrl().toString();
+
+        // Create URL Object
         URL obj = new URL(url);
+
+        // Create HttpURLConnection Object
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-        // optional default is GET
+
+        // Set RequestMethod and Request Property
         con.setRequestMethod("GET");
         con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:27.0) Gecko/20100101 Firefox/27.0.2 Waterfox/27.0");
         con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        con.setRequestProperty("Authorization", "Bearer "+ access_token);
+
+        // Use token for authorization
+        con.setRequestProperty("Authorization", "Bearer "+ token);
+
+        // Get Response to verify whether authentication was successful
         int responseCode = con.getResponseCode();
         System.out.println("\nSending 'GET' request to URL : " + url);
         System.out.println("Response Code : " + responseCode);
+
+        // Read information from URL with BufferedReader Object
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
         String inputLine;
@@ -78,7 +92,8 @@ public class RetrieveModulesTest {
             response.append(inputLine);
         }
         in.close();
-        //print result
+
+        // Print as a string
         System.out.println(response.toString());
     }
 }
