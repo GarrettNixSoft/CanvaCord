@@ -20,6 +20,11 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * The CourseAndServerCard is the page in the instance configuration wizard
+ * in which the user enters the Canvas course ID and Discord server ID for
+ * their instance.
+ */
 public class CourseAndServerCard extends InstanceConfigCard implements BackgroundTaskCard<Boolean> {
 
 	private JTextField courseInputField;
@@ -162,6 +167,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 	@Override
 	protected void initLogic() {
 
+		// Build document listeners to remove verification status for any verified inputs that get changed
 		DocumentListener courseEditListener = new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
@@ -229,6 +235,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 		courseInputField.getDocument().addDocumentListener(courseEditListener);
 		serverInputField.getDocument().addDocumentListener(serverEditListener);
 
+		// Add logic to the button being pressed
 		verifyButton.addActionListener(event -> {
 
 			// ================ CHECK FOR EMPTY FIELDS ================
@@ -322,6 +329,10 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 
 	@Override
 	public void updateTask(int typeCode, Boolean verified) {
+
+		// This method is called by the verification tasks when they finish, and is used
+		// to update the GUI elements to display the result of those tasks
+
 		if (typeCode == CANVAS_VERIFY) {
 
 			courseVerifyBar.setIndeterminate(false);

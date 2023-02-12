@@ -3,6 +3,10 @@ import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.TokenSetupCard;
 import org.canvacord.util.string.StringUtils;
 
+/**
+ * The TokenSetupWizard implements the initial setup process for CanvaCord. It is the
+ * first operation run when CanvaCord is installed on a system.
+ */
 public class TokenSetupWizard extends CanvaCordWizard {
 
 	private TokenSetupCard tokenSetupCard;

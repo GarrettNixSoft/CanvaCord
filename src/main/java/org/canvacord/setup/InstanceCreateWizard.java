@@ -1,17 +1,17 @@
 package org.canvacord.setup;
 
-import net.miginfocom.swing.MigLayout;
-import org.canvacord.gui.*;
 import org.canvacord.gui.wizard.CanvaCordWizard;
-import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.gui.wizard.cards.instance.CourseAndServerCard;
 import org.canvacord.gui.wizard.cards.instance.InstanceBasicConfigCard;
 import org.canvacord.gui.wizard.cards.instance.InstanceSetupWelcomeCard;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Optional;
 
+/**
+ * The InstanceCreateWizard implements the process of creating a new CanvaCord
+ * instance.
+ */
 public class InstanceCreateWizard extends CanvaCordWizard {
 
 	private InstanceSetupWelcomeCard startingCard;
