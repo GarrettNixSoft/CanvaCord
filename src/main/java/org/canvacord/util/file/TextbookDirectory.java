@@ -23,8 +23,8 @@ public class TextbookDirectory {
 
     /**
      * Prompts User to Select a PDF file and stores it in the /config/textbooks folder.
-     * @param id
-     * @return testing
+     * @param id The course id of the course too add the textbook file too
+     * @return the chosen pdf file that the user chosen
      */
     public static Optional<File> chooseTextbook(String id){
         Optional<File> testing = FileGetter.getFile("C:", "PDF File", ".pdf");
@@ -42,5 +42,16 @@ public class TextbookDirectory {
             System.out.println("Failed to copy to path");
         }
         return testing;
+    }
+
+    /**
+     * Checks to see if a course already has a pdf associated with it in the /config/textbooks folder
+     * @param id course id
+     * @return a boolean
+     */
+    public static boolean exists(String id)
+    {
+        File outputFile = new File("./config/textbooks/" + id + "_1.pdf");
+        return outputFile.exists();
     }
 }

@@ -29,22 +29,8 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class DirectoryTest {
     public static void main(String[] Args) throws IOException {
-        /**
-        Optional<File> testing = FileGetter.getFile("C:", "PDF File", ".pdf");
-        FileInputStream fileInputStream;
-        FileOutputStream fileOutputStream;
-        File inputFile = testing.get();
-        File outputFile = new File("./config/textbooks/" + "bruhmoment" + ".pdf");
-
-        while(outputFile.exists())
-        {
-            outputFile = new File("./config/textbooks/" + "bruhmoment" + ".pdf");
-        }
-        //System.out.println(outputFile.getAbsolutePath());
-        //System.out.println(inputFile.toPath());
-
-        Files.copy(inputFile.toPath(), outputFile.toPath());
-        **/
+        Scanner input = new Scanner(System.in);
         TextbookDirectory.chooseTextbook("testing");
+
     }
 }
