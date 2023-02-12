@@ -21,6 +21,11 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.Optional;
 
+/**
+ * The TokenSetupCard is the card which handles the initial setup of CanvaCord, in which
+ * the user enters their login information which CanvaCord will use to access Canvas and
+ * Discord on their behalf.
+ */
 public class TokenSetupCard extends WizardCard implements BackgroundTaskCard<Boolean> {
 
 	private JTextField urlField;
@@ -322,6 +327,9 @@ public class TokenSetupCard extends WizardCard implements BackgroundTaskCard<Boo
 
 	@Override
 	public void updateTask(int typeCode, Boolean verified) {
+
+		// This method is called by the verification tasks when they finish, and is used
+		// to update the GUI elements to display the result of those tasks
 
 		if (typeCode == CANVAS_VERIFY) {
 

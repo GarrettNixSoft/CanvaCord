@@ -8,6 +8,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * The InstanceSetupWelcomeCard is the first card (page) the user sees when
+ * opening the InstanceCreateWizard. It informs them of some important
+ * prerequisite steps that should be taken before continuing to the next step.
+ */
 public class InstanceSetupWelcomeCard extends WizardCard {
 
 	public InstanceSetupWelcomeCard(CanvaCordWizard parent, String name) {
@@ -21,9 +26,11 @@ public class InstanceSetupWelcomeCard extends WizardCard {
 
 		setLayout(new BorderLayout());
 
+		// ================ START SCREEN PANEL ================
 		JPanel startPanel = new JPanel();
 		startPanel.setLayout(new BorderLayout());
 
+		// ================ SIDE BAR IMAGE ================
 		ImagePanel imagePanel = new ImagePanel("resources/setup_sidebar.png");
 		startPanel.add(imagePanel, BorderLayout.WEST);
 		imagePanel.setPreferredSize(new Dimension(200, 450));
@@ -34,6 +41,7 @@ public class InstanceSetupWelcomeCard extends WizardCard {
 		int borderHeight = 50;
 		int borderWidth = 20;
 
+		// ================ PANEL FOR DISPLAYING TEXT ================
 		JPanel textPanel = new JPanel();
 		textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
 		textPanel.setBorder(new EmptyBorder(borderHeight, borderWidth, borderHeight, borderWidth));
@@ -46,6 +54,7 @@ public class InstanceSetupWelcomeCard extends WizardCard {
 
 		textPanel.add(Box.createVerticalStrut(30));
 
+		// ================ WELCOME TEXT AND INSTRUCTIONS ================
 		JTextArea welcomeText = new JTextArea();
 		welcomeText.setEditable(false);
 		welcomeText.setLineWrap(true);

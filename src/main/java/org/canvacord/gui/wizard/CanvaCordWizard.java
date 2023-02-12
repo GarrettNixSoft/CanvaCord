@@ -7,6 +7,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * The CanvaCordWizard is the base for implementing multi-page GUI processes.
+ */
 public abstract class CanvaCordWizard extends JDialog {
 
 	public static final Font WIZARD_HEADER_FONT = new Font("Segoe UI", Font.BOLD, 20);
@@ -17,7 +20,6 @@ public abstract class CanvaCordWizard extends JDialog {
 	public static Font getFont(int size) {
 		return new Font("Segoe UI", Font.PLAIN, size);
 	}
-
 
 	private JPanel contentPanel;
 
@@ -43,6 +45,10 @@ public abstract class CanvaCordWizard extends JDialog {
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 500;
 
+	/**
+	 * Build a CanvaCordWizard with the given window title.
+	 * @param title the string to display as the wizard's window title
+	 */
 	public CanvaCordWizard(String title) {
 
 		setSize(WIDTH, HEIGHT);
@@ -70,6 +76,11 @@ public abstract class CanvaCordWizard extends JDialog {
 
 	}
 
+	/**
+	 * Builds the basic GUI components shared by all CanvaCordWizards, such as
+	 * the navigation and Cancel buttons ate the bottom and the blank panel
+	 * which will be populated with GUI components by implementing subclasses
+	 */
 	private void initComponents() {
 
 		contentPanel = new JPanel();
@@ -105,6 +116,9 @@ public abstract class CanvaCordWizard extends JDialog {
 
 	}
 
+	/**
+	 * Initializes the basic logic for the navigation and Cancel buttons.
+	 */
 	private void initButtons() {
 
 		// the back and next buttons should navigate in their respective directions, if the current card supports it
@@ -128,6 +142,10 @@ public abstract class CanvaCordWizard extends JDialog {
 
 	}
 
+	/**
+	 * Add a card (or page) to this wizard.
+	 * @param card the card to add
+	 */
 	protected void registerCard(WizardCard card) {
 		if (!card.isConfigured()) throw new CanvaCordException("Attempted to register a Wizard Card without configuring its navigator");
 		cardPanel.add(card, card.toString());
@@ -137,6 +155,9 @@ public abstract class CanvaCordWizard extends JDialog {
 		}
 	}
 
+	/**
+	 * Subclasses should build and register their cards in this method.
+	 */
 	protected abstract void initCards();
 
 	public void setBackButtonEnabled(boolean enabled) {
@@ -155,6 +176,10 @@ public abstract class CanvaCordWizard extends JDialog {
 
 	public void setFinishTask(BackgroundTask<Boolean> task) { this.finishTask = task; }
 
+	/**
+	 * Navigate the wizard to the specified card (page).
+	 * @param currentCard the card to navigate to
+	 */
 	public void setCurrentCard(WizardCard currentCard) {
 		// If there is already a card showing, call its function for navigating away
 		if (this.currentCard != null) {
@@ -179,12 +204,23 @@ public abstract class CanvaCordWizard extends JDialog {
 		setBackButtonEnabled(this.currentCard.getPreviousCard().isPresent());
 	}
 
+	/**
+	 * Subclasses should implement logic here to determine whether the user has
+	 * successfully completed whatever operation the wizard implements based on
+	 * their inputs and the state of the GUI components.
+	 * @return {@code true} if the user has completed the process without error.
+	 */
 	public abstract boolean completedSuccessfully();
 
 	public boolean isCancelled() {
 		return cancelled;
 	}
 
+	/**
+	 * Show this wizard to the user.
+	 * @return the result of calling {@code completedSuccessfully()} once the user exits the wizard,
+	 * 			whether by closing the window, clicking Cancel, or clicking Finish.
+	 */
 	public boolean runWizard() {
 
 		this.setVisible(true);

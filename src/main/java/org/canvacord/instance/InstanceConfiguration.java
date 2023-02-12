@@ -1,6 +1,7 @@
 package org.canvacord.instance;
 
 import org.canvacord.util.file.FileUtil;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -8,6 +9,10 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 public class InstanceConfiguration {
+
+	public enum EndOfSemesterAction {
+		DELETE, ARCHIVE
+	}
 
 	private final JSONObject configJSON;
 
@@ -18,6 +23,25 @@ public class InstanceConfiguration {
 	// TODO: getters
 	public boolean getGenerateExamEvents() {
 		return configJSON.getBoolean("generate_exam_events");
+	}
+
+	public boolean getDoCustomReminders() {
+		return configJSON.getBoolean("do_custom_reminders");
+	}
+
+	public EndOfSemesterAction getEndOfSemesterAction() {
+		return switch (configJSON.getString("end_of_semester_action")) {
+			case "delete" -> EndOfSemesterAction.DELETE;
+			default -> EndOfSemesterAction.ARCHIVE;
+		};
+	}
+
+	public JSONArray getInstanceRoles() {
+		return configJSON.getJSONArray("roles");
+	}
+
+	public JSONArray getAssignmentDueReminders() {
+		return configJSON.getJSONArray("assignment_due_reminders");
 	}
 
 	public static InstanceConfiguration defaultConfiguration() {
