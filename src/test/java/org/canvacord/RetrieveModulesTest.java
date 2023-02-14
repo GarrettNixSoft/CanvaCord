@@ -14,20 +14,18 @@ import edu.ksu.canvas.interfaces.ModuleReader;
 import edu.ksu.canvas.requestOptions.ListModulesOptions;
 
 import java.io.*;
-import java.net.HttpURLConnection;
+import java.net.*;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.net.URL;
 import java.util.Scanner;
 
 
 import org.canvacord.util.input.UserInput;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.canvacord.util.net.RemoteFileGetter;
@@ -41,27 +39,22 @@ public class RetrieveModulesTest {
 
     public static void main(String[] args) throws IOException {
 
-        System.out.println("Module Test");
         String canvasBaseUrl = "https://csulb.instructure.com/";
 
         // Get Path of Canvas Token
         Path fileName = Path.of("config/Canvas_Token.txt");
 
-        // Now calling Files.readString() method to
         // read the file
         String token = Files.readString(fileName);
 
-        //throw token in CanvasApi
-        // Throw string into sting token
+        // Use CSULB url and token to make CanvasAPI object
         CanvasApi canvasApi = new CanvasApi(canvasBaseUrl, token);
-
 
         // Print Module Urls with course ID
         List<Module> modules = canvasApi.getModules(32202L);
         for(int i = 0; i < modules.size(); i++) {
             System.out.println(modules.get(i).getItemsUrl());
         }
-
 
         // Test to request information from Canvas Module URL
 
@@ -107,13 +100,11 @@ public class RetrieveModulesTest {
         for (int i = 0; i < jsonArr.length(); i++)
         {
             JSONObject jsonObj = jsonArr.getJSONObject(i);
-
             System.out.println(jsonObj);
         }
 
         // Print URL
         System.out.println(jsonArr.getJSONObject(0).get("url"));
-
 
         // REQUEST NUMBER 2
 
@@ -134,6 +125,7 @@ public class RetrieveModulesTest {
         // Use token for authorization
         con.setRequestProperty("Authorization", "Bearer "+ token);
 
+        // Get Response to verify whether authentication was successful
         responseCode = con.getResponseCode();
         System.out.println("\nSending 'GET' request to URL : " + jsonArr.getJSONObject(0).get("url"));
         System.out.println("Response Code : " + responseCode);
@@ -156,16 +148,70 @@ public class RetrieveModulesTest {
         // Print Download URL
         System.out.println(json.get("url"));
 
+        //DOWNLOAD REQUEST!!!!
+        url = json.get("url").toString();
 
-        // Test another time 
-        //URL website = new URL(json.get("url").toString());
-        //ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-        //FileOutputStream fos = new FileOutputStream("");
-        //fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        // Create URL Object
+        obj = new URL(url);
+
+        // Create HttpURLConnection Object
+        con = (HttpURLConnection) obj.openConnection();
+
+        // Set RequestMethod and Request Property
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:27.0) Gecko/20100101 Firefox/27.0.2 Waterfox/27.0");
+        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+        // Use token for authorization
+        con.setRequestProperty("Authorization", "Bearer "+ token);
+
+        // Get Response to verify whether authentication was successful
+        responseCode = con.getResponseCode();
+        System.out.println("\nSending 'GET' request to URL : " + url);
+        System.out.println("Response Code : " + responseCode);
+
+        //VERIFIED TRY SAVING FILE
+        // Requesting input data from server
+        con.getInputStream();
+
+        // This will get input data from the server
+        InputStream inputStream = null;
+
+        // This will read the data from the server;
+        OutputStream outputStream = null;
 
 
+        // Open local file writer
+        outputStream = new FileOutputStream("C://Users/frive/Documents/CanvaCord/config/test.docx");
+
+        //Getting content Length
+        int contentLength = con.getContentLength();
+        System.out.println("File contentLength = " + contentLength + " bytes");
 
 
+        // Requesting input data from server
+        inputStream = con.getInputStream();
+
+        // Limiting byte written to file per loop
+        byte[] buffer = new byte[2048];
+
+        // Increments file size
+        int length;
+        int downloaded = 0;
+
+        // Looping until server finishes
+        while ((length = inputStream.read(buffer)) != -1)
+        {
+            // Writing data
+            outputStream.write(buffer, 0, length);
+            downloaded+=length;
+            //System.out.println("Download Status: " + (downloaded * 100) / (contentLength * 1.0) + "%");
+        }
+        // closing used resources
+        // The computer will not be able to use the image
+        // This is a must
+        outputStream.close();
+        inputStream.close();
 
     }
 }
