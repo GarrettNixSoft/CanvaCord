@@ -157,10 +157,11 @@ public class RetrieveModulesTest {
         System.out.println(json.get("url"));
 
 
-        URL website = new URL(json.get("url").toString());
-        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-        FileOutputStream fos = new FileOutputStream("C://Users/frive/Documents/CanvaCord/config/");
-        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        // Test another time 
+        //URL website = new URL(json.get("url").toString());
+        //ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+        //FileOutputStream fos = new FileOutputStream("");
+        //fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
 
 
