@@ -16,11 +16,19 @@
 
     <dependencies>
         <!-- Kansas State's Canvas API library -->
-        <dependency>
+        <!--<dependency>
             <groupId>edu.ksu.canvas</groupId>
             <artifactId>canvas-api</artifactId>
             <version>2.0.0</version>
+        </dependency> -->
+        <dependency>
+            <groupId>org.canvacord</groupId>
+            <artifactId>canvas-api</artifactId>
+            <version>2.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/canvas-api.jar</systemPath>
         </dependency>
+
         <!-- Javacord -->
         <dependency>
             <groupId>org.javacord</groupId>
