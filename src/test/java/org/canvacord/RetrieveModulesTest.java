@@ -13,10 +13,10 @@ import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.interfaces.ModuleReader;
 import edu.ksu.canvas.requestOptions.ListModulesOptions;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -27,7 +27,6 @@ import java.util.Scanner;
 import org.canvacord.util.input.UserInput;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -158,7 +157,10 @@ public class RetrieveModulesTest {
         System.out.println(json.get("url"));
 
 
-
+        URL website = new URL(json.get("url").toString());
+        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+        FileOutputStream fos = new FileOutputStream("C://Users/frive/Documents/CanvaCord/config/");
+        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 
 
 
