@@ -18,12 +18,6 @@ public class CanvasFetchScheduler {
 
     }
 
-    public static void shutDown() throws SchedulerException {
-
-        fetchScheduler.shutdown();
-
-    }
-
     public static void scheduleInstance(Instance instance) {
 
         try {

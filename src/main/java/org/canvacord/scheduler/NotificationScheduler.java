@@ -17,12 +17,6 @@ public class NotificationScheduler {
 
     }
 
-    public static void shutDown() throws SchedulerException {
-
-        notifyScheduler.shutdown();
-
-    }
-
     public static void scheduleInstance(Instance instance) {
 
         try {

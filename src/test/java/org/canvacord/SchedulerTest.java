@@ -2,7 +2,6 @@ package org.canvacord;
 
 import org.canvacord.instance.Instance;
 import org.canvacord.scheduler.CanvaCordScheduler;
-import org.canvacord.scheduler.NotificationScheduler;
 
 public class SchedulerTest {
 

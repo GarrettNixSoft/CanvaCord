@@ -24,6 +24,19 @@ public class CanvaCordScheduler {
 
     }
 
+
+
+    public static void shutDown() throws SchedulerException {
+
+        try {
+            scheduler.shutdown(true);
+        }
+        catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void scheduleInstance(Instance instance) {
         CanvasFetchScheduler.scheduleInstance(instance);
         NotificationScheduler.scheduleInstance(instance);
