@@ -1,0 +1,42 @@
+{
+	"canvas_fetch_schedule_frequent": {
+		"type": "interval",
+		"interval": {
+			"amount": 15,
+			"unit": "minutes"
+		},
+		"round_start": true
+	},
+	"canvas_fetch_schedule_hourly": {
+		"type": "interval",
+		"interval": {
+			"amount": 1,
+			"unit": "hours"
+		},
+		"round_start": true
+	},
+	"canvas_fetch_schedule_daily": {
+		"type": "daily",
+		"times": [
+			"12:00",
+			"20:00"
+		]
+	},
+	"canvas_fetch_schedule_custom": {
+		"type": "schedule",
+		"schedule": [
+			{
+				"day": "Mon",
+				"time": "12:15"
+			},
+			{
+				"day": "Thu",
+				"time": "18:20"
+			},
+			{
+				"day": "Sat",
+				"time": "08:35"
+			}
+		]
+	}
+}
