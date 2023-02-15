@@ -2,10 +2,7 @@ package org.canvacord.discord.commands;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.message.MessageFlag;
-import org.javacord.api.entity.message.component.ActionRow;
-import org.javacord.api.entity.message.component.Button;
-import org.javacord.api.entity.message.component.SelectMenu;
-import org.javacord.api.entity.message.component.SelectMenuOption;
+import org.javacord.api.entity.message.component.*;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.interaction.ButtonClickEvent;
 import org.javacord.api.event.interaction.SelectMenuChooseEvent;
@@ -22,17 +19,15 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeUnit;
 
 public class HelpCommand extends Command implements ButtonClickListener, SelectMenuChooseListener{
-	//we CANNN move the listeners to their own class. for the sake of looking nice?
 	private final List<SelectMenuOption> tutorialSelectMenuOptions = new ArrayList<>();
 	private final List <SelectMenuOption> commandSelectMenuOptions = new ArrayList<>();
 	private final HashMap<String,EmbedBuilder> tutorialDescriptions = new HashMap<>();
-	private final HashMap<Long,Command> commandList = new HashMap<>(); //TODO: get this from Instance!!!
-	// I DON'T ACTUALLY KNOW HOW TO DO THAT!!!
+	private final HashMap<Long,Command> commandList = new HashMap<>(); //TODO: get this from Instance
 
 	@Override
 	public String getName(){
-		return "help"; //TODO: make this so it accesses the created slash command and uses getName on that?
-		// i mean otherwise we could just manually add names to each command, and use the getname to BUILD the slashcommands
+		return "help"; //option: make this so it accesses the created slash command and uses getName on that?
+		//otherwise: we could just manually add names to each command, and use the getname to BUILD the slashcommands
 	}
 	@Override
 	public String getDescription(){
@@ -47,7 +42,7 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 	}
 	@Override
 	public void execute(SlashCommandInteraction interaction) {
-		//IMPORTANT: when making new slash commands, make their VALUE their COMMAND ID
+		//IMPORTANT: when making slash command options in the helper slash command: make their VALUE their COMMAND ID
 
 		long commandOptionId = interaction
 				.getOptionByName("commands")
@@ -55,11 +50,11 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 				.orElse(interaction.getCommandId()); //GETS THE HELP COMMAND ID
 		if (commandList.isEmpty()) commandList.put(interaction.getCommandId(),this); //FIXME: JUST SO IT WORKS WITHOUT THE REAL HASHMAP
 
-		DiscordApi api = interaction.getApi(); //need the API to attach listeners sorry :(
+		DiscordApi api = interaction.getApi(); //need the API to attach listeners
 
 		try{
 			api.getGlobalSlashCommandById(commandOptionId).join();
-		} catch (CompletionException e) { //usually just that the command ID does not exist. might not actually happen now that everything set up but JIC until everything's all set up
+		} catch (CompletionException e) { // keep until command building is complete (checks that the Command ID exists)
 			interaction.createImmediateResponder().setContent("An error fetching that command has occurred. ("+e.getCause().getMessage()+")")
 					.setFlags(MessageFlag.EPHEMERAL).respond();
 			return;
@@ -70,32 +65,28 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 						.setTitle("/"+commandList.get(commandOptionId).getName())
 						.addField("Description",commandList.get(commandOptionId).getDescription())
 						.setFooter("See the GitHub for complete documentation: https://github.com/GarrettNixSoft/CanvaCord"))
-				.setFlags(MessageFlag.EPHEMERAL); //makes it so only the user who sent the slash command sees
+				.setFlags(MessageFlag.EPHEMERAL); //makes it so only the user who sent the slash command sees it
 
 		if (commandOptionId == interaction.getCommandId()){  //IF IS DEFAULT HELP COMMAND
-			response.addComponents(ActionRow.of(
-					Button.secondary("Commands", "See the commands"),
-					Button.secondary("Tutorial", "View the tutorials")));
-			response.respond()
+			response.addComponents(getButtonRow()).respond()
 					.thenAccept(originalResponse -> { //attach the listeners for component interactions
 						api.addButtonClickListener(this).removeAfter(10, TimeUnit.MINUTES);
 						api.addSelectMenuChooseListener(this).removeAfter(10, TimeUnit.MINUTES);
-					}); // you should be able to attach listeners to objects . but interactionoriginalresponseupdater class was being tricky
+					}); // see if there are better ways to attach listeners to interactionimmediateresponders
 		}
 		else { //regular command responses do not need the buttons or listeners
 			response.respond();
 		}
 	}
 
-	//WE COULD: make a new class for just the help command listeners (public class HelpCommandListeners implements ButtonClickListener, SelectMenuChooseListener{})
-	// or: we could leave them here
+	//option: make a new class for just the help command listeners
 	@Override
 	public void onButtonClick(ButtonClickEvent event){
 		ButtonInteraction interaction = event.getButtonInteraction();
 		String buttonID = interaction.getCustomId();
 		ComponentInteractionOriginalMessageUpdater response = interaction.createOriginalMessageUpdater()
 				.removeAllEmbeds()
-				.removeAllComponents();
+				.addComponents(getButtonRow());
 		EmbedBuilder messageBody = new EmbedBuilder().setTitle(buttonID + " overview").setDescription("Use the select menu below to choose a specific option");
 
 		if (buttonID.equals("Commands")){
@@ -104,22 +95,14 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
                     The Discord slash command prompt will show what commands are available to use, you can view a list of CanvaCord commands from the select menu below, or from the CanvaCord GitHub.
 
                     You reached here by *using* a slash command. Great job!""");
-			response.addComponents(ActionRow.of(Button.secondary("Tutorial", "Tutorials")),
-					ActionRow.of(SelectMenu.create("Browse commands",
-							"Click here to show command options", 1, 1,
-							getCommandSelectMenuOptions())));
 		}
 		else if (buttonID.equals("Tutorial")){
 			messageBody.addField("Welcome to CanvaCord!", """
                     For the specifics on each command,click the button below and select from there. Slash commands will be what you (the User) will primarily use to access CanvaCord's functionality.
 
                      For more details on what CanvaCord can do *other than* commands, use the select menu below.""");
-			response.addComponents(ActionRow.of(Button.secondary("Commands", "Commands")),
-					ActionRow.of( SelectMenu.create("Browse tutorials",
-							"Click here to show tutorial options",1, 1,
-							getTutorialSelectMenuOptions())));
 		}
-		response.addEmbed(messageBody).update();
+		response.addComponents(getMenuRow(buttonID)).addEmbed(messageBody).update();
 		interaction.acknowledge();
 	}
 	@Override
@@ -127,23 +110,24 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 		SelectMenuInteraction interaction = event.getSelectMenuInteraction();
 		String selectMenuChoiceString = interaction.getChosenOptions().get(0).getValue();
 		ComponentInteractionOriginalMessageUpdater response = interaction.createOriginalMessageUpdater()
-				.removeAllEmbeds()
-				.removeAllComponents();
+				.removeAllEmbeds().addComponents(getButtonRow());
 		EmbedBuilder newMessage = new EmbedBuilder();
 
-		try {
+		try { // Attempt to parse the choice string as a long (if it is: then it's the command ID)
 			Command selectedMenuCommand = commandList.get(Long.parseLong(selectMenuChoiceString));
 			newMessage = newMessage.setTitle("/"+selectedMenuCommand.getName()).setDescription(selectedMenuCommand.getDescription());
+			response.addComponents(getMenuRow("Commands"));
 		}
-		catch(NumberFormatException e) {
+		catch(NumberFormatException e) { // if the choice string is NOT a long, it's a tutorial
 			newMessage = getTutorials().get(selectMenuChoiceString);
+			response.addComponents(getMenuRow("Tutorial"));
 		}
 		if (newMessage.equals(new EmbedBuilder())) //SOMETHING messed up
 			newMessage.setDescription("No commands exist! Please try CanvaCord set-up again, or contact us through the GitHub with an error report.");
 
 		response.addEmbed(newMessage.setFooter("For more complete documentation, see the GitHub!: https://github.com/GarrettNixSoft/CanvaCord")).update();
 		interaction.acknowledge();
-	} // this removes all the components from the message. option if there is time: create method that puts them back
+	}
 	private List<SelectMenuOption> getCommandSelectMenuOptions(){
 		if (commandSelectMenuOptions.equals(new ArrayList<>())){
 			commandList.forEach((commandID, command)
@@ -157,6 +141,18 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 				tutorialSelectMenuOptions.add(SelectMenuOption.create(name,name,"See details about: "+name));
 		}
 		return tutorialSelectMenuOptions;
+	}
+	private ActionRow getMenuRow(String buttonID){
+		ActionRowBuilder builder = new ActionRowBuilder();
+		// Check to create the correct dropdown menu
+		List<SelectMenuOption> MenuOptions = (buttonID.equals("Commands")) ? getCommandSelectMenuOptions() : getTutorialSelectMenuOptions();
+		builder.addComponents(SelectMenu.create("Browse "+buttonID,"See "+buttonID+" Options",
+				1,1,MenuOptions));
+		return builder.build();
+	}
+	private ActionRow getButtonRow(){
+		return ActionRow.of(Button.secondary("Tutorial", "Tutorials"),
+				Button.secondary("Commands", "Commands"));
 	}
 	private HashMap<String,EmbedBuilder> getTutorials(){
 		if (tutorialDescriptions.isEmpty()) {
