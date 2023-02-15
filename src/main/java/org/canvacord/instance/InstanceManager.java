@@ -1,19 +1,17 @@
 package org.canvacord.instance;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class InstanceManager {
 
-	private static List<Instance> instances;
+	private static Map<String, Instance> instances;
 	private static List<Instance> runningInstances;
 	private static Set<String> runningInstanceIDs;
 
 	public static void loadInstances() {
 
-		instances = new ArrayList<>();
+		instances = new HashMap<>();
 		runningInstances = new ArrayList<>();
 		runningInstanceIDs = new HashSet<>();
 
@@ -22,7 +20,14 @@ public class InstanceManager {
 	}
 
 	public static boolean runInstance(String instanceID) {
-		// TODO
+
+		// check already running
+		if (runningInstanceIDs.contains(instanceID))
+			return false;
+
+		Instance instance = instances.get(instanceID);
+		instance.start();
+
 		return false;
 	}
 
@@ -33,20 +38,38 @@ public class InstanceManager {
 
 	public static String generateNewInstance(InstanceConfiguration configuration) {
 
-		Instance instance = createInstance(configuration);
-		instances.add(instance);
+		AtomicReference<String> instanceID = new AtomicReference<>();
 
-		// TODO:
-		// if instantiation is successful, save the config to disk
+		createInstance(configuration).ifPresentOrElse(
+				instance -> {
+					instances.put(instance.getInstanceID(), instance);
 
-		// return the instance's ID so the caller can decide when to initialize it
-		return instance.getInstanceID();
+					// TODO:
+					// if instantiation is successful, save the config to disk
+
+					// return the instance's ID so the caller can decide when to initialize it
+					instanceID.set(instance.getInstanceID());
+				},
+				() -> {
+					// TODO handle instance creation exception
+					instanceID.set("");
+				}
+		);
+
+		return instanceID.get();
+
 
 	}
 
-	private static Instance createInstance(InstanceConfiguration configuration) {
-		// TODO
-		return null;
+	private static Optional<Instance> createInstance(InstanceConfiguration configuration) {
+		String courseID = configuration.getCourseID();
+		long serverID = configuration.getServerID();
+		try {
+			return Optional.of(new Instance(courseID, serverID, configuration));
+		}
+		catch (InstantiationException e) {
+			return Optional.empty();
+		}
 	}
 
 }

@@ -1,6 +1,8 @@
 package org.canvacord.instance;
 
 import org.canvacord.discord.commands.Command;
+import org.canvacord.scheduler.CanvasFetchScheduler;
+import org.canvacord.scheduler.NotificationScheduler;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,7 +54,8 @@ public class Instance {
 	}
 
 	public void start() {
-		// TODO
+		CanvasFetchScheduler.scheduleInstance(this);
+		NotificationScheduler.scheduleInstance(this);
 	}
 
 	public void update() {

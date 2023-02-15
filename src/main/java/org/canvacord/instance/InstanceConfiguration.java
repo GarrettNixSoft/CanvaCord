@@ -21,6 +21,14 @@ public class InstanceConfiguration {
 	}
 
 	// TODO: getters
+	public String getCourseID() {
+		return configJSON.getString("course_id");
+	}
+
+	public long getServerID() {
+		return Long.parseLong("server_id");
+	}
+
 	public boolean getGenerateExamEvents() {
 		return configJSON.getBoolean("generate_exam_events");
 	}
