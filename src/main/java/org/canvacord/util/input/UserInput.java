@@ -72,6 +72,12 @@ public class UserInput {
 		frame.dispose();
 	}
 
+	public static void showExceptionWarning(Exception e) {
+		JFrame frame = buildParent();
+		JOptionPane.showMessageDialog(frame, e.getMessage(), e.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+		frame.dispose();
+	}
+
 	public static boolean askToConfirm(String message, String title) {
 		JFrame frame = buildParent();
 		int response = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
