@@ -33,6 +33,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.swing.*;
 
 
 public class RetrieveModulesTest {
@@ -149,9 +150,14 @@ public class RetrieveModulesTest {
         System.out.println(json.get("url"));
 
         //DOWNLOAD REQUEST!!!!
+
+        // Download URL, contains the file
         url = json.get("url").toString();
 
-        // Create URL Object
+        // Print name of file
+        System.out.println(json.get("display_name").toString());
+
+        // Create URL Object, redundant (will clean up later) just for simplification
         obj = new URL(url);
 
         // Create HttpURLConnection Object
@@ -170,24 +176,23 @@ public class RetrieveModulesTest {
         System.out.println("\nSending 'GET' request to URL : " + url);
         System.out.println("Response Code : " + responseCode);
 
-        //VERIFIED TRY SAVING FILE
-        // Requesting input data from server
-        con.getInputStream();
+        //VERIFIED? NOW TRY SAVING FILE
 
-        // This will get input data from the server
+        // Requesting input data from server
+        // con.getInputStream();
+
+        // Initialize inputStream
         InputStream inputStream = null;
 
-        // This will read the data from the server;
+        // Initialize OutputStream
         OutputStream outputStream = null;
 
-
-        // Open local file writer
-        outputStream = new FileOutputStream("C://Users/frive/Documents/CanvaCord/config/test.docx");
+        // Where to save data?
+        outputStream = new FileOutputStream("C://Users/frive/Documents/CanvaCord/config/" + json.get("display_name").toString());
 
         //Getting content Length
         int contentLength = con.getContentLength();
         System.out.println("File contentLength = " + contentLength + " bytes");
-
 
         // Requesting input data from server
         inputStream = con.getInputStream();
@@ -207,11 +212,9 @@ public class RetrieveModulesTest {
             downloaded+=length;
             //System.out.println("Download Status: " + (downloaded * 100) / (contentLength * 1.0) + "%");
         }
-        // closing used resources
-        // The computer will not be able to use the image
-        // This is a must
+
+        // Close both streams
         outputStream.close();
         inputStream.close();
-
     }
 }
