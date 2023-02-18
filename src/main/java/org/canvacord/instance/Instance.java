@@ -79,6 +79,10 @@ public class Instance {
 		return serverID;
 	}
 
+	public InstanceConfiguration getConfiguration() {
+		return configuration;
+	}
+
 	public Map<Long,Command> getRegisteredCommands() {
 		//TODO: actually populate this hashmap?
 		return serverCommands;

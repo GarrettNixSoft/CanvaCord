@@ -10,6 +10,17 @@ import java.util.Optional;
 
 public class InstanceConfiguration {
 
+	private static JSONObject defaultConfigJSON;
+
+	static {
+		File defaultConfigJSONFile = Paths.get("resources/default_config.json").toFile();
+		Optional<JSONObject> defaultConfigJSON = FileUtil.getJSON(defaultConfigJSONFile);
+		if (defaultConfigJSON.isPresent()) {
+			InstanceConfiguration.defaultConfigJSON = defaultConfigJSON.get();
+		}
+		else throw new RuntimeException("Default configuration is missing!");
+	}
+
 	public enum EndOfSemesterAction {
 		DELETE, ARCHIVE
 	}
@@ -18,15 +29,35 @@ public class InstanceConfiguration {
 
 	public InstanceConfiguration(JSONObject configJSON) {
 		this.configJSON = configJSON;
+		initDefaults();
+	}
+
+	/**
+	 * Any values not set in the JSONObject passed to the constructor
+	 * will have default values inserted here. For example if no fetch
+	 * schedule for polling Canvas data is set, the default schedule
+	 * will be applied.
+	 */
+	private void initDefaults() {
+		for (String key : defaultConfigJSON.keySet()) {
+			if (!configJSON.has(key))
+				configJSON.put(key, defaultConfigJSON.get(key));
+		}
 	}
 
 	// TODO: getters
+
+
+	public JSONObject getRawJSON() {
+		return configJSON;
+	}
+
 	public String getCourseID() {
 		return configJSON.getString("course_id");
 	}
 
 	public long getServerID() {
-		return Long.parseLong("server_id");
+		return configJSON.getLong("server_id");
 	}
 
 	public boolean getGenerateExamEvents() {
@@ -53,11 +84,7 @@ public class InstanceConfiguration {
 	}
 
 	public static InstanceConfiguration defaultConfiguration() {
-		File defaultConfigJSONFile = Paths.get("resources/default_config.json").toFile();
-		Optional<JSONObject> defaultConfigJSON = FileUtil.getJSON(defaultConfigJSONFile);
-		if (defaultConfigJSON.isPresent())
-			return new InstanceConfiguration(defaultConfigJSON.get());
-		else throw new RuntimeException("Default configuration is missing!");
+		return new InstanceConfiguration(defaultConfigJSON);
 	}
 
 }

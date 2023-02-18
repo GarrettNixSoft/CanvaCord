@@ -3,6 +3,7 @@ package org.canvacord.gui.wizard.cards.instance;
 import net.miginfocom.swing.MigLayout;
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.DiscordBot;
+import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.BackgroundTask;
 import org.canvacord.gui.DangerousProgressBar;
 import org.canvacord.gui.TextPrompt;
@@ -373,4 +374,17 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 			getParentWizard().setNextButtonTooltip(null);
 		}
 	}
+
+	public String getCourseID() {
+		if (!verifiedCanvasCourse)
+			throw new CanvaCordException("Unverified course ID requested!");
+		else return courseInputField.getText();
+	}
+
+	public long getServerID() {
+		if (!verifiedDiscordServer)
+			throw new CanvaCordException("Unverified server ID requested!");
+		else return Long.parseLong(serverInputField.getText());
+	}
+
 }
