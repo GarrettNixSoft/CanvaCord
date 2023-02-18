@@ -5,6 +5,7 @@ import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
 import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.setup.FirstRunSetup;
+import org.canvacord.util.LookAndFeel;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONObject;
 
@@ -15,6 +16,9 @@ public class CanvaCord {
 	public static final String VERSION_ID = "v0.0.1";
 
 	public static void main(String[] args) {
+
+		// make CanvaCord look native
+		LookAndFeel.init();
 
 		// check whether the setup process has been run before
 		checkSetup();
