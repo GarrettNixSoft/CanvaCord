@@ -1,4 +1,4 @@
-package org.canvacord.gui;
+package org.canvacord.gui.task;
 
 public interface BackgroundTask<T> {
 

@@ -1,4 +1,4 @@
-package org.canvacord.gui;
+package org.canvacord.gui.component;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

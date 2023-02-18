@@ -1,4 +1,4 @@
-package org.canvacord.gui;
+package org.canvacord.gui.task;
 
 import org.canvacord.gui.wizard.cards.BackgroundTaskCard;
 
