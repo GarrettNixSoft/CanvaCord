@@ -4,10 +4,11 @@ import net.miginfocom.swing.MigLayout;
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.exception.CanvaCordException;
-import org.canvacord.gui.BackgroundTask;
-import org.canvacord.gui.DangerousProgressBar;
-import org.canvacord.gui.TextPrompt;
-import org.canvacord.gui.VerifyBackgroundTask;
+import org.canvacord.gui.CanvaCordFonts;
+import org.canvacord.gui.task.BackgroundTask;
+import org.canvacord.gui.component.DangerousProgressBar;
+import org.canvacord.gui.component.TextPrompt;
+import org.canvacord.gui.task.VerifyBackgroundTask;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.BackgroundTaskCard;
 import org.canvacord.util.input.UserInput;
@@ -86,7 +87,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 
 		// ================ COURSE ID INPUT ================
 		JLabel courseInputLabel = new JLabel("Enter Canvas Course ID:");
-		courseInputLabel.setFont(CanvaCordWizard.WIZARD_LABEL_FONT);
+		courseInputLabel.setFont(CanvaCordFonts.LABEL_FONT);
 
 		courseInputField = new JTextField(5);
 		TextPrompt courseInputPrompt = new TextPrompt("12345", courseInputField);
@@ -99,7 +100,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 		inputPanel.add(courseInputField);
 		// ================ SERVER ID INPUT ================
 		JLabel serverInputLabel = new JLabel("Enter Discord Server ID: ");
-		serverInputLabel.setFont(CanvaCordWizard.WIZARD_LABEL_FONT);
+		serverInputLabel.setFont(CanvaCordFonts.LABEL_FONT);
 
 		serverInputField = new JTextField(5);
 		TextPrompt serverInputPrompt = new TextPrompt("123456789", serverInputField);
@@ -127,7 +128,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 		verifyPanel.add(Box.createVerticalStrut(20));
 		// ================ COURSE VERIFICATION INDICATOR ================
 		courseVerifyLabel = new JLabel("Course ID: Unverified");
-		courseVerifyLabel.setFont(CanvaCordWizard.WIZARD_LABEL_FONT);
+		courseVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT);
 		courseVerifyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		verifyPanel.add(courseVerifyLabel);
@@ -141,7 +142,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 		verifyPanel.add(Box.createVerticalStrut(verifySpacing));
 		// ================ SERVER VERIFICATION INDICATOR ================
 		serverVerifyLabel = new JLabel("Server ID: Unverified");
-		serverVerifyLabel.setFont(CanvaCordWizard.WIZARD_LABEL_FONT);
+		serverVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT);
 		serverVerifyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		verifyPanel.add(serverVerifyLabel);
