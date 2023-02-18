@@ -29,6 +29,7 @@ public class VerifyBackgroundTask extends SwingWorker<Boolean, Object> {
         }
         catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            parentCard.updateTask(typeCode, false);
         }
     }
 }

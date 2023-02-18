@@ -23,6 +23,10 @@ public class InstanceManager {
 
 	}
 
+	public static List<Instance> getInstances() {
+		return instances.values().stream().toList();
+	}
+
 	public static boolean runInstance(String instanceID) {
 
 		// check already running
