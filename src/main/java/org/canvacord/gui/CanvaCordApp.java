@@ -1,15 +1,22 @@
 package org.canvacord.gui;
 
 import org.canvacord.exception.CanvaCordException;
-import org.canvacord.gui.wizard.CanvaCordWizard;
+import org.canvacord.gui.component.InstanceCell;
+import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.main.CanvaCord;
+import org.canvacord.scheduler.CanvaCordScheduler;
+import org.canvacord.util.input.UserInput;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import java.util.List;
 
 public class CanvaCordApp extends JFrame {
 
@@ -17,16 +24,16 @@ public class CanvaCordApp extends JFrame {
 	private static CanvaCordApp instance;
 
 	// ================ DIMENSIONS ================
-	private static final int DEFAULT_WIDTH = 1200;
-	private static final int DEFAULT_HEIGHT = DEFAULT_WIDTH * 3 / 4;
+	public static final int DEFAULT_WIDTH = 1200;
+	public static final int DEFAULT_HEIGHT = DEFAULT_WIDTH * 3 / 4;
 
-	private static final int MIN_WIDTH = DEFAULT_WIDTH * 3 / 4;
-	private static final int MIN_HEIGHT = MIN_WIDTH * 3 / 4;
+	public static final int MIN_WIDTH = DEFAULT_WIDTH * 3 / 4;
+	public static final int MIN_HEIGHT = MIN_WIDTH * 3 / 4;
 
-	private static final int DEFAULT_TOP_BAR_HEIGHT = DEFAULT_HEIGHT / 10;
-	private static final int MIN_TOP_BAR_HEIGHT = MIN_HEIGHT / 10;
+	public static final int DEFAULT_TOP_BAR_HEIGHT = DEFAULT_HEIGHT / 10;
+	public static final int MIN_TOP_BAR_HEIGHT = MIN_HEIGHT / 10;
 
-	private static final int MIN_INSTANCE_WIDTH = MIN_WIDTH * 3 / 4;
+	public static final int MIN_INSTANCE_WIDTH = MIN_WIDTH * 3 / 4;
 
 	// ================ COMPONENTS ================
 	private JPanel topPanel;
@@ -39,6 +46,7 @@ public class CanvaCordApp extends JFrame {
 	private JSplitPane splitPane;
 	private JPanel noInstancesPanel;
 	private JScrollPane instancesPane;
+	private JPanel instanceList;
 	private JPanel detailsPanel;
 
 	/**
@@ -49,7 +57,15 @@ public class CanvaCordApp extends JFrame {
 		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
 		setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				onAppClose();
+				dispose();
+				System.exit(0);
+			}
+		});
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		// build GUI elements and logic
 		buildGUI();
@@ -147,13 +163,18 @@ public class CanvaCordApp extends JFrame {
 		noInstancesPanel.setLayout(new GridBagLayout());
 
 		JLabel noInstancesLabel = new JLabel("No Instances");
-		noInstancesLabel.setFont(CanvaCordWizard.WIZARD_HEADER_FONT);
+		noInstancesLabel.setFont(CanvaCordFonts.HEADER_FONT);
 		noInstancesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		noInstancesPanel.add(noInstancesLabel);
 
 		// ================ INSTANCES SCROLL PANE ================
 		instancesPane = new JScrollPane();
+
+		instanceList = new JPanel();
+		instanceList.setLayout(new BoxLayout(instanceList, BoxLayout.Y_AXIS));
+
+		instancesPane.getViewport().setView(instanceList);
 
 		splitPane.setLeftComponent(instancesPane);
 
@@ -174,10 +195,24 @@ public class CanvaCordApp extends JFrame {
 	}
 
 	private void populateInstancesPane() {
-		// build panel components
-		// TODO
+
+		// clear the instances pane
+		instanceList.removeAll();
+
+		// add all instances to the instances pane
+		List<Instance> instances = InstanceManager.getInstances();
+
+		for (int i = 0; i < instances.size(); i++) {
+			Instance instance = instances.get(i);
+			InstanceCell cell = new InstanceCell(instance);
+			instanceList.add(cell);
+			System.out.println("Added instance " + instance.getName() + " to panel");
+			if (i < instances.size() - 1) instancesPane.add(Box.createVerticalStrut(2));
+		}
+
 		// show these instances in the panel
-		splitPane.setRightComponent(instancesPane);
+		splitPane.setLeftComponent(instancesPane);
+		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
 	}
 
 	// ================ INTERACTIVITY ================
@@ -220,6 +255,20 @@ public class CanvaCordApp extends JFrame {
 
 		instance = new CanvaCordApp();
 		instance.setVisible(true);
+
+	}
+	
+	private static void onAppClose() {
+
+		System.out.println("Closing CanvaCord");
+
+		try {
+			InstanceManager.stopAllInstances();
+			CanvaCordScheduler.shutDown();
+		}
+		catch (Exception e) {
+			UserInput.showExceptionWarning(e);
+		}
 
 	}
 

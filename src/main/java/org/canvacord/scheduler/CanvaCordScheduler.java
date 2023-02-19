@@ -24,8 +24,6 @@ public class CanvaCordScheduler {
 
     }
 
-
-
     public static void shutDown() throws SchedulerException {
 
         try {
@@ -37,12 +35,12 @@ public class CanvaCordScheduler {
 
     }
 
-    public static void scheduleInstance(Instance instance) {
+    public static void scheduleInstance(Instance instance) throws SchedulerException {
         CanvasFetchScheduler.scheduleInstance(instance);
         NotificationScheduler.scheduleInstance(instance);
     }
 
-    public static void removeInstance(Instance instance) {
+    public static void removeInstance(Instance instance) throws SchedulerException {
         CanvasFetchScheduler.removeInstance(instance);
         NotificationScheduler.removeInstance(instance);
     }

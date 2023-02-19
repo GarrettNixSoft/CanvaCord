@@ -8,6 +8,7 @@ import org.quartz.impl.StdSchedulerFactory;
 public class NotificationScheduler {
 
     private static Scheduler notifyScheduler;
+    private static final String GROUP_ID = "discordNotify";
 
     public static void init() throws SchedulerException {
 
@@ -22,12 +23,12 @@ public class NotificationScheduler {
         try {
             // TODO
             JobDetail notifyJob = JobBuilder.newJob(NotificationJob.class)
-                    .withIdentity(instance.getInstanceID(), "discordNotify")
+                    .withIdentity(instance.getInstanceID(), GROUP_ID)
                     .usingJobData("serverID", instance.getServerID())
                     .build();
 
             Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(instance.getInstanceID(), "discordNotify")
+                    .withIdentity(instance.getInstanceID(), GROUP_ID)
                     .startNow()
                     .withSchedule(
                             SimpleScheduleBuilder.simpleSchedule()
@@ -45,10 +46,9 @@ public class NotificationScheduler {
 
     }
 
-    public static void removeInstance(Instance instance) {
-
-        // TODO
-
+    public static void removeInstance(Instance instance) throws SchedulerException {
+        JobKey key = new JobKey(instance.getInstanceID(), GROUP_ID);
+        notifyScheduler.deleteJob(key);
     }
 
 }

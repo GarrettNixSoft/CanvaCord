@@ -1,6 +1,8 @@
 package org.canvacord.instance;
 
+import org.canvacord.exception.CanvaCordException;
 import org.canvacord.setup.InstanceCreateWizard;
+import org.quartz.SchedulerException;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,6 +22,7 @@ public class InstanceManager {
 	public static void loadInstances() {
 
 		// TODO: load saved instances from disk
+//		InstanceLoader.loadInstance();
 
 	}
 
@@ -27,7 +30,7 @@ public class InstanceManager {
 		return instances.values().stream().toList();
 	}
 
-	public static boolean runInstance(String instanceID) {
+	public static boolean runInstance(String instanceID) throws SchedulerException {
 
 		// check already running
 		if (runningInstanceIDs.contains(instanceID) || !instances.containsKey(instanceID))
@@ -39,7 +42,7 @@ public class InstanceManager {
 		return true;
 	}
 
-	public static boolean stopInstance(String instanceID) {
+	public static boolean stopInstance(String instanceID) throws SchedulerException {
 
 		// check already running
 		if (!runningInstanceIDs.contains(instanceID) || !instances.containsKey(instanceID))
@@ -49,6 +52,13 @@ public class InstanceManager {
 		instance.stop();
 
 		return true;
+	}
+
+	public static void stopAllInstances() throws SchedulerException {
+		for (String runningInstanceID : runningInstanceIDs) {
+			if (!stopInstance(runningInstanceID))
+				throw new CanvaCordException("Failed to shut down instance " + instances.get(runningInstanceID).getName());
+		}
 	}
 
 	public static Optional<String> generateNewInstance() {

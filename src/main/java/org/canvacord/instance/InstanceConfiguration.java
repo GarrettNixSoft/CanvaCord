@@ -43,6 +43,9 @@ public class InstanceConfiguration {
 			if (!configJSON.has(key))
 				configJSON.put(key, defaultConfigJSON.get(key));
 		}
+		// If no name was specified
+		if (!configJSON.has("name"))
+			configJSON.put("name", "instance_" + configJSON.getString("course_id") + "-" + configJSON.getLong("server_id"));
 	}
 
 	// TODO: getters
@@ -58,6 +61,22 @@ public class InstanceConfiguration {
 
 	public long getServerID() {
 		return configJSON.getLong("server_id");
+	}
+
+	public String getInstanceName() {
+		return configJSON.getString("name");
+	}
+
+	public String getCourseTitle() {
+		return configJSON.getString("course_title");
+	}
+
+	public String getServerName() {
+		return configJSON.getString("server_name");
+	}
+
+	public String getIconPath() {
+		return configJSON.getString("icon_path");
 	}
 
 	public boolean getGenerateExamEvents() {
@@ -83,8 +102,11 @@ public class InstanceConfiguration {
 		return configJSON.getJSONArray("assignment_due_reminders");
 	}
 
-	public static InstanceConfiguration defaultConfiguration() {
-		return new InstanceConfiguration(defaultConfigJSON);
+	public static InstanceConfiguration defaultConfiguration(String courseID, long serverID) {
+		JSONObject defaultConfig = new JSONObject(defaultConfigJSON);
+		defaultConfig.put("course_id", courseID);
+		defaultConfig.put("server_id", serverID);
+		return new InstanceConfiguration(defaultConfig);
 	}
 
 }

@@ -9,6 +9,7 @@ import org.quartz.simpl.SimpleJobFactory;
 public class CanvasFetchScheduler {
 
 	private static Scheduler fetchScheduler;
+    private static final String GROUP_ID = "canvasFetch";
 
     public static void init() throws SchedulerException {
 
@@ -18,38 +19,32 @@ public class CanvasFetchScheduler {
 
     }
 
-    public static void scheduleInstance(Instance instance) {
+    public static void scheduleInstance(Instance instance) throws SchedulerException {
 
-        try {
-            // TODO
-            JobDetail fetchJob = JobBuilder.newJob(CanvasFetchJob.class)
-                    .withIdentity(instance.getInstanceID(), "canvasFetch")
-                    .usingJobData("courseID", instance.getCourseID())
-                    .build();
+        JobDetail fetchJob = JobBuilder.newJob(CanvasFetchJob.class)
+                .withIdentity(instance.getInstanceID(), GROUP_ID)
+                .usingJobData("courseID", instance.getCourseID())
+                .build();
 
-            Trigger trigger = TriggerBuilder.newTrigger()
-                    .withIdentity(instance.getInstanceID(), "canvasFetch")
-                    .startNow()
-                    .withSchedule(
-                            SimpleScheduleBuilder.simpleSchedule()
-                                    .withIntervalInSeconds(10)
-                                    .repeatForever()
-                    ).build();
+        // TODO make this dynamic based on instance config
+        Trigger trigger = TriggerBuilder.newTrigger()
+                .withIdentity(instance.getInstanceID(), GROUP_ID)
+                .startNow()
+                .withSchedule(
+                        SimpleScheduleBuilder.simpleSchedule()
+                                .withIntervalInSeconds(10)
+                                .repeatForever()
+                ).build();
 
-            fetchScheduler.scheduleJob(fetchJob, trigger);
+        fetchScheduler.scheduleJob(fetchJob, trigger);
 
-            System.out.println("Scheduled updates for instance " + instance.getInstanceID());
-        }
-        catch (SchedulerException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Scheduled updates for instance " + instance.getInstanceID());
 
     }
 
-    public static void removeInstance(Instance instance) {
-
-        // TODO
-
+    public static void removeInstance(Instance instance) throws SchedulerException {
+        JobKey key = new JobKey(instance.getInstanceID(), GROUP_ID);
+        fetchScheduler.deleteJob(key);
     }
 
 }

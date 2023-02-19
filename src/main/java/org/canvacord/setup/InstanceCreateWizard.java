@@ -107,6 +107,10 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		configJSON.put("course_id", courseID);
 		configJSON.put("server_id", serverID);
 
+		// Fetch and store the Course and Server names
+		configJSON.put("course_title", courseAndServerCard.getCourseTitle());
+		configJSON.put("server_name", courseAndServerCard.getServerName());
+
 		// TODO add more settings from other pages
 
 		// Wrap it all up in a nice InstanceConfiguration object for convenience

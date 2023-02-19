@@ -1,8 +1,8 @@
 package org.canvacord.instance;
 
 import org.canvacord.discord.commands.Command;
-import org.canvacord.scheduler.CanvasFetchScheduler;
-import org.canvacord.scheduler.NotificationScheduler;
+import org.canvacord.scheduler.CanvaCordScheduler;
+import org.quartz.SchedulerException;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,12 +38,24 @@ public class Instance {
 		this.serverID = serverID;
 		// build the instance ID
 		this.instanceID = courseID + "-" + serverID;
-		// set up a default configuration
-		this.configuration = InstanceConfiguration.defaultConfiguration();
+		// set up a default configuration if necessary
+		this.configuration = InstanceConfiguration.defaultConfiguration(courseID, serverID);
 	}
 
 	public Instance(String courseID, long serverID, InstanceConfiguration configuration) throws InstantiationException {
-		this(courseID, serverID);
+		// enforce uniqueness
+		if (courseIDs.contains(courseID))
+			throw new InstantiationException("Course ID " + courseID + " is already in use by another instance!");
+		else if (serverIDs.contains(serverID))
+			throw new InstantiationException("Server ID " + serverID + " is already in use by another instance!");
+		// if unique, store and assign fields
+		courseIDs.add(courseID);
+		this.courseID = courseID;
+		serverIDs.add(serverID);
+		this.serverID = serverID;
+		// build the instance ID
+		this.instanceID = courseID + "-" + serverID;
+		// use given config
 		this.configuration = configuration;
 	}
 
@@ -53,17 +65,12 @@ public class Instance {
 		return false;
 	}
 
-	public void start() {
-		CanvasFetchScheduler.scheduleInstance(this);
-		NotificationScheduler.scheduleInstance(this);
+	public void start() throws SchedulerException {
+		CanvaCordScheduler.scheduleInstance(this);
 	}
 
-	public void update() {
-		// TODO
-	}
-
-	public void stop() {
-		// TODO
+	public void stop() throws SchedulerException {
+		CanvaCordScheduler.removeInstance(this);
 	}
 
 	// ******************************** GETTERS ********************************
@@ -77,6 +84,22 @@ public class Instance {
 
 	public long getServerID() {
 		return serverID;
+	}
+
+	public String getName() {
+		return configuration.getInstanceName();
+	}
+
+	public String getIconPath() {
+		return configuration.getIconPath();
+	}
+
+	public String getCourseTitle() {
+		return configuration.getCourseTitle();
+	}
+
+	public String getServerName() {
+		return configuration.getServerName();
 	}
 
 	public InstanceConfiguration getConfiguration() {
