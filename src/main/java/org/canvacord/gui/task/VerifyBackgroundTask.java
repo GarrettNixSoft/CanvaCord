@@ -1,4 +1,4 @@
-package org.canvacord.gui;
+package org.canvacord.gui.task;
 
 import org.canvacord.gui.wizard.cards.BackgroundTaskCard;
 
@@ -29,6 +29,7 @@ public class VerifyBackgroundTask extends SwingWorker<Boolean, Object> {
         }
         catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            parentCard.updateTask(typeCode, false);
         }
     }
 }

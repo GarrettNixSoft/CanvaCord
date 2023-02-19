@@ -2,10 +2,16 @@ package org.canvacord.setup;
 
 public class FirstRunSetup {
 
+	/**
+	 * Run the initial setup process.
+	 * @return {@code true} if the user completes the setup process successfully.
+	 */
 	public static boolean runFirstTimeSetup() {
 
-		// TODO
-		return false;
+		TokenSetupWizard tokenSetupWizard = new TokenSetupWizard();
+		tokenSetupWizard.runWizard();
+
+		return tokenSetupWizard.completedSuccessfully();
 
 	}
 

@@ -1,4 +1,5 @@
 {
+	"icon_path": "default",
 	"past_assignments_log_channel": null,
 	"session_markers_channels": [
 	],
@@ -8,11 +9,32 @@
 	],
 	"end_of_semester_action": "archive",
 	"generate_exam_events": false,
-	"canvas_fetch_interval": {
+	"canvas_fetch_schedule": {
+		"type": "interval",
 		"duration": 1,
 		"unit": "hours"
 	},
 	"roles": [
+		{
+			"name": "New Assignments Immediate",
+			"separate": false,
+			"color": "cyan"
+		},
+		{
+			"name": "New Assignments Daily",
+			"separate": false,
+			"color": "yellow"
+		},
+		{
+			"name": "New Announcements Immediate",
+			"separate": false,
+			"color": "magenta"
+		},
+		{
+			"name": "New Announcements Daily",
+			"separate": false,
+			"color": "brown"
+		},
 		{
 			"name": "Assignments All",
 			"separate": false,

@@ -1,7 +1,8 @@
 package org.canvacord.gui.wizard.cards.instance;
 
 import net.miginfocom.swing.MigLayout;
-import org.canvacord.gui.ImagePanel;
+import org.canvacord.gui.CanvaCordFonts;
+import org.canvacord.gui.component.ImagePanel;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 		cardPanel.add(topBar, BorderLayout.NORTH);
 
 		JLabel cardHeader = new JLabel("Basic Settings");
-		cardHeader.setFont(CanvaCordWizard.WIZARD_HEADER_FONT);
+		cardHeader.setFont(CanvaCordFonts.HEADER_FONT);
 		cardHeader.setBounds(30, 25, 300, 30);
 		topBar.add(cardHeader);
 

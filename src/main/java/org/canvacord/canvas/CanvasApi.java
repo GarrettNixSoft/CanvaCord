@@ -9,6 +9,7 @@ import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
+import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
 import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
 import edu.ksu.canvas.requestOptions.ListModulesOptions;
 import edu.ksu.canvas.requestOptions.ListUserCoursesOptions;
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class CanvasApi {
 
@@ -85,6 +87,16 @@ public class CanvasApi {
 		ListUserCoursesOptions options = new ListUserCoursesOptions(userID);
 
 		return reader.listUserCourses(options);
+
+	}
+
+	public Optional<Course> getCourse(String courseID) throws IOException {
+
+		CourseReader reader = API.getReader(CourseReader.class, TOKEN);
+
+		GetSingleCourseOptions options = new GetSingleCourseOptions(courseID);
+
+		return reader.getSingleCourse(options);
 
 	}
 

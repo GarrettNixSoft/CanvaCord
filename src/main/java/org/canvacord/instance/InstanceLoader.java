@@ -16,51 +16,38 @@ public class InstanceLoader {
 	 * @return an Instance object constructed from the data saved to disk
 	 * @throws CanvaCordException when the instances directory is not found and cannot be created for some reason
 	 */
-	public static Instance loadInstance(String instanceID) throws CanvaCordException {
+	public static Optional<Instance> loadInstance(String instanceID) throws CanvaCordException {
 
 		// Check for "instances" folder in the working directory
-		File instanceDir = Paths.get("instances").toFile();
+		File instanceDir = Paths.get("instances/" + instanceID).toFile();
 
 		// If it's missing, attempt to create it
 		if (!instanceDir.exists()) {
-
-			boolean success = instanceDir.mkdir();
-
+			boolean success = instanceDir.mkdirs();
 			if (!success)
 				throw new CanvaCordException("Could not create instances directory!");
-
-			return null;
-
+			// Directory created successfully; return empty since the instance file can't exist
+			else
+				return Optional.empty();
 		}
 		// Otherwise if it exists, but is not a directory, throw an error
 		else if (!instanceDir.isDirectory())
 			throw new CanvaCordException("instances is a file, not a directory!");
 
 		// Otherwise, check for the target file
-		File[] instanceFiles = instanceDir.listFiles();
+		File instanceFile = Paths.get("instances/" + instanceID + "/config.json").toFile();
 
-		for (File file : instanceFiles) {
-
-			// Check if the file name pattern indicates a valid instance file
-			if (!isValidInstanceFile(file)) {
-				continue;
-			}
-
-			// If it could be an instance file, check if the name matches the ID exactly
-			if (FileUtil.getFileName(file).equals(instanceID)) {
-
-				// If it's a match, send it to the parser and return the result
-				Optional<JSONObject> instanceJSON = FileUtil.getJSON(file);
-				if (instanceJSON.isPresent())
-					return InstanceParser.parseInstance(instanceID, instanceJSON.get());
-				else throw new RuntimeException("Failed to load instance file! " + file.getPath());
-
-			}
-
+		// If the file does not exist, return empty
+		if (!instanceFile.exists())
+			return Optional.empty();
+		// Otherwise, load the instance and return it
+		else {
+			Optional<JSONObject> instanceJSON = FileUtil.getJSON(instanceFile);
+			if (instanceJSON.isPresent())
+				return Optional.of(InstanceParser.parseInstance(instanceID, instanceJSON.get()));
+			else
+				throw new CanvaCordException("Failed to load instance file! " + instanceFile.getPath());
 		}
-
-		// if no matches were found, return null without throwing an exception to indicate the instance file was not found
-		return null;
 
 	}
 

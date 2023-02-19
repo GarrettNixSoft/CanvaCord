@@ -1,52 +1,116 @@
 package org.canvacord.instance;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.canvacord.exception.CanvaCordException;
+import org.canvacord.setup.InstanceCreateWizard;
+import org.quartz.SchedulerException;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class InstanceManager {
 
-	private static List<Instance> instances;
+	private static Map<String, Instance> instances;
 	private static List<Instance> runningInstances;
 	private static Set<String> runningInstanceIDs;
 
-	public static void loadInstances() {
-
-		instances = new ArrayList<>();
+	static {
+		instances = new HashMap<>();
 		runningInstances = new ArrayList<>();
 		runningInstanceIDs = new HashSet<>();
+	}
+
+	public static void loadInstances() {
 
 		// TODO: load saved instances from disk
+//		InstanceLoader.loadInstance();
 
 	}
 
-	public static boolean runInstance(String instanceID) {
-		// TODO
-		return false;
+	public static List<Instance> getInstances() {
+		return instances.values().stream().toList();
 	}
 
-	public static boolean stopInstance(String instanceID) {
-		// TODO
-		return false;
+	public static boolean runInstance(String instanceID) throws SchedulerException {
+
+		// check already running
+		if (runningInstanceIDs.contains(instanceID) || !instances.containsKey(instanceID))
+			return false;
+
+		Instance instance = instances.get(instanceID);
+		instance.start();
+
+		return true;
 	}
 
-	public static String generateNewInstance(InstanceConfiguration configuration) {
+	public static boolean stopInstance(String instanceID) throws SchedulerException {
 
-		Instance instance = createInstance(configuration);
-		instances.add(instance);
+		// check already running
+		if (!runningInstanceIDs.contains(instanceID) || !instances.containsKey(instanceID))
+			return false;
 
-		// TODO:
-		// if instantiation is successful, save the config to disk
+		Instance instance = instances.get(instanceID);
+		instance.stop();
 
-		// return the instance's ID so the caller can decide when to initialize it
-		return instance.getInstanceID();
+		return true;
+	}
+
+	public static void stopAllInstances() throws SchedulerException {
+		for (String runningInstanceID : runningInstanceIDs) {
+			if (!stopInstance(runningInstanceID))
+				throw new CanvaCordException("Failed to shut down instance " + instances.get(runningInstanceID).getName());
+		}
+	}
+
+	public static Optional<String> generateNewInstance() {
+
+		// Create and run a wizard to get the user to set up the instance
+		InstanceCreateWizard wizard = new InstanceCreateWizard();
+		wizard.runWizard();
+
+		// If the wizard process did not complete successfully return empty
+		if (!wizard.completedSuccessfully())
+			return Optional.empty();
+
+		// Otherwise, get the resulting configuration and generate an instance with it
+		InstanceConfiguration configuration = wizard.getResult();
+
+		AtomicReference<String> instanceID = new AtomicReference<>();
+
+		createInstance(configuration).ifPresentOrElse(
+				instance -> {
+
+					// store the instance in the map
+					instances.put(instance.getInstanceID(), instance);
+
+					// TODO:
+					// if instantiation is successful, save the config to disk
+					InstanceWriter.writeInstance(instance);
+
+					// Additionally, create its data file
+					InstanceDataManager.createInstanceData(instance.getInstanceID());
+
+					// return the instance's ID so the caller can decide when to initialize it
+					instanceID.set(instance.getInstanceID());
+				},
+				() -> {
+					// TODO handle instance creation exception
+					instanceID.set("");
+				}
+		);
+
+		return Optional.of(instanceID.get());
 
 	}
 
-	private static Instance createInstance(InstanceConfiguration configuration) {
-		// TODO
-		return null;
+	private static Optional<Instance> createInstance(InstanceConfiguration configuration) {
+		String courseID = configuration.getCourseID();
+		long serverID = configuration.getServerID();
+		try {
+			return Optional.of(new Instance(courseID, serverID, configuration));
+		}
+		catch (InstantiationException e) {
+			return Optional.empty();
+		}
 	}
 
 }

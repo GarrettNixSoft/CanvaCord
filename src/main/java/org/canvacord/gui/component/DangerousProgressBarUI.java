@@ -1,4 +1,4 @@
-package org.canvacord.gui;
+package org.canvacord.gui.component;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicProgressBarUI;

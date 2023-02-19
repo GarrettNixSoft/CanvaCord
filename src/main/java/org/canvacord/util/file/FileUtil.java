@@ -81,8 +81,14 @@ public class FileUtil {
 	}
 
 	/**
-	 * Write all of the data in the given {@code JSONObject} into a file
+	 * Write the data in the given {@code JSONObject} into a file
 	 * at the path specified by the {@code file} String.
+	 * <br>
+	 * If the file exists, it will be overwritten.
+	 * <br>
+	 * If the file does not exist, and/or one or more directories
+	 * in the file's specified path do not exist, they will be
+	 * created before attempting to write to the file.
 	 * @param json the {@code JSONObject} to write to disk
 	 * @param file the path for the desired file
 	 */

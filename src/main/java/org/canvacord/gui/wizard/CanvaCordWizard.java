@@ -1,7 +1,7 @@
 package org.canvacord.gui.wizard;
 
 import org.canvacord.exception.CanvaCordException;
-import org.canvacord.gui.BackgroundTask;
+import org.canvacord.gui.task.BackgroundTask;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -11,11 +11,6 @@ import java.awt.*;
  * The CanvaCordWizard is the base for implementing multi-page GUI processes.
  */
 public abstract class CanvaCordWizard extends JDialog {
-
-	public static final Font WIZARD_HEADER_FONT = new Font("Segoe UI", Font.BOLD, 20);
-	public static final Font WIZARD_LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 12);
-	public static final Font WIZARD_LABEL_FONT_MEDIUM = new Font("Segoe UI", Font.PLAIN, 14);
-	public static final Font WIZARD_LABEL_FONT_LARGE = new Font("Segoe UI", Font.PLAIN, 16);
 
 	public static Font getFont(int size) {
 		return new Font("Segoe UI", Font.PLAIN, size);

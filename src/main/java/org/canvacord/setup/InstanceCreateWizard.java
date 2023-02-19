@@ -4,6 +4,8 @@ import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.CourseAndServerCard;
 import org.canvacord.gui.wizard.cards.instance.InstanceBasicConfigCard;
 import org.canvacord.gui.wizard.cards.instance.InstanceSetupWelcomeCard;
+import org.canvacord.instance.InstanceConfiguration;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.util.Optional;
@@ -84,8 +86,36 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 	@Override
 	public boolean completedSuccessfully() {
+
 		// TODO
-		return false;
+
+		// for now, only verify that the course and server IDs were verified
+		return courseAndServerCard.isVerifiedCanvasCourse() && courseAndServerCard.isVerifiedDiscordServer();
+
+	}
+
+	public InstanceConfiguration getResult() {
+
+		// Store all the settings in a JSON object that will be wrapped in an InstanceConfiguration
+		JSONObject configJSON = new JSONObject();
+
+		// Get the course and server IDs from their config page
+		String courseID = courseAndServerCard.getCourseID();
+		long serverID = courseAndServerCard.getServerID();
+
+		// Put them into the JSON object
+		configJSON.put("course_id", courseID);
+		configJSON.put("server_id", serverID);
+
+		// Fetch and store the Course and Server names
+		configJSON.put("course_title", courseAndServerCard.getCourseTitle());
+		configJSON.put("server_name", courseAndServerCard.getServerName());
+
+		// TODO add more settings from other pages
+
+		// Wrap it all up in a nice InstanceConfiguration object for convenience
+		return new InstanceConfiguration(configJSON);
+
 	}
 
 }

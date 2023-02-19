@@ -1,6 +1,7 @@
 package org.canvacord.gui.wizard.cards.instance;
 
-import org.canvacord.gui.ImagePanel;
+import org.canvacord.gui.CanvaCordFonts;
+import org.canvacord.gui.component.ImagePanel;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
 
@@ -48,7 +49,7 @@ public class InstanceSetupWelcomeCard extends WizardCard {
 		textPanel.setMaximumSize(new Dimension(textWidth, getMaximumSize().height));
 
 		JLabel newInstanceHeader = new JLabel("<html><body style='text-align: center'>New Instance Wizard</html>");
-		newInstanceHeader.setFont(CanvaCordWizard.WIZARD_HEADER_FONT);
+		newInstanceHeader.setFont(CanvaCordFonts.HEADER_FONT);
 		newInstanceHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
 		textPanel.add(newInstanceHeader);
 
