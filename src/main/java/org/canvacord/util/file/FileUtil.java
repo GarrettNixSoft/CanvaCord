@@ -187,10 +187,20 @@ public class FileUtil {
 
 	}
 
+	/**
+	 * Validate a file.
+	 * @param file the file to validate
+	 * @param extensions all extensions that should be considered valid
+	 * @return {@code true} if the file exists and its extension matches one of the given extensions
+	 */
 	public static boolean isValidFile(String file, String... extensions) {
 		return isValidFile(new File(file), extensions);
 	}
 
+	/**
+	 * Delete a directory and all of its files and subdirectories.
+	 * @param dir the directory to delete
+	 */
 	public static void deleteDirectory(File dir) {
 
 		try {
