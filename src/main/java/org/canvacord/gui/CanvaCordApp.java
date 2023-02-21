@@ -200,25 +200,6 @@ public class CanvaCordApp extends JFrame {
 
 	}
 
-	private void addInstanceCell(Instance instance) {
-		InstanceCell cell = new InstanceCell(instance);
-		instanceList.add(cell);
-		instanceCells.put(cell.getInstance().getInstanceID(), cell);
-		System.out.println("Added instance " + instance.getName() + " to panel");
-		if (!splitPane.getLeftComponent().equals(instancesPane))
-			splitPane.setLeftComponent(instancesPane);
-		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
-	}
-
-	private void removeInstanceCell(InstanceCell cell) {
-		instanceList.remove(cell);
-		instanceCells.remove(cell.getInstance().getInstanceID());
-		System.out.println("Removed instance " + instance.getName() + " from panel");
-		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
-		if (instanceCells.isEmpty())
-			splitPane.setLeftComponent(noInstancesPanel);
-	}
-
 	private void populateInstancesPane() {
 
 		// clear the instances pane
@@ -237,6 +218,25 @@ public class CanvaCordApp extends JFrame {
 		// show these instances in the panel
 		splitPane.setLeftComponent(instancesPane);
 		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
+	}
+
+	private void addInstanceCell(Instance instance) {
+		InstanceCell cell = new InstanceCell(instance);
+		instanceList.add(cell);
+		instanceCells.put(cell.getInstance().getInstanceID(), cell);
+		System.out.println("Added instance " + instance.getName() + " to panel");
+		if (!splitPane.getLeftComponent().equals(instancesPane))
+			splitPane.setLeftComponent(instancesPane);
+		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
+	}
+
+	private void removeInstanceCell(InstanceCell cell) {
+		instanceList.remove(cell);
+		instanceCells.remove(cell.getInstance().getInstanceID());
+		System.out.println("Removed instance " + instance.getName() + " from panel");
+		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
+		if (instanceCells.isEmpty())
+			splitPane.setLeftComponent(noInstancesPanel);
 	}
 
 	// ================ INTERACTIVITY ================
