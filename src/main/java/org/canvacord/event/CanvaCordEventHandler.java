@@ -21,7 +21,9 @@ public class CanvaCordEventHandler {
 
     protected static void publishEvent(CanvaCordEvent event) {
         for (CanvaCordEventListener listener : eventListeners) {
-            listener.onEvent(event);
+            new Thread(
+                    () -> listener.onEvent(event)
+            ).start();
         }
     }
 
