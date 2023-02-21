@@ -17,12 +17,19 @@ public class InstanceCell extends JPanel {
 	public static final int HEIGHT = 120;
 	public static final int LABEL_HEIGHT = 40;
 
+	private final Instance instance;
+
 	public InstanceCell(Instance instance) {
+		this.instance = instance;
 		setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - 5, HEIGHT));
 		setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - 3, HEIGHT));
 		setMaximumSize(new Dimension(10000, HEIGHT));
 		setLayout(new BorderLayout());
 		init(instance);
+	}
+
+	public Instance getInstance() {
+		return instance;
 	}
 
 	public void init(Instance instance) {

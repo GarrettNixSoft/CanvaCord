@@ -61,7 +61,7 @@ public class InstanceManager {
 		}
 	}
 
-	public static Optional<String> generateNewInstance() {
+	public static Optional<Instance> generateNewInstance() {
 
 		// Create and run a wizard to get the user to set up the instance
 		InstanceCreateWizard wizard = new InstanceCreateWizard();
@@ -74,7 +74,7 @@ public class InstanceManager {
 		// Otherwise, get the resulting configuration and generate an instance with it
 		InstanceConfiguration configuration = wizard.getResult();
 
-		AtomicReference<String> instanceID = new AtomicReference<>();
+		AtomicReference<Instance> instanceRef = new AtomicReference<>();
 
 		createInstance(configuration).ifPresentOrElse(
 				instance -> {
@@ -90,15 +90,14 @@ public class InstanceManager {
 					InstanceDataManager.createInstanceData(instance.getInstanceID());
 
 					// return the instance's ID so the caller can decide when to initialize it
-					instanceID.set(instance.getInstanceID());
+					instanceRef.set(instance);
 				},
 				() -> {
 					// TODO handle instance creation exception
-					instanceID.set("");
 				}
 		);
 
-		return Optional.of(instanceID.get());
+		return Optional.of(instanceRef.get());
 
 	}
 
