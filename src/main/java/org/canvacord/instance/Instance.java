@@ -2,8 +2,10 @@ package org.canvacord.instance;
 
 import org.canvacord.discord.commands.Command;
 import org.canvacord.scheduler.CanvaCordScheduler;
+import org.canvacord.util.file.FileUtil;
 import org.quartz.SchedulerException;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -114,6 +116,14 @@ public class Instance {
 	public String getStatus() {
 		// TODO
 		return "Idle";
+	}
+
+	// ================ UTILITIES ================
+	public static boolean isValidInstanceData(File[] dirContents) {
+		return 	(FileUtil.getFileName(dirContents[0]).equals("config") &&
+				FileUtil.getFileName(dirContents[1]).equals("data")) ||
+				(FileUtil.getFileName(dirContents[0]).equals("data") &&
+				FileUtil.getFileName(dirContents[1]).equals("config"));
 	}
 
 }
