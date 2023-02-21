@@ -1,5 +1,6 @@
 package org.canvacord.instance;
 
+import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.file.FileUtil;
@@ -8,6 +9,7 @@ import org.quartz.SchedulerException;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -149,6 +151,7 @@ public class InstanceManager {
 				},
 				() -> {
 					// TODO handle instance creation exception
+					System.out.println("Instance creation failed");
 				}
 		);
 
@@ -163,8 +166,32 @@ public class InstanceManager {
 			return Optional.of(new Instance(courseID, serverID, configuration));
 		}
 		catch (InstantiationException e) {
+			e.printStackTrace();
 			return Optional.empty();
 		}
+	}
+
+	public static void deleteInstance(Instance instance) {
+
+		try {
+			// Stop the instance
+			stopInstance(instance.getInstanceID());
+
+			// Find the instance folder
+			File instanceDir = Paths.get("instances/" + instance.getInstanceID()).toFile();
+			FileUtil.deleteDirectory(instanceDir);
+
+			instances.remove(instance.getInstanceID());
+			Instance.acknowledgeDeleted(instance);
+
+			// Send an event signalling the deletion occurred
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.INSTANCE_DELETED, instance);
+		}
+		catch (Exception e) {
+			UserInput.showExceptionWarning(e);
+			e.printStackTrace();
+		}
+
 	}
 
 }

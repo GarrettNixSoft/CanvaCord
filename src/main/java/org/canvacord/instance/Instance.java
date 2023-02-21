@@ -18,6 +18,11 @@ public class Instance {
 	private static final Set<Long> serverIDs = new HashSet<>();
 	private static final Map<Long,Command> serverCommands = new HashMap<>();
 
+	public static void acknowledgeDeleted(Instance instance) {
+		courseIDs.remove(instance.getCourseID());
+		serverIDs.remove(instance.getServerID());
+	}
+
 	private final String instanceID;
 
 	// instance identity

@@ -1,9 +1,13 @@
 package org.canvacord.gui.component;
 
+import org.canvacord.event.CanvaCordEvent;
+import org.canvacord.event.CanvaCordEventHandler;
 import org.canvacord.gui.CanvaCordApp;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.instance.Instance;
+import org.canvacord.instance.InstanceManager;
 import org.canvacord.util.Globals;
+import org.canvacord.util.input.UserInput;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -143,6 +147,15 @@ public class InstanceCell extends JPanel {
 
 		setEnabled(true);
 		setOpaque(true);
+
+		// OPTIONS BUTTON LOGIC
+		optionsButton.addActionListener(event -> {
+
+			// TODO make this do useful things; for now, use it for testing instance deletion
+			if (UserInput.askToConfirm("Delete this instance?", "Delete Test"))
+				InstanceManager.deleteInstance(instance);
+
+		});
 
 	}
 }

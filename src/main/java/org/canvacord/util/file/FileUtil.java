@@ -1,11 +1,13 @@
 package org.canvacord.util.file;
 
+import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringConverter;
 import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -187,6 +189,31 @@ public class FileUtil {
 
 	public static boolean isValidFile(String file, String... extensions) {
 		return isValidFile(new File(file), extensions);
+	}
+
+	public static void deleteDirectory(File dir) {
+
+		try {
+
+			File[] files = dir.listFiles();
+
+			for (File file : files) {
+
+				if (file.isDirectory())
+					deleteDirectory(file);
+				else
+					Files.delete(file.toPath());
+
+			}
+
+			Files.delete(dir.toPath());
+
+		}
+		catch (Exception e) {
+			UserInput.showExceptionWarning(e);
+			e.printStackTrace();
+		}
+
 	}
 
 }
