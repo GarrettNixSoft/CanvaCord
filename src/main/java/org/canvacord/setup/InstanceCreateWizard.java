@@ -5,6 +5,7 @@ import org.canvacord.gui.wizard.cards.instance.CourseAndServerCard;
 import org.canvacord.gui.wizard.cards.instance.InstanceBasicConfigCard;
 import org.canvacord.gui.wizard.cards.instance.InstanceSetupWelcomeCard;
 import org.canvacord.instance.InstanceConfiguration;
+import org.canvacord.util.file.FileUtil;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -18,7 +19,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 	private InstanceSetupWelcomeCard startingCard;
 	private CourseAndServerCard courseAndServerCard;
-	private InstanceBasicConfigCard configCard;
+	private InstanceBasicConfigCard basicConfigCard;
 
 	public InstanceCreateWizard() {
 		super("Create Instance");
@@ -45,14 +46,14 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		courseAndServerCard = new CourseAndServerCard(this, "course_server");
 
 		// The third card is the first page of configuration
-		configCard = new InstanceBasicConfigCard(this, "config_1", true);
+		basicConfigCard = new InstanceBasicConfigCard(this, "config_1", true);
 
 		// Configure the navigation connections
 		startingCard.setNavigator(() -> Optional.of(courseAndServerCard));
 
 		startingCard.setOnNavigateTo(this::enableNext);
 
-		courseAndServerCard.setNavigator(() -> Optional.of(configCard));
+		courseAndServerCard.setNavigator(() -> Optional.of(basicConfigCard));
 		courseAndServerCard.setPreviousCard(startingCard);
 
 		courseAndServerCard.setOnNavigateTo(() -> {
@@ -65,23 +66,23 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 			System.out.println("Component 0's component 0's component 0: " + ((JPanel) ((JPanel) courseAndServerCard.getComponent(0)).getComponent(0)).getComponent(0));
 		});
 
-		configCard.setNavigator(Optional::empty);
-		configCard.setPreviousCard(courseAndServerCard);
+		basicConfigCard.setNavigator(Optional::empty);
+		basicConfigCard.setPreviousCard(courseAndServerCard);
 
-		configCard.setOnNavigateTo(() -> {
+		basicConfigCard.setOnNavigateTo(() -> {
 
 			enableNext();
 
-			System.out.println("Component 0: " + configCard.getComponent(0));
-			System.out.println("Component 0's component 0: " + ((JPanel) configCard.getComponent(0)).getComponent(0));
-			System.out.println("Component 0's component 0's component 0: " + ((JPanel) ((JPanel) configCard.getComponent(0)).getComponent(0)).getComponent(0));
+			System.out.println("Component 0: " + basicConfigCard.getComponent(0));
+			System.out.println("Component 0's component 0: " + ((JPanel) basicConfigCard.getComponent(0)).getComponent(0));
+			System.out.println("Component 0's component 0's component 0: " + ((JPanel) ((JPanel) basicConfigCard.getComponent(0)).getComponent(0)).getComponent(0));
 
 		});
 
 		// Register the cards
 		registerCard(startingCard);
 		registerCard(courseAndServerCard);
-		registerCard(configCard);
+		registerCard(basicConfigCard);
 	}
 
 	@Override
@@ -110,6 +111,15 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		// Fetch and store the Course and Server names
 		configJSON.put("course_title", courseAndServerCard.getCourseTitle());
 		configJSON.put("server_name", courseAndServerCard.getServerName());
+
+		// Fetch name and icon path from the basic settings card
+		String name = basicConfigCard.getInstanceName();
+		if (!name.isBlank())
+			configJSON.put("name", name);
+
+		String iconPath = basicConfigCard.getIconPath();
+		if (FileUtil.isValidFile(iconPath, "png", "jpg", "jpeg"))
+			configJSON.put("icon_path", iconPath);
 
 		// TODO add more settings from other pages
 

@@ -23,12 +23,15 @@ public abstract class WizardCard extends JPanel {
 	private final String name;
 	private final boolean isEndCard;
 
+	public static final int WIDTH = 600;
+	public static final int HEIGHT = 450;
+
 	public WizardCard(CanvaCordWizard parent, String name, boolean isEndCard) {
 		this.parent = parent;
 		this.name = name;
 		this.isEndCard = isEndCard;
 		setLayout(new FlowLayout());
-		setMaximumSize(new Dimension(600, 450));
+		setMaximumSize(new Dimension(WIDTH, HEIGHT));
 	}
 
 	/**
