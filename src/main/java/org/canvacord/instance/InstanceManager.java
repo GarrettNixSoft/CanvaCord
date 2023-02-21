@@ -2,8 +2,13 @@ package org.canvacord.instance;
 
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.setup.InstanceCreateWizard;
+import org.canvacord.util.file.FileUtil;
+import org.canvacord.util.input.UserInput;
 import org.quartz.SchedulerException;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -21,8 +26,58 @@ public class InstanceManager {
 
 	public static void loadInstances() {
 
-		// TODO: load saved instances from disk
-//		InstanceLoader.loadInstance();
+		try {
+
+			// Find all files in the instances directory
+			File instancesDir = Paths.get("instances/").toFile();
+			File[] potentialInstances = instancesDir.listFiles();
+
+			// Iterate over the files and attempt to read them as instances
+			for (File file : potentialInstances) {
+
+				try {
+					// Instances are contained in subdirectories; if this is not a directory, skip it
+					if (!file.isDirectory())
+						continue;
+
+					// List the instance files
+					File[] instanceFiles = file.listFiles();
+
+					// Instances contain 2 files: config and data
+					if (instanceFiles.length != 2)
+						continue;
+
+					// Both files must be JSON files
+					if (!FileUtil.getFileExtension(instanceFiles[0]).equals("json") ||
+						!FileUtil.getFileExtension(instanceFiles[1]).equals("json"))
+						continue;
+
+					// The two JSON files must be named config.json and data.json
+					if (Instance.isValidInstanceData(instanceFiles)) {
+						// Get the instance ID from the directory name
+						String instanceID = FileUtil.getFileName(file);
+						// Load the instance
+						InstanceLoader.loadInstance(instanceID).ifPresent(
+								instance -> {
+									instances.put(instanceID, instance);
+								}
+						);
+					}
+					else {
+						throw new NullPointerException();
+					}
+
+				}
+				catch (NullPointerException e) {
+					UserInput.showErrorMessage("There is bad data in the instances folder.", "Bad Instance Data");
+				}
+			}
+		}
+		catch (Exception e) {
+			UserInput.showExceptionWarning(e);
+			e.printStackTrace();
+			System.exit(-1);
+		}
 
 	}
 

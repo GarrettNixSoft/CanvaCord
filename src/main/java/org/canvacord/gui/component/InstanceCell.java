@@ -14,8 +14,10 @@ import java.nio.file.Paths;
 public class InstanceCell extends JPanel {
 	
 	public static final int ICON_SIZE = 96;
-	public static final int HEIGHT = 120;
+	public static final int HEIGHT = 130;
 	public static final int LABEL_HEIGHT = 40;
+	public static final int STATUS_HEIGHT = 30;
+	public static final int DETAILS_HEIGHT = HEIGHT - LABEL_HEIGHT - STATUS_HEIGHT;
 
 	private final Instance instance;
 
@@ -86,8 +88,8 @@ public class InstanceCell extends JPanel {
 		// Put all detail components in a lower panel
 		JPanel instanceDetailsPanel = new JPanel();
 		instanceDetailsPanel.setBorder(new EmptyBorder(0, 5, 0, 5));
-		instanceDetailsPanel.setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, HEIGHT - LABEL_HEIGHT));
-		instanceDetailsPanel.setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, HEIGHT - LABEL_HEIGHT));
+		instanceDetailsPanel.setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, DETAILS_HEIGHT));
+		instanceDetailsPanel.setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, DETAILS_HEIGHT));
 		instanceDetailsPanel.setLayout(new BoxLayout(instanceDetailsPanel, BoxLayout.Y_AXIS));
 
 		// TODO
@@ -104,10 +106,10 @@ public class InstanceCell extends JPanel {
 		instanceDetailsPanel.add(serverLabel);
 
 		JPanel statusPanel = new JPanel();
-		statusPanel.setBorder(new EmptyBorder(0, 5, 0, 5));
+		statusPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
 		statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
-		statusPanel.setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, 20));
-		statusPanel.setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, 20));
+		statusPanel.setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, STATUS_HEIGHT));
+		statusPanel.setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, STATUS_HEIGHT));
 
 		JLabel statusLabel = new JLabel("Status: Idle");
 		statusLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
