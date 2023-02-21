@@ -1,5 +1,7 @@
 package org.canvacord.gui;
 
+import org.canvacord.event.CanvaCordEvent;
+import org.canvacord.event.CanvaCordEventHandler;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.component.InstanceCell;
 import org.canvacord.instance.Instance;
@@ -16,7 +18,9 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CanvaCordApp extends JFrame {
 
@@ -48,6 +52,8 @@ public class CanvaCordApp extends JFrame {
 	private JScrollPane instancesPane;
 	private JPanel instanceList;
 	private JPanel detailsPanel;
+
+	private Map<String, InstanceCell> instanceCells = new HashMap<>();
 
 	/**
 	 * Construct the main application window for CanvaCord.
@@ -204,15 +210,33 @@ public class CanvaCordApp extends JFrame {
 
 		for (int i = 0; i < instances.size(); i++) {
 			Instance instance = instances.get(i);
-			InstanceCell cell = new InstanceCell(instance);
-			instanceList.add(cell);
-			System.out.println("Added instance " + instance.getName() + " to panel");
-			if (i < instances.size() - 1) instancesPane.add(Box.createVerticalStrut(2));
+			addInstanceCell(instance);
+//			if (i < instances.size() - 1) instancesPane.add(Box.createVerticalStrut(2));
+			// TODO ^ this can be placed in another map by strut hashCode and removed when the instance is deleted
 		}
 
 		// show these instances in the panel
 		splitPane.setLeftComponent(instancesPane);
 		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
+	}
+
+	private void addInstanceCell(Instance instance) {
+		InstanceCell cell = new InstanceCell(instance);
+		instanceList.add(cell);
+		instanceCells.put(cell.getInstance().getInstanceID(), cell);
+		System.out.println("Added instance " + instance.getName() + " to panel");
+		if (!splitPane.getLeftComponent().equals(instancesPane))
+			splitPane.setLeftComponent(instancesPane);
+		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
+	}
+
+	private void removeInstanceCell(InstanceCell cell) {
+		instanceList.remove(cell);
+		instanceCells.remove(cell.getInstance().getInstanceID());
+		System.out.println("Removed instance " + instance.getName() + " from panel");
+		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
+		if (instanceCells.isEmpty())
+			splitPane.setLeftComponent(noInstancesPanel);
 	}
 
 	// ================ INTERACTIVITY ================
@@ -241,7 +265,26 @@ public class CanvaCordApp extends JFrame {
 		newInstanceButton.addActionListener(event -> {
 
 			// run the user through the New Instance wizard; if a new instance is created, update the panel
-			InstanceManager.generateNewInstance().ifPresent(id -> populateInstancesPane());
+			InstanceManager.generateNewInstance().ifPresent(
+					instance -> CanvaCordEvent.newEvent(CanvaCordEvent.Type.NEW_INSTANCE, instance)
+			);
+
+		});
+
+		// ================ REACTING TO EVENTS ================
+		CanvaCordEventHandler.addEventListener(event -> {
+
+			switch (event.getType()) {
+				case NEW_INSTANCE -> {
+					Instance newInstance = (Instance) event.getPayload();
+					addInstanceCell(newInstance);
+				}
+				case INSTANCE_DELETED -> {
+					Instance deletedInstance = (Instance) event.getPayload();
+					InstanceCell cellToDelete = instanceCells.get(deletedInstance.getInstanceID());
+					removeInstanceCell(cellToDelete);
+				}
+			}
 
 		});
 
