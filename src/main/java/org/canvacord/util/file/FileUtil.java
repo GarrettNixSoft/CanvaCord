@@ -67,12 +67,28 @@ public class FileUtil {
 		}
 	}
 
+	/**
+	 * Get a file's name without the extension. If the
+	 * specified file has no extension, the result is
+	 * the equivalent of calling {@code File.getName()}.
+	 * @param file the file to get the name of
+	 * @return a {@code String} containing the file name with the extension removed
+	 */
 	public static String getFileName(File file) {
 		String fileName = file.getName();
 		int extensionIndex = fileName.lastIndexOf('.');
-		return fileName.substring(0, extensionIndex);
+		if (extensionIndex == -1)
+			return fileName;
+		else
+			return fileName.substring(0, extensionIndex);
 	}
 
+	/**
+	 * Get the extension of a file, if it has one. Does not
+	 * include the period.
+	 * @param file the file to get the extension of
+	 * @return a {@code String} containing all characters following the last period in the file name
+	 */
 	public static String getFileExtension(File file) {
 		String fileName = file.getName();
 		int extensionIndex = fileName.lastIndexOf('.');
