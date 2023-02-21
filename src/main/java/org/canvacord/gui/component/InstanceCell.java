@@ -18,6 +18,8 @@ public class InstanceCell extends JPanel {
 	public static final int LABEL_HEIGHT = 40;
 	public static final int STATUS_HEIGHT = 30;
 	public static final int DETAILS_HEIGHT = HEIGHT - LABEL_HEIGHT - STATUS_HEIGHT;
+	public static final int OPTIONS_WIDTH = 60;
+	public static final int STATUS_WIDTH = CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE - OPTIONS_WIDTH;
 
 	private final Instance instance;
 
@@ -76,8 +78,8 @@ public class InstanceCell extends JPanel {
 		JPanel labelPanel = new JPanel();
 		labelPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
-		labelPanel.setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, LABEL_HEIGHT));
-		labelPanel.setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, LABEL_HEIGHT));
+		labelPanel.setMinimumSize(new Dimension(STATUS_WIDTH, LABEL_HEIGHT));
+		labelPanel.setPreferredSize(new Dimension(STATUS_WIDTH, LABEL_HEIGHT));
 
 		JLabel instanceLabel = new JLabel(instance.getName());
 		instanceLabel.setFont(CanvaCordFonts.HEADER_FONT);
@@ -88,11 +90,10 @@ public class InstanceCell extends JPanel {
 		// Put all detail components in a lower panel
 		JPanel instanceDetailsPanel = new JPanel();
 		instanceDetailsPanel.setBorder(new EmptyBorder(0, 5, 0, 5));
-		instanceDetailsPanel.setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, DETAILS_HEIGHT));
-		instanceDetailsPanel.setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, DETAILS_HEIGHT));
+		instanceDetailsPanel.setMinimumSize(new Dimension(STATUS_WIDTH, DETAILS_HEIGHT));
+		instanceDetailsPanel.setPreferredSize(new Dimension(STATUS_WIDTH, DETAILS_HEIGHT));
 		instanceDetailsPanel.setLayout(new BoxLayout(instanceDetailsPanel, BoxLayout.Y_AXIS));
 
-		// TODO
 		JLabel courseLabel = new JLabel("Course: " + instance.getCourseTitle());
 		courseLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 		courseLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -108,8 +109,8 @@ public class InstanceCell extends JPanel {
 		JPanel statusPanel = new JPanel();
 		statusPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
 		statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
-		statusPanel.setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, STATUS_HEIGHT));
-		statusPanel.setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE, STATUS_HEIGHT));
+		statusPanel.setMinimumSize(new Dimension(STATUS_WIDTH, STATUS_HEIGHT));
+		statusPanel.setPreferredSize(new Dimension(STATUS_WIDTH, STATUS_HEIGHT));
 
 		JLabel statusLabel = new JLabel("Status: Idle");
 		statusLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);

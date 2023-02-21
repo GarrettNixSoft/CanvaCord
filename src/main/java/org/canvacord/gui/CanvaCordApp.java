@@ -256,8 +256,10 @@ public class CanvaCordApp extends JFrame {
 		// the divider should not be allowed to be moved to a position less than the minimum instance width
 		splitPane.addPropertyChangeListener("dividerLocation", event -> {
 			int location = (Integer) event.getNewValue();
-			if (location < MIN_INSTANCE_WIDTH) {
-				splitPane.setDividerLocation(MIN_INSTANCE_WIDTH);
+			int windowWidth = getWidth();
+			double ratio = location / (double) windowWidth;
+			if (ratio < 0.75) {
+				splitPane.setDividerLocation(0.75);
 			}
 		});
 

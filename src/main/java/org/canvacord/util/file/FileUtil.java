@@ -172,4 +172,21 @@ public class FileUtil {
 		}
 	}
 
+	public static boolean isValidFile(File file, String... extensions) {
+
+		if (!file.exists())
+			return false;
+
+		for (String ext : extensions)
+			if (getFileExtension(file).equalsIgnoreCase(ext))
+				return true;
+
+		return false;
+
+	}
+
+	public static boolean isValidFile(String file, String... extensions) {
+		return isValidFile(new File(file), extensions);
+	}
+
 }
