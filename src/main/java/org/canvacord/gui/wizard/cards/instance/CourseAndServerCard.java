@@ -165,8 +165,6 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 
 		cardPanel.add(contentPanel, BorderLayout.CENTER);
 
-		// add all components when done
-		add(cardPanel);
 	}
 
 	private static final int CANVAS_VERIFY = 0;

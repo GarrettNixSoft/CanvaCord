@@ -25,7 +25,6 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 	protected void buildGUI() {
 
 		// ================ GUI SUB-PANEL ================
-		JPanel cardPanel = new JPanel();
 		cardPanel.setLayout(new BorderLayout());
 
 		// ================ HEADER ================
@@ -41,7 +40,6 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 		topBar.add(cardHeader);
 
 		// ================ MAIN CONTENT ================
-		JPanel contentPanel = new JPanel();
 		contentPanel.setLayout(null);
 		Dimension size = new Dimension(WizardCard.WIDTH, WizardCard.HEIGHT);
 		contentPanel.setMinimumSize(size);
@@ -83,10 +81,6 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 		chooseFileButton.setFont(CanvaCordFonts.LABEL_FONT);
 		chooseFileButton.setBounds(componentX + fieldWidth + 20, 211, 90, 24);
 		contentPanel.add(chooseFileButton);
-
-		// ================ ADD COMPONENTS ================
-		cardPanel.add(contentPanel, BorderLayout.CENTER);
-		add(cardPanel);
 
 	}
 

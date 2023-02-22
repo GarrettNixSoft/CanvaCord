@@ -3,6 +3,7 @@ package org.canvacord.setup;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.CourseAndServerCard;
 import org.canvacord.gui.wizard.cards.instance.InstanceBasicConfigCard;
+import org.canvacord.gui.wizard.cards.instance.InstanceCanvasFetchCard;
 import org.canvacord.gui.wizard.cards.instance.InstanceSetupWelcomeCard;
 import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.file.FileUtil;
@@ -21,6 +22,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 	private InstanceSetupWelcomeCard startingCard;
 	private CourseAndServerCard courseAndServerCard;
 	private InstanceBasicConfigCard basicConfigCard;
+	private InstanceCanvasFetchCard canvasFetchCard;
 
 	public InstanceCreateWizard() {
 		super("Create Instance");
@@ -47,11 +49,13 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		courseAndServerCard = new CourseAndServerCard(this, "course_server");
 
 		// The third card is the first page of configuration
-		basicConfigCard = new InstanceBasicConfigCard(this, "config_1", true);
+		basicConfigCard = new InstanceBasicConfigCard(this, "config_1", false);
+
+		// The fourth card is for setting up the Canvas fetching schedule
+		canvasFetchCard = new InstanceCanvasFetchCard(this, "fetch_config", true);
 
 		// Configure the navigation connections
 		startingCard.setNavigator(() -> Optional.of(courseAndServerCard));
-
 		startingCard.setOnNavigateTo(this::enableNext);
 
 		courseAndServerCard.setNavigator(() -> Optional.of(basicConfigCard));
@@ -63,7 +67,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 			}
 		});
 
-		basicConfigCard.setNavigator(Optional::empty);
+		basicConfigCard.setNavigator(() -> Optional.of(canvasFetchCard));
 		basicConfigCard.setPreviousCard(courseAndServerCard);
 
 		basicConfigCard.setOnNavigateTo(() -> {
@@ -72,16 +76,22 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 		});
 
+		canvasFetchCard.setNavigator(Optional::empty);
+		canvasFetchCard.setPreviousCard(basicConfigCard);
+
 		// Register the cards
 		registerCard(startingCard);
 		registerCard(courseAndServerCard);
 		registerCard(basicConfigCard);
+		registerCard(canvasFetchCard);
 	}
 
 	@Override
 	public boolean completedSuccessfully() {
 
 		// TODO
+		if (isCancelled())
+			return false;
 
 		// for now, only verify that the course and server IDs were verified
 		return courseAndServerCard.isVerifiedCanvasCourse() && courseAndServerCard.isVerifiedDiscordServer();

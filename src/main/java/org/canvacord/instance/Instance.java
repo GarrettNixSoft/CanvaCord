@@ -1,6 +1,7 @@
 package org.canvacord.instance;
 
 import org.canvacord.discord.commands.Command;
+import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.util.file.FileUtil;
 import org.quartz.SchedulerException;
@@ -74,6 +75,19 @@ public class Instance {
 
 	public void start() throws SchedulerException {
 		CanvaCordScheduler.scheduleInstance(this);
+	}
+
+	public void update() {
+
+		// Notify that a fetch has started for this instance
+		CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_STARTED, this);
+
+		// Fetch Canvas data and update the cache
+		// TODO
+
+		// Notify that the fetch has completed for this instance
+		CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_COMPLETED, this);
+
 	}
 
 	public void stop() throws SchedulerException {

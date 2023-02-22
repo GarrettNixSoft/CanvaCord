@@ -22,6 +22,7 @@ public abstract class InstanceConfigCard extends WizardCard {
 		initLogic();
 
 		cardPanel.add(contentPanel, BorderLayout.CENTER);
+		add(cardPanel);
 	}
 
 	private void buildHeader(String title) {
