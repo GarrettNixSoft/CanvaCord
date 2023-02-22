@@ -6,6 +6,7 @@ import org.canvacord.gui.wizard.cards.instance.InstanceBasicConfigCard;
 import org.canvacord.gui.wizard.cards.instance.InstanceSetupWelcomeCard;
 import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.file.FileUtil;
+import org.canvacord.util.input.UserInput;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -60,10 +61,6 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 			if (!(courseAndServerCard.isVerifiedCanvasCourse() && courseAndServerCard.isVerifiedDiscordServer())) {
 				disableNext();
 			}
-
-			System.out.println("Component 0: " + courseAndServerCard.getComponent(0));
-			System.out.println("Component 0's component 0: " + ((JPanel) courseAndServerCard.getComponent(0)).getComponent(0));
-			System.out.println("Component 0's component 0's component 0: " + ((JPanel) ((JPanel) courseAndServerCard.getComponent(0)).getComponent(0)).getComponent(0));
 		});
 
 		basicConfigCard.setNavigator(Optional::empty);
@@ -72,10 +69,6 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		basicConfigCard.setOnNavigateTo(() -> {
 
 			enableNext();
-
-			System.out.println("Component 0: " + basicConfigCard.getComponent(0));
-			System.out.println("Component 0's component 0: " + ((JPanel) basicConfigCard.getComponent(0)).getComponent(0));
-			System.out.println("Component 0's component 0's component 0: " + ((JPanel) ((JPanel) basicConfigCard.getComponent(0)).getComponent(0)).getComponent(0));
 
 		});
 
@@ -118,8 +111,11 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 			configJSON.put("name", name);
 
 		String iconPath = basicConfigCard.getIconPath();
-		if (FileUtil.isValidFile(iconPath, "png", "jpg", "jpeg"))
-			configJSON.put("icon_path", iconPath);
+		if (!iconPath.isBlank())
+			if (FileUtil.isValidFile(iconPath, "png", "jpg", "jpeg"))
+				configJSON.put("icon_path", iconPath);
+			else
+				UserInput.showMessage("Could not load the specified image.\nUsing default icon.", "Bad Icon Path");
 
 		// TODO add more settings from other pages
 
