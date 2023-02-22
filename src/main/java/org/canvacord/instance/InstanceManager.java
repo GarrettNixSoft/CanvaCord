@@ -2,14 +2,13 @@ package org.canvacord.instance;
 
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.exception.CanvaCordException;
+import org.canvacord.persist.CacheManager;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
 import org.quartz.SchedulerException;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -144,7 +143,7 @@ public class InstanceManager {
 					InstanceWriter.writeInstance(instance);
 
 					// Additionally, create its data file
-					InstanceDataManager.createInstanceData(instance.getInstanceID());
+					CacheManager.createInstanceData(instance.getInstanceID());
 
 					// return the instance's ID so the caller can decide when to initialize it
 					instanceRef.set(instance);
