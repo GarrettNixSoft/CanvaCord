@@ -15,9 +15,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class InstanceManager {
 
-	private static Map<String, Instance> instances;
-	private static List<Instance> runningInstances;
-	private static Set<String> runningInstanceIDs;
+	private static final Map<String, Instance> instances;
+	private static final List<Instance> runningInstances;
+	private static final Set<String> runningInstanceIDs;
 
 	static {
 		instances = new HashMap<>();
@@ -103,17 +103,6 @@ public class InstanceManager {
 		return true;
 	}
 
-	public static void updateInstance(String instanceID) {
-
-		try {
-			instances.get(instanceID).update();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
 	public static boolean stopInstance(String instanceID) throws SchedulerException {
 
 		// check already running
@@ -145,6 +134,17 @@ public class InstanceManager {
 			if (!stopInstance(runningInstanceID))
 				throw new CanvaCordException("Failed to shut down instance " + instances.get(runningInstanceID).getName());
 		}
+	}
+
+	public static void updateInstance(String instanceID) {
+
+		try {
+			instances.get(instanceID).update();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public static Optional<Instance> generateNewInstance() {
