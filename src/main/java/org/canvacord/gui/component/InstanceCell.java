@@ -123,14 +123,18 @@ public class InstanceCell extends JPanel {
 
 		statusLabel = new JLabel("Status: Stopped");
 		statusLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
+		statusPanel.setPreferredSize(new Dimension(150, 24));
 		statusPanel.add(statusLabel);
 
-		statusPanel.add(Box.createHorizontalStrut(20));
+		Dimension minFiller = new Dimension(20, 5);
+		Dimension preFiller = new Dimension(50, 5);
+		Dimension maxFiller = new Dimension(Short.MAX_VALUE, 5);
+		statusPanel.add(new Box.Filler(minFiller, preFiller, maxFiller));
 
 		statusBar = new DangerousProgressBar(0, 100);
-		statusBar.setMinimumSize(new Dimension(200, 12));
-		statusBar.setPreferredSize(new Dimension(200, 16));
-		statusBar.setMaximumSize(new Dimension(300, 16));
+		statusBar.setMinimumSize(new Dimension(300, 16));
+		statusBar.setPreferredSize(new Dimension(300, 20));
+		statusBar.setMaximumSize(new Dimension(450, 20));
 		statusBar.setMinimum(0);
 		statusBar.setMaximum(100);
 		statusPanel.add(statusBar);
@@ -146,9 +150,10 @@ public class InstanceCell extends JPanel {
 
 		mainPanel.add(instanceDetailsPanel, BorderLayout.CENTER);
 		mainPanel.add(statusPanel, BorderLayout.SOUTH);
-		mainPanel.add(optionsButtonPanel, BorderLayout.EAST);
+//		mainPanel.add(optionsButtonPanel, BorderLayout.EAST);
 
 		add(mainPanel, BorderLayout.CENTER);
+		add(optionsButtonPanel, BorderLayout.EAST);
 
 		setEnabled(true);
 		setOpaque(true);
