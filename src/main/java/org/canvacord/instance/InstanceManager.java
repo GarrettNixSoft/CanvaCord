@@ -95,6 +95,9 @@ public class InstanceManager {
 		Instance instance = instances.get(instanceID);
 		instance.start();
 
+		runningInstances.add(instance);
+		runningInstanceIDs.add(instanceID);
+
 		CanvaCordEvent.newEvent(CanvaCordEvent.Type.INSTANCE_STARTED, instance);
 
 		return true;
@@ -134,6 +137,7 @@ public class InstanceManager {
 	}
 
 	public static void stopAllInstances() throws SchedulerException {
+		System.out.println("Stop all");
 		for (String runningInstanceID : runningInstanceIDs) {
 			if (!stopInstance(runningInstanceID))
 				throw new CanvaCordException("Failed to shut down instance " + instances.get(runningInstanceID).getName());

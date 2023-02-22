@@ -94,11 +94,11 @@ public class Instance {
 			// Fetch Canvas data and update the cache
 
 			// First fetch assignments
-			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, FetchStage.ASSIGNMENTS);
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, this, FetchStage.ASSIGNMENTS);
 			CacheManager.updateAssignments(instanceID, canvasApi.getAssignments(courseID));
 
 			// Next fetch announcements
-			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, FetchStage.ANNOUNCEMENTS);
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, this, FetchStage.ANNOUNCEMENTS);
 			CacheManager.updateAnnouncements(instanceID, canvasApi.getAnnouncements(courseID));
 
 			// Write cache data to disk

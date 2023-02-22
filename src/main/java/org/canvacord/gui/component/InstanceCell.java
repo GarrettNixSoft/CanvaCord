@@ -2,6 +2,7 @@ package org.canvacord.gui.component;
 
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.CanvaCordEventHandler;
+import org.canvacord.event.FetchStage;
 import org.canvacord.gui.CanvaCordApp;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.instance.Instance;
@@ -188,10 +189,35 @@ public class InstanceCell extends JPanel {
 						statusBar.setFailed(false);
 						statusBar.setValue(0);
 					}
-					case FETCH_COMPLETED, NOTIFY_COMPLETED -> {
-						statusLabel.setText("Status: Idle");
+					case FETCH_COMPLETED -> {
+						statusLabel.setText("Status: Fetch Complete");
 						statusBar.setFailed(false);
-						statusBar.setValue(0);
+						statusBar.setValue(100);
+						SwingUtilities.invokeLater(() -> {
+							try {
+								Thread.sleep(1000);
+								statusLabel.setText("Status: Idle");
+								statusBar.setValue(0);
+							}
+							catch (Exception e) {
+								System.out.println("Sleep failed");
+							}
+						});
+					}
+					case NOTIFY_COMPLETED -> {
+						statusLabel.setText("Status: Notify Complete");
+						statusBar.setFailed(false);
+						statusBar.setValue(100);
+						SwingUtilities.invokeLater(() -> {
+							try {
+								Thread.sleep(1000);
+								statusLabel.setText("Status: Idle");
+								statusBar.setValue(0);
+							}
+							catch (Exception e) {
+								System.out.println("Sleep failed");
+							}
+						});
 					}
 
 					case FETCH_ERROR -> {
@@ -201,6 +227,14 @@ public class InstanceCell extends JPanel {
 					case NOTIFY_ERROR -> {
 						statusLabel.setText("Status: Notify Error");
 						statusBar.setFailed(true);
+					}
+
+					case FETCH_UPDATE -> {
+						FetchStage stage = (FetchStage) event.getPayload()[1];
+						if (stage == FetchStage.ASSIGNMENTS)
+							statusBar.setValue(33);
+						else if (stage == FetchStage.ANNOUNCEMENTS)
+							statusBar.setValue(67);
 					}
 
 				}
