@@ -123,6 +123,9 @@ public class InstanceManager {
 		Instance instance = instances.get(instanceID);
 		instance.stop();
 
+		runningInstances.remove(instance);
+		runningInstanceIDs.remove(instanceID);
+
 		CanvaCordEvent.newEvent(CanvaCordEvent.Type.INSTANCE_STOPPED, instance);
 
 		return true;
