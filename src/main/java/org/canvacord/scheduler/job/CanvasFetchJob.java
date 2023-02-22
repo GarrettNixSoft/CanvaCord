@@ -1,22 +1,23 @@
 package org.canvacord.scheduler.job;
 
+import org.canvacord.instance.InstanceManager;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 public class CanvasFetchJob implements Job {
 
-    private String courseID;
+    private String instanceID;
 
-    public void setCourseID(String courseID) {
-        this.courseID = courseID;
+    public void setInstanceID(String instanceID) {
+        this.instanceID = instanceID;
     }
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
 
-        // TODO
-        System.out.println("Fetching Canvas data for course " + courseID);
+        System.out.println("Fetching Canvas data for instance " + instanceID);
+        InstanceManager.updateInstance(instanceID);
 
     }
 }

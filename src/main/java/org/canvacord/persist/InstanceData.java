@@ -14,6 +14,8 @@ public class InstanceData {
 	}
 
 	// ================ GETTERS ================
+	protected JSONObject getJSON() {return instanceData; }
+
 	public JSONArray getPastAssignments() {
 		return instanceData.getJSONArray("past_assignments");
 	}

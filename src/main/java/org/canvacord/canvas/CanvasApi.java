@@ -1,19 +1,19 @@
 package org.canvacord.canvas;
 
 import edu.ksu.canvas.CanvasApiFactory;
+import edu.ksu.canvas.interfaces.AnnouncementReader;
 import edu.ksu.canvas.interfaces.AssignmentReader;
 import edu.ksu.canvas.interfaces.CourseReader;
 import edu.ksu.canvas.interfaces.ModuleReader;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Module;
+import edu.ksu.canvas.model.announcement.Announcement;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
-import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
-import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
-import edu.ksu.canvas.requestOptions.ListModulesOptions;
-import edu.ksu.canvas.requestOptions.ListUserCoursesOptions;
+import edu.ksu.canvas.requestOptions.*;
 import org.canvacord.persist.ConfigManager;
+import org.checkerframework.checker.units.qual.C;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -113,7 +113,7 @@ public class CanvasApi {
 
 	public List<Module> getModules(Long courseID) throws IOException {
 
-		// get an assignment reader
+		// get a module reader
 		ModuleReader reader = API.getReader(ModuleReader.class, TOKEN);
 
 		ListModulesOptions options = new ListModulesOptions(courseID);
@@ -122,6 +122,14 @@ public class CanvasApi {
 
 	}
 
+	public List<Announcement> getAnnouncements(String courseID) throws IOException {
 
+		AnnouncementReader reader = API.getReader(AnnouncementReader.class, TOKEN);
+
+		ListCourseAnnouncementsOptions options = new ListCourseAnnouncementsOptions(courseID);
+
+		return reader.listCourseAnnouncements(options);
+
+	}
 
 }

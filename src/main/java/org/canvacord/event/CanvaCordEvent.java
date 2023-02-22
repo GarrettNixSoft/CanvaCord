@@ -6,20 +6,20 @@ public class CanvaCordEvent {
         NEW_INSTANCE, INSTANCE_DELETED,
         INITIALIZE_STARTED, INITIALIZE_UPDATE, INITIALIZE_COMPLETED,
         INSTANCE_STARTED, INSTANCE_STOPPED,
-        FETCH_STARTED, FETCH_UPDATE, FETCH_COMPLETED,
-        NOTIFY_STARTED, NOTIFY_UPDATE, NOTIFY_COMPLETED
+        FETCH_STARTED, FETCH_UPDATE, FETCH_COMPLETED, FETCH_ERROR,
+        NOTIFY_STARTED, NOTIFY_UPDATE, NOTIFY_COMPLETED, NOTIFY_ERROR
     }
 
     private final Type type;
-    private final Object payload;
+    private final Object[] payload;
 
-    private CanvaCordEvent(Type type, Object payload) {
+    private CanvaCordEvent(Type type, Object... payload) {
         this.type = type;
         this.payload = payload;
         CanvaCordEventHandler.publishEvent(this);
     }
 
-    public static void newEvent(Type type, Object payload) {
+    public static void newEvent(Type type, Object... payload) {
         new CanvaCordEvent(type, payload);
     }
 
@@ -27,7 +27,7 @@ public class CanvaCordEvent {
         return type;
     }
 
-    public Object getPayload() {
+    public Object[] getPayload() {
         return payload;
     }
 }

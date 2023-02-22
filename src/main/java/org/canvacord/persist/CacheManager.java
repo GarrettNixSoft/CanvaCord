@@ -48,7 +48,7 @@ public class CacheManager {
 	public static InstanceData loadInstanceData(String instanceID) throws CanvaCordException {
 
 		// Find the data file
-		File instanceDataFile = Paths.get("instances/" + instanceID + "/data.config").toFile();
+		File instanceDataFile = Paths.get("instances/" + instanceID + "/data.json").toFile();
 
 		// If it exists, read the JSON and pack it
 		Optional<JSONObject> loadedData = FileUtil.getJSON(instanceDataFile);
@@ -62,6 +62,14 @@ public class CacheManager {
 			UserInput.showWarningMessage("Data cache file for " + instanceID + " not found.\nA new file will be created.", "Missing Cache Data");
 			return createInstanceData(instanceID);
 		}
+
+	}
+
+	public static void writeInstanceData(String instanceID) {
+
+		File targetFile = Paths.get("instances/" + instanceID + "/data.json").toFile();
+		if (!FileUtil.writeJSON(cacheData.get(instanceID).getJSON(), targetFile))
+			throw new CanvaCordException("Failed to write cache data for instance " + instanceID);
 
 	}
 

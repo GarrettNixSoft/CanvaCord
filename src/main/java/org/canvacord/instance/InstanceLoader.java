@@ -1,6 +1,7 @@
 package org.canvacord.instance;
 
 import org.canvacord.exception.CanvaCordException;
+import org.canvacord.persist.CacheManager;
 import org.canvacord.util.file.FileUtil;
 import org.json.JSONObject;
 
@@ -43,8 +44,11 @@ public class InstanceLoader {
 		// Otherwise, load the instance and return it
 		else {
 			Optional<JSONObject> instanceJSON = FileUtil.getJSON(instanceFile);
-			if (instanceJSON.isPresent())
-				return Optional.of(InstanceParser.parseInstance(instanceID, instanceJSON.get()));
+			if (instanceJSON.isPresent()) {
+				Instance parsedInstance = InstanceParser.parseInstance(instanceID, instanceJSON.get());
+				CacheManager.loadInstanceData(instanceID);
+				return Optional.of(parsedInstance);
+			}
 			else
 				throw new CanvaCordException("Failed to load instance file! " + instanceFile.getPath());
 		}

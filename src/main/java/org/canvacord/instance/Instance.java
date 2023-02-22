@@ -1,12 +1,17 @@
 package org.canvacord.instance;
 
+import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.commands.Command;
 import org.canvacord.event.CanvaCordEvent;
+import org.canvacord.event.FetchStage;
+import org.canvacord.exception.CanvaCordException;
+import org.canvacord.persist.CacheManager;
 import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.util.file.FileUtil;
 import org.quartz.SchedulerException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -82,12 +87,35 @@ public class Instance {
 		// Notify that a fetch has started for this instance
 		CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_STARTED, this);
 
-		// Fetch Canvas data and update the cache
+		// Grab the CanvasApi instance
+		CanvasApi canvasApi = CanvasApi.getInstance();
+
+		try {
+			// Fetch Canvas data and update the cache
+
+			// First fetch assignments
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, FetchStage.ASSIGNMENTS);
+			CacheManager.updateAssignments(instanceID, canvasApi.getAssignments(courseID));
+
+			// Next fetch announcements
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, FetchStage.ANNOUNCEMENTS);
+			CacheManager.updateAnnouncements(instanceID, canvasApi.getAnnouncements(courseID));
+
+			// Write cache data to disk
+			CacheManager.writeInstanceData(instanceID);
+
+			// Notify that the fetch has completed for this instance
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_COMPLETED, this);
+		}
+		catch (IOException | CanvaCordException e) {
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_ERROR, this, e);
+			e.printStackTrace();
+		}
+
+	}
+
+	public void notifyServer() {
 		// TODO
-
-		// Notify that the fetch has completed for this instance
-		CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_COMPLETED, this);
-
 	}
 
 	public void stop() throws SchedulerException {

@@ -95,7 +95,20 @@ public class InstanceManager {
 		Instance instance = instances.get(instanceID);
 		instance.start();
 
+		CanvaCordEvent.newEvent(CanvaCordEvent.Type.INSTANCE_STARTED, instance);
+
 		return true;
+	}
+
+	public static void updateInstance(String instanceID) {
+
+		try {
+			instances.get(instanceID).update();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public static boolean stopInstance(String instanceID) throws SchedulerException {
@@ -107,7 +120,17 @@ public class InstanceManager {
 		Instance instance = instances.get(instanceID);
 		instance.stop();
 
+		CanvaCordEvent.newEvent(CanvaCordEvent.Type.INSTANCE_STOPPED, instance);
+
 		return true;
+	}
+
+	public static void runAllInstances() throws SchedulerException {
+		for (String instanceID : instances.keySet()) {
+			if (!runningInstanceIDs.contains(instanceID))
+				if (!runInstance(instanceID))
+					throw new CanvaCordException("Failed to start instance " + instances.get(instanceID).getName());
+		}
 	}
 
 	public static void stopAllInstances() throws SchedulerException {
