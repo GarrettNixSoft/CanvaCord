@@ -40,13 +40,13 @@ public class InstanceData {
 
 		// Search for this assignment ID in the old assignments list
 		// If a match was found, do nothing
-		if (JSONUtils.arrayContains(oldAssignments, assignmentID)) return;
+		if (JSONUtils.arrayContainsLong(oldAssignments, assignmentID)) return;
 
 		// Otherwise, fetch the new assignment list
 		JSONArray newAssignments = getNewAssignments();
 
 		// Search the new assignments for a match
-		if (JSONUtils.arrayContains(newAssignments, assignmentID)) return;
+		if (JSONUtils.arrayContainsLong(newAssignments, assignmentID)) return;
 
 		// If neither array contained the ID, it's a new assignment, so add it to the new array
 		newAssignments.put(assignmentID);
@@ -85,13 +85,13 @@ public class InstanceData {
 
 		// Search for this announcement ID in the old announcements list
 		// If a match was found, do nothing
-		if (JSONUtils.arrayContains(oldAnnouncements, announcementID)) return;
+		if (JSONUtils.arrayContainsLong(oldAnnouncements, announcementID)) return;
 
 		// Otherwise, fetch the new announcement list
 		JSONArray newAnnouncements = getNewAnnouncements();
 
 		// Search the new announcements for a match
-		if (JSONUtils.arrayContains(newAnnouncements, announcementID)) return;
+		if (JSONUtils.arrayContainsLong(newAnnouncements, announcementID)) return;
 
 		// If neither array contained the ID, it's a new announcement, so add it to the new array
 		newAnnouncements.put(announcementID);

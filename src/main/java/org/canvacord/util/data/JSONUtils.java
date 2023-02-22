@@ -4,9 +4,9 @@ import org.json.JSONArray;
 
 public class JSONUtils {
 
-	public static boolean arrayContains(JSONArray array, Object target) {
+	public static boolean arrayContainsLong(JSONArray array, long target) {
 		for (int i = 0; i < array.length(); i++) {
-			if (array.get(i).equals(target)) {
+			if (array.getLong(i) == target) {
 				return true;
 			}
 		}
