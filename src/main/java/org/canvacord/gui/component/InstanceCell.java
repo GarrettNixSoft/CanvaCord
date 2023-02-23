@@ -1,9 +1,14 @@
 package org.canvacord.gui.component;
 
+import org.canvacord.event.CanvaCordEvent;
+import org.canvacord.event.CanvaCordEventHandler;
+import org.canvacord.event.FetchStage;
 import org.canvacord.gui.CanvaCordApp;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.instance.Instance;
+import org.canvacord.instance.InstanceManager;
 import org.canvacord.util.Globals;
+import org.canvacord.util.input.UserInput;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -23,6 +28,9 @@ public class InstanceCell extends JPanel {
 
 	private final Instance instance;
 
+	private JLabel statusLabel;
+	private DangerousProgressBar statusBar;
+
 	public InstanceCell(Instance instance) {
 		this.instance = instance;
 		setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - 5, HEIGHT));
@@ -30,6 +38,7 @@ public class InstanceCell extends JPanel {
 		setMaximumSize(new Dimension(10000, HEIGHT));
 		setLayout(new BorderLayout());
 		init(instance);
+		initLogic(instance);
 	}
 
 	public Instance getInstance() {
@@ -112,16 +121,20 @@ public class InstanceCell extends JPanel {
 		statusPanel.setMinimumSize(new Dimension(STATUS_WIDTH, STATUS_HEIGHT));
 		statusPanel.setPreferredSize(new Dimension(STATUS_WIDTH, STATUS_HEIGHT));
 
-		JLabel statusLabel = new JLabel("Status: Idle");
+		statusLabel = new JLabel("Status: Stopped");
 		statusLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
+		statusPanel.setPreferredSize(new Dimension(150, 24));
 		statusPanel.add(statusLabel);
 
-		statusPanel.add(Box.createHorizontalStrut(20));
+		Dimension minFiller = new Dimension(20, 5);
+		Dimension preFiller = new Dimension(50, 5);
+		Dimension maxFiller = new Dimension(Short.MAX_VALUE, 5);
+		statusPanel.add(new Box.Filler(minFiller, preFiller, maxFiller));
 
-		JProgressBar statusBar = new JProgressBar();
-		statusBar.setMinimumSize(new Dimension(200, 12));
-		statusBar.setPreferredSize(new Dimension(200, 16));
-		statusBar.setMaximumSize(new Dimension(300, 16));
+		statusBar = new DangerousProgressBar(0, 100);
+		statusBar.setMinimumSize(new Dimension(300, 16));
+		statusBar.setPreferredSize(new Dimension(300, 20));
+		statusBar.setMaximumSize(new Dimension(450, 20));
 		statusBar.setMinimum(0);
 		statusBar.setMaximum(100);
 		statusPanel.add(statusBar);
@@ -137,12 +150,104 @@ public class InstanceCell extends JPanel {
 
 		mainPanel.add(instanceDetailsPanel, BorderLayout.CENTER);
 		mainPanel.add(statusPanel, BorderLayout.SOUTH);
-		mainPanel.add(optionsButtonPanel, BorderLayout.EAST);
+//		mainPanel.add(optionsButtonPanel, BorderLayout.EAST);
 
 		add(mainPanel, BorderLayout.CENTER);
+		add(optionsButtonPanel, BorderLayout.EAST);
 
 		setEnabled(true);
 		setOpaque(true);
 
+		// OPTIONS BUTTON LOGIC
+		optionsButton.addActionListener(event -> {
+
+			// TODO make this do useful things; for now, use it for testing instance deletion
+			if (UserInput.askToConfirm("Delete this instance?", "Delete Test"))
+				InstanceManager.deleteInstance(instance);
+
+		});
+
 	}
+
+	private void initLogic(Instance instance) {
+
+		CanvaCordEventHandler.addEventListener(event -> {
+
+			// If this event involves this cell's instance
+			if (event.getPayload()[0] instanceof Instance eventInstance && eventInstance.equals(instance)) {
+
+				switch (event.getType()) {
+
+					case INSTANCE_STARTED -> {
+						statusLabel.setText("Status: Idle");
+					}
+					case INSTANCE_STOPPED -> {
+						statusLabel.setText("Status: Stopped");
+					}
+					case FETCH_STARTED -> {
+						statusLabel.setText("Status: Fetching...");
+						statusBar.setFailed(false);
+						statusBar.setValue(0);
+					}
+					case NOTIFY_STARTED -> {
+						statusLabel.setText("Status: Notifying...");
+						statusBar.setFailed(false);
+						statusBar.setValue(0);
+					}
+					case FETCH_COMPLETED -> {
+						statusLabel.setText("Status: Fetch Complete");
+						statusBar.setFailed(false);
+						statusBar.setValue(100);
+						SwingUtilities.invokeLater(() -> {
+							try {
+								Thread.sleep(1000);
+								statusLabel.setText("Status: Idle");
+								statusBar.setValue(0);
+							}
+							catch (Exception e) {
+								System.out.println("Sleep failed");
+							}
+						});
+					}
+					case NOTIFY_COMPLETED -> {
+						statusLabel.setText("Status: Notify Complete");
+						statusBar.setFailed(false);
+						statusBar.setValue(100);
+						SwingUtilities.invokeLater(() -> {
+							try {
+								Thread.sleep(1000);
+								statusLabel.setText("Status: Idle");
+								statusBar.setValue(0);
+							}
+							catch (Exception e) {
+								System.out.println("Sleep failed");
+							}
+						});
+					}
+
+					case FETCH_ERROR -> {
+						statusLabel.setText("Status: Fetch Error");
+						statusBar.setFailed(true);
+					}
+					case NOTIFY_ERROR -> {
+						statusLabel.setText("Status: Notify Error");
+						statusBar.setFailed(true);
+					}
+
+					case FETCH_UPDATE -> {
+						FetchStage stage = (FetchStage) event.getPayload()[1];
+						if (stage == FetchStage.ASSIGNMENTS)
+							statusBar.setValue(33);
+						else if (stage == FetchStage.ANNOUNCEMENTS)
+							statusBar.setValue(67);
+					}
+
+				}
+
+			}
+
+		});
+
+	}
+
 }

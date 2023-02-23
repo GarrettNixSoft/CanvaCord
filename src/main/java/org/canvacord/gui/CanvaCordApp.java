@@ -263,6 +263,27 @@ public class CanvaCordApp extends JFrame {
 			}
 		});
 
+		// ================ STARTING/STOPPING ALL INSTANCES ================
+		startAllButton.addActionListener(event -> {
+			try {
+				InstanceManager.runAllInstances();
+			}
+			catch (Exception e) {
+				UserInput.showExceptionWarning(e);
+				e.printStackTrace();
+			}
+		});
+
+		stopAllButton.addActionListener(event -> {
+			try {
+				InstanceManager.stopAllInstances();
+			}
+			catch (Exception e) {
+				UserInput.showExceptionWarning(e);
+				e.printStackTrace();
+			}
+		});
+
 		// ================ CREATING NEW INSTANCES ================
 		newInstanceButton.addActionListener(event -> {
 
@@ -278,11 +299,11 @@ public class CanvaCordApp extends JFrame {
 
 			switch (event.getType()) {
 				case NEW_INSTANCE -> {
-					Instance newInstance = (Instance) event.getPayload();
+					Instance newInstance = (Instance) event.getPayload()[0];
 					addInstanceCell(newInstance);
 				}
 				case INSTANCE_DELETED -> {
-					Instance deletedInstance = (Instance) event.getPayload();
+					Instance deletedInstance = (Instance) event.getPayload()[0];
 					InstanceCell cellToDelete = instanceCells.get(deletedInstance.getInstanceID());
 					removeInstanceCell(cellToDelete);
 				}

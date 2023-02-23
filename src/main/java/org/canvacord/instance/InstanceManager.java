@@ -1,22 +1,23 @@
 package org.canvacord.instance;
 
+import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.exception.CanvaCordException;
+import org.canvacord.persist.CacheManager;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
 import org.quartz.SchedulerException;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class InstanceManager {
 
-	private static Map<String, Instance> instances;
-	private static List<Instance> runningInstances;
-	private static Set<String> runningInstanceIDs;
+	private static final Map<String, Instance> instances;
+	private static final List<Instance> runningInstances;
+	private static final Set<String> runningInstanceIDs;
 
 	static {
 		instances = new HashMap<>();
@@ -94,6 +95,11 @@ public class InstanceManager {
 		Instance instance = instances.get(instanceID);
 		instance.start();
 
+		runningInstances.add(instance);
+		runningInstanceIDs.add(instanceID);
+
+		CanvaCordEvent.newEvent(CanvaCordEvent.Type.INSTANCE_STARTED, instance);
+
 		return true;
 	}
 
@@ -106,14 +112,39 @@ public class InstanceManager {
 		Instance instance = instances.get(instanceID);
 		instance.stop();
 
+		runningInstances.remove(instance);
+		runningInstanceIDs.remove(instanceID);
+
+		CanvaCordEvent.newEvent(CanvaCordEvent.Type.INSTANCE_STOPPED, instance);
+
 		return true;
 	}
 
+	public static void runAllInstances() throws SchedulerException {
+		for (String instanceID : instances.keySet()) {
+			if (!runningInstanceIDs.contains(instanceID))
+				if (!runInstance(instanceID))
+					throw new CanvaCordException("Failed to start instance " + instances.get(instanceID).getName());
+		}
+	}
+
 	public static void stopAllInstances() throws SchedulerException {
+		System.out.println("Stop all");
 		for (String runningInstanceID : runningInstanceIDs) {
 			if (!stopInstance(runningInstanceID))
 				throw new CanvaCordException("Failed to shut down instance " + instances.get(runningInstanceID).getName());
 		}
+	}
+
+	public static void updateInstance(String instanceID) {
+
+		try {
+			instances.get(instanceID).update();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	public static Optional<Instance> generateNewInstance() {
@@ -142,13 +173,14 @@ public class InstanceManager {
 					InstanceWriter.writeInstance(instance);
 
 					// Additionally, create its data file
-					InstanceDataManager.createInstanceData(instance.getInstanceID());
+					CacheManager.createInstanceData(instance.getInstanceID());
 
 					// return the instance's ID so the caller can decide when to initialize it
 					instanceRef.set(instance);
 				},
 				() -> {
 					// TODO handle instance creation exception
+					System.out.println("Instance creation failed");
 				}
 		);
 
@@ -163,8 +195,32 @@ public class InstanceManager {
 			return Optional.of(new Instance(courseID, serverID, configuration));
 		}
 		catch (InstantiationException e) {
+			e.printStackTrace();
 			return Optional.empty();
 		}
+	}
+
+	public static void deleteInstance(Instance instance) {
+
+		try {
+			// Stop the instance
+			stopInstance(instance.getInstanceID());
+
+			// Find the instance folder
+			File instanceDir = Paths.get("instances/" + instance.getInstanceID()).toFile();
+			FileUtil.deleteDirectory(instanceDir);
+
+			instances.remove(instance.getInstanceID());
+			Instance.acknowledgeDeleted(instance);
+
+			// Send an event signalling the deletion occurred
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.INSTANCE_DELETED, instance);
+		}
+		catch (Exception e) {
+			UserInput.showExceptionWarning(e);
+			e.printStackTrace();
+		}
+
 	}
 
 }

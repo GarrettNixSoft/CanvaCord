@@ -1,11 +1,17 @@
 package org.canvacord.instance;
 
+import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.commands.Command;
+import org.canvacord.event.CanvaCordEvent;
+import org.canvacord.event.FetchStage;
+import org.canvacord.exception.CanvaCordException;
+import org.canvacord.persist.CacheManager;
 import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.util.file.FileUtil;
 import org.quartz.SchedulerException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -17,6 +23,11 @@ public class Instance {
 	private static final Set<String> courseIDs = new HashSet<>();
 	private static final Set<Long> serverIDs = new HashSet<>();
 	private static final Map<Long,Command> serverCommands = new HashMap<>();
+
+	public static void acknowledgeDeleted(Instance instance) {
+		courseIDs.remove(instance.getCourseID());
+		serverIDs.remove(instance.getServerID());
+	}
 
 	private final String instanceID;
 
@@ -69,6 +80,42 @@ public class Instance {
 
 	public void start() throws SchedulerException {
 		CanvaCordScheduler.scheduleInstance(this);
+	}
+
+	public void update() {
+
+		// Notify that a fetch has started for this instance
+		CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_STARTED, this);
+
+		// Grab the CanvasApi instance
+		CanvasApi canvasApi = CanvasApi.getInstance();
+
+		try {
+			// Fetch Canvas data and update the cache
+
+			// First fetch assignments
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, this, FetchStage.ASSIGNMENTS);
+			CacheManager.updateAssignments(instanceID, canvasApi.getAssignments(courseID));
+
+			// Next fetch announcements
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, this, FetchStage.ANNOUNCEMENTS);
+			CacheManager.updateAnnouncements(instanceID, canvasApi.getAnnouncements(courseID));
+
+			// Write cache data to disk
+			CacheManager.writeInstanceData(instanceID);
+
+			// Notify that the fetch has completed for this instance
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_COMPLETED, this);
+		}
+		catch (IOException | CanvaCordException e) {
+			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_ERROR, this, e);
+			e.printStackTrace();
+		}
+
+	}
+
+	public void notifyServer() {
+		// TODO
 	}
 
 	public void stop() throws SchedulerException {

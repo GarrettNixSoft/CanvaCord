@@ -66,6 +66,12 @@ public class UserInput {
 		frame.dispose();
 	}
 
+	public static void showWarningMessage(String message, String title) {
+		JFrame frame = buildParent();
+		JOptionPane.showMessageDialog(frame, message, title, JOptionPane.WARNING_MESSAGE);
+		frame.dispose();
+	}
+
 	public static void showMessage(String message, String title) {
 		JFrame frame = buildParent();
 		JOptionPane.showMessageDialog(frame, message, title, JOptionPane.PLAIN_MESSAGE);
