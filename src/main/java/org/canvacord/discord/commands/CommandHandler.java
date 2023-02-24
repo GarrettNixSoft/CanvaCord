@@ -11,16 +11,18 @@ import java.util.Map;
 
 public class CommandHandler {
 
-	private static Map<Long, Command> commands = new HashMap<>();
+	private static final Map<Long, Command> commands = new HashMap<>();
 
-	public static void registerCommandGlobal(SlashCommandBuilder slashCommand, Command command, DiscordApi api) {
+	public static long registerCommandGlobal(SlashCommandBuilder slashCommand, Command command, DiscordApi api) {
 		SlashCommand globalCommand = slashCommand.createGlobal(api).join();
 		commands.put(globalCommand.getId(), command);
+		return globalCommand.getId();
 	}
 
-	public static void registerCommandServer(SlashCommandBuilder slashCommand, Command command, Server server) {
+	public static long registerCommandServer(SlashCommandBuilder slashCommand, Command command, Server server) {
 		SlashCommand serverCommand = slashCommand.createForServer(server).join();
 		commands.put(serverCommand.getId(), command);
+		return serverCommand.getId();
 	}
 
 	public static void executeCommand(SlashCommandInteraction interaction) {
