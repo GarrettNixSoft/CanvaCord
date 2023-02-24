@@ -26,8 +26,7 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 
 	@Override
 	public String getName(){
-		return "help"; //option: make this so it accesses the created slash command and uses getName on that?
-		//otherwise: we could just manually add names to each command, and use the getname to BUILD the slashcommands
+		return "help";
 	}
 	@Override
 	public String getDescription(){
@@ -39,6 +38,10 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
                 To skip straight to viewing a specific command's description, use its slash command name as a parameter, after */help commands*
                 Discord will attempt to autocomplete, or show you a list of available options as you type. How nice!
                 """;
+	}
+	@Override
+	public String getShortDescription(){
+		return "Send an overview for CanvaCord commands.";
 	}
 	@Override
 	public void execute(SlashCommandInteraction interaction) {
@@ -154,6 +157,8 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 		return ActionRow.of(Button.secondary("Tutorial", "Tutorials"),
 				Button.secondary("Commands", "Commands"));
 	}
+	// If there's time: tutorial class, interacts with registered commands
+	// checks which commands are in the server and rearranges tutorials accordingly
 	private HashMap<String,EmbedBuilder> getTutorials(){
 		if (tutorialDescriptions.isEmpty()) {
 			//todo: as we finish GUI/near the end, add image (maybe gif?) examples for tutorials
@@ -171,7 +176,7 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
                             """)
 					.addInlineField("1: Server Owners", "Through the Application Control Panel (ACP) there is a button for each course/bot instance labeled *\"Update Now\"*. " +
 							"Click it to fetch Canvas data.")
-					.addInlineField("2: Non Owner Users", "Bother your server owner.")); //bit cheeky innit
+					.addInlineField("2: Non Owner Users", "Politely ask your server owner."));
 			tutorialDescriptions.put("Getting notified", new EmbedBuilder().addField("Notifications", """
                     As Canvas data is updated (new assignments, assignment date changes, course announcements) the CanvaCord bot will mention Users by self-selected Discord roles. The bot will also ping users after being given a timestamp for a course's meeting times.
                                     
