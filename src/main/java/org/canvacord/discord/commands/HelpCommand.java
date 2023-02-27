@@ -82,6 +82,12 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 		}
 	}
 
+	@Override
+	public SlashCommandBuilder getBuilder() {
+		// TODO
+		return null;
+	}
+
 	//option: make a new class for just the help command listeners
 	@Override
 	public void onButtonClick(ButtonClickEvent event){
