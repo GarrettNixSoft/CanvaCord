@@ -9,6 +9,6 @@ public abstract class Command {
 	public abstract String getName();
 	public abstract void execute(SlashCommandInteraction interaction);
 
-	public abstract SlashCommandBuilder getBuilder();
+	protected abstract SlashCommandBuilder getBuilder();
 
 }
