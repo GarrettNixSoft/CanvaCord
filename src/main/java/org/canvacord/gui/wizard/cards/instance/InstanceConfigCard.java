@@ -37,8 +37,6 @@ public abstract class InstanceConfigCard extends WizardCard {
 		topBar.setLayout(null);
 //		topBar.setBorder(new EmptyBorder(10, 10, 10, 10));
 		topBar.setPreferredSize(new Dimension(CanvaCordWizard.WIDTH, 80));
-		topBar.setMinimumSize(new Dimension(CanvaCordWizard.WIDTH, 80));
-		topBar.setMaximumSize(new Dimension(CanvaCordWizard.WIDTH, 80));
 		cardPanel.add(topBar, BorderLayout.NORTH);
 
 		JLabel cardHeader = new JLabel(title);

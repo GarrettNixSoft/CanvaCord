@@ -24,20 +24,19 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 	@Override
 	protected void buildGUI() {
 
-		// ================ GUI SUB-PANEL ================
-		cardPanel.setLayout(new BorderLayout());
+		// ================ MAIN LAYOUT ================
+//		cardPanel.setLayout(new BorderLayout());
 
 		// ================ HEADER ================
-		ImagePanel topBar = new ImagePanel("resources/setup_topbar.png");
-		topBar.setLayout(null);
-//		topBar.setBorder(new EmptyBorder(10, 10, 10, 10));
-		topBar.setPreferredSize(new Dimension(getMaximumSize().width, 80));
-		cardPanel.add(topBar, BorderLayout.NORTH);
-
-		JLabel cardHeader = new JLabel("Basic Settings");
-		cardHeader.setFont(CanvaCordFonts.HEADER_FONT);
-		cardHeader.setBounds(30, 25, 300, 30);
-		topBar.add(cardHeader);
+//		ImagePanel topBar = new ImagePanel("resources/setup_topbar.png");
+//		topBar.setLayout(null);
+//		topBar.setPreferredSize(new Dimension(getMaximumSize().width, 80));
+//		cardPanel.add(topBar, BorderLayout.NORTH);
+//
+//		JLabel cardHeader = new JLabel("Basic Settings");
+//		cardHeader.setFont(CanvaCordFonts.HEADER_FONT);
+//		cardHeader.setBounds(30, 25, 300, 30);
+//		topBar.add(cardHeader);
 
 		// ================ MAIN CONTENT ================
 		contentPanel.setLayout(null);
