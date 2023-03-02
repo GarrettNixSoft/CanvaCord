@@ -92,9 +92,18 @@ public class CanvasApi {
 
 	public Optional<Course> getCourse(String courseID) throws IOException {
 
+		return getCourseIncludes(courseID,null);
+
+	}
+
+	public Optional<Course> getCourseIncludes(String courseID, List<GetSingleCourseOptions.Include> includes) throws IOException {
+
 		CourseReader reader = API.getReader(CourseReader.class, TOKEN);
 
 		GetSingleCourseOptions options = new GetSingleCourseOptions(courseID);
+
+		if (includes != null)
+			options.includes(includes);
 
 		return reader.getSingleCourse(options);
 
