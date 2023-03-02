@@ -2,6 +2,7 @@ package org.canvacord.gui.wizard.cards.instance;
 
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,12 +11,14 @@ import java.awt.event.ActionListener;
 
 public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
+	// ================ ROW PANELS ================
 	private JPanel frequentPanel;
 	private JPanel hourlyPanel;
 	private JPanel dailyPanel;
 	private JPanel weeklyPanel;
 	private JPanel customPanel;
 
+	// ================ SELECTING ROWS ================
 	private ButtonGroup radioButtonGroup;
 	private JRadioButton frequentButton;
 	private JRadioButton hourlyButton;
@@ -23,6 +26,32 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 	private JRadioButton weeklyButton;
 	private JRadioButton customButton;
 
+	// ================ USER INPUTS ================
+	// ======== FREQUENT ========
+	private JSpinner freqMinuteSpinner;
+	// ======== HOURLY ========
+	private JSpinner hourlyHoursSpinner;
+	// ======== DAILY ========
+	private JSpinner dailyHourSpinner;
+	private JSpinner dailyMinuteSpinner;
+	private JRadioButton dailyAmButton;
+	private JRadioButton dailyPmButton;
+	// ======== WEEKLY ========
+	private JCheckBox mondayBox;
+	private JCheckBox tuesdayBox;
+	private JCheckBox wednesdayBox;
+	private JCheckBox thursdayBox;
+	private JCheckBox fridayBox;
+	private JCheckBox saturdayBox;
+	private JCheckBox sundayBox;
+	private JSpinner weeklyHourSpinner;
+	private JSpinner weeklyMinuteSpinner;
+	private JRadioButton weeklyAmButton;
+	private JRadioButton weeklyPmButton;
+	// ======== CUSTOM ========
+	private JTextField customCronField;
+
+	// ================ CONTENT SPACING ================
 	private static final int CONTENT_PADDING_HORIZONTAL = 50;
 	private static final int CONTENT_PADDING_VERTICAL = 24;
 	private static final int HEADER_SPACING = 36;
@@ -115,7 +144,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		frequentPanel.add(Box.createHorizontalStrut(4));
 
 		// ================ SPINNER + MODEL ================
-		JSpinner freqMinuteSpinner = new JSpinner();
+		freqMinuteSpinner = new JSpinner();
 		freqMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT);
 		freqMinuteSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		freqMinuteSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
@@ -159,12 +188,12 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		hourlyPanel.add(Box.createHorizontalStrut(4));
 
 		// ================ SPINNER + MODEL ================
-		JSpinner hoursSpinner = new JSpinner();
-		hoursSpinner.setFont(CanvaCordFonts.LABEL_FONT);
-		hoursSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		hoursSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		hoursSpinner.setModel(new SpinnerNumberModel(1, 1, 23, 1));
-		hourlyPanel.add(hoursSpinner);
+		hourlyHoursSpinner = new JSpinner();
+		hourlyHoursSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		hourlyHoursSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		hourlyHoursSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		hourlyHoursSpinner.setModel(new SpinnerNumberModel(1, 1, 23, 1));
+		hourlyPanel.add(hourlyHoursSpinner);
 
 		hourlyPanel.add(Box.createHorizontalStrut(4));
 
@@ -196,41 +225,41 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		radioButtonGroup.add(dailyButton);
 
 		// ================ HOUR SPINNER + MODEL ================
-		JSpinner hourSpinner = new JSpinner();
-		hourSpinner.setFont(CanvaCordFonts.LABEL_FONT);
-		hourSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		hourSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		hourSpinner.setModel(new SpinnerNumberModel(12, 1, 12, 1));
-		dailyPanel.add(hourSpinner);
+		dailyHourSpinner = new JSpinner();
+		dailyHourSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		dailyHourSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		dailyHourSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		dailyHourSpinner.setModel(new SpinnerNumberModel(12, 1, 12, 1));
+		dailyPanel.add(dailyHourSpinner);
 
 		dailyPanel.add(Box.createHorizontalStrut(4));
 
 		// ================ MINUTE SELECTOR + MODEL ================
-		JSpinner minuteSpinner = new JSpinner();
-		minuteSpinner.setFont(CanvaCordFonts.LABEL_FONT);
-		minuteSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		minuteSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		minuteSpinner.setModel(new SpinnerNumberModel(0, 0, 59, 1));
-		minuteSpinner.setEditor(new JSpinner.NumberEditor(minuteSpinner, "00"));
+		dailyMinuteSpinner = new JSpinner();
+		dailyMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		dailyMinuteSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		dailyMinuteSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		dailyMinuteSpinner.setModel(new SpinnerNumberModel(0, 0, 59, 1));
+		dailyMinuteSpinner.setEditor(new JSpinner.NumberEditor(dailyMinuteSpinner, "00"));
 
-		dailyPanel.add(minuteSpinner);
+		dailyPanel.add(dailyMinuteSpinner);
 		dailyPanel.add(Box.createHorizontalStrut(4));
 
 		// ================ AM/PM SELECTOR ================
-		JRadioButton amButton = new JRadioButton("AM");
-		amButton.setFont(CanvaCordFonts.LABEL_FONT);
-		dailyPanel.add(amButton);
+		dailyAmButton = new JRadioButton("AM");
+		dailyAmButton.setFont(CanvaCordFonts.LABEL_FONT);
+		dailyPanel.add(dailyAmButton);
 
-		JRadioButton pmButton = new JRadioButton("PM");
-		pmButton.setFont(CanvaCordFonts.LABEL_FONT);
-		dailyPanel.add(pmButton);
+		dailyPmButton = new JRadioButton("PM");
+		dailyPmButton.setFont(CanvaCordFonts.LABEL_FONT);
+		dailyPanel.add(dailyPmButton);
 
 		// select AM by default
-		amButton.setSelected(true);
+		dailyAmButton.setSelected(true);
 
 		ButtonGroup amPmGroup = new ButtonGroup();
-		amPmGroup.add(amButton);
-		amPmGroup.add(pmButton);
+		amPmGroup.add(dailyAmButton);
+		amPmGroup.add(dailyPmButton);
 
 		// ================ ADD TO CONTENT ================
 		contentPanel.add(dailyPanel);
@@ -254,70 +283,70 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		radioButtonGroup.add(weeklyButton);
 
 		// ================ WEEKDAY CHECK BOXES ================
-		JCheckBox mondayBox = new JCheckBox("M");
+		mondayBox = new JCheckBox("M");
 		mondayBox.setFont(CanvaCordFonts.LABEL_FONT);
 		weeklyPanel.add(mondayBox);
 
-		JCheckBox tuesdayBox = new JCheckBox("T");
+		tuesdayBox = new JCheckBox("T");
 		tuesdayBox.setFont(CanvaCordFonts.LABEL_FONT);
 		weeklyPanel.add(tuesdayBox);
 
-		JCheckBox wednesdayBox = new JCheckBox("W");
+		wednesdayBox = new JCheckBox("W");
 		wednesdayBox.setFont(CanvaCordFonts.LABEL_FONT);
 		weeklyPanel.add(wednesdayBox);
 
-		JCheckBox thursdayBox = new JCheckBox("Th");
+		thursdayBox = new JCheckBox("Th");
 		thursdayBox.setFont(CanvaCordFonts.LABEL_FONT);
 		weeklyPanel.add(thursdayBox);
 
-		JCheckBox fridayBox = new JCheckBox("F");
+		fridayBox = new JCheckBox("F");
 		fridayBox.setFont(CanvaCordFonts.LABEL_FONT);
 		weeklyPanel.add(fridayBox);
 
-		JCheckBox saturdayBox = new JCheckBox("Sa");
+		saturdayBox = new JCheckBox("Sa");
 		saturdayBox.setFont(CanvaCordFonts.LABEL_FONT);
 		weeklyPanel.add(saturdayBox);
 
-		JCheckBox sundayBox = new JCheckBox("Su");
+		sundayBox = new JCheckBox("Su");
 		sundayBox.setFont(CanvaCordFonts.LABEL_FONT);
 		weeklyPanel.add(sundayBox);
 
 		weeklyPanel.add(Box.createHorizontalStrut(4));
 
 		// ================ HOUR SPINNER + MODEL ================
-		JSpinner hourSpinner = new JSpinner();
-		hourSpinner.setFont(CanvaCordFonts.LABEL_FONT);
-		hourSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		hourSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		hourSpinner.setModel(new SpinnerNumberModel(12, 1, 12, 1));
-		weeklyPanel.add(hourSpinner);
+		weeklyHourSpinner = new JSpinner();
+		weeklyHourSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		weeklyHourSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		weeklyHourSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		weeklyHourSpinner.setModel(new SpinnerNumberModel(12, 1, 12, 1));
+		weeklyPanel.add(weeklyHourSpinner);
 
 		// ================ MINUTE SPINNER + MODEL ================
-		JSpinner minuteSpinner = new JSpinner();
-		minuteSpinner.setFont(CanvaCordFonts.LABEL_FONT);
-		minuteSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		minuteSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
-		minuteSpinner.setModel(new SpinnerNumberModel(0, 0, 59, 1));
-		minuteSpinner.setEditor(new JSpinner.NumberEditor(minuteSpinner, "00"));
+		weeklyMinuteSpinner = new JSpinner();
+		weeklyMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		weeklyMinuteSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		weeklyMinuteSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
+		weeklyMinuteSpinner.setModel(new SpinnerNumberModel(0, 0, 59, 1));
+		weeklyMinuteSpinner.setEditor(new JSpinner.NumberEditor(weeklyMinuteSpinner, "00"));
 
-		weeklyPanel.add(minuteSpinner);
+		weeklyPanel.add(weeklyMinuteSpinner);
 		weeklyPanel.add(Box.createHorizontalStrut(4));
 
 		// ================ AM/PM SELECTOR ================
-		JRadioButton amButton = new JRadioButton("AM");
-		amButton.setFont(CanvaCordFonts.LABEL_FONT);
-		weeklyPanel.add(amButton);
+		weeklyAmButton = new JRadioButton("AM");
+		weeklyAmButton.setFont(CanvaCordFonts.LABEL_FONT);
+		weeklyPanel.add(weeklyAmButton);
 
-		JRadioButton pmButton = new JRadioButton("PM");
-		pmButton.setFont(CanvaCordFonts.LABEL_FONT);
-		weeklyPanel.add(pmButton);
+		weeklyPmButton = new JRadioButton("PM");
+		weeklyPmButton.setFont(CanvaCordFonts.LABEL_FONT);
+		weeklyPanel.add(weeklyPmButton);
 
 		// select AM by default
-		amButton.setSelected(true);
+		weeklyAmButton.setSelected(true);
 
 		ButtonGroup amPmGroup = new ButtonGroup();
-		amPmGroup.add(amButton);
-		amPmGroup.add(pmButton);
+		amPmGroup.add(weeklyAmButton);
+		amPmGroup.add(weeklyPmButton);
 
 		// ================ ADD TO CONTENT ================
 		contentPanel.add(weeklyPanel);
@@ -342,7 +371,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		radioButtonGroup.add(customButton);
 
 		// ================ CUSTOM FIELD ================
-		JTextField customCronField = new JTextField(24);
+		customCronField = new JTextField(24);
 		customCronField.setFont(CanvaCordFonts.LABEL_FONT);
 		customCronField.setPreferredSize(new Dimension(240, SPINNER_HEIGHT));
 		customCronField.setMaximumSize(new Dimension(240, SPINNER_HEIGHT));
@@ -410,6 +439,35 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		for (Component subcomponent : component.getComponents()) {
 			if (subcomponent instanceof JComponent jComponent)
 				setComponentsEnabledRecursively(jComponent, enabled);
+		}
+
+	}
+
+	public JSONObject getScheduleJSON() {
+
+		if (frequentButton.isSelected()) {
+			// TODO
+			return null;
+		}
+		else if (hourlyButton.isSelected()) {
+			// TODO
+			return null;
+		}
+		else if (dailyButton.isSelected()) {
+			// TODO
+			return null;
+		}
+		else if (weeklyButton.isSelected()) {
+			// TODO
+			return null;
+		}
+		else if (customButton.isSelected()) {
+			// TODO
+			return null;
+		}
+		else {
+			// empty schedule
+			return new JSONObject();
 		}
 
 	}
