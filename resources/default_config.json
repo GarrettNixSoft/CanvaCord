@@ -11,8 +11,11 @@
 	"generate_exam_events": false,
 	"canvas_fetch_schedule": {
 		"type": "interval",
-		"duration": 1,
-		"unit": "hours"
+		"interval": {
+			"amount": 15,
+			"unit": "minutes"
+		},
+		"round": false
 	},
 	"roles": [
 		{
