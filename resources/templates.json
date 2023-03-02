@@ -18,7 +18,8 @@
 	"canvas_fetch_schedule_daily": {
 		"type": "daily",
 		"hour": 12,
-		"minute": 0
+		"minute": 0,
+		"ampm": "am"
 	},
 	"canvas_fetch_schedule_weekly": {
 		"type": "weekly",
@@ -29,7 +30,8 @@
 				"Sa"
 			],
 			"hour": 12,
-			"minute": 35
+			"minute": 35,
+			"ampm": "pm"
 		}
 	},
 	"canvas_fetch_schedule_custom": {
