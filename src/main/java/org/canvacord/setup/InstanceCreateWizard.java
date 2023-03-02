@@ -79,11 +79,15 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		canvasFetchCard.setNavigator(Optional::empty);
 		canvasFetchCard.setPreviousCard(basicConfigCard);
 
+		canvasFetchCard.setOnNavigateTo(() -> {
+			setBackButtonEnabled(true);
+		});
+
 		// Register the cards
 		registerCard(startingCard);
 		registerCard(courseAndServerCard);
 		registerCard(basicConfigCard);
-		registerCard(canvasFetchCard);
+		registerCard(canvasFetchCard); // TODO move to 4th place
 	}
 
 	@Override
@@ -126,6 +130,9 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 				configJSON.put("icon_path", iconPath);
 			else
 				UserInput.showMessage("Could not load the specified image.\nUsing default icon.", "Bad Icon Path");
+
+		JSONObject scheduleObject = canvasFetchCard.getScheduleJSON();
+		configJSON.put("canvas_fetch_schedule", scheduleObject);
 
 		// TODO add more settings from other pages
 
