@@ -2,12 +2,16 @@ package org.canvacord.gui.wizard.cards.instance;
 
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
@@ -37,13 +41,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 	private JRadioButton dailyAmButton;
 	private JRadioButton dailyPmButton;
 	// ======== WEEKLY ========
-	private JCheckBox mondayBox;
-	private JCheckBox tuesdayBox;
-	private JCheckBox wednesdayBox;
-	private JCheckBox thursdayBox;
-	private JCheckBox fridayBox;
-	private JCheckBox saturdayBox;
-	private JCheckBox sundayBox;
+	private List<JCheckBox> dayCheckboxes;
 	private JSpinner weeklyHourSpinner;
 	private JSpinner weeklyMinuteSpinner;
 	private JRadioButton weeklyAmButton;
@@ -283,32 +281,41 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		radioButtonGroup.add(weeklyButton);
 
 		// ================ WEEKDAY CHECK BOXES ================
-		mondayBox = new JCheckBox("M");
+		dayCheckboxes = new ArrayList<>();
+
+		JCheckBox mondayBox = new JCheckBox("M");
 		mondayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		dayCheckboxes.add(mondayBox);
 		weeklyPanel.add(mondayBox);
 
-		tuesdayBox = new JCheckBox("T");
+		JCheckBox tuesdayBox = new JCheckBox("T");
 		tuesdayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		dayCheckboxes.add(tuesdayBox);
 		weeklyPanel.add(tuesdayBox);
 
-		wednesdayBox = new JCheckBox("W");
+		JCheckBox wednesdayBox = new JCheckBox("W");
 		wednesdayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		dayCheckboxes.add(wednesdayBox);
 		weeklyPanel.add(wednesdayBox);
 
-		thursdayBox = new JCheckBox("Th");
+		JCheckBox thursdayBox = new JCheckBox("Th");
 		thursdayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		dayCheckboxes.add(thursdayBox);
 		weeklyPanel.add(thursdayBox);
 
-		fridayBox = new JCheckBox("F");
+		JCheckBox fridayBox = new JCheckBox("F");
 		fridayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		dayCheckboxes.add(fridayBox);
 		weeklyPanel.add(fridayBox);
 
-		saturdayBox = new JCheckBox("Sa");
+		JCheckBox saturdayBox = new JCheckBox("Sa");
 		saturdayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		dayCheckboxes.add(saturdayBox);
 		weeklyPanel.add(saturdayBox);
 
-		sundayBox = new JCheckBox("Su");
+		JCheckBox sundayBox = new JCheckBox("Su");
 		sundayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		dayCheckboxes.add(sundayBox);
 		weeklyPanel.add(sundayBox);
 
 		weeklyPanel.add(Box.createHorizontalStrut(4));
@@ -445,30 +452,49 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 	public JSONObject getScheduleJSON() {
 
+		JSONObject result = new JSONObject();
+
 		if (frequentButton.isSelected()) {
-			// TODO
-			return null;
+			result.put("type", "interval");
+			result.put("round", false);
+			JSONObject interval = new JSONObject();
+			interval.put("unit", "minutes");
+			interval.put("amount", freqMinuteSpinner.getValue());
+			result.put("interval", interval);
 		}
 		else if (hourlyButton.isSelected()) {
-			// TODO
-			return null;
+			result.put("type", "interval");
+			result.put("round", true);
+			JSONObject interval = new JSONObject();
+			interval.put("unit", "hours");
+			interval.put("amount", hourlyHoursSpinner.getValue());
+			result.put("interval", interval);
 		}
 		else if (dailyButton.isSelected()) {
-			// TODO
-			return null;
+			result.put("type", "daily");
+			result.put("hour", dailyHourSpinner.getValue());
+			result.put("minute", dailyMinuteSpinner.getValue());
+			result.put("ampm", dailyAmButton.isSelected() ? "am" : dailyPmButton.isSelected() ? "pm" : "");
 		}
 		else if (weeklyButton.isSelected()) {
-			// TODO
-			return null;
+			result.put("type", "weekly");
+			result.put("hour", weeklyHourSpinner.getValue());
+			result.put("minute", weeklyMinuteSpinner.getValue());
+			result.put("ampm", weeklyAmButton.isSelected() ? "am" : weeklyPmButton.isSelected() ? "pm" : "");
+			JSONArray days = new JSONArray();
+			for (JCheckBox dayCheckbox : dayCheckboxes) {
+				if (dayCheckbox.isSelected())
+					days.put(dayCheckbox.getText());
+			}
+			result.put("days", days);
 		}
 		else if (customButton.isSelected()) {
-			// TODO
-			return null;
+			result.put("type", "cron");
+			result.put("cron", customCronField.getText());
+			// TODO verify cron string
 		}
-		else {
-			// empty schedule
-			return new JSONObject();
-		}
+
+		return result;
 
 	}
 
