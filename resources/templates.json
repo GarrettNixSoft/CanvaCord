@@ -5,7 +5,7 @@
 			"amount": 15,
 			"unit": "minutes"
 		},
-		"round_start": true
+		"round_start": false
 	},
 	"canvas_fetch_schedule_hourly": {
 		"type": "interval",
@@ -17,26 +17,23 @@
 	},
 	"canvas_fetch_schedule_daily": {
 		"type": "daily",
-		"times": [
-			"12:00",
-			"20:00"
-		]
+		"hour": 12,
+		"minute": 0
+	},
+	"canvas_fetch_schedule_weekly": {
+		"type": "weekly",
+		"schedule": {
+			"days": [
+				"Mon",
+				"Thu",
+				"Sat"
+			],
+			"hour": 12,
+			"minute": 35
+		}
 	},
 	"canvas_fetch_schedule_custom": {
-		"type": "schedule",
-		"schedule": [
-			{
-				"day": "Mon",
-				"time": "12:15"
-			},
-			{
-				"day": "Thu",
-				"time": "18:20"
-			},
-			{
-				"day": "Sat",
-				"time": "08:35"
-			}
-		]
+		"type": "custom",
+		"cron": "0 0 12 ? * WED"
 	}
 }
