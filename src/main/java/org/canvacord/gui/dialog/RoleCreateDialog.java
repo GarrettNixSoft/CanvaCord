@@ -4,6 +4,7 @@ import org.canvacord.discord.CanvaCordRole;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Optional;
 
 public class RoleCreateDialog extends JDialog {
 
@@ -20,6 +21,11 @@ public class RoleCreateDialog extends JDialog {
 		initLogic();
 	}
 
+	public RoleCreateDialog(CanvaCordRole roleToEdit) {
+		this();
+		prefillGUI(roleToEdit);
+	}
+
 	private void buildGUI() {
 		// TODO
 	}
@@ -28,8 +34,22 @@ public class RoleCreateDialog extends JDialog {
 		// TODO
 	}
 
-	public CanvaCordRole getResult() {
+	private void prefillGUI(CanvaCordRole roleToEdit) {
+		// TODO
+	}
+
+	private CanvaCordRole getResult() {
 		return null;
+	}
+
+	public static Optional<CanvaCordRole> buildRole() {
+		// TODO
+		return Optional.empty();
+	}
+
+	public static Optional<CanvaCordRole> editRole(CanvaCordRole roleToEdit) {
+		// TODO
+		return Optional.empty();
 	}
 
 }
