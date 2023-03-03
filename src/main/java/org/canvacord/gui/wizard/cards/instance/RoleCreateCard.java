@@ -1,5 +1,6 @@
 package org.canvacord.gui.wizard.cards.instance;
 
+import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
 import org.canvacord.discord.CanvaCordRole;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;
@@ -46,6 +47,24 @@ public class RoleCreateCard extends InstanceConfigCard {
 
 		JList<CanvaCordRole> rolesList = new JList<>();
 		rolesPane.getViewport().setView(rolesList);
+
+		int buttonX = 508;
+		int buttonY = 134;
+		int buttonSize = 48;
+		int buttonSpacing = 20;
+
+		JButton newRoleButton = new JButton(new ImageIcon("resources/new_icon.png"));
+		newRoleButton.setBounds(buttonX, buttonY, buttonSize, buttonSize);
+		contentPanel.add(newRoleButton);
+
+		JButton editRoleButton = new JButton(new ImageIcon("resources/edit_icon_wip.png"));
+		editRoleButton.setBounds(buttonX, buttonY + buttonSize + buttonSpacing, buttonSize, buttonSize);
+		contentPanel.add(editRoleButton);
+
+		JButton deleteRoleButton = new JButton(new ImageIcon("resources/delete_icon_non_beveled.png"));
+		deleteRoleButton.setBounds(buttonX, buttonY + (buttonSize + buttonSpacing) * 2, buttonSize, buttonSize);
+		contentPanel.add(deleteRoleButton);
+
 
 		// TODO
 
