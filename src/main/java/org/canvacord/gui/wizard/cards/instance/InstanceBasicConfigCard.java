@@ -1,8 +1,6 @@
 package org.canvacord.gui.wizard.cards.instance;
 
-import net.miginfocom.swing.MigLayout;
 import org.canvacord.gui.CanvaCordFonts;
-import org.canvacord.gui.component.ImagePanel;
 import org.canvacord.gui.component.TextPrompt;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
@@ -54,12 +52,12 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 		contentPanel.add(nameLabel);
 
 		nameField = new JTextField(50);
-		nameField.setFont(CanvaCordFonts.LABEL_FONT);
+		nameField.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		nameField.setBounds(componentX, 106, fieldWidth, 24);
 		contentPanel.add(nameField);
 
 		TextPrompt namePrompt = new TextPrompt("My Instance", nameField);
-		namePrompt.setFont(CanvaCordFonts.LABEL_FONT);
+		namePrompt.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		namePrompt.setForeground(Color.GRAY);
 
 		JLabel pathLabel = new JLabel("Choose an icon file (Optional):");
@@ -68,16 +66,16 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 		contentPanel.add(pathLabel);
 
 		iconPathField = new JTextField(260);
-		iconPathField.setFont(CanvaCordFonts.LABEL_FONT);
+		iconPathField.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		iconPathField.setBounds(componentX, 211, fieldWidth, 24);
 		contentPanel.add(iconPathField);
 
 		TextPrompt pathPrompt = new TextPrompt("Path to file...", iconPathField);
-		pathPrompt.setFont(CanvaCordFonts.LABEL_FONT);
+		pathPrompt.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		pathPrompt.setForeground(Color.GRAY);
 
 		chooseFileButton = new JButton("Choose...");
-		chooseFileButton.setFont(CanvaCordFonts.LABEL_FONT);
+		chooseFileButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		chooseFileButton.setBounds(componentX + fieldWidth + 20, 211, 90, 24);
 		contentPanel.add(chooseFileButton);
 

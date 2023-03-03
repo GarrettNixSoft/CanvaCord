@@ -1,10 +1,7 @@
 package org.canvacord.setup;
 
 import org.canvacord.gui.wizard.CanvaCordWizard;
-import org.canvacord.gui.wizard.cards.instance.CourseAndServerCard;
-import org.canvacord.gui.wizard.cards.instance.InstanceBasicConfigCard;
-import org.canvacord.gui.wizard.cards.instance.InstanceCanvasFetchCard;
-import org.canvacord.gui.wizard.cards.instance.InstanceSetupWelcomeCard;
+import org.canvacord.gui.wizard.cards.instance.*;
 import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
@@ -23,6 +20,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 	private CourseAndServerCard courseAndServerCard;
 	private InstanceBasicConfigCard basicConfigCard;
 	private InstanceCanvasFetchCard canvasFetchCard;
+	private RoleCreateCard roleCreateCard;
 
 	public InstanceCreateWizard() {
 		super("Create Instance");
@@ -52,12 +50,17 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		basicConfigCard = new InstanceBasicConfigCard(this, "config_1", false);
 
 		// The fourth card is for setting up the Canvas fetching schedule
-		canvasFetchCard = new InstanceCanvasFetchCard(this, "fetch_config", true);
+		canvasFetchCard = new InstanceCanvasFetchCard(this, "fetch_config", false);
 
-		// Configure the navigation connections
+		// The fifth card is for defining what roles this instance should use
+		roleCreateCard = new RoleCreateCard(this, "role_config", true);
+
+		// ================================ Configure the navigation connections ================================
+		// ================ START ================
 		startingCard.setNavigator(() -> Optional.of(courseAndServerCard));
 		startingCard.setOnNavigateTo(this::enableNext);
 
+		// ================ COURSE AND SERVER ================
 		courseAndServerCard.setNavigator(() -> Optional.of(basicConfigCard));
 		courseAndServerCard.setPreviousCard(startingCard);
 
@@ -67,6 +70,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 			}
 		});
 
+		// ================ NAME AND ICON ================
 		basicConfigCard.setNavigator(() -> Optional.of(canvasFetchCard));
 		basicConfigCard.setPreviousCard(courseAndServerCard);
 
@@ -76,18 +80,21 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 		});
 
-		canvasFetchCard.setNavigator(Optional::empty);
+		// ================ FETCH SCHEDULE ================
+		canvasFetchCard.setNavigator(() -> Optional.of(roleCreateCard));
 		canvasFetchCard.setPreviousCard(basicConfigCard);
 
-		canvasFetchCard.setOnNavigateTo(() -> {
-			setBackButtonEnabled(true);
-		});
+		// ================ DISCORD ROLES ================
+		roleCreateCard.setNavigator(Optional::empty);
+		roleCreateCard.setPreviousCard(canvasFetchCard);
 
 		// Register the cards
+		registerCard(roleCreateCard); // TODO this should be last
+
 		registerCard(startingCard);
 		registerCard(courseAndServerCard);
 		registerCard(basicConfigCard);
-		registerCard(canvasFetchCard); // TODO move to 4th place
+		registerCard(canvasFetchCard);
 	}
 
 	@Override

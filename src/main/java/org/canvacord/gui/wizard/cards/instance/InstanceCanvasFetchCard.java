@@ -123,7 +123,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ RADIO BUTTON ================
 		frequentButton = new JRadioButton("Frequent");
-		frequentButton.setFont(CanvaCordFonts.LABEL_FONT);
+		frequentButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		frequentPanel.add(frequentButton);
 
 		frequentPanel.add(Box.createHorizontalGlue());
@@ -136,14 +136,14 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ PRE-SPINNER LABEL ================
 		JLabel everyLabel = new JLabel("Every");
-		everyLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		everyLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		frequentPanel.add(everyLabel);
 
 		frequentPanel.add(Box.createHorizontalStrut(4));
 
 		// ================ SPINNER + MODEL ================
 		freqMinuteSpinner = new JSpinner();
-		freqMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		freqMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		freqMinuteSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		freqMinuteSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		freqMinuteSpinner.setModel(new SpinnerNumberModel(15, 1, 59, 1));
@@ -153,7 +153,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ POST-SPINNER LABEL ================
 		JLabel minutesLabel = new JLabel("Minute(s)");
-		minutesLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		minutesLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		frequentPanel.add(minutesLabel);
 
 		// ================ ADD TO CONTENT ================
@@ -170,7 +170,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ RADIO BUTTON ================
 		hourlyButton = new JRadioButton("Hourly");
-		hourlyButton.setFont(CanvaCordFonts.LABEL_FONT);
+		hourlyButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		hourlyPanel.add(hourlyButton);
 
 		hourlyPanel.add(Box.createHorizontalGlue());
@@ -180,14 +180,14 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ PRE-SPINNER LABEL ================
 		JLabel everyLabel = new JLabel("Every");
-		everyLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		everyLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		hourlyPanel.add(everyLabel);
 
 		hourlyPanel.add(Box.createHorizontalStrut(4));
 
 		// ================ SPINNER + MODEL ================
 		hourlyHoursSpinner = new JSpinner();
-		hourlyHoursSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		hourlyHoursSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		hourlyHoursSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		hourlyHoursSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		hourlyHoursSpinner.setModel(new SpinnerNumberModel(1, 1, 23, 1));
@@ -197,7 +197,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================= POST-SPINNER LABEL ================
 		JLabel hoursLabel = new JLabel("Hour(s)");
-		hoursLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		hoursLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		hourlyPanel.add(hoursLabel);
 
 		// ================ ADD TO CONTENT ================
@@ -214,7 +214,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ RADIO BUTTON ================
 		dailyButton = new JRadioButton("Daily");
-		dailyButton.setFont(CanvaCordFonts.LABEL_FONT);
+		dailyButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dailyPanel.add(dailyButton);
 
 		dailyPanel.add(Box.createHorizontalGlue());
@@ -224,7 +224,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ HOUR SPINNER + MODEL ================
 		dailyHourSpinner = new JSpinner();
-		dailyHourSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		dailyHourSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dailyHourSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		dailyHourSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		dailyHourSpinner.setModel(new SpinnerNumberModel(12, 1, 12, 1));
@@ -234,7 +234,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ MINUTE SELECTOR + MODEL ================
 		dailyMinuteSpinner = new JSpinner();
-		dailyMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		dailyMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dailyMinuteSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		dailyMinuteSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		dailyMinuteSpinner.setModel(new SpinnerNumberModel(0, 0, 59, 1));
@@ -245,11 +245,11 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ AM/PM SELECTOR ================
 		dailyAmButton = new JRadioButton("AM");
-		dailyAmButton.setFont(CanvaCordFonts.LABEL_FONT);
+		dailyAmButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dailyPanel.add(dailyAmButton);
 
 		dailyPmButton = new JRadioButton("PM");
-		dailyPmButton.setFont(CanvaCordFonts.LABEL_FONT);
+		dailyPmButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dailyPanel.add(dailyPmButton);
 
 		// select AM by default
@@ -272,7 +272,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ RADIO BUTTON ===============
 		weeklyButton = new JRadioButton("Weekly");
-		weeklyButton.setFont(CanvaCordFonts.LABEL_FONT);
+		weeklyButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		weeklyPanel.add(weeklyButton);
 
 		weeklyPanel.add(Box.createHorizontalGlue());
@@ -284,37 +284,37 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		dayCheckboxes = new ArrayList<>();
 
 		JCheckBox mondayBox = new JCheckBox("M");
-		mondayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		mondayBox.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dayCheckboxes.add(mondayBox);
 		weeklyPanel.add(mondayBox);
 
 		JCheckBox tuesdayBox = new JCheckBox("T");
-		tuesdayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		tuesdayBox.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dayCheckboxes.add(tuesdayBox);
 		weeklyPanel.add(tuesdayBox);
 
 		JCheckBox wednesdayBox = new JCheckBox("W");
-		wednesdayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		wednesdayBox.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dayCheckboxes.add(wednesdayBox);
 		weeklyPanel.add(wednesdayBox);
 
 		JCheckBox thursdayBox = new JCheckBox("Th");
-		thursdayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		thursdayBox.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dayCheckboxes.add(thursdayBox);
 		weeklyPanel.add(thursdayBox);
 
 		JCheckBox fridayBox = new JCheckBox("F");
-		fridayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		fridayBox.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dayCheckboxes.add(fridayBox);
 		weeklyPanel.add(fridayBox);
 
 		JCheckBox saturdayBox = new JCheckBox("Sa");
-		saturdayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		saturdayBox.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dayCheckboxes.add(saturdayBox);
 		weeklyPanel.add(saturdayBox);
 
 		JCheckBox sundayBox = new JCheckBox("Su");
-		sundayBox.setFont(CanvaCordFonts.LABEL_FONT);
+		sundayBox.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dayCheckboxes.add(sundayBox);
 		weeklyPanel.add(sundayBox);
 
@@ -322,7 +322,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ HOUR SPINNER + MODEL ================
 		weeklyHourSpinner = new JSpinner();
-		weeklyHourSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		weeklyHourSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		weeklyHourSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		weeklyHourSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		weeklyHourSpinner.setModel(new SpinnerNumberModel(12, 1, 12, 1));
@@ -330,7 +330,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ MINUTE SPINNER + MODEL ================
 		weeklyMinuteSpinner = new JSpinner();
-		weeklyMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT);
+		weeklyMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		weeklyMinuteSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		weeklyMinuteSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
 		weeklyMinuteSpinner.setModel(new SpinnerNumberModel(0, 0, 59, 1));
@@ -341,11 +341,11 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ AM/PM SELECTOR ================
 		weeklyAmButton = new JRadioButton("AM");
-		weeklyAmButton.setFont(CanvaCordFonts.LABEL_FONT);
+		weeklyAmButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		weeklyPanel.add(weeklyAmButton);
 
 		weeklyPmButton = new JRadioButton("PM");
-		weeklyPmButton.setFont(CanvaCordFonts.LABEL_FONT);
+		weeklyPmButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		weeklyPanel.add(weeklyPmButton);
 
 		// select AM by default
@@ -369,7 +369,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ RADIO BUTTON ================
 		customButton = new JRadioButton("Custom");
-		customButton.setFont(CanvaCordFonts.LABEL_FONT);
+		customButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		customPanel.add(customButton);
 
 		customPanel.add(Box.createHorizontalGlue());
@@ -379,7 +379,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// ================ CUSTOM FIELD ================
 		customCronField = new JTextField(24);
-		customCronField.setFont(CanvaCordFonts.LABEL_FONT);
+		customCronField.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		customCronField.setPreferredSize(new Dimension(240, SPINNER_HEIGHT));
 		customCronField.setMaximumSize(new Dimension(240, SPINNER_HEIGHT));
 		customPanel.add(customCronField);

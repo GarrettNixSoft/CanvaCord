@@ -105,7 +105,7 @@ public class TokenSetupCard extends WizardCard implements BackgroundTaskCard<Boo
 
 		// ================ INSTITUTION URL INPUT ================
 		JLabel urlLabel = new JLabel("Enter your institution's Canvas URL:");
-		urlLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		urlLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 
 		urlField = new JTextField(50);
 		TextPrompt urlPrompt = new TextPrompt("https://school.instructure.com", urlField);
@@ -118,7 +118,7 @@ public class TokenSetupCard extends WizardCard implements BackgroundTaskCard<Boo
 		inputPanel.add(urlField);
 		// ================ USER ID INPUT ================
 		JLabel idLabel = new JLabel("Enter your Canvas User ID:");
-		idLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		idLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 
 		idField = new JTextField(8);
 		TextPrompt idPrompt = new TextPrompt("12345", idField);
@@ -131,7 +131,7 @@ public class TokenSetupCard extends WizardCard implements BackgroundTaskCard<Boo
 		inputPanel.add(idField);
 		// ================ CANVAS API TOKEN INPUT ================
 		JLabel canvasTokenLabel = new JLabel("Enter your Canvas Access Token:");
-		canvasTokenLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		canvasTokenLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 
 		canvasTokenField = new JTextField(100);
 		TextPrompt canvasTokenPrompt = new TextPrompt("Token...", canvasTokenField);
@@ -144,7 +144,7 @@ public class TokenSetupCard extends WizardCard implements BackgroundTaskCard<Boo
 		inputPanel.add(canvasTokenField);
 		// ================ DISCORD TOKEN INPUT ================
 		JLabel discordTokenLabel = new JLabel("Enter your Discord Bot Token:");
-		discordTokenLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		discordTokenLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 
 		discordTokenField = new JTextField(100);
 		TextPrompt discordTokenPrompt = new TextPrompt("Token...", discordTokenField);
@@ -170,7 +170,7 @@ public class TokenSetupCard extends WizardCard implements BackgroundTaskCard<Boo
 		verifyPanel.add(Box.createVerticalStrut(12));
 		// ================ CANVAS TOKEN VERIFY ================
 		canvasTokenVerifyLabel = new JLabel("Canvas Token: Unverified");
-		canvasTokenVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		canvasTokenVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		canvasTokenVerifyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		canvasProgressBar = new DangerousProgressBar(0, 100);
@@ -184,7 +184,7 @@ public class TokenSetupCard extends WizardCard implements BackgroundTaskCard<Boo
 		verifyPanel.add(Box.createVerticalStrut(12));
 		// ================ DISCORD TOKEN VERIFY ================
 		discordTokenVerifyLabel = new JLabel("Discord Token: Unverified");
-		discordTokenVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		discordTokenVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		discordTokenVerifyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		discordProgressBar = new DangerousProgressBar(0, 100);

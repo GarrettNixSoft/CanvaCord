@@ -23,7 +23,6 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The CourseAndServerCard is the page in the instance configuration wizard
@@ -62,6 +61,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 
 	@Override
 	protected void buildGUI() {
+
 		contentPanel.setLayout(new MigLayout("", "[grow]", "[grow][grow]"));
 
 		int subPanelHeight = 180;
@@ -93,7 +93,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 
 		// ================ COURSE ID INPUT ================
 		JLabel courseInputLabel = new JLabel("Enter Canvas Course ID:");
-		courseInputLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		courseInputLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 
 		courseInputField = new JTextField(5);
 		TextPrompt courseInputPrompt = new TextPrompt("12345", courseInputField);
@@ -106,7 +106,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 		inputPanel.add(courseInputField);
 		// ================ SERVER ID INPUT ================
 		JLabel serverInputLabel = new JLabel("Enter Discord Server ID: ");
-		serverInputLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		serverInputLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 
 		serverInputField = new JTextField(5);
 		TextPrompt serverInputPrompt = new TextPrompt("123456789", serverInputField);
@@ -134,7 +134,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 		verifyPanel.add(Box.createVerticalStrut(20));
 		// ================ COURSE VERIFICATION INDICATOR ================
 		courseVerifyLabel = new JLabel("Course ID: Unverified");
-		courseVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		courseVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		courseVerifyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		verifyPanel.add(courseVerifyLabel);
@@ -148,7 +148,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 		verifyPanel.add(Box.createVerticalStrut(verifySpacing));
 		// ================ SERVER VERIFICATION INDICATOR ================
 		serverVerifyLabel = new JLabel("Server ID: Unverified");
-		serverVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT);
+		serverVerifyLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		serverVerifyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		verifyPanel.add(serverVerifyLabel);
@@ -371,7 +371,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 			}
 			else {
 				serverVerifyBar.setFailed(true);
-				UserInput.showErrorMessage("Discord Server ID verification failed.", "Bad Server ID");
+				UserInput.showErrorMessage("Discord Server ID verification failed.\n(Has your bot joined the server yet?)", "Bad Server ID");
 				serverVerifyLabel.setText("Server ID: Verification Failed");
 			}
 
