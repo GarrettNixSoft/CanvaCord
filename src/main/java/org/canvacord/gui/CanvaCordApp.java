@@ -220,6 +220,10 @@ public class CanvaCordApp extends JFrame {
 		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
 	}
 
+	/**
+	 * Add a new cell to the Instance list panel.
+	 * @param instance the instance the new cell should represent
+	 */
 	private void addInstanceCell(Instance instance) {
 		InstanceCell cell = new InstanceCell(instance);
 		instanceList.add(cell);
@@ -230,6 +234,11 @@ public class CanvaCordApp extends JFrame {
 		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
 	}
 
+	/**
+	 * Remove a cell from the Instance list panel. This should be used whenever
+	 * a user deletes an Instance.
+	 * @param cell the cell to remove
+	 */
 	private void removeInstanceCell(InstanceCell cell) {
 		instanceList.remove(cell);
 		instanceCells.remove(cell.getInstance().getInstanceID());
@@ -314,6 +323,10 @@ public class CanvaCordApp extends JFrame {
 	}
 
 	// ================ RUNNING THE APP ================
+
+	/**
+	 * Run the CanvaCord application. This fails if CanvaCord is already running.
+	 */
 	public static void run() {
 
 		if (instance != null)
@@ -323,7 +336,11 @@ public class CanvaCordApp extends JFrame {
 		instance.setVisible(true);
 
 	}
-	
+
+	/**
+	 * Called when the user attempts to exit CanvaCord by clicking the X on the window.
+	 * This attempts to properly shut down all instances and the scheduler.
+	 */
 	private static void onAppClose() {
 
 		System.out.println("Closing CanvaCord");

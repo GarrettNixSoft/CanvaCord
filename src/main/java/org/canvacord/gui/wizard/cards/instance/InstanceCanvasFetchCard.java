@@ -103,10 +103,12 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 	@Override
 	protected void initLogic() {
 
+		// Whenever a radio button for a schedule type is clicked, activate that row and disable all the other rows
 		ActionListener typeSelectionListener = event -> {
 			updatePanels();
 		};
 
+		// instruct every radio button for each row to perform this action when selected
 		frequentButton.addActionListener(typeSelectionListener);
 		hourlyButton.addActionListener(typeSelectionListener);
 		dailyButton.addActionListener(typeSelectionListener);
@@ -392,6 +394,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 	private void updatePanels() {
 
+		// Based on which radio button is selected, activate one row and disable all the other rows
 		if (frequentButton.isSelected()) {
 			setComponentsEnabledRecursively(frequentPanel, true);
 			setComponentsEnabledRecursively(hourlyPanel, false);
@@ -452,6 +455,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 	public JSONObject getScheduleJSON() {
 
+		// Build a JSON representation of the user's schedule based on what they input in the GUI fields
 		JSONObject result = new JSONObject();
 
 		if (frequentButton.isSelected()) {
