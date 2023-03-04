@@ -151,6 +151,10 @@ public class Instance {
 		return configuration.getServerName();
 	}
 
+	public String getSyllabusPath(){
+		return configuration.getSyllabusPath();
+	}
+
 	public InstanceConfiguration getConfiguration() {
 		return configuration;
 	}

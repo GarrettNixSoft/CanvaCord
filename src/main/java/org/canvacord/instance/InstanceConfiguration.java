@@ -79,6 +79,10 @@ public class InstanceConfiguration {
 		return configJSON.getString("icon_path");
 	}
 
+	public String getSyllabusPath(){
+		return configJSON.getString("syllabus_file_path");
+	}
+
 	public boolean getGenerateExamEvents() {
 		return configJSON.getBoolean("generate_exam_events");
 	}
