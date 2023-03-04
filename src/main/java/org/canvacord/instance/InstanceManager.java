@@ -19,10 +19,22 @@ public class InstanceManager {
 	private static final List<Instance> runningInstances;
 	private static final Set<String> runningInstanceIDs;
 
+	private static final Map<String, Instance> instancesByCourseID;
+	private static final Map<Long, Instance> instancesByServerID;
+
 	static {
 		instances = new HashMap<>();
 		runningInstances = new ArrayList<>();
 		runningInstanceIDs = new HashSet<>();
+
+		instancesByCourseID = new HashMap<>();
+		instancesByServerID = new HashMap<>();
+	}
+
+	private static void addInstance(Instance instance) {
+		instances.put(instance.getInstanceID(), instance);
+		instancesByCourseID.put(instance.getCourseID(), instance);
+		instancesByServerID.put(instance.getServerID(), instance);
 	}
 
 	public static void loadInstances() {
@@ -59,9 +71,7 @@ public class InstanceManager {
 						String instanceID = FileUtil.getFileName(file);
 						// Load the instance
 						InstanceLoader.loadInstance(instanceID).ifPresent(
-								instance -> {
-									instances.put(instanceID, instance);
-								}
+								InstanceManager::addInstance
 						);
 					}
 					else {
@@ -84,6 +94,14 @@ public class InstanceManager {
 
 	public static List<Instance> getInstances() {
 		return instances.values().stream().toList();
+	}
+
+	public static Optional<Instance> getInstanceByCourseID(String courseID) {
+		return Optional.ofNullable(instancesByCourseID.get(courseID));
+	}
+
+	public static Optional<Instance> getInstanceByServerID(long serverID) {
+		return Optional.ofNullable(instancesByServerID.get(serverID));
 	}
 
 	public static boolean runInstance(String instanceID) throws SchedulerException {
@@ -166,7 +184,7 @@ public class InstanceManager {
 				instance -> {
 
 					// store the instance in the map
-					instances.put(instance.getInstanceID(), instance);
+					addInstance(instance);
 
 					// TODO:
 					// if instantiation is successful, save the config to disk
