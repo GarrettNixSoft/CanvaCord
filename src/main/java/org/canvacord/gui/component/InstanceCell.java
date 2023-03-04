@@ -1,6 +1,5 @@
 package org.canvacord.gui.component;
 
-import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.CanvaCordEventHandler;
 import org.canvacord.event.FetchStage;
 import org.canvacord.gui.CanvaCordApp;
@@ -17,7 +16,8 @@ import java.awt.*;
 import java.nio.file.Paths;
 
 public class InstanceCell extends JPanel {
-	
+
+	// ================ COMPONENT POSITIONING AND ALIGNMENT ================
 	public static final int ICON_SIZE = 96;
 	public static final int HEIGHT = 130;
 	public static final int LABEL_HEIGHT = 40;
@@ -26,8 +26,10 @@ public class InstanceCell extends JPanel {
 	public static final int OPTIONS_WIDTH = 60;
 	public static final int STATUS_WIDTH = CanvaCordApp.MIN_INSTANCE_WIDTH - ICON_SIZE - OPTIONS_WIDTH;
 
+	// ================ ASSOCIATED INSTANCE ================
 	private final Instance instance;
 
+	// ================ UPDATING STATUS ================
 	private JLabel statusLabel;
 	private DangerousProgressBar statusBar;
 
@@ -71,6 +73,7 @@ public class InstanceCell extends JPanel {
 		iconContainerPanel.setMaximumSize(new Dimension(ICON_SIZE, ICON_SIZE));
 		iconContainerPanel.setLayout(new GridBagLayout());
 
+		// Show the instance icon
 		ImagePanel iconPanel = new ImagePanel(iconPath);
 		iconPanel.setMinimumSize(new Dimension(ICON_SIZE, ICON_SIZE));
 		iconPanel.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
@@ -90,6 +93,7 @@ public class InstanceCell extends JPanel {
 		labelPanel.setMinimumSize(new Dimension(STATUS_WIDTH, LABEL_HEIGHT));
 		labelPanel.setPreferredSize(new Dimension(STATUS_WIDTH, LABEL_HEIGHT));
 
+		// Show the instance's name
 		JLabel instanceLabel = new JLabel(instance.getName());
 		instanceLabel.setFont(CanvaCordFonts.HEADER_FONT);
 		labelPanel.add(instanceLabel);
@@ -103,6 +107,7 @@ public class InstanceCell extends JPanel {
 		instanceDetailsPanel.setPreferredSize(new Dimension(STATUS_WIDTH, DETAILS_HEIGHT));
 		instanceDetailsPanel.setLayout(new BoxLayout(instanceDetailsPanel, BoxLayout.Y_AXIS));
 
+		// Show the associated Canvas course title
 		JLabel courseLabel = new JLabel("Course: " + instance.getCourseTitle());
 		courseLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 		courseLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -110,17 +115,20 @@ public class InstanceCell extends JPanel {
 
 		instanceDetailsPanel.add(Box.createVerticalStrut(2));
 
+		// Show the associated Discord server name
 		JLabel serverLabel = new JLabel("Server: " + instance.getServerName());
 		serverLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 		serverLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		instanceDetailsPanel.add(serverLabel);
 
+		// Show the current status on a panel
 		JPanel statusPanel = new JPanel();
 		statusPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
 		statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
 		statusPanel.setMinimumSize(new Dimension(STATUS_WIDTH, STATUS_HEIGHT));
 		statusPanel.setPreferredSize(new Dimension(STATUS_WIDTH, STATUS_HEIGHT));
 
+		// Show the current status as a string
 		statusLabel = new JLabel("Status: Stopped");
 		statusLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 		statusPanel.setPreferredSize(new Dimension(150, 24));
@@ -131,6 +139,7 @@ public class InstanceCell extends JPanel {
 		Dimension maxFiller = new Dimension(Short.MAX_VALUE, 5);
 		statusPanel.add(new Box.Filler(minFiller, preFiller, maxFiller));
 
+		// Use a progress bar to show fetch or notification progress
 		statusBar = new DangerousProgressBar(0, 100);
 		statusBar.setMinimumSize(new Dimension(300, 16));
 		statusBar.setPreferredSize(new Dimension(300, 20));
@@ -139,10 +148,12 @@ public class InstanceCell extends JPanel {
 		statusBar.setMaximum(100);
 		statusPanel.add(statusBar);
 
+		// Add a panel for the options button
 		JPanel optionsButtonPanel = new JPanel();
 		optionsButtonPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		optionsButtonPanel.setLayout(new GridBagLayout());
 
+		// Add a button for instance options
 		JButton optionsButton = new JButton();
 		optionsButton.setIcon(new ImageIcon("resources/options_icon.png"));
 		optionsButton.setEnabled(true);
@@ -171,11 +182,13 @@ public class InstanceCell extends JPanel {
 
 	private void initLogic(Instance instance) {
 
+		// ================ LISTEN FOR NEW EVENTS ================
 		CanvaCordEventHandler.addEventListener(event -> {
 
 			// If this event involves this cell's instance
 			if (event.getPayload()[0] instanceof Instance eventInstance && eventInstance.equals(instance)) {
 
+				// check the type of event and update the status bar
 				switch (event.getType()) {
 
 					case INSTANCE_STARTED -> {
