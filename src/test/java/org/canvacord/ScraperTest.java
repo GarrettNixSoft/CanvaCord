@@ -41,6 +41,9 @@ public class ScraperTest {
         System.out.println(bookRows.first().select("td").get(9).select("a").attr("href")); */
         //String url = TextbookScraper.getTextbookURL("calculus");
         //System.out.println(url);
-        TextbookScraper.downloadTextbook("32202", "calculus");
+
+
+        //Course ID and name of the textbook is required to test
+        TextbookScraper.downloadTextbook("32202", "bio");
     }
 }
