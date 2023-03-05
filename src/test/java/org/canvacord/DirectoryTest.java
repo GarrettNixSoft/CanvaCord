@@ -16,7 +16,7 @@ public class DirectoryTest {
         }
         System.out.println("Please select a textbook to add to the local directory");
         //prompts the user to choose a file from a directory
-        TextbookDirectory.chooseTextbook(courseID);
+        TextbookDirectory.storeTextbook(courseID);
         System.out.println("There now exists: " + TextbookDirectory.getNumberOfTextbooks(courseID) + " textbooks in course: " + courseID);
     }
 }

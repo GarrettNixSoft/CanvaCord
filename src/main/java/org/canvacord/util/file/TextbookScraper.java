@@ -67,6 +67,8 @@ public class TextbookScraper {
 
         //Download Section of Code
         String downloadURL = downloads.first().select("h2").get(0).select("a").attr("href");
+        String[] parts = downloadURL.split("\\.");
+        //System.out.println(parts[parts.length - 1]);
 
         //Try catch to see if the url is valid
         try {
@@ -76,7 +78,7 @@ public class TextbookScraper {
             InputStream inputStream = connection.getInputStream();
             String id = "testing";
             //Stores files in /config/textbooks numerically using the course ID
-            FileOutputStream outputStream = new FileOutputStream("./config/textbooks/" + courseID + "_" + TextbookDirectory.getLatestNumber(courseID) +".pdf");
+            FileOutputStream outputStream = new FileOutputStream("./config/textbooks/" + courseID + "_" + TextbookDirectory.getLatestNumber(courseID) + "." + parts[parts.length - 1]);
             //Number of Bytes downloaded for each loop
             byte[] buffer = new byte[1024];
             int bytesRead;
