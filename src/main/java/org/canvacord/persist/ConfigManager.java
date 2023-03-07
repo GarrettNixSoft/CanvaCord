@@ -39,4 +39,19 @@ public class ConfigManager {
         else return false;
     }
 
+    public static String getCanvasToken() {
+        return configJSON.getString("canvas_token");
+    }
+
+    public static String getDiscordToken() {
+        return configJSON.getString("discord_token");
+    }
+
+    public static String getUserID() {
+        return configJSON.getString("id");
+    }
+
+    public static String getCanvasURL() {
+        return configJSON.getString("url");
+    }
 }
