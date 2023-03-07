@@ -1,6 +1,7 @@
 package org.canvacord.instance;
 
 import org.canvacord.exception.CanvaCordException;
+import org.canvacord.util.file.CanvaCordPaths;
 import org.json.JSONObject;
 
 public class InstanceParser {
@@ -14,7 +15,7 @@ public class InstanceParser {
 		if (!storedID.equals(instanceID))
 			throw new CanvaCordException("Instance file name and stored ID do not match! (" + instanceID + ", " + storedID + ")");
 
-		InstanceConfiguration configuration = new InstanceConfiguration(instanceJSON);
+		InstanceConfiguration configuration = new InstanceConfiguration(instanceJSON, CanvaCordPaths.getInstanceConfigPath(instanceID, serverID));
 
 		try {
 			return new Instance(courseID, serverID, configuration);
