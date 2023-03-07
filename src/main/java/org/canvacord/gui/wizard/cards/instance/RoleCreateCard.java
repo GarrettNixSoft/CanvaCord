@@ -156,8 +156,11 @@ public class RoleCreateCard extends InstanceConfigCard {
 			String name = role.getName();
 			Color color = role.getColor();
 
+			ColorIcon icon = new ColorIcon(color, SIZE, SIZE);
+			icon.setDoBorder(true);
+
 			setText(name);
-			setIcon(new ColorIcon(color, SIZE, SIZE));
+			setIcon(icon);
 
 			if (isSelected) {
 				setBackground(list.getSelectionBackground());

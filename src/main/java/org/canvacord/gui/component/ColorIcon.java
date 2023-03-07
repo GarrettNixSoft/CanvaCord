@@ -6,8 +6,9 @@ import java.awt.*;
 public class ColorIcon implements Icon {
 
 	private Color color;
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
+	private boolean doBorder;
 
 	public ColorIcon(Color color, int width, int height) {
 		this.color = color;
@@ -23,10 +24,20 @@ public class ColorIcon implements Icon {
 		this.color = color;
 	}
 
+	public void setDoBorder(boolean doBorder) {
+		this.doBorder = doBorder;
+	}
+
 	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 		g.setColor(color);
 		g.fillRect(x, y, width, height);
+
+		if (doBorder) {
+			Color borderColor = new Color(255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue());
+			g.setColor(borderColor);
+			g.drawRect(x, y, width - 1, height - 1);
+		}
 	}
 
 	@Override
