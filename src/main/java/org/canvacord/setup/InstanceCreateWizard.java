@@ -5,6 +5,7 @@ import org.canvacord.gui.wizard.cards.instance.*;
 import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -89,13 +90,13 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		roleCreateCard.setPreviousCard(canvasFetchCard);
 
 		// Register the cards
-		registerCard(roleCreateCard); // TODO this should be last
 
 		registerCard(startingCard);
 		registerCard(courseAndServerCard);
 		registerCard(basicConfigCard);
 		registerCard(canvasFetchCard);
 
+		registerCard(roleCreateCard); // TODO this should be last
 	}
 
 	@Override
@@ -132,6 +133,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		if (!name.isBlank())
 			configJSON.put("name", name);
 
+		// Icon path is optional
 		String iconPath = basicConfigCard.getIconPath();
 		if (!iconPath.isBlank())
 			if (FileUtil.isValidFile(iconPath, "png", "jpg", "jpeg"))
@@ -139,8 +141,13 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 			else
 				UserInput.showMessage("Could not load the specified image.\nUsing default icon.", "Bad Icon Path");
 
+		// Add the user's configured Canvas Fetch schedule
 		JSONObject scheduleObject = canvasFetchCard.getScheduleJSON();
 		configJSON.put("canvas_fetch_schedule", scheduleObject);
+
+		// Generate roles and add them to the configuration
+		JSONArray rolesArray = roleCreateCard.getRolesArray();
+		configJSON.put("roles", rolesArray);
 
 		// TODO add more settings from other pages
 

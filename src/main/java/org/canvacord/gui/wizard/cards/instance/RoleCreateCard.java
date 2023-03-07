@@ -8,6 +8,8 @@ import org.canvacord.gui.dialog.RoleCreateDialog;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.util.input.UserInput;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -177,5 +179,13 @@ public class RoleCreateCard extends InstanceConfigCard {
 			return this;
 
 		}
+	}
+
+	public JSONArray getRolesArray() {
+		JSONArray result = new JSONArray();
+		for (CanvaCordRole role : roles) {
+			result.put(role.getJSON());
+		}
+		return result;
 	}
 }

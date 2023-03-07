@@ -1,5 +1,8 @@
 package org.canvacord.discord;
 
+import org.canvacord.gui.component.ColorIcon;
+import org.json.JSONObject;
+
 import java.awt.*;
 
 public class CanvaCordRole {
@@ -26,5 +29,12 @@ public class CanvaCordRole {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public JSONObject getJSON() {
+		JSONObject result = new JSONObject();
+		result.put("name", name);
+		result.put("color", color.getRGB());
+		return result;
 	}
 }
