@@ -1,17 +1,19 @@
 package org.canvacord.gui.component;
 
-import org.checkerframework.checker.units.qual.C;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class ColorPanel extends JPanel {
+public class ColorIcon implements Icon {
 
 	private Color color;
+	private final int width;
+	private final int height;
 	private boolean doBorder;
 
-	public ColorPanel(Color color) {
+	public ColorIcon(Color color, int width, int height) {
 		this.color = color;
+		this.width = width;
+		this.height = height;
 	}
 
 	public Color getColor() {
@@ -27,16 +29,24 @@ public class ColorPanel extends JPanel {
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+	public void paintIcon(Component c, Graphics g, int x, int y) {
 		g.setColor(color);
-		g.fillRect(0, 0, getWidth(), getHeight());
+		g.fillRect(x, y, width, height);
 
 		if (doBorder) {
 			Color borderColor = new Color(255 - color.getRed(), 255 - color.getGreen(), 255 - color.getBlue());
 			g.setColor(borderColor);
-			g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+			g.drawRect(x, y, width - 1, height - 1);
 		}
 	}
 
+	@Override
+	public int getIconWidth() {
+		return width;
+	}
+
+	@Override
+	public int getIconHeight() {
+		return height;
+	}
 }
