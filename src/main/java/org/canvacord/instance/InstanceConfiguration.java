@@ -29,11 +29,9 @@ public class InstanceConfiguration {
 	}
 
 	private JSONObject configJSON;
-	private final Path pathToFile;
 
-	public InstanceConfiguration(JSONObject configJSON, Path pathToFile) {
+	public InstanceConfiguration(JSONObject configJSON) {
 		this.configJSON = configJSON;
-		this.pathToFile = pathToFile;
 		initDefaults();
 	}
 
@@ -120,7 +118,7 @@ public class InstanceConfiguration {
 		JSONObject defaultConfig = new JSONObject(defaultConfigJSON);
 		defaultConfig.put("course_id", courseID);
 		defaultConfig.put("server_id", serverID);
-		return new InstanceConfiguration(defaultConfig, Paths.get("instances/" + courseID + "-" + serverID + "/config.json"));
+		return new InstanceConfiguration(defaultConfig);
 	}
 
 }

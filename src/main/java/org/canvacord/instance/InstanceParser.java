@@ -15,7 +15,7 @@ public class InstanceParser {
 		if (!storedID.equals(instanceID))
 			throw new CanvaCordException("Instance file name and stored ID do not match! (" + instanceID + ", " + storedID + ")");
 
-		InstanceConfiguration configuration = new InstanceConfiguration(instanceJSON, CanvaCordPaths.getInstanceConfigPath(instanceID, serverID));
+		InstanceConfiguration configuration = new InstanceConfiguration(instanceJSON);
 
 		try {
 			return new Instance(courseID, serverID, configuration);
