@@ -19,6 +19,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,107 +53,148 @@ public class RetrieveModulesTest {
         CanvasApi canvasApi = new CanvasApi(canvasBaseUrl, token);
 
         // Print Module Urls with course ID
-        List<Module> modules = canvasApi.getModules(32202L);
+        List<Module> modules = canvasApi.getModules(32109L);
         for(int i = 0; i < modules.size(); i++) {
             System.out.println(modules.get(i).getItemsUrl());
         }
 
+        JSONArray test = canvasApi.getDownloadableModules(32109L, token);
+
+        for(int i = 0; i < test.length(); i++) {
+            System.out.println(test.getJSONObject(i));
+        }
+        /*
+        // will hold all downloadable module json objects
+        JSONArray downloadableModules = new JSONArray();
+
         // Test to request information from Canvas Module URL
-
         // For simplification
-        String url = modules.get(0).getItemsUrl().toString();
 
-        // Create URL Object
-        URL obj = new URL(url);
+        List<String> urls = new ArrayList<>();
 
-        // Create HttpURLConnection Object
-        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-        // Set RequestMethod and Request Property
-        con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:27.0) Gecko/20100101 Firefox/27.0.2 Waterfox/27.0");
-        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-        // Use token for authorization
-        con.setRequestProperty("Authorization", "Bearer "+ token);
-
-        // Get Response to verify whether authentication was successful
-        int responseCode = con.getResponseCode();
-        System.out.println("\nSending 'GET' request to URL : " + url);
-        System.out.println("Response Code : " + responseCode);
-
-        // Read information from URL with BufferedReader Object
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
+        for(int i = 0; i < modules.size(); i++) {
+            urls.add(modules.get(i).getItemsUrl().toString());
         }
-        in.close();
+        //String url = modules.get(1).getItemsUrl().toString();
 
-        // Print as a string
-        System.out.println(response.toString());
 
-        // Put url in JSON Array Object
-        JSONArray jsonArr = new JSONArray(response.toString());
+        //FOR LOOP ALL THIS
 
-        // Initialize JSON Object
-        for (int i = 0; i < jsonArr.length(); i++)
-        {
-            JSONObject jsonObj = jsonArr.getJSONObject(i);
-            System.out.println(jsonObj);
+        for (int i = 0; i < urls.size(); i++) {
+            // Create URL Object
+            URL obj = new URL(urls.get(i));
+
+            // Create HttpURLConnection Object
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            // Set RequestMethod and Request Property
+            con.setRequestMethod("GET");
+            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:27.0) Gecko/20100101 Firefox/27.0.2 Waterfox/27.0");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            // Use token for authorization
+            con.setRequestProperty("Authorization", "Bearer " + token);
+
+            // Get Response to verify whether authentication was successful
+            int responseCode = con.getResponseCode();
+            System.out.println("\nSending 'GET' request to URL : " + urls.get(i).toString());
+            System.out.println("Response Code : " + responseCode);
+
+            // Read information from URL with BufferedReader Object
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Print as a string
+            System.out.println(response.toString());
+
+            // Put url in JSON Array Object
+            JSONArray jsonArr = new JSONArray(response.toString());
+
+            // Print JSON Object
+            for (int j = 0; j < jsonArr.length(); j++) {
+                // if jsonObj is a file throw it into the downloadableModules JSON Array
+                JSONObject jsonObj = jsonArr.getJSONObject(j);
+                if (jsonArr.getJSONObject(j).get("type").toString().equals("File")) {
+                    System.out.println(jsonObj);
+                    downloadableModules.put(jsonArr.getJSONObject(j));
+                }
+            }
         }
 
+        //HOLD HERE
         // Print URL
-        System.out.println(jsonArr.getJSONObject(0).get("url"));
+
+        for(int i = 0; i < downloadableModules.length(); i++) {
+            System.out.println(downloadableModules.getJSONObject(i));
+        }
 
         // REQUEST NUMBER 2
+        //downloadableModules hold all possible downloadable modules
 
-        // For simplification
-        url = jsonArr.getJSONObject(0).get("url").toString();
+        for(int i = 0; i < downloadableModules.length(); i++) {
+            // For simplification
+            String url = downloadableModules.getJSONObject(i).get("url").toString();
 
-        // Create URL Object
-        obj = new URL(url);
+            // Create URL Object
+            URL obj = new URL(url);
 
-        // Create HttpURLConnection Object
-        con = (HttpURLConnection) obj.openConnection();
+            // Create HttpURLConnection Object
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-        // Set RequestMethod and Request Property
-        con.setRequestMethod("GET");
-        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:27.0) Gecko/20100101 Firefox/27.0.2 Waterfox/27.0");
-        con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            // Set RequestMethod and Request Property
+            con.setRequestMethod("GET");
+            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:27.0) Gecko/20100101 Firefox/27.0.2 Waterfox/27.0");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-        // Use token for authorization
-        con.setRequestProperty("Authorization", "Bearer "+ token);
+            // Use token for authorization
+            con.setRequestProperty("Authorization", "Bearer " + token);
 
-        // Get Response to verify whether authentication was successful
-        responseCode = con.getResponseCode();
-        System.out.println("\nSending 'GET' request to URL : " + jsonArr.getJSONObject(0).get("url"));
-        System.out.println("Response Code : " + responseCode);
+            // Get Response to verify whether authentication was successful
+            int responseCode = con.getResponseCode();
+            System.out.println("\nSending 'GET' request to URL : " + downloadableModules.getJSONObject(i).get("url").toString());
+            System.out.println("Response Code : " + responseCode);
 
-        // Read information from URL with BufferedReader Object
-        in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String inputLine2;
-        response = new StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
+            // Read information from URL with BufferedReader Object
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine2;
+            StringBuffer response = new StringBuffer();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Print as a string
+            System.out.println(response.toString());
+
+            JSONObject json = new JSONObject(response.toString());
+            //replace with new json object containing downloadable url
+            downloadableModules.put(i, json);
+            // Print JSON Object
+
+            // Print Download URL
+            System.out.println(json.get("display_name"));
+            System.out.println(json.get("url"));
         }
-        in.close();
 
-        // Print as a string
-        System.out.println(response.toString());
+        for(int i = 0; i < downloadableModules.length(); i++) {
+            System.out.println(downloadableModules.getJSONObject(i));
+        }
 
-        JSONObject json = new JSONObject(response.toString());
 
-        // Print Download URL
-        System.out.println(json.get("url"));
-
+        /*
+        //STOP HERE
         //DOWNLOAD REQUEST!!!!
 
         // Download URL, contains the file
-        url = json.get("url").toString();
+        String url = json.get("url").toString();
 
         // Print name of file
         System.out.println(json.get("display_name").toString());
@@ -216,5 +258,7 @@ public class RetrieveModulesTest {
         // Close both streams
         outputStream.close();
         inputStream.close();
+
+         */
     }
 }

@@ -12,6 +12,7 @@ import edu.ksu.canvas.model.assignment.Assignment;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.List;
 
 public class RetrieveAssignmentTest {
@@ -37,5 +38,17 @@ public class RetrieveAssignmentTest {
         for(int i = 0; i < assignments.size(); i++) {
             System.out.println(assignments.get(i).getName());
         }
+        // For testing psuedocode
+        // now that we have the list of assignments
+        // for loop through assignments
+        Date startDate = new Date(123, 02, 5);
+        Date endDate = new Date(123, 02, 18);
+
+        assignments = canvasApi.getAssignmentsByDateRange("32202", startDate, endDate);
+        // return assignments
+        for(int i = 0; i < assignments.size(); i++) {
+            System.out.println(assignments.get(i).getName());
+        }
+
     }
 }
