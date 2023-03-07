@@ -89,13 +89,13 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		roleCreateCard.setPreviousCard(canvasFetchCard);
 
 		// Register the cards
+		registerCard(roleCreateCard); // TODO this should be last
 
 		registerCard(startingCard);
 		registerCard(courseAndServerCard);
 		registerCard(basicConfigCard);
 		registerCard(canvasFetchCard);
 
-		registerCard(roleCreateCard); // TODO this should be last
 	}
 
 	@Override
