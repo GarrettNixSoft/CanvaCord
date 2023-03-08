@@ -60,4 +60,12 @@ public class CanvaCordRole {
 		result.put("color", Integer.toHexString(color.getRGB()));
 		return result;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof CanvaCordRole other) {
+			return this.name.equals(other.name) && this.color.equals(other.color);
+		}
+		return false;
+	}
 }

@@ -1,21 +1,22 @@
 package org.canvacord.instance;
 
 import org.canvacord.canvas.CanvasApi;
+import org.canvacord.discord.CanvaCordNotification;
+import org.canvacord.discord.CanvaCordRole;
 import org.canvacord.discord.commands.Command;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.FetchStage;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.persist.CacheManager;
 import org.canvacord.scheduler.CanvaCordScheduler;
+import org.canvacord.util.compare.ListComparator;
 import org.canvacord.util.file.FileUtil;
+import org.canvacord.util.input.UserInput;
 import org.quartz.SchedulerException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Instance {
 
@@ -37,6 +38,11 @@ public class Instance {
 
 	// components
 	private InstanceConfiguration configuration;
+
+	// entities
+	private List<CanvaCordRole> configuredRoles = new ArrayList<>();
+	private List<CanvaCordRole> registeredRoles = new ArrayList<>();
+	private List<CanvaCordNotification> configuredNotifications = new ArrayList<>();
 
 	public Instance(String courseID, long serverID) throws InstantiationException {
 		// enforce uniqueness
@@ -73,15 +79,65 @@ public class Instance {
 	}
 
 	// ******************************** OPERATIONS ********************************
-	public boolean initialize() {
+
+	/**
+	 * Run the initialization process for this Instance in its target Discord server.
+	 * This creates all Roles, Channels, etc. that this instance is configured to use
+	 * as defined in its config.json file generated during the instance creation process.
+	 * @return {@code true} if the initialization of all entities completes without error
+	 * @throws CanvaCordException if some error occurs during initialization
+	 */
+	public boolean initialize() throws CanvaCordException {
 		// TODO
 		return false;
 	}
 
+	/**
+	 * Verify which entities (Roles, Channels, etc.) required for this Instance's
+	 * operation on the Discord end are actually present in the target Server.
+	 * <br>
+	 * If any entities are missing, the user will be prompted to repair the instance.
+	 * If they choose to repair, CanvaCord will attempt to create the missing entities
+	 * in Discord.
+	 * @throws CanvaCordException if some error occurs when creating missing entities
+	 */
+	public void verify() throws CanvaCordException {
+
+		// ================ VERIFY ROLES ================
+		// refresh the roles from the config file and Discord
+		getConfiguredRoles(true);
+		getRegisteredRoles(true);
+
+		// Check for a difference between the two lists
+		ListComparator<CanvaCordRole> comparator = new ListComparator<>();
+		if (!(comparator.listsIdentical(configuredRoles, registeredRoles))) {
+			// Ask the user if they want to fix this problem now
+			if (UserInput.askToConfirm("Some roles configured for instance " + getName() + " do not appear to be registered in the target Discord server. Attempt to create them now?", "Missing Roles")) {
+				// Get a list of all roles that are configured in the file but not found on Discord
+				List<CanvaCordRole> unregisteredRoles = comparator.listDifference(configuredRoles, registeredRoles);
+				// Attempt to create all of those roles
+				// TODO this is part of Andrew's use case
+			}
+
+		}
+
+		// ================ VERIFY CHANNELS ================
+		// TODO
+
+	}
+
+	/**
+	 * Start this Instance. This Instance's configured Fetch and Notify schedules
+	 * will be registered in the CanvaCordScheduler, putting this Instance in an active state.
+	 * @throws SchedulerException if some error occurs adding this Instance to the scheduler
+	 */
 	public void start() throws SchedulerException {
 		CanvaCordScheduler.scheduleInstance(this);
 	}
 
+	/**
+	 * Perform a Canvas Fetch to update this Instance's information.
+	 */
 	public void update() {
 
 		// Notify that a fetch has started for this instance
@@ -153,6 +209,30 @@ public class Instance {
 
 	public InstanceConfiguration getConfiguration() {
 		return configuration;
+	}
+
+	public List<CanvaCordRole> getConfiguredRoles(boolean refresh) {
+		// If a refresh is requested, reload the list from the config file
+		if (refresh) {
+			configuration.refresh();
+		}
+		return configuredRoles;
+	}
+
+	public List<CanvaCordRole> getRegisteredRoles(boolean refresh) {
+		// If a refresh is requested, reload the list from Discord
+		if (refresh) {
+			// TODO
+		}
+		return registeredRoles;
+	}
+
+	public List<CanvaCordNotification> getConfiguredNotifications(boolean refresh) {
+		// If a refresh is requested, reload the list from the config file
+		if (refresh) {
+			// TODO
+		}
+		return configuredNotifications;
 	}
 
 	public Map<Long,Command> getRegisteredCommands() {
