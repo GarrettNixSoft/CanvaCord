@@ -1,10 +1,13 @@
 package org.canvacord.instance;
 
+import org.canvacord.exception.CanvaCordException;
+import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 
@@ -25,7 +28,7 @@ public class InstanceConfiguration {
 		DELETE, ARCHIVE
 	}
 
-	private final JSONObject configJSON;
+	private JSONObject configJSON;
 
 	public InstanceConfiguration(JSONObject configJSON) {
 		this.configJSON = configJSON;
@@ -46,6 +49,15 @@ public class InstanceConfiguration {
 		// If no name was specified
 		if (!configJSON.has("name"))
 			configJSON.put("name", "instance_" + configJSON.getString("course_id") + "-" + configJSON.getLong("server_id"));
+	}
+
+	public void refresh() throws CanvaCordException {
+		File configFile = CanvaCordPaths.getInstanceConfigPath(getCourseID(), getServerID()).toFile();
+		Optional<JSONObject> readFromDisk = FileUtil.getJSON(configFile);
+		if (readFromDisk.isPresent())
+			configJSON = readFromDisk.get();
+		else
+			throw new CanvaCordException("Failed to refresh instance configuration");
 	}
 
 	// TODO: getters

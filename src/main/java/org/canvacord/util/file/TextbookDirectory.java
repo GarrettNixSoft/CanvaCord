@@ -38,7 +38,7 @@ public class TextbookDirectory {
      * @param id The course id of the course too add the textbook file too
      * @return the chosen pdf file that the user chosen
      */
-    public static Optional<File> chooseTextbook(String id){
+    public static Optional<File> storeTextbook(String id){
         Optional<File> testing = FileGetter.getFile("C:", "PDF File", ".pdf");
         //Checks if user closes the prompt window
         if(testing.isEmpty()) {
@@ -52,6 +52,16 @@ public class TextbookDirectory {
             Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
         } catch(Exception e) {
             System.out.println("Failed to copy to path");
+        }
+        return testing;
+    }
+
+    public static Optional<File> chooseTextbook(){
+        Optional<File> testing = FileGetter.getFile("C:", "PDF File", ".pdf");
+        //Checks if user closes the prompt window
+        if(testing.isEmpty()) {
+            System.out.println("Unable to obtain file");
+            return Optional.empty();
         }
         return testing;
     }

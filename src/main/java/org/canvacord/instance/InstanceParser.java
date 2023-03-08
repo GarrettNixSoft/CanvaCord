@@ -1,6 +1,7 @@
 package org.canvacord.instance;
 
 import org.canvacord.exception.CanvaCordException;
+import org.canvacord.util.file.CanvaCordPaths;
 import org.json.JSONObject;
 
 public class InstanceParser {
