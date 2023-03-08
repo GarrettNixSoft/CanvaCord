@@ -1,6 +1,7 @@
 package org.canvacord.instance;
 
 import org.canvacord.canvas.CanvasApi;
+import org.canvacord.discord.CanvaCordNotification;
 import org.canvacord.discord.CanvaCordRole;
 import org.canvacord.discord.commands.Command;
 import org.canvacord.event.CanvaCordEvent;
@@ -41,6 +42,7 @@ public class Instance {
 	// entities
 	private List<CanvaCordRole> configuredRoles = new ArrayList<>();
 	private List<CanvaCordRole> registeredRoles = new ArrayList<>();
+	private List<CanvaCordNotification> configuredNotifications = new ArrayList<>();
 
 	public Instance(String courseID, long serverID) throws InstantiationException {
 		// enforce uniqueness
@@ -223,6 +225,14 @@ public class Instance {
 			// TODO
 		}
 		return registeredRoles;
+	}
+
+	public List<CanvaCordNotification> getConfiguredNotifications(boolean refresh) {
+		// If a refresh is requested, reload the list from the config file
+		if (refresh) {
+			// TODO
+		}
+		return configuredNotifications;
 	}
 
 	public Map<Long,Command> getRegisteredCommands() {
