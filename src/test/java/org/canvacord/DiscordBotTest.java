@@ -9,8 +9,11 @@ public class DiscordBotTest {
 
     public static void main(String[] args) {
 
-        //DiscordApi Bot = new DiscordApiBuilder().setToken("MTA4MjczNzcwOTkyNTI3Nzc0OA.GDzgUs.mRUVdrq6X40_pzFXt8IeTVS-LHf2u50rXUNwwA").login().join();
-        //DiscordApi api = new DiscordApiBuilder().setToken("MTA4MjczNzcwOTkyNTI3Nzc0OA.GDzgUs.mRUVdrq6X40_pzFXt8IeTVS-LHf2u50rXUNwwA").login().join();
+        DiscordBot bot = DiscordBot.getBotInstance();
+        bot.login();
+
+        
+
 
 
 

@@ -72,6 +72,10 @@ public class DiscordBot {
 		return api.getServers();
 	}
 
+	//send assignment message to target channel
+
+	//
+
 
 
 	// IDK
