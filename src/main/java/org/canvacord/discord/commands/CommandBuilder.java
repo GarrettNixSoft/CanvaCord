@@ -25,24 +25,25 @@ public class CommandBuilder {
 		assignment <parameters> DONE
 		remindme <create: date and name parameters> <list> <delete: name parameter> DONE
 		help <commands: parameter> DONE
-		modules <list> <name: parameter> DONE
+		modules <list> <name: parameter> DONE (option: add scoptionchoices for the available/downloadable modules)
 		*/
 
 		for (Command command:serverActiveCommands){
-			SlashCommandBuilder build = SlashCommand.with(command.getName(),command.getShortDescription());
+			SlashCommandBuilder build = command.getBuilder();
 			long commandID = registerCommandServer(build,command,server);
-			helpCommandOptionChoices.add(SlashCommandOptionChoice.create(command.getName(),commandID));
+			helpCommandOptionChoices.add(SlashCommandOptionChoice.create(command.getName(),String.valueOf(commandID)));
 		}
 
 
 		// help cmd has to be LAST to get all registered COMMAND ID's
-		SlashCommandBuilder helpCommand = SlashCommand.with(help.getName(),help.getShortDescription(),
-				Collections.singletonList(SlashCommandOption.createWithChoices(
-						SlashCommandOptionType.LONG,"commands","(optional) select a command",false,
+		SlashCommandBuilder helpCommand = help.getBuilder()
+				.setOptions(Collections.singletonList(SlashCommandOption.createWithChoices(
+						SlashCommandOptionType.STRING,"commands","(optional) select a command",false,
 						helpCommandOptionChoices)));
 		registerCommandServer(helpCommand,help,server);
 
-		// THE COMMAND CLASSES BELOW DO NOT EXIST YET
+		// THE COMMAND CLASSES BELOW DO NOT EXIST YET. when they do, move these into their getbuilder method
+		// but replace "build" with "Slashcommand.with(getName(),getShortDescription())"
 		// TODO
 		/*
 		SlashCommandBuilder assignmentCommand = build.addOption(SlashCommandOption

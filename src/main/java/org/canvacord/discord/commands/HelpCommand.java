@@ -47,10 +47,19 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 	public void execute(SlashCommandInteraction interaction) {
 		//IMPORTANT: when making slash command options in the helper slash command: make their VALUE their COMMAND ID
 
-		long commandOptionId = interaction
+		String commandIdFromInteraction = interaction
 				.getOptionByName("commands")
-				.flatMap(SlashCommandInteractionOption::getLongValue)//GETS THE COMMANDS PARAMETER ID
-				.orElse(interaction.getCommandId()); //GETS THE HELP COMMAND ID
+				.flatMap(SlashCommandInteractionOption::getStringValue)//GETS THE COMMANDS PARAMETER ID
+				.orElse(String.valueOf(interaction.getCommandId())); //GETS THE HELP COMMAND ID
+
+		long commandOptionId = 0;
+		try {
+			commandOptionId = Long.parseLong(commandIdFromInteraction);
+		}
+		catch (NumberFormatException e){
+			System.out.println("Error registering command!");
+		}
+
 		if (commandList.isEmpty()) commandList.put(interaction.getCommandId(),this); //FIXME: JUST SO IT WORKS WITHOUT THE REAL HASHMAP
 
 		DiscordApi api = interaction.getApi(); //need the API to attach listeners
@@ -84,8 +93,7 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 
 	@Override
 	public SlashCommandBuilder getBuilder() {
-		// TODO
-		return null;
+		return SlashCommand.with(getName(),getShortDescription());
 	}
 
 	//option: make a new class for just the help command listeners
@@ -155,7 +163,7 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 		ActionRowBuilder builder = new ActionRowBuilder();
 		// Check to create the correct dropdown menu
 		List<SelectMenuOption> MenuOptions = (buttonID.equals("Commands")) ? getCommandSelectMenuOptions() : getTutorialSelectMenuOptions();
-		builder.addComponents(SelectMenu.create("Browse "+buttonID,"See "+buttonID+" Options",
+		builder.addComponents(SelectMenu.createStringMenu("Browse "+buttonID,"See "+buttonID+" Options",
 				1,1,MenuOptions));
 		return builder.build();
 	}
