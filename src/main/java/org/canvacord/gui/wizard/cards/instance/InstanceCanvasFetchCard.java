@@ -2,6 +2,7 @@ package org.canvacord.gui.wizard.cards.instance;
 
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;
+import org.canvacord.util.gui.ComponentUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -396,39 +397,39 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 
 		// Based on which radio button is selected, activate one row and disable all the other rows
 		if (frequentButton.isSelected()) {
-			setComponentsEnabledRecursively(frequentPanel, true);
-			setComponentsEnabledRecursively(hourlyPanel, false);
-			setComponentsEnabledRecursively(dailyPanel, false);
-			setComponentsEnabledRecursively(weeklyPanel, false);
-			setComponentsEnabledRecursively(customPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(frequentPanel, true);
+			ComponentUtils.setComponentsEnabledRecursively(hourlyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(dailyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(weeklyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(customPanel, false);
 		}
 		else if (hourlyButton.isSelected()) {
-			setComponentsEnabledRecursively(frequentPanel, false);
-			setComponentsEnabledRecursively(hourlyPanel, true);
-			setComponentsEnabledRecursively(dailyPanel, false);
-			setComponentsEnabledRecursively(weeklyPanel, false);
-			setComponentsEnabledRecursively(customPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(frequentPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(hourlyPanel, true);
+			ComponentUtils.setComponentsEnabledRecursively(dailyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(weeklyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(customPanel, false);
 		}
 		else if (dailyButton.isSelected()) {
-			setComponentsEnabledRecursively(frequentPanel, false);
-			setComponentsEnabledRecursively(hourlyPanel, false);
-			setComponentsEnabledRecursively(dailyPanel, true);
-			setComponentsEnabledRecursively(weeklyPanel, false);
-			setComponentsEnabledRecursively(customPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(frequentPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(hourlyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(dailyPanel, true);
+			ComponentUtils.setComponentsEnabledRecursively(weeklyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(customPanel, false);
 		}
 		else if (weeklyButton.isSelected()) {
-			setComponentsEnabledRecursively(frequentPanel, false);
-			setComponentsEnabledRecursively(hourlyPanel, false);
-			setComponentsEnabledRecursively(dailyPanel, false);
-			setComponentsEnabledRecursively(weeklyPanel, true);
-			setComponentsEnabledRecursively(customPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(frequentPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(hourlyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(dailyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(weeklyPanel, true);
+			ComponentUtils.setComponentsEnabledRecursively(customPanel, false);
 		}
 		else if (customButton.isSelected()) {
-			setComponentsEnabledRecursively(frequentPanel, false);
-			setComponentsEnabledRecursively(hourlyPanel, false);
-			setComponentsEnabledRecursively(dailyPanel, false);
-			setComponentsEnabledRecursively(weeklyPanel, false);
-			setComponentsEnabledRecursively(customPanel, true);
+			ComponentUtils.setComponentsEnabledRecursively(frequentPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(hourlyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(dailyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(weeklyPanel, false);
+			ComponentUtils.setComponentsEnabledRecursively(customPanel, true);
 		}
 
 		// explicitly enable all radio buttons
@@ -437,19 +438,6 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		dailyButton.setEnabled(true);
 		weeklyButton.setEnabled(true);
 		customButton.setEnabled(true);
-
-	}
-
-	private void setComponentsEnabledRecursively(JComponent component, boolean enabled) {
-
-		// set the flag for the target component
-		component.setEnabled(enabled);
-
-		// set the flag recursively for all subcomponents
-		for (Component subcomponent : component.getComponents()) {
-			if (subcomponent instanceof JComponent jComponent)
-				setComponentsEnabledRecursively(jComponent, enabled);
-		}
 
 	}
 
