@@ -33,8 +33,7 @@ public class DiscordBot {
 
 	public static DiscordBot getBotInstance() {
 		if (botInstance == null) {
-			JSONObject config = ConfigManager.getConfig();
-			botInstance = new DiscordBot(config.getString("discord_token"));
+			botInstance = new DiscordBot(ConfigManager.getDiscordToken());
 		}
 		return botInstance;
 	}

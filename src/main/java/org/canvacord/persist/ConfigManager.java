@@ -24,7 +24,7 @@ public class ConfigManager {
         return loadedFile;
     }
 
-    public static JSONObject getConfig() {
+    private static JSONObject getConfig() {
         if (configJSON == null) loadConfig();
         return configJSON;
     }
