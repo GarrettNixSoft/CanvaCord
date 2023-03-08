@@ -46,9 +46,8 @@ public class CanvasApi {
 
 	public static CanvasApi getInstance() {
 		if (instance == null) {
-			JSONObject config = ConfigManager.getConfig();
-			String url = config.getString("url");
-			String token = config.getString("canvas_token");
+			String url = ConfigManager.getCanvasURL();
+			String token = ConfigManager.getCanvasToken();
 			instance = new CanvasApi(url, token);
 		}
 		return instance;

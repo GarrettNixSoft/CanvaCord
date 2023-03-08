@@ -20,7 +20,7 @@ public class DiscordBot {
 	private DiscordBot() {
 
 		// fetch the token
-		String token = ConfigManager.getConfig().getString("discord_token");
+		String token = ConfigManager.getDiscordToken();
 
 		// prepare to log in
 		API_BUILDER = new DiscordApiBuilder().setToken(token);
