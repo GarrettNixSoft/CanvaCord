@@ -1,5 +1,7 @@
 package org.canvacord.event;
 
+import org.canvacord.util.string.StringConverter;
+
 public class CanvaCordEvent {
 
     public enum Type {
@@ -7,8 +9,30 @@ public class CanvaCordEvent {
         INITIALIZE_STARTED, INITIALIZE_UPDATE, INITIALIZE_COMPLETED,
         INSTANCE_STARTED, INSTANCE_STOPPED,
         FETCH_STARTED, FETCH_UPDATE, FETCH_COMPLETED, FETCH_ERROR,
-        NOTIFY_STARTED, NOTIFY_UPDATE, NOTIFY_COMPLETED, NOTIFY_ERROR
+        NOTIFY_STARTED, NOTIFY_UPDATE, NOTIFY_COMPLETED, NOTIFY_ERROR,
+        NEW_ASSIGNMENT, NEW_ANNOUNCEMENT, ASSIGNMENT_DUE_DATE_APPROACHING,
+        ASSIGNMENT_DUE_DATE_CHANGED;
+
+        public static Type stringToType(String typeStr) {
+            for (Type type : values()) {
+                if (type.toString().equals(typeStr))
+                    return type;
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            return StringConverter.enumToString(super.toString());
+        }
     }
+
+    public static Type[] NOTIFICATION_EVENTS = {
+            Type.NEW_ASSIGNMENT,
+            Type.NEW_ANNOUNCEMENT,
+            Type.ASSIGNMENT_DUE_DATE_APPROACHING,
+            Type.ASSIGNMENT_DUE_DATE_CHANGED
+    };
 
     private final Type type;
     private final Object[] payload;

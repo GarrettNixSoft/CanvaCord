@@ -1,18 +1,17 @@
 package org.canvacord.gui.dialog;
 
-import org.canvacord.discord.CanvaCordRole;
+import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorPanel;
+import org.canvacord.util.input.UserInput;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.Optional;
 
-public class RoleCreateDialog extends JDialog {
+public class RoleCreateDialog extends CanvaCordDialog {
 
 	private static final int WIDTH = 360;
 	private static final int HEIGHT = 240;
@@ -20,28 +19,8 @@ public class RoleCreateDialog extends JDialog {
 	private JTextField roleNameField;
 	private ColorPanel roleColorPanel;
 
-	private JButton okButton;
-	private JButton cancelButton;
-
-	private boolean cancelled;
-
 	public RoleCreateDialog() {
-		super();
-
-		// basic config
-		setTitle("New Role");
-		setModalityType(ModalityType.APPLICATION_MODAL);
-		setMaximumSize(new Dimension(WIDTH, HEIGHT));
-		setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		setMinimumSize(new Dimension(WIDTH, HEIGHT));
-		setResizable(false);
-
-		// capture clicking the X
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-
-		// center in display
-		setLocationRelativeTo(null);
-
+		super("New Role", WIDTH, HEIGHT);
 		buildGUI();
 		initLogic();
 	}
@@ -51,13 +30,16 @@ public class RoleCreateDialog extends JDialog {
 		prefillGUI(roleToEdit);
 	}
 
+	@Override
+	protected boolean verifyInputs() {
+		if (roleNameField.getText().isBlank()) {
+			UserInput.showErrorMessage("The Role's name cannot be blank.", "Name Error");
+			return false;
+		}
+		return true;
+	}
+
 	private void buildGUI() {
-
-		// Use absolute positioning
-		setLayout(null);
-
-		// Use an internal panel for components
-
 
 		// Positioning constants
 		final int componentX = 20;
@@ -67,11 +49,6 @@ public class RoleCreateDialog extends JDialog {
 		final int nameFieldY = nameLabelY + 30;
 		final int colorLabelY = nameFieldY + 30;
 		final int colorPanelY = colorLabelY + 32;
-
-		final int buttonWidth = 80;
-		final int buttonHeight = 28;
-		final int buttonSpacing = 10;
-		final int buttonY = colorPanelY + 70;
 
 		// Label the name field
 		JLabel nameFieldLabel = new JLabel("Choose a name for the Role:");
@@ -97,17 +74,6 @@ public class RoleCreateDialog extends JDialog {
 		add(roleColorPanel);
 
 		roleColorPanel.setDoBorder(true);
-
-		// Add dialog buttons
-		okButton = new JButton("OK");
-		okButton.setFont(CanvaCordFonts.LABEL_FONT_BIGGER_THAN_SMALL_BUT_SMALLER_THAN_MEDIUM);
-		okButton.setBounds(WIDTH / 2 - buttonWidth - buttonSpacing / 2, buttonY, buttonWidth, buttonHeight);
-		add(okButton);
-
-		cancelButton = new JButton("Cancel");
-		cancelButton.setFont(CanvaCordFonts.LABEL_FONT_BIGGER_THAN_SMALL_BUT_SMALLER_THAN_MEDIUM);
-		cancelButton.setBounds(WIDTH / 2 + buttonSpacing / 2, buttonY, buttonWidth, buttonHeight);
-		add(cancelButton);
 
 	}
 
@@ -144,24 +110,6 @@ public class RoleCreateDialog extends JDialog {
 			}
 		});
 
-		okButton.addActionListener(event -> {
-			cancelled = false;
-			setVisible(false);
-		});
-
-		cancelButton.addActionListener(event -> {
-			cancelled = true;
-			setVisible(false);
-		});
-
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				cancelled = true;
-				setVisible(false);
-			}
-		});
-
 	}
 
 	private void prefillGUI(CanvaCordRole roleToEdit) {
@@ -170,7 +118,7 @@ public class RoleCreateDialog extends JDialog {
 	}
 
 	private Optional<CanvaCordRole> getResult() {
-		if (cancelled)
+		if (cancelled || !verifyInputs())
 			return Optional.empty();
 		else {
 			return Optional.of(new CanvaCordRole(roleColorPanel.getColor(), roleNameField.getText()));
@@ -178,20 +126,16 @@ public class RoleCreateDialog extends JDialog {
 	}
 
 	public static Optional<CanvaCordRole> buildRole() {
-
 		RoleCreateDialog dialog = new RoleCreateDialog();
 		dialog.setVisible(true);
 		dialog.dispose();
-
 		return dialog.getResult();
 	}
 
 	public static Optional<CanvaCordRole> editRole(CanvaCordRole roleToEdit) {
-
 		RoleCreateDialog dialog = new RoleCreateDialog(roleToEdit);
 		dialog.setVisible(true);
 		dialog.dispose();
-
 		return dialog.getResult();
 	}
 

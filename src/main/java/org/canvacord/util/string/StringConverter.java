@@ -136,5 +136,9 @@ public class StringConverter {
 	public static String getValue(String valueStr) {
 		return valueStr.substring(valueStr.indexOf("=") + 1);
 	}
+
+	public static String enumToString(String enumName) {
+		return StringUtils.uppercaseWords(enumName.replaceAll("_", " "));
+	}
 	
 }

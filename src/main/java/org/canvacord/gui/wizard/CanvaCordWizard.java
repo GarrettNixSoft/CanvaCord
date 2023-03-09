@@ -6,6 +6,8 @@ import org.canvacord.gui.task.BackgroundTask;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The CanvaCordWizard is the base for implementing multi-page GUI processes.
@@ -27,6 +29,9 @@ public abstract class CanvaCordWizard extends JDialog {
 	private JButton backButton;
 	private JButton nextButton;
 	private JButton cancelButton;
+
+	// REGISTERED CARDS
+	private Map<String, WizardCard> registeredCards;
 
 	// CURRENT CARD
 	private WizardCard currentCard;
@@ -54,6 +59,8 @@ public abstract class CanvaCordWizard extends JDialog {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setResizable(false);
 		setTitle(title);
+
+		registeredCards = new HashMap<>();
 
 		initComponents();
 		initButtons();
@@ -143,6 +150,8 @@ public abstract class CanvaCordWizard extends JDialog {
 	 */
 	protected void registerCard(WizardCard card) {
 		if (!card.isConfigured()) throw new CanvaCordException("Attempted to register a Wizard Card without configuring its navigator");
+		if (registeredCards.containsKey(card.toString())) throw new CanvaCordException("Duplicate wizard card ID");
+		registeredCards.put(card.toString(), card);
 		cardPanel.add(card, card.toString());
 		cardLayout.addLayoutComponent(card, card.toString());
 		if (currentCard == null) {
@@ -209,6 +218,10 @@ public abstract class CanvaCordWizard extends JDialog {
 
 	public boolean isCancelled() {
 		return cancelled;
+	}
+
+	public WizardCard getCard(String cardID) {
+		return registeredCards.get(cardID);
 	}
 
 	/**

@@ -1,7 +1,6 @@
 package org.canvacord.gui.wizard.cards.instance;
 
-import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
-import org.canvacord.discord.CanvaCordRole;
+import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.RoleCreateDialog;
@@ -9,7 +8,6 @@ import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,10 +79,6 @@ public class RoleCreateCard extends InstanceConfigCard {
 		rolesList.setLayoutOrientation(JList.VERTICAL);
 		rolesList.setCellRenderer(new RoleCellRenderer(rolesList));
 
-		// TODO
-
-
-
 	}
 
 	@Override
@@ -98,11 +92,15 @@ public class RoleCreateCard extends InstanceConfigCard {
 			RoleCreateDialog.buildRole().ifPresent(role -> {
 				roles.add(role);
 				updateRolesList();
+				if (roles.size() == 1)
+					enableNext();
 			});
 		});
 
+		// ================ EDITING EXISTING ROLES ================
 		editRoleButton.addActionListener(event -> {
 			CanvaCordRole roleToEdit = rolesList.getSelectedValue();
+			if (roleToEdit == null) return;
 			int index = rolesList.getSelectedIndex();
 			RoleCreateDialog.editRole(roleToEdit).ifPresent(editedRole -> {
 				roles.set(index, editedRole);
@@ -110,11 +108,15 @@ public class RoleCreateCard extends InstanceConfigCard {
 			});
 		});
 
+		// ================ DELETING ROLES ================
 		deleteRoleButton.addActionListener(event -> {
+			int index = rolesList.getSelectedIndex();
+			if (index == -1) return;
 			if (UserInput.askToConfirm("Delete this role?", "Confirm Delete")) {
-				int index = rolesList.getSelectedIndex();
 				roles.remove(index);
 				updateRolesList();
+				if (roles.isEmpty())
+					disableNext();
 			}
 		});
 
@@ -137,6 +139,16 @@ public class RoleCreateCard extends InstanceConfigCard {
 		rolesList.setModel(roleListModel);
 		rolesList.updateUI();
 
+	}
+
+	private void enableNext() {
+		getParentWizard().setNextButtonEnabled(true);
+		getParentWizard().setNextButtonTooltip(null);
+	}
+
+	private void disableNext() {
+		getParentWizard().setNextButtonEnabled(false);
+		getParentWizard().setNextButtonTooltip("<html>You must create at least one<br>Role before continuing.</html>");
 	}
 
 	private static class RoleCellRenderer extends JLabel implements ListCellRenderer<CanvaCordRole> {
@@ -188,4 +200,9 @@ public class RoleCreateCard extends InstanceConfigCard {
 		}
 		return result;
 	}
+
+	public List<CanvaCordRole> getRoles() {
+		return roles;
+	}
+
 }

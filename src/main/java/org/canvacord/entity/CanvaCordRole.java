@@ -1,4 +1,4 @@
-package org.canvacord.discord;
+package org.canvacord.entity;
 
 import org.canvacord.util.input.UserInput;
 import org.json.JSONObject;
@@ -67,5 +67,10 @@ public class CanvaCordRole {
 			return this.name.equals(other.name) && this.color.equals(other.color);
 		}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }
