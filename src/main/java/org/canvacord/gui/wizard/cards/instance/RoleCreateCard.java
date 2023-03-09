@@ -1,5 +1,6 @@
 package org.canvacord.gui.wizard.cards.instance;
 
+import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorIcon;
@@ -12,10 +13,13 @@ import org.json.JSONArray;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RoleCreateCard extends InstanceConfigCard {
 
+	private Map<String, CanvaCordRole> rolesByName;
 	private List<CanvaCordRole> roles;
 	private JList<CanvaCordRole> rolesList;
 
@@ -84,13 +88,19 @@ public class RoleCreateCard extends InstanceConfigCard {
 	@Override
 	protected void initLogic() {
 
-		// init the list
+		// init the collections
 		roles = new ArrayList<>();
+		rolesByName = new HashMap<>();
 
 		// ================ ADDING NEW ROLES ================
 		newRoleButton.addActionListener(event -> {
 			RoleCreateDialog.buildRole().ifPresent(role -> {
+				if (rolesByName.containsKey(role.getName())) {
+					UserInput.showErrorMessage("Role names must be unique!", "Duplicate Name");
+					return;
+				}
 				roles.add(role);
+				rolesByName.put(role.getName(), role);
 				updateRolesList();
 				if (roles.size() == 1)
 					enableNext();
@@ -101,11 +111,15 @@ public class RoleCreateCard extends InstanceConfigCard {
 		editRoleButton.addActionListener(event -> {
 			CanvaCordRole roleToEdit = rolesList.getSelectedValue();
 			if (roleToEdit == null) return;
+			rolesByName.remove(roleToEdit.getName());
 			int index = rolesList.getSelectedIndex();
-			RoleCreateDialog.editRole(roleToEdit).ifPresent(editedRole -> {
-				roles.set(index, editedRole);
-				updateRolesList();
-			});
+			RoleCreateDialog.editRole(roleToEdit).ifPresentOrElse(
+				editedRole -> {
+					roles.set(index, editedRole);
+					rolesByName.put(editedRole.getName(), editedRole);
+					updateRolesList();
+				},
+				() -> rolesByName.put(roleToEdit.getName(), roleToEdit));
 		});
 
 		// ================ DELETING ROLES ================
@@ -113,7 +127,8 @@ public class RoleCreateCard extends InstanceConfigCard {
 			int index = rolesList.getSelectedIndex();
 			if (index == -1) return;
 			if (UserInput.askToConfirm("Delete this role?", "Confirm Delete")) {
-				roles.remove(index);
+				CanvaCordRole removed = roles.remove(index);
+				rolesByName.remove(removed.getName());
 				updateRolesList();
 				if (roles.isEmpty())
 					disableNext();
