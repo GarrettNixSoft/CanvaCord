@@ -18,6 +18,8 @@ public class StringUtils {
 	public static String uppercaseWords(String str) {
 		// prepare a StringBuilder to construct the result
 		StringBuilder result = new StringBuilder();
+		// Lowercase the string
+		str = str.toLowerCase();
 		// split the string into words
 		String[] words = str.split(" ");
 		// iterate over each word
@@ -35,6 +37,11 @@ public class StringUtils {
 		return result.toString().trim();
 	}
 
+	public static String checkPlural(String word, int value) {
+		if (value != 1) word += "s";
+		return word;
+	}
+
 	public static String[] getStringNumberArray(int start, int end) {
 
 		List<String> list = new ArrayList<>();
@@ -45,6 +52,17 @@ public class StringUtils {
 
 		return list.toArray(new String[0]);
 
+	}
+
+	public static String commaSeparatedList(List<?> list) {
+		if (list.isEmpty()) return "";
+		StringBuilder result = new StringBuilder();
+		result.append(list.get(0));
+		for (int i = 1; i < list.size(); i++) {
+			result.append(", ");
+			result.append(list.get(i));
+		}
+		return result.toString();
 	}
 
 	public static boolean isURL(String str) {

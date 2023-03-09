@@ -1,8 +1,8 @@
 package org.canvacord.instance;
 
 import org.canvacord.canvas.CanvasApi;
-import org.canvacord.discord.CanvaCordNotification;
-import org.canvacord.discord.CanvaCordRole;
+import org.canvacord.entity.CanvaCordNotification;
+import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.discord.commands.Command;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.FetchStage;

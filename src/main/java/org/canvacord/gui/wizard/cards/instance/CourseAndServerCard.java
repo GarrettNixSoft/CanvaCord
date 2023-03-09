@@ -331,11 +331,6 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 		getParentWizard().setNextButtonTooltip("<html>You must verify your Course ID and<br>Server ID before continuing.</html>");
 	}
 
-	private void enableNext() {
-		getParentWizard().setNextButtonEnabled(true);
-		getParentWizard().setNextButtonTooltip(null);
-	}
-
 	@Override
 	public void updateTask(int typeCode, Boolean verified) {
 

@@ -1,7 +1,7 @@
 package org.canvacord.gui.wizard.cards.instance;
 
-import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
-import org.canvacord.discord.CanvaCordRole;
+import org.canvacord.entity.CanvaCordNotification;
+import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.RoleCreateDialog;
@@ -9,15 +9,17 @@ import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RoleCreateCard extends InstanceConfigCard {
 
+	private Map<String, CanvaCordRole> rolesByName;
 	private List<CanvaCordRole> roles;
 	private JList<CanvaCordRole> rolesList;
 
@@ -81,40 +83,55 @@ public class RoleCreateCard extends InstanceConfigCard {
 		rolesList.setLayoutOrientation(JList.VERTICAL);
 		rolesList.setCellRenderer(new RoleCellRenderer(rolesList));
 
-		// TODO
-
-
-
 	}
 
 	@Override
 	protected void initLogic() {
 
-		// init the list
+		// init the collections
 		roles = new ArrayList<>();
+		rolesByName = new HashMap<>();
 
 		// ================ ADDING NEW ROLES ================
 		newRoleButton.addActionListener(event -> {
 			RoleCreateDialog.buildRole().ifPresent(role -> {
+				if (rolesByName.containsKey(role.getName())) {
+					UserInput.showErrorMessage("Role names must be unique!", "Duplicate Name");
+					return;
+				}
 				roles.add(role);
+				rolesByName.put(role.getName(), role);
 				updateRolesList();
+				if (roles.size() == 1)
+					enableNext();
 			});
 		});
 
+		// ================ EDITING EXISTING ROLES ================
 		editRoleButton.addActionListener(event -> {
 			CanvaCordRole roleToEdit = rolesList.getSelectedValue();
+			if (roleToEdit == null) return;
+			rolesByName.remove(roleToEdit.getName());
 			int index = rolesList.getSelectedIndex();
-			RoleCreateDialog.editRole(roleToEdit).ifPresent(editedRole -> {
-				roles.set(index, editedRole);
-				updateRolesList();
-			});
+			RoleCreateDialog.editRole(roleToEdit).ifPresentOrElse(
+				editedRole -> {
+					roles.set(index, editedRole);
+					rolesByName.put(editedRole.getName(), editedRole);
+					updateRolesList();
+				},
+				() -> rolesByName.put(roleToEdit.getName(), roleToEdit));
 		});
 
+		// ================ DELETING ROLES ================
 		deleteRoleButton.addActionListener(event -> {
+			int index = rolesList.getSelectedIndex();
+			if (index == -1) return;
 			if (UserInput.askToConfirm("Delete this role?", "Confirm Delete")) {
-				int index = rolesList.getSelectedIndex();
-				roles.remove(index);
+				CanvaCordRole removed = roles.remove(index);
+				rolesByName.remove(removed.getName());
 				updateRolesList();
+				if (roles.isEmpty())
+					disableNext();
 			}
 		});
 
@@ -137,6 +154,16 @@ public class RoleCreateCard extends InstanceConfigCard {
 		rolesList.setModel(roleListModel);
 		rolesList.updateUI();
 
+	}
+
+	private void enableNext() {
+		getParentWizard().setNextButtonEnabled(true);
+		getParentWizard().setNextButtonTooltip(null);
+	}
+
+	private void disableNext() {
+		getParentWizard().setNextButtonEnabled(false);
+		getParentWizard().setNextButtonTooltip("<html>You must create at least one<br>Role before continuing.</html>");
 	}
 
 	private static class RoleCellRenderer extends JLabel implements ListCellRenderer<CanvaCordRole> {
@@ -188,4 +215,9 @@ public class RoleCreateCard extends InstanceConfigCard {
 		}
 		return result;
 	}
+
+	public List<CanvaCordRole> getRoles() {
+		return roles;
+	}
+
 }

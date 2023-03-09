@@ -46,12 +46,12 @@ public class UserInput {
 		}
 	}
 
-	public static int getUserChoiceFromList(String prompt, String title, String[] options) {
+	public static String getUserChoiceFromList(String prompt, String title, String[] options) {
 
 		JFrame frame = buildParent();
 
-		int response = JOptionPane.showOptionDialog(frame, prompt, title,
-				JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+		String response = (String) JOptionPane.showInputDialog(frame, prompt, title,
+				JOptionPane.PLAIN_MESSAGE,
 				null, options, options[0]);
 
 		frame.dispose();

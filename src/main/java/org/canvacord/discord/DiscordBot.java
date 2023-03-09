@@ -10,6 +10,7 @@ import org.javacord.api.entity.server.Server;
 import org.json.JSONObject;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.concurrent.CompletionException;
 
 public class DiscordBot {
@@ -18,6 +19,8 @@ public class DiscordBot {
 
 	private final DiscordApiBuilder API_BUILDER;
 	private DiscordApi api;
+
+	private boolean connected = false;
 
 	private DiscordBot() {
 
@@ -43,6 +46,7 @@ public class DiscordBot {
 	public boolean login() {
 		try {
 			api = API_BUILDER.login().get();
+			connected = true;
 			return true;
 		}
 		catch (Exception e) {
@@ -54,6 +58,7 @@ public class DiscordBot {
 	public boolean disconnect() {
 		try {
 			api.disconnect().join();
+			connected = false;
 		}
 		catch (CompletionException e) {
 			e.printStackTrace();
@@ -84,6 +89,11 @@ public class DiscordBot {
 	// IDK
 	public DiscordApi getApi() {
 		return api;
+	}
+
+	public Optional<Server> getServerByID(long serverID) {
+		if (!connected) login();
+		return api.getServerById(serverID);
 	}
 
 	/**

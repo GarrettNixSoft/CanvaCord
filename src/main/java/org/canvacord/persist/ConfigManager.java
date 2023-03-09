@@ -40,18 +40,18 @@ public class ConfigManager {
     }
 
     public static String getCanvasToken() {
-        return configJSON.getString("canvas_token");
+        return getConfig().getString("canvas_token");
     }
 
     public static String getDiscordToken() {
-        return configJSON.getString("discord_token");
+        return getConfig().getString("discord_token");
     }
 
     public static String getUserID() {
-        return configJSON.getString("id");
+        return getConfig().getString("id");
     }
 
     public static String getCanvasURL() {
-        return configJSON.getString("url");
+        return getConfig().getString("url");
     }
 }

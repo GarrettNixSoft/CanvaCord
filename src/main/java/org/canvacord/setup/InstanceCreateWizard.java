@@ -22,14 +22,15 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 	private InstanceBasicConfigCard basicConfigCard;
 	private InstanceCanvasFetchCard canvasFetchCard;
 	private RoleCreateCard roleCreateCard;
+	private NotificationCreateCard notificationCreateCard;
 
 	public InstanceCreateWizard() {
 		super("Create Instance");
 	}
 
-	private void disableNext() {
+	private void disableNext(String message) {
 		setNextButtonEnabled(false);
-		setNextButtonTooltip("<html>You must verify your Course ID and<br>Server ID before continuing.</html>");
+		setNextButtonTooltip(message);
 	}
 
 	private void enableNext() {
@@ -48,13 +49,16 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		courseAndServerCard = new CourseAndServerCard(this, "course_server");
 
 		// The third card is the first page of configuration
-		basicConfigCard = new InstanceBasicConfigCard(this, "config_1", false);
+		basicConfigCard = new InstanceBasicConfigCard(this, "name_icon", false);
 
 		// The fourth card is for setting up the Canvas fetching schedule
 		canvasFetchCard = new InstanceCanvasFetchCard(this, "fetch_config", false);
 
 		// The fifth card is for defining what roles this instance should use
-		roleCreateCard = new RoleCreateCard(this, "role_config", true);
+		roleCreateCard = new RoleCreateCard(this, "role_config", false);
+
+		// The sixth card us for defining what notifications should be sent
+		notificationCreateCard = new NotificationCreateCard(this, "notification_config", true);
 
 		// ================================ Configure the navigation connections ================================
 		// ================ START ================
@@ -67,7 +71,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 		courseAndServerCard.setOnNavigateTo(() -> {
 			if (!(courseAndServerCard.isVerifiedCanvasCourse() && courseAndServerCard.isVerifiedDiscordServer())) {
-				disableNext();
+				disableNext("<html>You must verify your Course ID and<br>Server ID before continuing.</html>");
 			}
 		});
 
@@ -86,17 +90,28 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		canvasFetchCard.setPreviousCard(basicConfigCard);
 
 		// ================ DISCORD ROLES ================
-		roleCreateCard.setNavigator(Optional::empty);
+		roleCreateCard.setNavigator(() -> Optional.of(notificationCreateCard));
 		roleCreateCard.setPreviousCard(canvasFetchCard);
 
-		// Register the cards
+		roleCreateCard.setOnNavigateTo(() -> {
+			disableNext("<html>You must create at least one<br>Role before continuing.</html>");
+		});
 
+		// ================ NOTIFICATIONS ================
+		notificationCreateCard.setNavigator(Optional::empty);
+		notificationCreateCard.setPreviousCard(roleCreateCard);
+
+		notificationCreateCard.setOnNavigateTo(() -> {
+			disableNext("<html>You must create at least one<br>Notification before continuing.</html>");
+		});
+
+		// Register the cards
 		registerCard(startingCard);
 		registerCard(courseAndServerCard);
 		registerCard(basicConfigCard);
 		registerCard(canvasFetchCard);
-
-		registerCard(roleCreateCard); // TODO this should be last
+		registerCard(roleCreateCard);
+		registerCard(notificationCreateCard);
 	}
 
 	@Override
@@ -148,6 +163,10 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		// Generate roles and add them to the configuration
 		JSONArray rolesArray = roleCreateCard.getRolesArray();
 		configJSON.put("roles", rolesArray);
+
+		// Generate notifications and add them to the configuration
+		JSONArray notificationsArray = notificationCreateCard.getNotificationsArray();
+		configJSON.put("notifications", notificationsArray);
 
 		// TODO add more settings from other pages
 
