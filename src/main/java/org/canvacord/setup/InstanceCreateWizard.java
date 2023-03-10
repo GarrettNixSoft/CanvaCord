@@ -2,6 +2,7 @@ package org.canvacord.setup;
 
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.*;
+import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
@@ -26,6 +27,11 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 	public InstanceCreateWizard() {
 		super("Create Instance");
+	}
+
+	public InstanceCreateWizard(Instance instanceToEdit) {
+		this();
+		prefillCards(instanceToEdit);
 	}
 
 	private void disableNext(String message) {
@@ -106,12 +112,17 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		});
 
 		// Register the cards
+
 		registerCard(startingCard);
 		registerCard(courseAndServerCard);
 		registerCard(basicConfigCard);
 		registerCard(canvasFetchCard);
 		registerCard(roleCreateCard);
-		registerCard(notificationCreateCard);
+		registerCard(notificationCreateCard);// TODO last
+	}
+
+	private void prefillCards(Instance instanceToEdit) {
+		// TODO
 	}
 
 	@Override

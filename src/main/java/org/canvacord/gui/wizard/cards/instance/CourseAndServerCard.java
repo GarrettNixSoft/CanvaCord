@@ -12,6 +12,7 @@ import org.canvacord.gui.component.TextPrompt;
 import org.canvacord.gui.task.VerifyBackgroundTask;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.BackgroundTaskCard;
+import org.canvacord.instance.Instance;
 import org.canvacord.util.input.UserInput;
 import org.javacord.api.entity.server.Server;
 
@@ -324,6 +325,11 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 
 		});
 
+	}
+
+	@Override
+	protected void prefillGUI(Instance instanceToEdit) {
+		// TODO Andrew
 	}
 
 	private void disableNext() {

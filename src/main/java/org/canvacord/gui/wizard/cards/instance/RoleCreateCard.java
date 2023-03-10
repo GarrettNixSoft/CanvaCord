@@ -7,6 +7,7 @@ import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.RoleCreateDialog;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
+import org.canvacord.instance.Instance;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
 
@@ -135,6 +136,11 @@ public class RoleCreateCard extends InstanceConfigCard {
 			}
 		});
 
+	}
+
+	@Override
+	protected void prefillGUI(Instance instanceToEdit) {
+		// TODO Andrew
 	}
 
 	private void updateRolesList() {

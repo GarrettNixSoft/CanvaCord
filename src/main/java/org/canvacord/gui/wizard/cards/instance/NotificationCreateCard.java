@@ -8,6 +8,7 @@ import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.NotificationCreateDialog;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
+import org.canvacord.instance.Instance;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringConverter;
@@ -121,6 +122,11 @@ public class NotificationCreateCard extends InstanceConfigCard {
 
 	}
 
+	@Override
+	protected void prefillGUI(Instance instanceToEdit) {
+		// TODO Andrew
+	}
+
 	private void updateNotificationsList() {
 
 		ListModel<CanvaCordNotification> notificationListModel = new AbstractListModel<>() {
@@ -186,7 +192,7 @@ public class NotificationCreateCard extends InstanceConfigCard {
 			colorIcon.setDoBorder(true);
 			setIcon(colorIcon);
 
-			setText("<html>" + eventStr + ": " + notification.getFriendlyScheduleDescription() + "<br/>-->" + rolesListStr);
+			setText("<html><b>" + notification.getName() + "</b><br/>" + eventStr + ": " + notification.getFriendlyScheduleDescription() + "<br/>-->" + rolesListStr);
 
 			if (isSelected) {
 				setBackground(list.getSelectionBackground());

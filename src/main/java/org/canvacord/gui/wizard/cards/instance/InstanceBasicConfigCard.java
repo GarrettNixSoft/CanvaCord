@@ -4,6 +4,7 @@ import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.TextPrompt;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
+import org.canvacord.instance.Instance;
 import org.canvacord.util.file.FileGetter;
 
 import javax.swing.*;
@@ -86,6 +87,11 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 
 		});
 
+	}
+
+	@Override
+	protected void prefillGUI(Instance instanceToEdit) {
+		// TODO Andrew
 	}
 
 	public String getInstanceName() {

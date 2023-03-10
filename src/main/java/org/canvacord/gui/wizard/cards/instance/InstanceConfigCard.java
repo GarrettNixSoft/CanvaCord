@@ -4,6 +4,7 @@ import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ImagePanel;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
+import org.canvacord.instance.Instance;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,6 +53,8 @@ public abstract class InstanceConfigCard extends WizardCard {
 
 	protected abstract void buildGUI();
 	protected abstract void initLogic();
+
+	protected abstract void prefillGUI(Instance instanceToEdit);
 
 	protected CanvaCordWizard getParentWizard() {
 		return parent;

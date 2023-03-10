@@ -2,6 +2,7 @@ package org.canvacord.gui.wizard.cards.instance;
 
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;
+import org.canvacord.instance.Instance;
 import org.canvacord.util.gui.ComponentUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -116,6 +117,11 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		weeklyButton.addActionListener(typeSelectionListener);
 		customButton.addActionListener(typeSelectionListener);
 
+	}
+
+	@Override
+	protected void prefillGUI(Instance instanceToEdit) {
+		// TODO Andrew
 	}
 
 	private void buildFrequentPanel() {
