@@ -191,7 +191,7 @@ public class InstanceManager {
 					InstanceWriter.writeInstance(instance);
 
 					// Additionally, create its data file
-					CacheManager.createInstanceData(instance.getInstanceID());
+					CacheManager.createInstanceData(instance);
 
 					// return the instance's ID so the caller can decide when to initialize it
 					instanceRef.set(instance);

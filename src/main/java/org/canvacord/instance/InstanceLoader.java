@@ -46,7 +46,7 @@ public class InstanceLoader {
 			Optional<JSONObject> instanceJSON = FileUtil.getJSON(instanceFile);
 			if (instanceJSON.isPresent()) {
 				Instance parsedInstance = InstanceParser.parseInstance(instanceID, instanceJSON.get());
-				CacheManager.loadInstanceData(instanceID);
+				CacheManager.loadInstanceData(parsedInstance);
 				return Optional.of(parsedInstance);
 			}
 			else

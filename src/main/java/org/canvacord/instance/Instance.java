@@ -37,12 +37,12 @@ public class Instance {
 	private final long serverID;
 
 	// components
-	private InstanceConfiguration configuration;
+	private final InstanceConfiguration configuration;
 
 	// entities
-	private List<CanvaCordRole> configuredRoles = new ArrayList<>();
-	private List<CanvaCordRole> registeredRoles = new ArrayList<>();
-	private List<CanvaCordNotification> configuredNotifications = new ArrayList<>();
+	private final List<CanvaCordRole> configuredRoles = new ArrayList<>();
+	private final List<CanvaCordRole> registeredRoles = new ArrayList<>();
+	private final List<CanvaCordNotification> configuredNotifications = new ArrayList<>();
 
 	public Instance(String courseID, long serverID) throws InstantiationException {
 		// enforce uniqueness
@@ -151,11 +151,11 @@ public class Instance {
 
 			// First fetch assignments
 			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, this, FetchStage.ASSIGNMENTS);
-			CacheManager.updateAssignments(instanceID, canvasApi.getAssignments(courseID));
+			CacheManager.updateAssignments(this, canvasApi.getAssignments(courseID));
 
 			// Next fetch announcements
 			CanvaCordEvent.newEvent(CanvaCordEvent.Type.FETCH_UPDATE, this, FetchStage.ANNOUNCEMENTS);
-			CacheManager.updateAnnouncements(instanceID, canvasApi.getAnnouncements(courseID));
+			CacheManager.updateAnnouncements(this, canvasApi.getAnnouncements(courseID));
 
 			// Write cache data to disk
 			CacheManager.writeInstanceData(instanceID);
@@ -219,6 +219,8 @@ public class Instance {
 		// If a refresh is requested, reload the list from the config file
 		if (refresh) {
 			configuration.refresh();
+			configuredRoles.clear();
+			configuredRoles.addAll(configuration.getConfiguredRoles());
 		}
 		return configuredRoles;
 	}
@@ -234,7 +236,9 @@ public class Instance {
 	public List<CanvaCordNotification> getConfiguredNotifications(boolean refresh) {
 		// If a refresh is requested, reload the list from the config file
 		if (refresh) {
-			// TODO
+			configuration.refresh();
+			configuredNotifications.clear();
+			configuredNotifications.addAll(configuration.getConfiguredNotifications());
 		}
 		return configuredNotifications;
 	}

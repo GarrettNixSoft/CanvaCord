@@ -1,5 +1,7 @@
 package org.canvacord.instance;
 
+import org.canvacord.entity.CanvaCordNotification;
+import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
@@ -9,6 +11,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class InstanceConfiguration {
@@ -114,8 +118,26 @@ public class InstanceConfiguration {
 		return configJSON.getJSONArray("roles");
 	}
 
-	public JSONArray getAssignmentDueReminders() {
-		return configJSON.getJSONArray("assignment_due_reminders");
+	public JSONArray getInstanceNotifications() {
+		return configJSON.getJSONArray("notifications");
+	}
+
+	public List<CanvaCordRole> getConfiguredRoles() {
+		List<CanvaCordRole> result = new ArrayList<>();
+		JSONArray jsonRoles = getInstanceRoles();
+		for (int i = 0; i < jsonRoles.length(); i++) {
+			result.add(new CanvaCordRole(jsonRoles.getJSONObject(i)));
+		}
+		return result;
+	}
+
+	public List<CanvaCordNotification> getConfiguredNotifications() {
+		List<CanvaCordNotification> result = new ArrayList<>();
+		JSONArray jsonNotifications = getInstanceNotifications();
+		for (int i = 0; i < jsonNotifications.length(); i++) {
+			result.add(new CanvaCordNotification(jsonNotifications.getJSONObject(i), configJSON.getJSONArray("roles")));
+		}
+		return result;
 	}
 
 	public static InstanceConfiguration defaultConfiguration(String courseID, long serverID) {

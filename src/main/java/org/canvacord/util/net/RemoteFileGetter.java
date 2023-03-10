@@ -54,7 +54,6 @@ public class RemoteFileGetter {
 			return Optional.empty();
 		}
 
-
 	}
 
 }

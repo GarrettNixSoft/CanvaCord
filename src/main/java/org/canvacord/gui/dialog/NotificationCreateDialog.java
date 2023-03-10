@@ -35,13 +35,18 @@ import java.util.List;
 public class NotificationCreateDialog extends CanvaCordDialog {
 
 	private static final int WIDTH = 480;
-	private static final int HEIGHT = 560;
+	private static final int HEIGHT = 620;
+
+	private static final int CHAR_LIMIT = 400;
 
 	// Parent access for getting the server ID
-	private InstanceCreateWizard parentWizard;
+	private final InstanceCreateWizard parentWizard;
 
 	// Roles available for selection
 	private final List<CanvaCordRole> availableRoles;
+
+	// Naming the notification
+	private JTextField nameField;
 
 	// Selecting roles to assign
 	private JComboBox<CanvaCordRole> roleSelector;
@@ -102,6 +107,13 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 			return false;
 		}
 
+		if (nameField.getText().contains(" ")) {
+			UserInput.showErrorMessage("Please don't include spaces in the notification name.", "Spaces In Name");
+			return false;
+		}
+
+		// TODO warn if message format is close to cap
+
 		return true;
 
 	}
@@ -122,8 +134,12 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 		final int addButtonX = componentX + 240 + buttonSpacing;
 		final int removeButtonX = addButtonX + buttonWidth + buttonSpacing;
 
+		// naming the notification
+		final int nameLabelY = 4;
+		final int nameFieldY = nameLabelY + 30;
+
 		// role selection vertical positions
-		final int roleLabelY = 4;
+		final int roleLabelY = nameFieldY + 30;
 		final int roleSelectorY = roleLabelY + 30;
 		final int roleFieldY = roleSelectorY + 36;
 
@@ -144,6 +160,17 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 		// message positions
 		final int messageLabelY = channelSelectorY + 30;
 		final int messageAreaY = messageLabelY + 30;
+
+		// ================ LABEL NOTIFICATION NAME ================
+		JLabel nameLabel = new JLabel("Name this Notification:");
+		nameLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
+		nameLabel.setBounds(componentX, nameLabelY, 240, 24);
+		add(nameLabel);
+
+		nameField = new JTextField(24);
+		nameField.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		nameField.setBounds(componentX, nameFieldY, 360, 24);
+		add(nameField);
 
 		// ================ LABEL ROLE SELECTION ================
 		JLabel roleSelectLabel = new JLabel("Choose Roles:");
@@ -262,7 +289,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 
 		// limit the character size of the message
 		AbstractDocument document = (AbstractDocument) messageArea.getDocument();
-		document.setDocumentFilter(new DocumentSizeFilter(2000));
+		document.setDocumentFilter(new DocumentSizeFilter(CHAR_LIMIT));
 
 		add(messageArea);
 
@@ -273,7 +300,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 		add(insertVariableButton);
 
 		// ================ SHOWING CHAR COUNT ================
-		charCountLabel = new JLabel("0/2000 chars");
+		charCountLabel = new JLabel("0/" + CHAR_LIMIT + " chars");
 		charCountLabel.setFont(CanvaCordFonts.LABEL_FONT_TINY);
 		charCountLabel.setBounds(WIDTH - buttonSpacing - buttonWidth - 4, messageAreaY + 130, buttonWidth, 36);
 		add(charCountLabel);
@@ -416,19 +443,19 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 			@Override
 			public void insertUpdate(DocumentEvent e) {
 				int length = e.getDocument().getLength();
-				charCountLabel.setText(length + "/2000 chars");
+				charCountLabel.setText(length + "/" + CHAR_LIMIT + " chars");
 			}
 
 			@Override
 			public void removeUpdate(DocumentEvent e) {
 				int length = e.getDocument().getLength();
-				charCountLabel.setText(length + "/2000 chars");
+				charCountLabel.setText(length + "/" + CHAR_LIMIT + " chars");
 			}
 
 			@Override
 			public void changedUpdate(DocumentEvent e) {
 				int length = e.getDocument().getLength();
-				charCountLabel.setText(length + "/2000 chars");
+				charCountLabel.setText(length + "/" + CHAR_LIMIT + " chars");
 			}
 		});
 
@@ -560,13 +587,14 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 			if (eventSelector.getSelectedItem() == null) throw new CanvaCordException("Something exploded");
 			if (channelSelector.getSelectedItem() == null) throw new CanvaCordException("Something imploded");
 			// Fetch all the relevant user inputs
+			String name = nameField.getText();
 			long channelID = ((CanvaCordNotificationTarget) channelSelector.getSelectedItem()).id();
 			CanvaCordEvent.Type eventType = (CanvaCordEvent.Type) eventSelector.getSelectedItem();
 			List<CanvaCordRole> roleList = selectedRoles.stream().toList();
 			String messageFormat = messageArea.getText();
 			String friendlyScheduleDescription = scheduleDescription.getText();
 			// Collect inputs into a neat object
-			CanvaCordNotification result = new CanvaCordNotification(eventType, channelID, roleList,
+			CanvaCordNotification result = new CanvaCordNotification(name, eventType, channelID, roleList,
 					scheduleObject, messageFormat, friendlyScheduleDescription);
 			// Send it back
 			return Optional.of(result);

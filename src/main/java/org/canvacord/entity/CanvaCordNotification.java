@@ -9,6 +9,7 @@ import java.util.List;
 
 public class CanvaCordNotification {
 
+	private String name;
 	private CanvaCordEvent.Type eventType;
 
 	private long channelID;
@@ -19,7 +20,8 @@ public class CanvaCordNotification {
 
 	private String friendlyScheduleDescription;
 
-	public CanvaCordNotification(CanvaCordEvent.Type eventType, long channelID, List<CanvaCordRole> rolesToPing, JSONObject schedule, String messageFormat, String friendlyScheduleDescription) {
+	public CanvaCordNotification(String name, CanvaCordEvent.Type eventType, long channelID, List<CanvaCordRole> rolesToPing, JSONObject schedule, String messageFormat, String friendlyScheduleDescription) {
+		this.name = name;
 		this.eventType = eventType;
 		this.channelID = channelID;
 		this.rolesToPing = rolesToPing;
@@ -28,16 +30,21 @@ public class CanvaCordNotification {
 		this.friendlyScheduleDescription = friendlyScheduleDescription;
 	}
 
-	public CanvaCordNotification(JSONObject configJSON) {
+	public CanvaCordNotification(JSONObject configJSON, JSONArray roleObjects) {
+		this.name = configJSON.getString("name");
 		this.eventType = CanvaCordEvent.Type.stringToType(configJSON.getString("event_type"));
 		this.channelID = configJSON.getLong("channel_id");
 		this.schedule = configJSON.getJSONObject("schedule");
 		this.messageFormat = configJSON.getString("message_format");
 		this.friendlyScheduleDescription = configJSON.getString("friendly_schedule_desc");
-		readRolesFromJSON(configJSON.getJSONArray("roles"));
+		readRolesFromJSON(configJSON.getJSONArray("roles"), roleObjects);
 	}
 
 	// ================================ GETTERS ================================
+	public String getName() {
+		return name;
+	}
+
 	public CanvaCordEvent.Type getEventType() {
 		return eventType;
 	}
@@ -63,6 +70,10 @@ public class CanvaCordNotification {
 	}
 
 	// ================================ SETTERS ================================
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public void setEventType(CanvaCordEvent.Type eventType) {
 		this.eventType = eventType;
 	}
@@ -88,10 +99,11 @@ public class CanvaCordNotification {
 	}
 
 	// ================================ UTILITY ================================
-	private void readRolesFromJSON(JSONArray rolesArray) {
+	private void readRolesFromJSON(JSONArray rolesArray, JSONArray roleObjects) {
 		rolesToPing = new ArrayList<>();
 		for (Object obj : rolesArray.toList()) {
-			rolesToPing.add(new CanvaCordRole((JSONObject) obj));
+			String roleName = (String) obj;
+			// TODO
 		}
 	}
 
@@ -105,7 +117,9 @@ public class CanvaCordNotification {
 
 	public JSONObject getJSON() {
 		JSONObject result = new JSONObject();
+		result.put("name", name);
 		result.put("channel_id", channelID);
+		result.put("event_type", eventType.toString());
 		result.put("roles", buildRolesArray());
 		result.put("schedule", schedule);
 		result.put("message_format", messageFormat);
