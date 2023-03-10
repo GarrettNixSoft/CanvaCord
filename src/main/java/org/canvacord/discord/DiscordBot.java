@@ -3,6 +3,8 @@ package org.canvacord.discord;
 import org.canvacord.persist.ConfigManager;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.server.Server;
 import org.json.JSONObject;
@@ -78,10 +80,11 @@ public class DiscordBot {
 	}
 
 	//send assignment message to target channel
-
-	//
-
-
+	public void sendMessageToChannel(String message, long channelID) {
+		TextChannel targetChannel = (TextChannel) this.getApi().getChannelById(channelID).get();
+		MessageBuilder test = new MessageBuilder();
+		test.append(message).send(targetChannel);
+	}
 
 	// IDK
 	public DiscordApi getApi() {
