@@ -34,11 +34,14 @@ public class DiscordBotTest {
 
         Server server = api.getServers().iterator().next();
 
-        //TEST
+        //TEST commands
         SlashCommand command = SlashCommand.with("ping", "Checks the functionality of this command")
                 .createForServer(server)
                 .join();
-        Set<SlashCommand> commands = api.getGlobalSlashCommands().join();
+
+        //if I need to delete
+        //command.delete();
+        //Set<SlashCommand> commands = api.getGlobalSlashCommands().join();
 
         api.addSlashCommandCreateListener(event -> {
             SlashCommandInteraction interaction = event.getSlashCommandInteraction();

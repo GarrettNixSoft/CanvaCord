@@ -53,12 +53,12 @@ public class RetrieveModulesTest {
         CanvasApi canvasApi = new CanvasApi(canvasBaseUrl, token);
 
         // Print Module Urls with course ID
-        List<Module> modules = canvasApi.getModules(32109L);
+        List<Module> modules = canvasApi.getModules(32202L);
         for(int i = 0; i < modules.size(); i++) {
             System.out.println(modules.get(i).getItemsUrl());
         }
 
-        JSONArray test = canvasApi.getDownloadableModules(32109L, token);
+        JSONArray test = canvasApi.getDownloadableModules(32202L, token);
 
         for(int i = 0; i < test.length(); i++) {
             System.out.println(test.getJSONObject(i));
