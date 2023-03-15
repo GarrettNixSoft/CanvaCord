@@ -61,7 +61,7 @@ public class RetrieveModulesTest {
         JSONArray test = canvasApi.getDownloadableModules(32202L, token);
 
         for(int i = 0; i < test.length(); i++) {
-            System.out.println(test.getJSONObject(i));
+            System.out.println(test.getJSONObject(i).get("url"));
         }
         /*
         // will hold all downloadable module json objects
