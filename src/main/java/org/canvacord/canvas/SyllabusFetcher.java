@@ -1,11 +1,15 @@
 package org.canvacord.canvas;
 
-import org.json.JSONObject;
-
 import java.util.Optional;
 
 public class SyllabusFetcher {
 
+	/**
+	 * Searches Canvas for a syllabus posted under the given course.
+	 * @param courseID the ID of the Canvas course to search
+	 * @return an Optional type containing a SyllabusInfo object describing what
+	 * was found on Canvas, or empty if nothing was found.
+	 */
 	protected static Optional<SyllabusInfo> fetchSyllabusForCourse(String courseID) {
 
 		// TODO:
