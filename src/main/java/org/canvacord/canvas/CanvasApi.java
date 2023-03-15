@@ -204,35 +204,11 @@ public class CanvasApi {
 
 		//FOR LOOP ALL THIS
 
+
+
 		for (int i = 0; i < urls.size(); i++) {
-			// Create URL Object
-			URL obj = new URL(urls.get(i));
 
-			// Create HttpURLConnection Object
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-			// Set RequestMethod and Request Property
-			con.setRequestMethod("GET");
-			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:27.0) Gecko/20100101 Firefox/27.0.2 Waterfox/27.0");
-			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-			// Use token for authorization
-			con.setRequestProperty("Authorization", "Bearer " + tokenStr);
-
-			// Get Response to verify whether authentication was successful
-			int responseCode = con.getResponseCode();
-			System.out.println("\nSending 'GET' request to URL : " + urls.get(i).toString());
-			System.out.println("Response Code : " + responseCode);
-
-			// Read information from URL with BufferedReader Object
-			BufferedReader in = new BufferedReader(
-					new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
+			StringBuffer response = httpRequest(urls.get(i), tokenStr);
 
 			// Print as a string
 			System.out.println(response.toString());
@@ -261,35 +237,7 @@ public class CanvasApi {
 			// For simplification
 			String url = downloadableModules.getJSONObject(i).get("url").toString();
 
-			// Create URL Object
-			URL obj = new URL(url);
-
-			// Create HttpURLConnection Object
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-			// Set RequestMethod and Request Property
-			con.setRequestMethod("GET");
-			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:27.0) Gecko/20100101 Firefox/27.0.2 Waterfox/27.0");
-			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-			// Use token for authorization
-			con.setRequestProperty("Authorization", "Bearer " + tokenStr);
-
-			// Get Response to verify whether authentication was successful
-			int responseCode = con.getResponseCode();
-			System.out.println("\nSending 'GET' request to URL : " + downloadableModules.getJSONObject(i).get("url").toString());
-			System.out.println("Response Code : " + responseCode);
-
-			// Read information from URL with BufferedReader Object
-			BufferedReader in = new BufferedReader(
-					new InputStreamReader(con.getInputStream()));
-			String inputLine2;
-			StringBuffer response = new StringBuffer();
-			String inputLine;
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
+			StringBuffer response = httpRequest(url, tokenStr);
 
 			// Print as a string
 			System.out.println(response.toString());
@@ -306,6 +254,39 @@ public class CanvasApi {
 
 		return downloadableModules;
 
+	}
+
+	public StringBuffer httpRequest(String url, String tokenStr) throws IOException {
+		// Create URL Object
+		URL obj = new URL(url);
+
+		// Create HttpURLConnection Object
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// Set RequestMethod and Request Property
+		con.setRequestMethod("GET");
+		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:27.0) Gecko/20100101 Firefox/27.0.2 Waterfox/27.0");
+		con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+		// Use token for authorization
+		con.setRequestProperty("Authorization", "Bearer " + tokenStr);
+
+		// Get Response to verify whether authentication was successful
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		// Read information from URL with BufferedReader Object
+		BufferedReader in = new BufferedReader(
+				new InputStreamReader(con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+
+		return response;
 	}
 
 	// DO NOT DELETE CODE BELOW!
