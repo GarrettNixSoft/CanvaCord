@@ -11,4 +11,13 @@ public class CanvaCordFonts {
 	public static final Font LABEL_FONT_BIGGER_THAN_SMALL_BUT_SMALLER_THAN_MEDIUM = new Font("Segoe UI", Font.PLAIN, 13);
 	public static final Font LABEL_FONT_MEDIUM = new Font("Segoe UI", Font.PLAIN, 14);
 	public static final Font LABEL_FONT_LARGE = new Font("Segoe UI", Font.PLAIN, 16);
+
+	public static Font bold(Font font) {
+		return font.deriveFont(Font.BOLD);
+	}
+
+	public static Font italic(Font font) {
+		return font.deriveFont(Font.ITALIC);
+	}
+
 }
