@@ -9,12 +9,15 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class FileHasher {
 
-	private static Map<String, String> hashRecords = new HashMap<>();
+	private static final Map<String, String> hashRecords = new HashMap<>();
 
+	@SuppressWarnings("UnstableApiUsage")
 	public static String hashFile(File file) {
+		// If this file has been hashed before, return the previous result
 		if (hashRecords.containsKey(file.getPath()))
 			return hashRecords.get(file.getPath());
 		else {
+			// Hash the file
 			AtomicReference<String> result = new AtomicReference<>();
 			FileUtil.getFileBytes(file).ifPresentOrElse(
 					data -> {
@@ -25,6 +28,9 @@ public class FileHasher {
 						result.set("null");
 					}
 			);
+			// Store the result for future reference
+			hashRecords.put(file.getPath(), result.get());
+			// Return the result
 			return result.get();
 		}
 	}
