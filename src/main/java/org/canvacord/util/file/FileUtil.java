@@ -1,5 +1,6 @@
 package org.canvacord.util.file;
 
+import com.google.common.hash.Hashing;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringConverter;
 import org.checkerframework.checker.units.qual.A;
@@ -7,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +68,23 @@ public class FileUtil {
 		else {
 			String combinedData = StringConverter.combineAll(fileData.get());
 			return Optional.of(new JSONArray(combinedData));
+		}
+	}
+
+	public static Optional<ByteBuffer> getFileBytes(File file) {
+		try {
+			int size = (int) Files.size(file.toPath());
+			ByteBuffer result = ByteBuffer.allocate(size);
+
+			InputStream in = FileUtil.class.getResourceAsStream(file.getPath());
+			if (in == null)
+				in = ResourceLoader.getResourceAsStream(file.getPath());
+
+			result.put(in.readAllBytes());
+			return Optional.of(result);
+
+		} catch (IOException e) {
+			return Optional.empty();
 		}
 	}
 
@@ -229,6 +248,37 @@ public class FileUtil {
 			UserInput.showExceptionWarning(e);
 			e.printStackTrace();
 		}
+
+	}
+
+	public static String getSizeString(File file) {
+
+		long bytes;
+		try {
+			bytes = Files.size(file.toPath());
+		}
+		catch (IOException e) {
+			bytes = 0;
+		}
+
+		String bytesStr;
+		if (bytes > Math.pow(1024, 4)) {
+			bytesStr = String.format("%.2fTB", (bytes / (int) (Math.pow(1024, 3)) / 1024.0));
+		}
+		else if (bytes > Math.pow(1024, 3)) {
+			bytesStr = String.format("%.2fGB", (bytes / (int) Math.pow(1024, 2)) / 1024.0);
+		}
+		else if (bytes > Math.pow(1024, 2)) {
+			bytesStr = String.format("%.2fMB", (bytes / 1024) / 1024.0);
+		}
+		else if (bytes > 1024) {
+			bytesStr = String.format("%.2fKB", bytes / 1024.0);
+		}
+		else {
+			bytesStr = bytes + "B";
+		}
+
+		return bytesStr;
 
 	}
 
