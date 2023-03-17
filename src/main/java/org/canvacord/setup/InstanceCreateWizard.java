@@ -24,6 +24,8 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 	private InstanceCanvasFetchCard canvasFetchCard;
 	private RoleCreateCard roleCreateCard;
 	private NotificationCreateCard notificationCreateCard;
+	private SyllabusCard syllabusCard;
+	private TextbookCard textbookCard;
 
 	public InstanceCreateWizard() {
 		super("Create Instance");
@@ -63,8 +65,14 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		// The fifth card is for defining what roles this instance should use
 		roleCreateCard = new RoleCreateCard(this, "role_config", false);
 
-		// The sixth card us for defining what notifications should be sent
-		notificationCreateCard = new NotificationCreateCard(this, "notification_config", true);
+		// The sixth card is for defining what notifications should be sent
+		notificationCreateCard = new NotificationCreateCard(this, "notification_config", false);
+
+		// The seventh card is for adding the syllabus
+		syllabusCard = new SyllabusCard(this, "syllabus_config", false);
+
+		// The eighth card is for adding the textbook(s)
+		textbookCard = new TextbookCard(this, "textbook_config", true);
 
 		// ================================ Configure the navigation connections ================================
 		// ================ START ================
@@ -104,12 +112,24 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		});
 
 		// ================ NOTIFICATIONS ================
-		notificationCreateCard.setNavigator(Optional::empty);
+		notificationCreateCard.setNavigator(() -> Optional.of(syllabusCard));
 		notificationCreateCard.setPreviousCard(roleCreateCard);
 
 		notificationCreateCard.setOnNavigateTo(() -> {
 			disableNext("<html>You must create at least one<br>Notification before continuing.</html>");
 		});
+
+		// ================ SYLLABUS ================
+		syllabusCard.setNavigator(() -> Optional.of(textbookCard));
+		syllabusCard.setPreviousCard(notificationCreateCard);
+
+		syllabusCard.setOnNavigateTo(() -> {
+			enableNext();
+		});
+
+		// ================ TEXTBOOK(S) ================
+		textbookCard.setNavigator(Optional::empty);
+		textbookCard.setPreviousCard(syllabusCard);
 
 		// Register the cards
 
@@ -118,22 +138,38 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		registerCard(basicConfigCard);
 		registerCard(canvasFetchCard);
 		registerCard(roleCreateCard);
-		registerCard(notificationCreateCard);// TODO last
+		registerCard(notificationCreateCard);
+		registerCard(syllabusCard);
+		registerCard(textbookCard);
 	}
 
 	private void prefillCards(Instance instanceToEdit) {
-		// TODO
+		// TODO Andrew
 	}
 
 	@Override
 	public boolean completedSuccessfully() {
 
 		// TODO
+
+		// cancelling the wizard constitutes a failure
 		if (isCancelled())
 			return false;
 
-		// for now, only verify that the course and server IDs were verified
-		return courseAndServerCard.isVerifiedCanvasCourse() && courseAndServerCard.isVerifiedDiscordServer();
+		// failing to verify the course and server is also a failure
+		if (!(courseAndServerCard.isVerifiedCanvasCourse() && courseAndServerCard.isVerifiedDiscordServer()))
+			return false;
+
+		// not adding any roles is a failure
+		if (roleCreateCard.getRolesArray().length() < 1)
+			return false;
+
+		// not adding any notifications is a failure
+		if (notificationCreateCard.getNotificationsArray().length() < 1)
+			return false;
+
+		// if none of the above apply, success
+		return true;
 
 	}
 
