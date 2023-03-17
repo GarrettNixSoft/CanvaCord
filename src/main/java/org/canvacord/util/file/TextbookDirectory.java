@@ -56,6 +56,24 @@ public class TextbookDirectory {
         return testing;
     }
 
+    public static Optional<File> storeTextbook(String id, File tb){
+        Optional<File> testing = Optional.of(tb);
+        //Checks if user closes the prompt window
+        if(testing.isEmpty()) {
+            System.out.println("Unable to obtain file");
+            return Optional.empty();
+        }
+        File inputFile = testing.get();
+        File outputFile = new File("./config/textbooks/" + id + "_" + getLatestNumber(id) + ".pdf");
+        //copies inputFile to outputFile
+        try {
+            Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
+        } catch(Exception e) {
+            System.out.println("Failed to copy to path");
+        }
+        return testing;
+    }
+
     public static Optional<File> chooseTextbook(){
         Optional<File> testing = FileGetter.getFile("C:", "PDF File", ".pdf");
         //Checks if user closes the prompt window
