@@ -143,6 +143,13 @@ public class RoleCreateCard extends InstanceConfigCard {
 		// TODO Andrew
 	}
 
+	public void onNavigateTo() {
+		if (roles.isEmpty())
+			disableNext();
+		else
+			enableNext();
+	}
+
 	private void updateRolesList() {
 
 		ListModel<CanvaCordRole> roleListModel = new AbstractListModel<>() {

@@ -10,6 +10,7 @@ import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.CourseAndServerCard;
+import org.canvacord.main.CanvaCord;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.gui.DocumentSizeFilter;
 import org.canvacord.util.input.UserInput;
@@ -75,6 +76,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 
 	// field data
 	private final Set<CanvaCordRole> selectedRoles;
+	private final List<CanvaCordNotificationTarget> availableChannels;
 
 	public NotificationCreateDialog(InstanceCreateWizard parentWizard, List<CanvaCordRole> availableRoles) {
 		super("New Notification", WIDTH, HEIGHT);
@@ -87,6 +89,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 
 		// collections
 		selectedRoles = new HashSet<>();
+		availableChannels = new ArrayList<>();
 
 		// build dialog
 		buildGUI();
@@ -462,7 +465,34 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 	}
 
 	private void prefillGUI(CanvaCordNotification notificationToEdit) {
-		// TODO
+
+		// fill the name
+		nameField.setText(notificationToEdit.getName());
+
+		// fill the role selections
+		selectedRoles.clear();
+		selectedRoles.addAll(notificationToEdit.getRolesToPing());
+		updateSelectedRolesField();
+
+		// select type
+		eventSelector.setSelectedItem(notificationToEdit.getEventType());
+
+		// select channel
+		refreshServers();
+		for (CanvaCordNotificationTarget channel : availableChannels) {
+			if (channel.id() == notificationToEdit.getChannelID()) {
+				channelSelector.setSelectedItem(channel);
+				break;
+			}
+		}
+
+		// set schedule
+		scheduleObject = notificationToEdit.getSchedule();
+		describeSchedule();
+
+		// set message format
+		messageArea.setText(notificationToEdit.getMessageFormat());
+
 	}
 
 	private void refreshServers() {
@@ -474,6 +504,8 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 		DiscordBot.getBotInstance().getServerByID(serverID).ifPresentOrElse(
 				// If the fetch succeeded,
 				server -> {
+					// Clear the channel list
+					availableChannels.clear();
 					// Store the server reference
 					targetServer = server;
 					// Get channels and filter them to just text channels
@@ -484,6 +516,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 						ServerTextChannel textChannel = channel.asServerTextChannel().get();
 						// Put them into the selector
 						CanvaCordNotificationTarget target = new CanvaCordNotificationTarget(textChannel);
+						availableChannels.add(target);
 						channelSelector.addItem(target);
 						channelSelector.setEnabled(true);
 					}
@@ -503,23 +536,26 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 			roleField.setText("");
 		else if (selectedRoles.size() == 1)
 			roleField.setText(selectedRoles.stream().toList().get(0).getName());
-		// Order the roles
-		List<CanvaCordRole> orderedRoles = new ArrayList<>(selectedRoles);
-		// Build the text with a StringBuilder
-		StringBuilder textBuilder = new StringBuilder();
-		// All but the last role are comma-separated
-		while (orderedRoles.size() > 1)
-			textBuilder.append(orderedRoles.remove(0).getName()).append(", ");
-		// The last role has no comma
-		textBuilder.append(orderedRoles.remove(0).getName());
-		// Set the field text
-		roleField.setText(textBuilder.toString());
+		else {
+			// Order the roles
+			List<CanvaCordRole> orderedRoles = new ArrayList<>(selectedRoles);
+			// Build the text with a StringBuilder
+			StringBuilder textBuilder = new StringBuilder();
+			// All but the last role are comma-separated
+			while (orderedRoles.size() > 1)
+				textBuilder.append(orderedRoles.remove(0).getName()).append(", ");
+			// The last role has no comma
+			textBuilder.append(orderedRoles.remove(0).getName());
+			// Set the field text
+			roleField.setText(textBuilder.toString());
+		}
 	}
 
 	private void describeSchedule() {
 
 		if (eventSelector.getSelectedItem() == null) {
 			UserInput.showErrorMessage("Something exploded.", "What");
+			CanvaCord.explode();
 		}
 
 		// TODO set the description field text here
@@ -583,9 +619,18 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 			return Optional.empty();
 		else {
 			// validate all selections
-			if (roleSelector.getSelectedItem() == null) throw new CanvaCordException("Something blew up");
-			if (eventSelector.getSelectedItem() == null) throw new CanvaCordException("Something exploded");
-			if (channelSelector.getSelectedItem() == null) throw new CanvaCordException("Something imploded");
+			if (roleSelector.getSelectedItem() == null) {
+				CanvaCord.explode();
+				throw new CanvaCordException("Something blew up");
+			}
+			if (eventSelector.getSelectedItem() == null) {
+				CanvaCord.explode();
+				throw new CanvaCordException("Something exploded");
+			}
+			if (channelSelector.getSelectedItem() == null) {
+				CanvaCord.explode();
+				throw new CanvaCordException("Something imploded");
+			}
 			// Fetch all the relevant user inputs
 			String name = nameField.getText();
 			long channelID = ((CanvaCordNotificationTarget) channelSelector.getSelectedItem()).id();
