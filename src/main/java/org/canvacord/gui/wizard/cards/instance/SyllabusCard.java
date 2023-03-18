@@ -18,6 +18,7 @@ public class SyllabusCard extends InstanceConfigCard {
 	private JLabel syllabusFileLabel;
 	private JButton findSyllabusButton;
 	private JButton addSyllabusButton;
+	private JButton clearButton;
 
 	private File syllabusFile;
 
@@ -77,6 +78,11 @@ public class SyllabusCard extends InstanceConfigCard {
 		addSyllabusButton.setBounds(componentX + buttonWidth + 10, buttonY, buttonWidth, buttonHeight);
 		contentPanel.add(addSyllabusButton);
 
+		clearButton = new JButton("Clear");
+		clearButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		clearButton.setBounds(componentX + (buttonWidth + 10) * 2, buttonY, buttonWidth, buttonHeight);
+		contentPanel.add(clearButton);
+
 	}
 
 	@Override
@@ -105,6 +111,14 @@ public class SyllabusCard extends InstanceConfigCard {
 					syllabusFile = file;
 				}
 			);
+		});
+
+		// ================ CLEARING SELECTION ================
+		clearButton.addActionListener(event -> {
+			if (UserInput.askToConfirm("Clear selection?", "Confirm Clear")) {
+				syllabusFileLabel.setText("None");
+				syllabusFile = null;
+			}
 		});
 
 	}
