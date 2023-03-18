@@ -108,7 +108,18 @@ public class NotificationCreateCard extends InstanceConfigCard {
 		});
 
 		// ================ EDITING EXISTING NOTIFICATIONS ================
-		// TODO
+		editNotificationButton.addActionListener(event -> {
+			CanvaCordNotification selection = notificationsList.getSelectedValue();
+			if (selection == null) return;
+			int index = notificationsList.getSelectedIndex();
+			List<CanvaCordRole> availableRoles = ((RoleCreateCard) getParentWizard().getCard("role_config")).getRoles();
+			NotificationCreateDialog.editNotification((InstanceCreateWizard) getParentWizard(), availableRoles, selection).ifPresent(
+					editedNotification -> {
+						notifications.set(index, editedNotification);
+						updateNotificationsList();
+					}
+			);
+		});
 
 		// ================ DELETING NOTIFICATIONS ================
 		deleteNotificationButton.addActionListener(event -> {
