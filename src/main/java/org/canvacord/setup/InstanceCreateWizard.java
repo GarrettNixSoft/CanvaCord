@@ -108,7 +108,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		roleCreateCard.setPreviousCard(canvasFetchCard);
 
 		roleCreateCard.setOnNavigateTo(() -> {
-			disableNext("<html>You must create at least one<br>Role before continuing.</html>");
+			roleCreateCard.onNavigateTo();
 		});
 
 		// ================ NOTIFICATIONS ================
