@@ -249,8 +249,6 @@ public class TextbookCard extends InstanceConfigCard {
 
 			// Hash the file
 			String hash = FileHasher.hashFile(textbook.getTextbookFile());
-			System.out.println("File path: " + textbook.getTextbookFile().getPath());
-			System.out.println("File hash: " + hash);
 
 			// Build a seed out of the characters in the hash
 			long seed = 0;
