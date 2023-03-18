@@ -131,6 +131,8 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		textbookCard.setNavigator(Optional::empty);
 		textbookCard.setPreviousCard(syllabusCard);
 
+		textbookCard.setOnNavigateTo(() -> textbookCard.onNavigateTo());
+
 		// Register the cards
 
 		registerCard(startingCard);
