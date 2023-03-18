@@ -303,6 +303,11 @@ public class CanvaCordApp extends JFrame {
 
 		});
 
+		// ================ EDITING CANVACORD OPTIONS ================
+		optionsButton.addActionListener(event -> {
+			CanvaCord.explode();
+		});
+
 		// ================ REACTING TO EVENTS ================
 		CanvaCordEventHandler.addEventListener(event -> {
 

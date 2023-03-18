@@ -1,5 +1,6 @@
 package org.canvacord.main;
 
+import org.canvacord.exception.ExplosionHandler;
 import org.canvacord.gui.CanvaCordApp;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
@@ -53,6 +54,23 @@ public class CanvaCord {
 			}
 
 		}
+
+	}
+
+	public static void explode() {
+
+		try {
+			ExplosionHandler.makeFunnyBoomSound();
+			UserInput.showErrorMessage("CanvaCord has exploded.", "Haha Program Go Boom");
+//			Thread.sleep(1000);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Something broke the funny boom sound, what a party pooper.");
+		}
+
+		System.exit(-1);
+
 
 	}
 

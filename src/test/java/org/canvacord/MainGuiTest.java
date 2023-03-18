@@ -1,12 +1,12 @@
 package org.canvacord;
 
-import org.canvacord.gui.CanvaCordApp;
+import org.canvacord.main.CanvaCord;
 
 public class MainGuiTest {
 
 	public static void main(String[] args) {
 
-		CanvaCordApp.run();
+		CanvaCord.main(args);
 
 	}
 
