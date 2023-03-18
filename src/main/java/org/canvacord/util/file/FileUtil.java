@@ -81,6 +81,7 @@ public class FileUtil {
 				in = ResourceLoader.getResourceAsStream(file.getPath());
 
 			result.put(in.readAllBytes());
+			result.flip();
 			return Optional.of(result);
 
 		} catch (IOException e) {
