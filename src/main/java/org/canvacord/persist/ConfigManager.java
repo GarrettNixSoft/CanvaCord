@@ -1,5 +1,6 @@
 package org.canvacord.persist;
 
+import org.canvacord.main.CanvaCord;
 import org.canvacord.util.file.FileUtil;
 import org.json.JSONObject;
 
@@ -17,10 +18,23 @@ public class ConfigManager {
 
     private static JSONObject configJSON;
 
+    private static boolean verifyConfig(JSONObject loadedConfig) {
+        if (!loadedConfig.has("canvas_token")) return false;
+        if (!loadedConfig.has("discord_token")) return false;
+        if (!loadedConfig.has("id")) return false;
+        return loadedConfig.has("url");
+    }
+
 	public static Optional<JSONObject> loadConfig() {
         File target = Paths.get("config/secrets.json").toFile();
         Optional<JSONObject> loadedFile = FileUtil.getJSON(target);
-        loadedFile.ifPresent(jsonObject -> configJSON = jsonObject);
+
+        loadedFile.ifPresent(jsonObject -> {
+            if (verifyConfig(jsonObject))
+                configJSON = jsonObject;
+            else
+                CanvaCord.explode("secrets.json contains bad data or is missing data;\ntry deleting it and running again.");
+        });
         return loadedFile;
     }
 

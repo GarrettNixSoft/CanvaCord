@@ -61,7 +61,23 @@ public class CanvaCord {
 
 		try {
 			ExplosionHandler.makeFunnyBoomSound();
-			UserInput.showErrorMessage("CanvaCord has exploded.", "Haha Program Go Boom");
+			UserInput.showErrorMessage("CanvaCord has exploded.", "Catastrophic Failure");
+//			Thread.sleep(1000);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.err.println("Something broke the funny boom sound, what a party pooper.");
+		}
+
+		System.exit(-1);
+
+	}
+
+	public static void explode(String message) {
+
+		try {
+			ExplosionHandler.makeFunnyBoomSound();
+			UserInput.showErrorMessage(message, "Catastrophic Failure");
 //			Thread.sleep(1000);
 		}
 		catch (Exception e) {
