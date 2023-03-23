@@ -15,6 +15,11 @@ public class CanvaCordPaths {
 		return getInstanceDirPath(instance.getCourseID(), instance.getServerID());
 	}
 
+	public static Path getInstanceDirPath(String instanceID) {
+		String[] tokens = instanceID.split("-");
+		return getInstanceDirPath(tokens[0], Long.parseLong(tokens[1]));
+	}
+
 	public static Path getInstanceConfigPath(String courseID, long serverID) {
 		return Paths.get("instances/" + instanceFormat(courseID, serverID) + "/config.json");
 	}
@@ -23,12 +28,22 @@ public class CanvaCordPaths {
 		return getInstanceConfigPath(instance.getCourseID(), instance.getServerID());
 	}
 
+	public static Path getInstanceConfigPath(String instanceID) {
+		String[] tokens = instanceID.split("-");
+		return getInstanceConfigPath(tokens[0], Long.parseLong(tokens[1]));
+	}
+
 	public static Path getInstanceCachePath(String courseID, long serverID) {
 		return Paths.get("instances/" + instanceFormat(courseID, serverID) + "/data.json");
 	}
 
 	public static Path getInstanceCachePath(Instance instance) {
 		return getInstanceCachePath(instance.getCourseID(), instance.getServerID());
+	}
+
+	public static Path getInstanceCachePath(String instanceID) {
+		String[] tokens = instanceID.split("-");
+		return getInstanceCachePath(tokens[0], Long.parseLong(tokens[1]));
 	}
 
 	public static String instanceFormat(String courseID, long serverID) {
