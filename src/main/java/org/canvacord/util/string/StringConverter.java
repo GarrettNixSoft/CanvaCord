@@ -2,12 +2,6 @@ package org.canvacord.util.string;
 
 import java.util.List;
 
-/*
- * @author Floober
- * 
- * Use a StringConverter object to handle String conversions.
- * 
- */
 public class StringConverter {
 	/*
 	 * Given a list of strings, return them all combined
