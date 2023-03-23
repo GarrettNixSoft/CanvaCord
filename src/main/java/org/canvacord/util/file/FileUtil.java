@@ -1,19 +1,18 @@
 package org.canvacord.util.file;
 
-import com.google.common.hash.Hashing;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringConverter;
-import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * The FileUtil class contains various utility methods for working with and
@@ -281,6 +280,17 @@ public class FileUtil {
 
 		return bytesStr;
 
+	}
+
+	public static boolean copyTo(File src, Path dest) {
+		try {
+			Files.copy(src.toPath(), dest, StandardCopyOption.REPLACE_EXISTING);
+			return true;
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }
