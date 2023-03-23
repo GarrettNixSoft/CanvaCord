@@ -4,7 +4,7 @@
 	"session_markers_channels": [
 	],
 	"do_custom_reminders": false,
-	"syllabus_file_path": null,
+	"has_syllabus": false,
 	"textbook_files": [
 	],
 	"end_of_semester_action": "archive",
