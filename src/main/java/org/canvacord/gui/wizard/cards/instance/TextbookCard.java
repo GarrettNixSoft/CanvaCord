@@ -264,4 +264,7 @@ public class TextbookCard extends InstanceConfigCard {
 
 	}
 
+	public List<TextbookInfo> getTextbooks() {
+		return textbooks;
+	}
 }

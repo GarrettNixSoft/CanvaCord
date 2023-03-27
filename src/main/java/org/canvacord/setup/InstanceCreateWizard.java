@@ -1,15 +1,21 @@
 package org.canvacord.setup;
 
+import org.canvacord.canvas.TextbookInfo;
+import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.*;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.file.FileUtil;
+import org.canvacord.util.file.TextbookDirectory;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,6 +32,8 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 	private NotificationCreateCard notificationCreateCard;
 	private SyllabusCard syllabusCard;
 	private TextbookCard textbookCard;
+	private MeetingRemindersCard meetingRemindersCard;
+	private MeetingMarkersCard meetingMarkersCard;
 
 	public InstanceCreateWizard() {
 		super("Create Instance");
@@ -72,7 +80,13 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		syllabusCard = new SyllabusCard(this, "syllabus_config", false);
 
 		// The eighth card is for adding the textbook(s)
-		textbookCard = new TextbookCard(this, "textbook_config", true);
+		textbookCard = new TextbookCard(this, "textbook_config", false);
+
+		// The ninth card is for setting up class meeting reminders
+		meetingRemindersCard = new MeetingRemindersCard(this, "meeting_reminder_config", false);
+
+		// The tenth card is for setting up meeting markers
+		meetingMarkersCard = new MeetingMarkersCard(this, "meeting_marker_config", true);
 
 		// ================================ Configure the navigation connections ================================
 		// ================ START ================
@@ -128,13 +142,26 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		});
 
 		// ================ TEXTBOOK(S) ================
-		textbookCard.setNavigator(Optional::empty);
+		textbookCard.setNavigator(() -> Optional.of(meetingRemindersCard));
 		textbookCard.setPreviousCard(syllabusCard);
 
 		textbookCard.setOnNavigateTo(() -> textbookCard.onNavigateTo());
 
-		// Register the cards
+		// ================ MEETING REMINDERS ================
+		meetingRemindersCard.setNavigator(() -> Optional.of(meetingMarkersCard));
+		meetingRemindersCard.setPreviousCard(textbookCard);
 
+		meetingRemindersCard.setOnNavigateTo(() -> meetingRemindersCard.onNavigateTo());
+
+		// ================ MEETING MARKERS ================
+		meetingMarkersCard.setNavigator(Optional::empty);
+		meetingMarkersCard.setPreviousCard(meetingRemindersCard);
+
+		meetingMarkersCard.setOnNavigateTo(() -> meetingMarkersCard.onNavigateTo());
+
+		// on navigate to?
+
+		// Register the cards
 		registerCard(startingCard);
 		registerCard(courseAndServerCard);
 		registerCard(basicConfigCard);
@@ -143,6 +170,9 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		registerCard(notificationCreateCard);
 		registerCard(syllabusCard);
 		registerCard(textbookCard);
+		registerCard(meetingRemindersCard);
+		registerCard(meetingMarkersCard);
+
 	}
 
 	private void prefillCards(Instance instanceToEdit) {
@@ -183,6 +213,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		// Get the course and server IDs from their config page
 		String courseID = courseAndServerCard.getCourseID();
 		long serverID = courseAndServerCard.getServerID();
+		String instanceID = courseID + "_" + serverID;
 
 		// Put them into the JSON object
 		configJSON.put("course_id", courseID);
@@ -216,6 +247,50 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		// Generate notifications and add them to the configuration
 		JSONArray notificationsArray = notificationCreateCard.getNotificationsArray();
 		configJSON.put("notifications", notificationsArray);
+
+		// Store a syllabus if one was added
+		syllabusCard.getSyllabusFile().ifPresent(
+				file -> {
+					boolean success = FileUtil.copyTo(file, Paths.get("instances/" + instanceID + "/syllabus.pdf"));
+					if (!success) {
+						UserInput.showWarningMessage("Failed to copy syllabus file.", "File Copy Error");
+					}
+					else {
+						configJSON.put("has_syllabus", true);
+					}
+				}
+		);
+
+		// Store any textbooks
+		List<TextbookInfo> textbooks = textbookCard.getTextbooks();
+		JSONArray textbookFiles = new JSONArray();
+		for (TextbookInfo bookInfo : textbooks) {
+			TextbookDirectory.storeTextbook(instanceID, bookInfo.getTextbookFile()).ifPresentOrElse(
+					file -> {
+						textbookFiles.put(file.getName());
+					},
+					() -> {
+						UserInput.showWarningMessage("Failed to store textbook:\n" + bookInfo.getTitle(), "Textbook Error");
+					}
+			);
+		}
+		configJSON.put("textbook_files", textbookFiles);
+
+		// Configure class meeting reminders
+		configJSON.put("do_meeting_reminders", meetingRemindersCard.doMeetingReminders());
+		configJSON.put("create_reminders_role", meetingRemindersCard.createRole());
+		configJSON.put("reminders_schedule", meetingRemindersCard.getReminderSchedule());
+		configJSON.put("meeting_reminders_channel", meetingRemindersCard.getTargetChannelID());
+
+		// store class schedule
+		JSONArray classSchedule = new JSONArray();
+		for (ClassMeeting meeting : meetingRemindersCard.getClassSchedule()) {
+			classSchedule.put(meeting.getJSON());
+		}
+
+		// Configure class meeting markers
+		configJSON.put("do_meeting_markers", meetingMarkersCard.doMeetingMarkers());
+		configJSON.put("meeting_markers_channel", meetingMarkersCard.getTargetChannelID());
 
 		// TODO add more settings from other pages
 
