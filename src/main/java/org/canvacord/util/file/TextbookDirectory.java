@@ -39,7 +39,7 @@ public class TextbookDirectory {
      * @return the chosen pdf file that the user chosen
      */
     public static Optional<File> storeTextbook(String id){
-        Optional<File> testing = FileGetter.getFile("C:", "PDF File", ".pdf");
+        Optional<File> testing = FileGetter.getFile(System.getProperty("user.dir"), "PDF File", ".pdf");
         //Checks if user closes the prompt window
         if(testing.isEmpty()) {
             System.out.println("Unable to obtain file");
