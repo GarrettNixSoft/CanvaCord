@@ -1,14 +1,19 @@
 {
 	"icon_path": "default",
 	"past_assignments_log_channel": null,
-	"session_markers_channels": [
-	],
+	"do_meeting_reminders": false,
+	"do_session_markers": false,
+	"meeting_reminders_channel": -1,
+	"meeting_markers_channel": -1,
+	"create_reminders_role": false,
+	"create_markers_role": false,
 	"do_custom_reminders": false,
+	"reminders_schedule": -1,
 	"has_syllabus": false,
-	"textbook_files": [
-	],
+	"textbook_files": [],
 	"end_of_semester_action": "archive",
 	"generate_exam_events": false,
+	"class_schedule": [],
 	"canvas_fetch_schedule": {
 		"type": "interval",
 		"interval": {
