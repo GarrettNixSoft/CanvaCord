@@ -2,6 +2,7 @@ package org.canvacord.instance;
 
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
+import org.canvacord.entity.ClassMeeting;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
@@ -95,15 +96,29 @@ public class InstanceConfiguration {
 		return configJSON.getString("icon_path");
 	}
 
-	public String getSyllabusPath(){
-		return configJSON.getString("syllabus_file_path");
+	public boolean hasSyllabus() { return configJSON.getBoolean("has_syllabus"); }
+
+	public boolean doMeetingReminders() {
+		return configJSON.getBoolean("do_meeting_reminders");
 	}
 
-	public boolean getGenerateExamEvents() {
+	public boolean doMeetingMarkers() {
+		return configJSON.getBoolean("do_meeting_markers");
+	}
+
+	public boolean createRemindersRole() {
+		return configJSON.getBoolean("create_reminders_role");
+	}
+
+	public boolean createMarkersRole() {
+		return configJSON.getBoolean("create_markers_role");
+	}
+
+	public boolean generateExamEvents() {
 		return configJSON.getBoolean("generate_exam_events");
 	}
 
-	public boolean getDoCustomReminders() {
+	public boolean doCustomReminders() {
 		return configJSON.getBoolean("do_custom_reminders");
 	}
 
@@ -140,6 +155,24 @@ public class InstanceConfiguration {
 		return result;
 	}
 
+	public JSONObject getFetchSchedule() {
+		return configJSON.getJSONObject("canvas_fetch_schedule");
+	}
+
+	public List<ClassMeeting> getClassSchedule() {
+		JSONArray scheduleData = configJSON.getJSONArray("class_schedule");
+		List<ClassMeeting> result = new ArrayList<>();
+		for (int i = 0; i < scheduleData.length(); i++) {
+			result.add(new ClassMeeting(scheduleData.getJSONObject(i)));
+		}
+		return result;
+	}
+
+	public int getClassReminderSchedule() {
+		return configJSON.getInt("reminders_schedule");
+	}
+
+	// ================================ UTILITY ================================
 	public static InstanceConfiguration defaultConfiguration(String courseID, long serverID) {
 		JSONObject defaultConfig = new JSONObject(defaultConfigJSON);
 		defaultConfig.put("course_id", courseID);

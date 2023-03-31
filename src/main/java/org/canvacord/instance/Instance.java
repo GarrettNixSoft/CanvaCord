@@ -4,6 +4,7 @@ import org.canvacord.canvas.CanvasApi;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.discord.commands.Command;
+import org.canvacord.entity.ClassMeeting;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.FetchStage;
 import org.canvacord.exception.CanvaCordException;
@@ -12,6 +13,7 @@ import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.util.compare.ListComparator;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
+import org.json.JSONObject;
 import org.quartz.SchedulerException;
 
 import java.io.File;
@@ -207,8 +209,32 @@ public class Instance {
 		return configuration.getServerName();
 	}
 
-	public String getSyllabusPath(){
-		return configuration.getSyllabusPath();
+	public boolean hasSyllabus(){
+		return configuration.hasSyllabus();
+	}
+
+	public boolean doMeetingReminders() {
+		return configuration.doMeetingReminders();
+	}
+
+	public boolean doMeetingMarkers() {
+		return configuration.doMeetingMarkers();
+	}
+
+	public boolean createRemindersRole() {
+		return configuration.createRemindersRole();
+	}
+
+	public boolean createMarkersRole() {
+		return configuration.createMarkersRole();
+	}
+
+	public boolean generateExamEvents() {
+		return configuration.generateExamEvents();
+	}
+
+	public boolean doCustomReminders() {
+		return configuration.doCustomReminders();
 	}
 
 	public InstanceConfiguration getConfiguration() {
@@ -241,6 +267,18 @@ public class Instance {
 			configuredNotifications.addAll(configuration.getConfiguredNotifications());
 		}
 		return configuredNotifications;
+	}
+
+	public JSONObject getCanvasFetchSchedule() {
+		return configuration.getFetchSchedule();
+	}
+
+	public List<ClassMeeting> getClassSchedule() {
+		return configuration.getClassSchedule();
+	}
+
+	public int getClassReminderSchedule() {
+		return configuration.getClassReminderSchedule();
 	}
 
 	public Map<Long,Command> getRegisteredCommands() {
