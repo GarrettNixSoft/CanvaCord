@@ -9,6 +9,7 @@ import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.file.TextbookDirectory;
 import org.canvacord.util.input.UserInput;
+import org.checkerframework.checker.units.qual.C;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -34,6 +35,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 	private TextbookCard textbookCard;
 	private MeetingRemindersCard meetingRemindersCard;
 	private MeetingMarkersCard meetingMarkersCard;
+	private CommandToggleCard commandToggleCard;
 
 	public InstanceCreateWizard() {
 		super("Create Instance");
@@ -86,7 +88,10 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		meetingRemindersCard = new MeetingRemindersCard(this, "meeting_reminder_config", false);
 
 		// The tenth card is for setting up meeting markers
-		meetingMarkersCard = new MeetingMarkersCard(this, "meeting_marker_config", true);
+		meetingMarkersCard = new MeetingMarkersCard(this, "meeting_marker_config", false);
+
+		// The eleventh card is for toggling command availability
+		commandToggleCard = new CommandToggleCard(this, "command_toggle", true);
 
 		// ================================ Configure the navigation connections ================================
 		// ================ START ================
@@ -154,12 +159,14 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		meetingRemindersCard.setOnNavigateTo(() -> meetingRemindersCard.onNavigateTo());
 
 		// ================ MEETING MARKERS ================
-		meetingMarkersCard.setNavigator(Optional::empty);
+		meetingMarkersCard.setNavigator(() -> Optional.of(commandToggleCard));
 		meetingMarkersCard.setPreviousCard(meetingRemindersCard);
 
 		meetingMarkersCard.setOnNavigateTo(() -> meetingMarkersCard.onNavigateTo());
 
-		// on navigate to?
+		// ================ COMMAND TOGGLE ================
+		commandToggleCard.setNavigator(Optional::empty);
+		commandToggleCard.setPreviousCard(meetingMarkersCard);
 
 		// Register the cards
 		registerCard(startingCard);
@@ -172,6 +179,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		registerCard(textbookCard);
 		registerCard(meetingRemindersCard);
 		registerCard(meetingMarkersCard);
+		registerCard(commandToggleCard);
 
 	}
 
@@ -287,12 +295,18 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		for (ClassMeeting meeting : meetingRemindersCard.getClassSchedule()) {
 			classSchedule.put(meeting.getJSON());
 		}
+		configJSON.put("class_schedule", classSchedule);
 
 		// Configure class meeting markers
 		configJSON.put("do_meeting_markers", meetingMarkersCard.doMeetingMarkers());
 		configJSON.put("meeting_markers_channel", meetingMarkersCard.getTargetChannelID());
 
-		// TODO add more settings from other pages
+		// configure command availability
+		JSONObject commandsRecord = new JSONObject();
+		for (CommandToggleCard.CommandRecord commandRecord : commandToggleCard.getCommandStates()) {
+			commandsRecord.put(commandRecord.name(), commandRecord.defaultState());
+		}
+		configJSON.put("command_availability", commandsRecord);
 
 		// Wrap it all up in a nice InstanceConfiguration object for convenience
 		return new InstanceConfiguration(configJSON);
