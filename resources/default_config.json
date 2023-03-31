@@ -1,4 +1,5 @@
 {
+	"initialized": false,
 	"icon_path": "default",
 	"past_assignments_log_channel": null,
 	"do_meeting_reminders": false,
