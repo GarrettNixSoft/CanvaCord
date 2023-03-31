@@ -33,6 +33,9 @@ public class InstanceCell extends JPanel {
 	private JLabel statusLabel;
 	private DangerousProgressBar statusBar;
 
+	// instances can be edited
+	private JButton optionsButton;
+
 	public InstanceCell(Instance instance) {
 		this.instance = instance;
 		setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - 5, HEIGHT));
@@ -154,7 +157,7 @@ public class InstanceCell extends JPanel {
 		optionsButtonPanel.setLayout(new GridBagLayout());
 
 		// Add a button for instance options
-		JButton optionsButton = new JButton();
+		optionsButton = new JButton();
 		optionsButton.setIcon(new ImageIcon("resources/options_icon.png"));
 		optionsButton.setEnabled(true);
 		optionsButtonPanel.add(optionsButton);
@@ -168,15 +171,6 @@ public class InstanceCell extends JPanel {
 
 		setEnabled(true);
 		setOpaque(true);
-
-		// OPTIONS BUTTON LOGIC
-		optionsButton.addActionListener(event -> {
-
-			// TODO make this do useful things; for now, use it for testing instance deletion
-			if (UserInput.askToConfirm("Delete this instance?", "Delete Test"))
-				InstanceManager.deleteInstance(instance);
-
-		});
 
 	}
 
@@ -258,6 +252,15 @@ public class InstanceCell extends JPanel {
 				}
 
 			}
+
+		});
+
+		// OPTIONS BUTTON LOGIC
+		optionsButton.addActionListener(event -> {
+
+			// TODO make this do useful things; for now, use it for testing instance deletion
+			if (UserInput.askToConfirm("Delete this instance?", "Delete Test"))
+				InstanceManager.deleteInstance(instance);
 
 		});
 
