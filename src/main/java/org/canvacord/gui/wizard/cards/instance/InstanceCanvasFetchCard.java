@@ -482,7 +482,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 			JSONArray days = new JSONArray();
 			for (JCheckBox dayCheckbox : dayCheckboxes) {
 				if (dayCheckbox.isSelected())
-					days.put(dayCheckbox.getText());
+					days.put(dayCheckbox.getText().toLowerCase());
 			}
 			result.put("days", days);
 		}
