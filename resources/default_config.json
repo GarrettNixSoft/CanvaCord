@@ -3,7 +3,7 @@
 	"icon_path": "default",
 	"past_assignments_log_channel": null,
 	"do_meeting_reminders": false,
-	"do_session_markers": false,
+	"do_meeting_markers": false,
 	"meeting_reminders_channel": -1,
 	"meeting_markers_channel": -1,
 	"create_reminders_role": false,
