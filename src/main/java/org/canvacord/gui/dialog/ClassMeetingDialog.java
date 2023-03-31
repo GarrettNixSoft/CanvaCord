@@ -65,9 +65,6 @@ public class ClassMeetingDialog extends CanvaCordDialog {
 			if (endHour != 12) endHour += 12;
 		}
 
-		System.out.println("startTime integers: " + startHour + ":" + startMinute);
-		System.out.println("endTime integers: " + endHour + ":" + endMinute);
-
 		Date startTime = DateBuilder.dateOf(startHour, startMinute, 0);
 		Date endTime = DateBuilder.dateOf(endHour, endMinute, 0);
 
