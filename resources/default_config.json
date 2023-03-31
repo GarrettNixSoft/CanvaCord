@@ -63,34 +63,5 @@
 			"separate": false,
 			"color": "red"
 		}
-	],
-	"assignment_due_reminders": [
-		{
-			"duration": 1,
-			"unit": "days",
-			"message": "Reminder: {title} is due tomorrow!",
-			"roles": [
-				"Assignments 1 Day",
-				"Assignments All"
-			]
-		},
-		{
-			"duration": 3,
-			"unit": "hours",
-			"message": "Reminder: {title} is due in 3 hours!",
-			"roles": [
-				"Assignments 3 Hours",
-				"Assignments All"
-			]
-		},
-		{
-			"duration": 15,
-			"unit": "minutes",
-			"message": "Last call! {title} is due in 15 minutes!",
-			"role": [
-				"Assignments 15 Minutes",
-				"Assignments All"
-			]
-		}
 	]
 }
