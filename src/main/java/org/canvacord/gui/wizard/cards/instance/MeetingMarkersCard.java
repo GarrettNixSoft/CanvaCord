@@ -148,7 +148,7 @@ public class MeetingMarkersCard extends InstanceConfigCard {
 	}
 
 	@Override
-	protected void prefillGUI(Instance instanceToEdit) {
+	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 	}
 

@@ -54,7 +54,7 @@ public abstract class InstanceConfigCard extends WizardCard {
 	protected abstract void buildGUI();
 	protected abstract void initLogic();
 
-	protected abstract void prefillGUI(Instance instanceToEdit);
+	public abstract void prefillGUI(Instance instanceToEdit);
 
 	protected CanvaCordWizard getParentWizard() {
 		return parent;

@@ -77,7 +77,7 @@ public class InstanceSetupWelcomeCard extends WizardCard {
 	}
 
 	@Override
-	protected void initLogic() {
+	public void initLogic() {
 		// no interactions here
 	}
 }

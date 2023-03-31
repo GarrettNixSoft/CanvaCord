@@ -92,7 +92,7 @@ public class CommandToggleCard extends InstanceConfigCard {
 	}
 
 	@Override
-	protected void prefillGUI(Instance instanceToEdit) {
+	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 	}
 

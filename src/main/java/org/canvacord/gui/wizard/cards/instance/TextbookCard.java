@@ -154,7 +154,7 @@ public class TextbookCard extends InstanceConfigCard {
 	}
 
 	@Override
-	protected void prefillGUI(Instance instanceToEdit) {
+	public void prefillGUI(Instance instanceToEdit) {
 		// TODO
 	}
 

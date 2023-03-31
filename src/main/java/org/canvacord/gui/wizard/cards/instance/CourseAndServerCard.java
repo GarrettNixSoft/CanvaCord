@@ -328,7 +328,7 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 	}
 
 	@Override
-	protected void prefillGUI(Instance instanceToEdit) {
+	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 	}
 
