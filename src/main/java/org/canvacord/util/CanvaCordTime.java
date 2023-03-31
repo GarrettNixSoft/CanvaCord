@@ -37,7 +37,7 @@ public class CanvaCordTime {
 
 	public static int stringToDayConstant(String dayString) {
 		return switch (dayString.toLowerCase()) {
-			case "monday", "mon", "mo" -> DateBuilder.MONDAY;
+			case "monday", "mon", "mo", "m" -> DateBuilder.MONDAY;
 			case "tuesday", "tue", "tu" -> DateBuilder.TUESDAY;
 			case "wednesday", "wed", "we" -> DateBuilder.WEDNESDAY;
 			case "thursday", "thu", "th" -> DateBuilder.THURSDAY;
