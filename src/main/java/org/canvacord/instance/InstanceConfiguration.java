@@ -122,6 +122,10 @@ public class InstanceConfiguration {
 		return configJSON.getBoolean("do_custom_reminders");
 	}
 
+	public JSONObject getCommandAvailability() {
+		return configJSON.getJSONObject("command_availability");
+	}
+
 	public EndOfSemesterAction getEndOfSemesterAction() {
 		return switch (configJSON.getString("end_of_semester_action")) {
 			case "delete" -> EndOfSemesterAction.DELETE;

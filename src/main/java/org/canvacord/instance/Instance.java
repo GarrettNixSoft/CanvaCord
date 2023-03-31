@@ -281,6 +281,10 @@ public class Instance {
 		return configuration.getClassReminderSchedule();
 	}
 
+	public JSONObject getCommandAvailability() {
+		return configuration.getCommandAvailability();
+	}
+
 	public Map<Long,Command> getRegisteredCommands() {
 		//TODO: actually populate this hashmap?
 		return serverCommands;
