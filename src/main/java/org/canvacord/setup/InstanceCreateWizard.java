@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -185,6 +186,16 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 	private void prefillCards(Instance instanceToEdit) {
 		// TODO Andrew
+		courseAndServerCard.prefillGUI(instanceToEdit);
+		basicConfigCard.prefillGUI(instanceToEdit);
+		canvasFetchCard.prefillGUI(instanceToEdit);
+		roleCreateCard.prefillGUI(instanceToEdit);
+		notificationCreateCard.prefillGUI(instanceToEdit);
+		syllabusCard.prefillGUI(instanceToEdit);
+		textbookCard.prefillGUI(instanceToEdit);
+		meetingRemindersCard.prefillGUI(instanceToEdit);
+		meetingMarkersCard.prefillGUI(instanceToEdit);
+		commandToggleCard.prefillGUI(instanceToEdit);
 	}
 
 	@Override
@@ -221,7 +232,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		// Get the course and server IDs from their config page
 		String courseID = courseAndServerCard.getCourseID();
 		long serverID = courseAndServerCard.getServerID();
-		String instanceID = courseID + "_" + serverID;
+		String instanceID = courseID + "-" + serverID;
 
 		// Put them into the JSON object
 		configJSON.put("course_id", courseID);
@@ -259,7 +270,11 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		// Store a syllabus if one was added
 		syllabusCard.getSyllabusFile().ifPresent(
 				file -> {
-					boolean success = FileUtil.copyTo(file, Paths.get("instances/" + instanceID + "/syllabus.pdf"));
+					//Directory Checker
+					File dirCheck = new File("./instances/" + instanceID);
+					if(!dirCheck.exists())
+						dirCheck.mkdirs();
+					boolean success = FileUtil.copyTo(file, Paths.get("./instances/" + instanceID + "/syllabus.pdf").toAbsolutePath());
 					if (!success) {
 						UserInput.showWarningMessage("Failed to copy syllabus file.", "File Copy Error");
 					}
