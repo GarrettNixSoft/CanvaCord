@@ -20,11 +20,12 @@ public class InstanceLoader {
 	public static Optional<Instance> loadInstance(String instanceID) throws CanvaCordException {
 
 		// Check for "instances" folder in the working directory
+		File allInstancesDir = Paths.get("instances/").toFile();
 		File instanceDir = Paths.get("instances/" + instanceID).toFile();
 
 		// If it's missing, attempt to create it
-		if (!instanceDir.exists()) {
-			boolean success = instanceDir.mkdirs();
+		if (!allInstancesDir.exists()) {
+			boolean success = allInstancesDir.mkdirs();
 			if (!success)
 				throw new CanvaCordException("Could not create instances directory!");
 			// Directory created successfully; return empty since the instance file can't exist
@@ -32,7 +33,7 @@ public class InstanceLoader {
 				return Optional.empty();
 		}
 		// Otherwise if it exists, but is not a directory, throw an error
-		else if (!instanceDir.isDirectory())
+		else if (!allInstancesDir.isDirectory())
 			throw new CanvaCordException("instances is a file, not a directory!");
 
 		// Otherwise, check for the target file

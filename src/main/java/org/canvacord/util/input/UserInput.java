@@ -82,6 +82,7 @@ public class UserInput {
 		JFrame frame = buildParent();
 		JOptionPane.showMessageDialog(frame, e.getMessage(), e.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
 		frame.dispose();
+		e.printStackTrace();
 	}
 
 	public static boolean askToConfirm(String message, String title) {

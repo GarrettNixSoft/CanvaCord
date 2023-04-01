@@ -1,5 +1,6 @@
 package org.canvacord.entity;
 
+import org.canvacord.util.CanvaCordColors;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONObject;
 
@@ -19,7 +20,7 @@ public class CanvaCordRole {
 	public CanvaCordRole(JSONObject roleJSON) {
 		try {
 			this.name = roleJSON.getString("name");
-			this.color = Color.decode(roleJSON.getString("color"));
+			this.color = CanvaCordColors.decode(roleJSON.getString("color"));
 		}
 		catch (Exception e) {
 			UserInput.showExceptionWarning(e);
