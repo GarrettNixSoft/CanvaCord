@@ -4,6 +4,7 @@ import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.instance.Instance;
 import org.canvacord.util.gui.ComponentUtils;
+import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -122,6 +123,51 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
+		JSONObject previousSchedule = instanceToEdit.getCanvasFetchSchedule();
+		try {
+			if (previousSchedule.getString("type") == "interval") {
+				if (previousSchedule.getBoolean("round") == true) {
+					frequentButton.setSelected(true);
+					freqMinuteSpinner.setValue(previousSchedule.getJSONObject("interval").get("amount"));
+				} else if (previousSchedule.getBoolean("round") == false) {
+					hourlyButton.setSelected(true);
+					hourlyHoursSpinner.setValue(previousSchedule.getJSONObject("interval").get("amount"));
+				}
+			} else if (previousSchedule.getString("type") == "daily") {
+				dailyButton.setSelected(true);
+				dailyHourSpinner.setValue(previousSchedule.get("hour"));
+				dailyMinuteSpinner.setValue(previousSchedule.get("minute"));
+				if (previousSchedule.getString("ampm").equals("am")) {
+					dailyAmButton.setSelected(true);
+				} else if (previousSchedule.getString("ampm").equals("pm")) {
+					dailyPmButton.setSelected(true);
+				}
+			} else if (previousSchedule.getString("type") == "weekly") {
+				weeklyButton.setSelected(true);
+				weeklyHourSpinner.setValue(previousSchedule.get("hour"));
+				weeklyMinuteSpinner.setValue(previousSchedule.get("minute"));
+				if (previousSchedule.getString("ampm").equals("am")) {
+					weeklyAmButton.setSelected(true);
+				} else if (previousSchedule.getString("ampm").equals("pm")) {
+					weeklyPmButton.setSelected(true);
+				}
+				JSONArray days = previousSchedule.getJSONArray("days");
+				for (int x = 0; x < days.length(); x++) {
+					for (JCheckBox dayCheckbox : dayCheckboxes) {
+						if (dayCheckbox.getText().toLowerCase().equals(days.getString(x).toLowerCase())) {
+							dayCheckbox.setSelected(true);
+						}
+					}
+				}
+			} else if (previousSchedule.getString("type") == "cron") {
+				customButton.setSelected(true);
+				customCronField.setText(previousSchedule.getString("cron"));
+			} else {
+				System.out.println("Error");
+			}
+		} catch(Exception e) {
+			UserInput.showExceptionWarning(e);
+		}
 	}
 
 	private void buildFrequentPanel() {

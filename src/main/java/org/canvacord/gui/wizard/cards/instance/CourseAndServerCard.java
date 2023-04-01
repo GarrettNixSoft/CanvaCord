@@ -330,6 +330,19 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
+		courseInputField.setText(instanceToEdit.getCourseID());
+		serverInputField.setText("" + instanceToEdit.getServerID());
+		setCourseTitle(instanceToEdit.getCourseTitle());
+		setServerName(instanceToEdit.getServerName());
+		courseVerifyBar.setValue(100);
+		courseVerifyBar.setFailed(false);
+		courseVerifyLabel.setText("Course ID: Verified!");
+		verifiedCanvasCourse = true;
+		serverVerifyBar.setValue(100);
+		serverVerifyBar.setFailed(false);
+		serverVerifyLabel.setText("Server ID: Verified!");
+		verifiedDiscordServer = true;
+
 	}
 
 	private void disableNext() {

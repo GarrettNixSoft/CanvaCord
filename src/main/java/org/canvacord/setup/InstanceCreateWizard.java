@@ -190,7 +190,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		basicConfigCard.prefillGUI(instanceToEdit);
 		canvasFetchCard.prefillGUI(instanceToEdit);
 		roleCreateCard.prefillGUI(instanceToEdit);
-		notificationCreateCard.prefillGUI(instanceToEdit);
+		//notificationCreateCard.prefillGUI(instanceToEdit);
 		syllabusCard.prefillGUI(instanceToEdit);
 		textbookCard.prefillGUI(instanceToEdit);
 		meetingRemindersCard.prefillGUI(instanceToEdit);

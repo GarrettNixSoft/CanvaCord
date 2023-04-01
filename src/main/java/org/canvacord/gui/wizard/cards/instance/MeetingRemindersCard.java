@@ -11,6 +11,7 @@ import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.instance.Instance;
 import org.canvacord.util.input.UserInput;
+import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerChannel;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.server.Server;
@@ -247,7 +248,24 @@ public class MeetingRemindersCard extends InstanceConfigCard {
 
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
-		// TODO
+		// TODO Andrew
+		doMeetingReminders.setSelected(instanceToEdit.doMeetingReminders());
+		createRole.setSelected(instanceToEdit.createRemindersRole());
+		minutesSpinner.setValue(instanceToEdit.getConfiguration().getClassReminderSchedule());
+		classSchedule = instanceToEdit.getClassSchedule();
+		describeClassSchedule();
+		refreshServers();
+		DiscordBot bot = DiscordBot.getBotInstance();
+		bot.login();
+		long channelID = instanceToEdit.getConfiguration().getRawJSON().getLong("meeting_reminders_channel");
+		System.out.println(channelID);
+		try {
+			ServerTextChannel ch = DiscordBot.getBotInstance().getApi().getServerTextChannelById(channelID).get();
+			channelSelector.setSelectedItem(ch);
+		} catch (Exception e) {
+			System.out.println("Something Wrong");
+		}
+		bot.disconnect();
 	}
 
 	private void handleToggle() {

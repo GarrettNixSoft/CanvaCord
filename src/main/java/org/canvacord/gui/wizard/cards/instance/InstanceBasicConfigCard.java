@@ -92,6 +92,8 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
+		nameField.setText(instanceToEdit.getName());
+		iconPathField.setText(instanceToEdit.getIconPath());
 	}
 
 	public String getInstanceName() {

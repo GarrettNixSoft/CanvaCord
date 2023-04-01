@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.json.JSONObject;
+
 public class TextbookCard extends InstanceConfigCard {
 
 	private List<TextbookInfo> textbooks;
@@ -155,7 +157,8 @@ public class TextbookCard extends InstanceConfigCard {
 
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
-		// TODO
+		// TODO Andrew
+		JSONObject textbooks = instanceToEdit.getConfiguration().getRawJSON();
 	}
 
 	private void updateTextbooksList() {

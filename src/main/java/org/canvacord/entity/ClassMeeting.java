@@ -21,8 +21,8 @@ public class ClassMeeting {
 
 	public ClassMeeting(JSONObject meetingData) {
 		weekday = CanvaCordWeekdayWrapper.getDayByName(meetingData.getString("day"));
-		startTime = meetingData.getJSONObject("start_time");
-		endTime = meetingData.getJSONObject("end_time");
+		startTime = meetingData.getJSONObject("start");
+		endTime = meetingData.getJSONObject("end");
 	}
 
 	public DayOfWeek getWeekday() {

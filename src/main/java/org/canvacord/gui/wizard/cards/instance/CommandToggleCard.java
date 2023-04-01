@@ -94,6 +94,18 @@ public class CommandToggleCard extends InstanceConfigCard {
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
+		commands = new ArrayList<>();
+		addCommandRecord("Syllabus", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("syllabus"), null);
+		addCommandRecord("Textbooks", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("textbooks"), null);
+		addCommandRecord("Assignments List", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignments_list"), null);
+		addCommandRecord("Assignments Search", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignments_search"), null);
+		addCommandRecord("Assignments Active", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignments_active"), null);
+		addCommandRecord("Assignment Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignment_details"), null);
+		addCommandRecord("Announcements List", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_list"), null);
+		addCommandRecord("Announcements Search", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_search"), null);
+		addCommandRecord("Announcement Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcement_details"), null);
+		addCommandRecord("Remind Me", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("remind_me"), null);
+		//future to do iterate and prefill gui
 	}
 
 	private void addCommandRecord(String name, boolean defaultState, CommandDescriptor descriptor) {

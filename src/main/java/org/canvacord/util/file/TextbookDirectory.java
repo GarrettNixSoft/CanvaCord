@@ -69,7 +69,7 @@ public class TextbookDirectory {
     }
 
     public static Optional<File> chooseTextbook(){
-        Optional<File> testing = FileGetter.getFile("C:", "PDF File", ".pdf");
+        Optional<File> testing = FileGetter.getFile("user.dir", "PDF File", ".pdf");
         //Checks if user closes the prompt window
         if(testing.isEmpty()) {
             System.out.println("Unable to obtain file");

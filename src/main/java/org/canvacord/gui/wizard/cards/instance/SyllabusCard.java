@@ -126,6 +126,8 @@ public class SyllabusCard extends InstanceConfigCard {
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
+		syllabusFile = new File("./instances/" + instanceToEdit.getCourseID() + "_" + instanceToEdit.getServerID() + "/syllabus.pdf");
+		syllabusFileLabel.setText(syllabusFile.getPath());
 	}
 
 	public Optional<File> getSyllabusFile() {

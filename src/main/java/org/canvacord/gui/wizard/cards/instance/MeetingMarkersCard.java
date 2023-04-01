@@ -150,6 +150,14 @@ public class MeetingMarkersCard extends InstanceConfigCard {
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
+		doMeetingMarkers.setSelected(instanceToEdit.doMeetingMarkers());
+		refreshServers();
+		DiscordBot bot = DiscordBot.getBotInstance();
+		bot.login();
+		long channelID = instanceToEdit.getConfiguration().getRawJSON().getLong("meeting_markers_channel");
+		ServerTextChannel ch = DiscordBot.getBotInstance().getApi().getServerTextChannelById(channelID).get();
+		channelSelector.setSelectedItem(ch);
+		bot.disconnect();
 	}
 
 	private void handleToggle() {
