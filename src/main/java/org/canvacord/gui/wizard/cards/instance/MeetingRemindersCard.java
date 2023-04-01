@@ -255,8 +255,8 @@ public class MeetingRemindersCard extends InstanceConfigCard {
 		classSchedule = instanceToEdit.getClassSchedule();
 		describeClassSchedule();
 		refreshServers();
-		DiscordBot bot = DiscordBot.getBotInstance();
-		bot.login();
+		//DiscordBot bot = DiscordBot.getBotInstance();
+		//bot.login();
 		long channelID = instanceToEdit.getConfiguration().getRawJSON().getLong("meeting_reminders_channel");
 		System.out.println(channelID);
 		try {
@@ -265,7 +265,7 @@ public class MeetingRemindersCard extends InstanceConfigCard {
 		} catch (Exception e) {
 			System.out.println("Something Wrong");
 		}
-		bot.disconnect();
+		//bot.disconnect();
 	}
 
 	private void handleToggle() {

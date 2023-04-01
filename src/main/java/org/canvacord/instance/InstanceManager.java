@@ -165,6 +165,45 @@ public class InstanceManager {
 
 	}
 
+	public static Optional<Instance> editNewInstance(Instance editInstance) {
+		// Create and run a wizard to get the user to set up the instance
+		InstanceCreateWizard wizard = new InstanceCreateWizard(editInstance);
+		wizard.runWizard();
+
+		// If the wizard process did not complete successfully return empty
+		if (!wizard.completedSuccessfully())
+			return Optional.empty();
+
+		// Otherwise, get the resulting configuration and generate an instance with it
+		InstanceConfiguration configuration = wizard.getResult();
+
+		AtomicReference<Instance> instanceRef = new AtomicReference<>();
+
+		createInstance(configuration).ifPresentOrElse(
+				instance -> {
+
+					// store the instance in the map
+					addInstance(instance);
+
+					// TODO:
+					// if instantiation is successful, save the config to disk
+					InstanceWriter.writeInstance(instance);
+
+					// Additionally, create its data file
+					CacheManager.createInstanceData(instance);
+
+					// return the instance's ID so the caller can decide when to initialize it
+					instanceRef.set(instance);
+				},
+				() -> {
+					// TODO handle instance creation exception
+					System.out.println("Instance creation failed");
+				}
+		);
+
+		return Optional.of(instanceRef.get());
+	}
+
 	public static Optional<Instance> generateNewInstance() {
 
 		// Create and run a wizard to get the user to set up the instance

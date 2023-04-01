@@ -142,8 +142,8 @@ public class RoleCreateCard extends InstanceConfigCard {
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		rolesByName = new HashMap<>();
-		roles = instanceToEdit.getConfiguredRoles(false);
-		//System.out.println("Role card is empty:" + roles.isEmpty());
+		roles = instanceToEdit.getConfiguredRoles(true);
+		System.out.println("Role card is empty:" + roles.isEmpty());
 		for(int x = 0; x < roles.size(); x++)
 		{
 			System.out.println(roles.size());
