@@ -290,7 +290,12 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		for (TextbookInfo bookInfo : textbooks) {
 			TextbookDirectory.storeTextbook(instanceID, bookInfo.getTextbookFile()).ifPresentOrElse(
 					file -> {
-						textbookFiles.put(file.getName());
+						String bookName = file.getName();
+						JSONObject textbookInfo = new JSONObject();
+						textbookInfo.put("file_name", bookName);
+						textbookInfo.put("title", bookInfo.getTitle());
+						textbookInfo.put("author", bookInfo.getAuthor());
+						textbookFiles.put(textbookInfo);
 					},
 					() -> {
 						UserInput.showWarningMessage("Failed to store textbook:\n" + bookInfo.getTitle(), "Textbook Error");
