@@ -6,6 +6,7 @@ import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.*;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceConfiguration;
+import org.canvacord.util.Profiler;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.file.TextbookDirectory;
 import org.canvacord.util.input.UserInput;
@@ -186,16 +187,37 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 	private void prefillCards(Instance instanceToEdit) {
 		// TODO Andrew
-		courseAndServerCard.prefillGUI(instanceToEdit);
-		basicConfigCard.prefillGUI(instanceToEdit);
-		canvasFetchCard.prefillGUI(instanceToEdit);
-		roleCreateCard.prefillGUI(instanceToEdit);
-		notificationCreateCard.prefillGUI(instanceToEdit);
-		syllabusCard.prefillGUI(instanceToEdit);
-		textbookCard.prefillGUI(instanceToEdit);
-		meetingRemindersCard.prefillGUI(instanceToEdit);
-		meetingMarkersCard.prefillGUI(instanceToEdit);
-		commandToggleCard.prefillGUI(instanceToEdit);
+
+		long courseAndServerTime = Profiler.executeProfiled(() -> courseAndServerCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled courseAndServerCard in " + courseAndServerTime + "ms");
+
+		long basicConfigTime = Profiler.executeProfiled(() -> basicConfigCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled basicConfigCard in " + basicConfigTime + "ms");
+
+		long canvasFetchTime = Profiler.executeProfiled(() -> canvasFetchCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled canvasFetchCard in " + canvasFetchTime + "ms");
+
+		long roleCreateTime = Profiler.executeProfiled(() -> roleCreateCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled roleCreateCard in " + roleCreateTime + "ms");
+
+		long notificationCreateTime = Profiler.executeProfiled(() -> notificationCreateCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled notificationCreateCard in " + notificationCreateTime + "ms");
+
+		long syllabusTime = Profiler.executeProfiled(() -> syllabusCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled syllabusCard in " + syllabusTime + "ms");
+
+		long textbookTime = Profiler.executeProfiled(() -> textbookCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled textbookCard in " + textbookTime + "ms");
+
+		long meetingRemindersTime = Profiler.executeProfiled(() -> meetingRemindersCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled meetingRemindersCard in " + meetingRemindersTime + "ms");
+
+		long meetingMarkersTime = Profiler.executeProfiled(() -> meetingMarkersCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled meetingMarkersCard in " + meetingMarkersTime + "ms");
+
+		long commandToggleTime = Profiler.executeProfiled(() -> commandToggleCard.prefillGUI(instanceToEdit));
+		System.out.println("Prefilled commandToggleCard in " + commandToggleTime + "ms");
+
 	}
 
 	@Override
