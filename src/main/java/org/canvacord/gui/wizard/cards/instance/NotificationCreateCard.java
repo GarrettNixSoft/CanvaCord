@@ -140,7 +140,7 @@ public class NotificationCreateCard extends InstanceConfigCard {
 		// TODO Andrew
 		notifications = instanceToEdit.getConfiguredNotifications(true);
 		updateNotificationsList();
-		if (notifications.size() == 1)
+		if (!notifications.isEmpty())
 			enableNext();
 	}
 
