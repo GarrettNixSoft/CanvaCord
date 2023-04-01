@@ -127,10 +127,10 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		//System.out.println(previousSchedule.getString("type"));
 		try {
 			if (previousSchedule.getString("type").equals("interval")) {
-				if (previousSchedule.getBoolean("round") == true) {
+				if (previousSchedule.getBoolean("round")) {
 					frequentButton.setSelected(true);
 					freqMinuteSpinner.setValue(previousSchedule.getJSONObject("interval").get("amount"));
-				} else if (previousSchedule.getBoolean("round") == false) {
+				} else if (!previousSchedule.getBoolean("round")) {
 					hourlyButton.setSelected(true);
 					hourlyHoursSpinner.setValue(previousSchedule.getJSONObject("interval").get("amount"));
 				}
