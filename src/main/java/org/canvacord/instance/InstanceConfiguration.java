@@ -1,5 +1,6 @@
 package org.canvacord.instance;
 
+import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.entity.ClassMeeting;
@@ -174,6 +175,15 @@ public class InstanceConfiguration {
 
 	public int getClassReminderSchedule() {
 		return configJSON.getInt("reminders_schedule");
+	}
+
+	public List<TextbookInfo> getTextbooks() {
+		List<TextbookInfo> result = new ArrayList<>();
+		JSONArray textbookData = configJSON.getJSONArray("textbook_files");
+		for (int i = 0; i < textbookData.length(); i++) {
+			result.add(new TextbookInfo(textbookData.getJSONObject(i)));
+		}
+		return result;
 	}
 
 	// ================================ UTILITY ================================

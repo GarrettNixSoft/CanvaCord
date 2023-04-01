@@ -1,6 +1,7 @@
 package org.canvacord.instance;
 
 import org.canvacord.canvas.CanvasApi;
+import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.discord.commands.Command;
@@ -275,6 +276,10 @@ public class Instance {
 
 	public List<ClassMeeting> getClassSchedule() {
 		return configuration.getClassSchedule();
+	}
+
+	public List<TextbookInfo> getTextbooks() {
+		return configuration.getTextbooks();
 	}
 
 	public int getClassReminderSchedule() {
