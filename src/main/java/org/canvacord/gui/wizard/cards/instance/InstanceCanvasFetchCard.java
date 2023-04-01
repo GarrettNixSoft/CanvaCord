@@ -124,8 +124,9 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		JSONObject previousSchedule = instanceToEdit.getCanvasFetchSchedule();
+		//System.out.println(previousSchedule.getString("type"));
 		try {
-			if (previousSchedule.getString("type") == "interval") {
+			if (previousSchedule.getString("type").equals("interval")) {
 				if (previousSchedule.getBoolean("round") == true) {
 					frequentButton.setSelected(true);
 					freqMinuteSpinner.setValue(previousSchedule.getJSONObject("interval").get("amount"));
@@ -133,7 +134,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 					hourlyButton.setSelected(true);
 					hourlyHoursSpinner.setValue(previousSchedule.getJSONObject("interval").get("amount"));
 				}
-			} else if (previousSchedule.getString("type") == "daily") {
+			} else if (previousSchedule.getString("type").equals("daily")) {
 				dailyButton.setSelected(true);
 				dailyHourSpinner.setValue(previousSchedule.get("hour"));
 				dailyMinuteSpinner.setValue(previousSchedule.get("minute"));
@@ -142,7 +143,8 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 				} else if (previousSchedule.getString("ampm").equals("pm")) {
 					dailyPmButton.setSelected(true);
 				}
-			} else if (previousSchedule.getString("type") == "weekly") {
+			} else if (previousSchedule.getString("type").equals("weekly")) {
+				//System.out.println("Check Flag: WOrks");
 				weeklyButton.setSelected(true);
 				weeklyHourSpinner.setValue(previousSchedule.get("hour"));
 				weeklyMinuteSpinner.setValue(previousSchedule.get("minute"));
@@ -159,7 +161,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 						}
 					}
 				}
-			} else if (previousSchedule.getString("type") == "cron") {
+			} else if (previousSchedule.getString("type").equals("cron")) {
 				customButton.setSelected(true);
 				customCronField.setText(previousSchedule.getString("cron"));
 			} else {
@@ -168,6 +170,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 		} catch(Exception e) {
 			UserInput.showExceptionWarning(e);
 		}
+		updatePanels();
 	}
 
 	private void buildFrequentPanel() {

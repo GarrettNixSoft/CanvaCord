@@ -142,14 +142,17 @@ public class RoleCreateCard extends InstanceConfigCard {
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		rolesByName = new HashMap<>();
-		roles = instanceToEdit.getConfiguredRoles(true);
+		roles = instanceToEdit.getConfiguredRoles(false);
+		//System.out.println("Role card is empty:" + roles.isEmpty());
 		for(int x = 0; x < roles.size(); x++)
 		{
+			System.out.println(roles.size());
+			System.out.println(roles.get(x) + " : " + roles.get(x).getColor());
 			rolesByName.put(roles.get(x).getName(), roles.get(x));
 		}
 		updateRolesList();
 		if (roles.size() == 1)
-			enableNext();
+			this.enableNext();
 	}
 
 	public void onNavigateTo() {

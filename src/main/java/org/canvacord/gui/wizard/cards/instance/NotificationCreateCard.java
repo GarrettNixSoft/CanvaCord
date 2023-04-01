@@ -138,7 +138,7 @@ public class NotificationCreateCard extends InstanceConfigCard {
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
-		notifications = instanceToEdit.getConfiguredNotifications(true);
+		notifications = instanceToEdit.getConfiguredNotifications(false);
 		updateNotificationsList();
 		if (notifications.size() == 1)
 			enableNext();
