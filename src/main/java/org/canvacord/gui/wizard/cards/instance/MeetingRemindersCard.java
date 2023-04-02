@@ -247,6 +247,10 @@ public class MeetingRemindersCard extends InstanceConfigCard {
 	}
 
 	@Override
+	/**
+	 * Prefills the MeetingReminderCard
+	 * Andrew Bae
+	 */
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		doMeetingReminders.setSelected(instanceToEdit.doMeetingReminders());

@@ -121,11 +121,16 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 	}
 
 	@Override
+	/**
+	 * Prefills the CanvasFetchCard
+	 * Andrew Bae
+	 */
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		JSONObject previousSchedule = instanceToEdit.getCanvasFetchSchedule();
 		//System.out.println(previousSchedule.getString("type"));
 		try {
+			//Checks if the minutespinner
 			if (previousSchedule.getString("type").equals("interval")) {
 				if (previousSchedule.getBoolean("round")) {
 					frequentButton.setSelected(true);
@@ -134,6 +139,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 					hourlyButton.setSelected(true);
 					hourlyHoursSpinner.setValue(previousSchedule.getJSONObject("interval").get("amount"));
 				}
+				//Checks if daily is checked
 			} else if (previousSchedule.getString("type").equals("daily")) {
 				dailyButton.setSelected(true);
 				dailyHourSpinner.setValue(previousSchedule.get("hour"));
@@ -143,6 +149,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 				} else if (previousSchedule.getString("ampm").equals("pm")) {
 					dailyPmButton.setSelected(true);
 				}
+				//checks if weekly is checked
 			} else if (previousSchedule.getString("type").equals("weekly")) {
 				//System.out.println("Check Flag: WOrks");
 				weeklyButton.setSelected(true);
@@ -161,9 +168,11 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 						}
 					}
 				}
+				//Checks if custom is checked
 			} else if (previousSchedule.getString("type").equals("cron")) {
 				customButton.setSelected(true);
 				customCronField.setText(previousSchedule.getString("cron"));
+				//Checks if there is an error
 			} else {
 				System.out.println("Error");
 			}

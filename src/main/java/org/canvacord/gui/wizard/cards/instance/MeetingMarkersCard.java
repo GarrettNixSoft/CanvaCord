@@ -148,6 +148,10 @@ public class MeetingMarkersCard extends InstanceConfigCard {
 	}
 
 	@Override
+	/**
+	 * Prefills the MeetingMarkersCard
+	 * Andrew Bae
+	 */
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		doMeetingMarkers.setSelected(instanceToEdit.doMeetingMarkers());

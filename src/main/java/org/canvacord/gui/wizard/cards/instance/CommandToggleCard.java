@@ -92,6 +92,10 @@ public class CommandToggleCard extends InstanceConfigCard {
 	}
 
 	@Override
+	/**
+	 * Prefills the command Toggle Cards
+	 * Andrew Bae
+	 */
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		commands = new ArrayList<>();

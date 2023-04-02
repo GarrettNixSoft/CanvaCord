@@ -102,7 +102,7 @@ public class NotificationCreateCard extends InstanceConfigCard {
 			NotificationCreateDialog.buildNotification((InstanceCreateWizard) getParentWizard(), availableRoles).ifPresent(notification -> {
 				notifications.add(notification);
 				updateNotificationsList();
-				if (notifications.size() == 1)
+				if (!notifications.isEmpty())
 					enableNext();
 			});
 		});
@@ -136,12 +136,20 @@ public class NotificationCreateCard extends InstanceConfigCard {
 	}
 
 	@Override
+	/**
+	 * Prefills the NotificationCreateCard
+	 * Andrew Bae
+	 */
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
-		notifications = instanceToEdit.getConfiguredNotifications(false);
+		enableNext();
+		System.out.println("Notification Create Card:");
+		notifications = instanceToEdit.getConfiguredNotifications(true);
 		updateNotificationsList();
-		if (!notifications.isEmpty())
+		if (!notifications.isEmpty()) {
+			System.out.println("Not empty");
 			enableNext();
+		}
 	}
 
 	private void updateNotificationsList() {
@@ -171,6 +179,13 @@ public class NotificationCreateCard extends InstanceConfigCard {
 	private void disableNext() {
 		getParentWizard().setNextButtonEnabled(false);
 		getParentWizard().setNextButtonTooltip("<html>You must create at least one<br>Notification before continuing.</html>");
+	}
+
+	public void onNavigateTo() {
+		if (notifications.isEmpty())
+			disableNext();
+		else
+			enableNext();
 	}
 
 	private static class NotificationCellRenderer extends JLabel implements ListCellRenderer<CanvaCordNotification> {

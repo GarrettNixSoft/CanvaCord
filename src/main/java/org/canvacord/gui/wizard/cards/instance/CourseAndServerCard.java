@@ -328,6 +328,10 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 	}
 
 	@Override
+	/**
+	 * Prefills the Course and Server Card
+	 * Andrew Bae
+	 */
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		courseInputField.setText(instanceToEdit.getCourseID());

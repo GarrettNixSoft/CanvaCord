@@ -139,6 +139,10 @@ public class RoleCreateCard extends InstanceConfigCard {
 	}
 
 	@Override
+	/**
+	 * Prefills the RoleCreateCard
+	 * Andrew Bae
+	 */
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		rolesByName = new HashMap<>();

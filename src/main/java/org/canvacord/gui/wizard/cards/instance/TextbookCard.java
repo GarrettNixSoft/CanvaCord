@@ -158,7 +158,8 @@ public class TextbookCard extends InstanceConfigCard {
 	@Override
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
-		JSONObject textbooks = instanceToEdit.getConfiguration().getRawJSON();
+		textbooks = instanceToEdit.getTextbooks();
+		updateTextbooksList();
 	}
 
 	private void updateTextbooksList() {

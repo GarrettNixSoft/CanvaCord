@@ -90,6 +90,10 @@ public class InstanceBasicConfigCard extends InstanceConfigCard {
 	}
 
 	@Override
+	/**
+	 * Prefills the BasicConfigCard
+	 * Andrew Bae
+	 */
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		nameField.setText(instanceToEdit.getName());

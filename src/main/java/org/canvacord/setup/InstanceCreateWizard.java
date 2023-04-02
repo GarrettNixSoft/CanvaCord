@@ -137,7 +137,8 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		notificationCreateCard.setPreviousCard(roleCreateCard);
 
 		notificationCreateCard.setOnNavigateTo(() -> {
-			disableNext("<html>You must create at least one<br>Notification before continuing.</html>");
+			//disableNext("<html>You must create at least one<br>Notification before continuing.</html>");
+			notificationCreateCard.onNavigateTo();
 		});
 
 		// ================ SYLLABUS ================
@@ -185,6 +186,10 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 	}
 
+	/**
+	 * Executes all the prefill commands from all the cards
+	 * Andrew Bae
+	 */
 	private void prefillCards(Instance instanceToEdit) {
 		// TODO Andrew
 
@@ -217,7 +222,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 		long commandToggleTime = Profiler.executeProfiled(() -> commandToggleCard.prefillGUI(instanceToEdit));
 		System.out.println("Prefilled commandToggleCard in " + commandToggleTime + "ms");
-
+		enableNext();
 	}
 
 	@Override
@@ -310,6 +315,9 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		List<TextbookInfo> textbooks = textbookCard.getTextbooks();
 		JSONArray textbookFiles = new JSONArray();
 		for (TextbookInfo bookInfo : textbooks) {
+			File dirCheck = new File("./instances/" + instanceID);
+			if(!dirCheck.exists())
+				dirCheck.mkdirs();
 			TextbookDirectory.storeTextbook(instanceID, bookInfo.getTextbookFile()).ifPresentOrElse(
 					file -> {
 						String bookName = file.getName();
