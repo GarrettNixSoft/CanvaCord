@@ -178,6 +178,11 @@ public abstract class CanvaCordWizard extends JDialog {
 		this.cancelButton.setEnabled(enabled);
 	}
 
+	/**
+	 * Assign a task to be executed when the wizard is completed (the user
+	 * reaches the final card and clicks "Finish").
+	 * @param task the task to execute
+	 */
 	public void setFinishTask(BackgroundTask<Boolean> task) { this.finishTask = task; }
 
 	/**

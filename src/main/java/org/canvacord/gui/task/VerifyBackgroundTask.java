@@ -5,6 +5,11 @@ import org.canvacord.gui.wizard.cards.BackgroundTaskCard;
 import javax.swing.*;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * The VerifyBackgroundTask is used to verify the ID of some entity,
+ * whether on Discord or Canvas. It returns a Boolean value indicating
+ * whether the ID in question was verified.
+ */
 public class VerifyBackgroundTask extends SwingWorker<Boolean, Object> {
 
     private final BackgroundTaskCard<Boolean> parentCard;

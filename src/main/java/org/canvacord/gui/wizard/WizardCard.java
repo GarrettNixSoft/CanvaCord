@@ -10,7 +10,7 @@ import java.util.Optional;
  */
 public abstract class WizardCard extends JPanel {
 
-	private CanvaCordWizard parent;
+	private final CanvaCordWizard parent;
 
 	private WizardCard previousCard;
 	private WizardNavigator navigator;
@@ -47,6 +47,14 @@ public abstract class WizardCard extends JPanel {
 
 	protected CanvaCordWizard getParentWizard() { return parent; }
 
+	/**
+	 * Set the action to execute when the user navigates to this
+	 * card. When the user clicks any button that results in this
+	 * card being set as the active card, the provided function
+	 * will be run.
+	 * @param onNavigateTo the task to execute when the user navigates
+	 *                     to this card
+	 */
 	public void setOnNavigateTo(WizardAction onNavigateTo) {
 		this.onNavigateTo = onNavigateTo;
 	}
@@ -63,6 +71,11 @@ public abstract class WizardCard extends JPanel {
 		if (onNavigateAway != null) onNavigateAway.execute();
 	}
 
+	/**
+	 * Set the card that should be navigated to if the user clicks
+	 * the "Back" button while this card is displayed.
+	 * @param previousCard the card to go back to
+	 */
 	public void setPreviousCard(WizardCard previousCard) {
 		this.previousCard = previousCard;
 	}
@@ -86,6 +99,12 @@ public abstract class WizardCard extends JPanel {
 		if (this.navigator != null) configured = true;
 	}
 
+	/**
+	 * Get the next card to navigate to when the user clicks the "Next" button
+	 * while this card is displayed. If this is the last card, this will
+	 * return empty.
+	 * @return the next card to navigate to
+	 */
 	public Optional<WizardCard> getNextCard() {
 		return navigator.getNextCard();
 	}
@@ -94,6 +113,9 @@ public abstract class WizardCard extends JPanel {
 		return configured;
 	}
 
+	/**
+	 * @return {@code true} if this card is set to be the last card in the sequence
+	 */
 	public boolean isEndCard() {
 		return isEndCard;
 	}

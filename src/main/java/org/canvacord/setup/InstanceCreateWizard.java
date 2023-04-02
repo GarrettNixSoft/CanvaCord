@@ -124,6 +124,8 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		canvasFetchCard.setNavigator(() -> Optional.of(roleCreateCard));
 		canvasFetchCard.setPreviousCard(basicConfigCard);
 
+		canvasFetchCard.setOnNavigateTo(this::enableNext);
+
 		// ================ DISCORD ROLES ================
 		roleCreateCard.setNavigator(() -> Optional.of(notificationCreateCard));
 		roleCreateCard.setPreviousCard(canvasFetchCard);

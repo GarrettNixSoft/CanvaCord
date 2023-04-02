@@ -12,10 +12,20 @@ public class CanvaCordFonts {
 	public static final Font LABEL_FONT_MEDIUM = new Font("Segoe UI", Font.PLAIN, 14);
 	public static final Font LABEL_FONT_LARGE = new Font("Segoe UI", Font.PLAIN, 16);
 
+	/**
+	 * Generate a copy of the given font, in bold style.
+	 * @param font the base font
+	 * @return a bold version of the base font
+	 */
 	public static Font bold(Font font) {
 		return font.deriveFont(Font.BOLD);
 	}
 
+	/**
+	 * Generate a copy of the given font, in italic style.
+	 * @param font the base font
+	 * @return an italicized version of the base font
+	 */
 	public static Font italic(Font font) {
 		return font.deriveFont(Font.ITALIC);
 	}

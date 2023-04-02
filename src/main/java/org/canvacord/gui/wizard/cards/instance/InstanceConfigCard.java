@@ -9,10 +9,20 @@ import org.canvacord.instance.Instance;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The InstanceConfigCard implements generic functionality common
+ * to all but the starting card of the InstanceCreateWizard.
+ */
 public abstract class InstanceConfigCard extends WizardCard {
 
 	private CanvaCordWizard parent;
+
+	// The Card Panel contains the contentPanel and places it
+	// in the center of the wizard, under the header
 	protected JPanel cardPanel;
+	// The Content Panel contains all GUI elements that reside
+	// in the interactive area, above the navigation buttons at
+	// the bottom
 	protected JPanel contentPanel;
 
 	public InstanceConfigCard(CanvaCordWizard parent, String name, boolean isEndCard, String title) {
@@ -26,6 +36,10 @@ public abstract class InstanceConfigCard extends WizardCard {
 		add(cardPanel);
 	}
 
+	/**
+	 * Builds the header visible at the top of each card in the instance setup process.
+	 * @param title the title to show on top of the header
+	 */
 	private void buildHeader(String title) {
 
 		// ================ GUI SUB-PANEL ================
@@ -51,9 +65,23 @@ public abstract class InstanceConfigCard extends WizardCard {
 
 	}
 
+	/**
+	 * All GUI elements visible on this card should be created, configured, and added
+	 * to the content panel here.
+	 */
 	protected abstract void buildGUI();
+
+	/**
+	 * All listeners should be implemented and added here.
+	 */
 	protected abstract void initLogic();
 
+	/**
+	 * When an InstanceCreateWizard is created in edit mode, it will call this
+	 * method on each of its child cards, passing a reference to the Instance
+	 * that is being edited.
+	 * @param instanceToEdit the instance to extract field data from
+	 */
 	public abstract void prefillGUI(Instance instanceToEdit);
 
 	protected CanvaCordWizard getParentWizard() {
