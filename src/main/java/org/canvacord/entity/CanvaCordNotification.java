@@ -103,7 +103,10 @@ public class CanvaCordNotification {
 		rolesToPing = new ArrayList<>();
 		for (Object obj : rolesArray.toList()) {
 			String roleName = (String) obj;
-			// TODO
+			for (Object jObj : roleObjects.toList()) {
+    JSONObject roleData = (JSONObject) jObj;
+    rolesToPing.add(new CanvaCordRole(roleData));
+   }
 		}
 	}
 
