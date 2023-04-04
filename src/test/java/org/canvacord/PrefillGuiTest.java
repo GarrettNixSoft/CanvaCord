@@ -15,7 +15,7 @@ public class PrefillGuiTest {
         // Create and run a wizard to get the user to set up the instance
         /*
         InstanceCreateWizard wizard = //new InstanceCreateWizard();
-                new InstanceCreateWizard(InstanceLoader.loadInstance("32150-1083546251661938829").get());
+                new InstanceCreateWizard(InstanceLoader.loadInstance("32202-1016848330992656415").get());
         wizard.runWizard();
 
         InstanceManager.generateNewInstance(); */

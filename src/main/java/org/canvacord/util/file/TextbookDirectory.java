@@ -35,10 +35,10 @@ public class TextbookDirectory {
 
     /**
      * Prompts User to Select a PDF file and stores it in the /config/textbooks folder.
-     * @param id The course id of the course too add the textbook file too
+     * @param instanceID The course id of the course too add the textbook file too
      * @return the chosen pdf file that the user chosen
      */
-    public static Optional<File> storeTextbook(String id){
+    public static Optional<File> storeTextbook(String instanceID) {
         Optional<File> testing = FileGetter.getFile(System.getProperty("user.dir"), "PDF File", ".pdf");
         //Checks if user closes the prompt window
         if(testing.isEmpty()) {
@@ -46,7 +46,8 @@ public class TextbookDirectory {
             return Optional.empty();
         }
         File inputFile = testing.get();
-        File outputFile = new File("./config/textbooks/" + id + "_" + getLatestNumber(id) + ".pdf");
+        String courseID = CanvaCordPaths.parseID(instanceID)[1];
+        File outputFile = new File("instances/" + instanceID + "/" + courseID + "_" + getLatestNumber(instanceID) + ".pdf");
         //copies inputFile to outputFile
         try {
             Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
@@ -56,8 +57,9 @@ public class TextbookDirectory {
         return testing;
     }
 
-    public static Optional<File> storeTextbook(String id, File inputFile){
-        File outputFile = new File("./config/textbooks/" + id + "_" + getLatestNumber(id) + ".pdf");
+    public static Optional<File> storeTextbook(String id, File inputFile) {
+        String courseID = CanvaCordPaths.parseID(id)[1];
+        File outputFile = new File("instances/" + id + "/" + courseID + "_" + getLatestNumber(id) + ".pdf");
         //copies inputFile to outputFile
         try {
             Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);

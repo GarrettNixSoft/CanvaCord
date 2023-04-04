@@ -50,4 +50,8 @@ public class CanvaCordPaths {
 		return courseID + "-" + serverID;
 	}
 
+	public static String[] parseID(String instanceID) {
+		return instanceID.split("-");
+	}
+
 }

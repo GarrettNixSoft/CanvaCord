@@ -313,26 +313,20 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 				}
 		);
 
+		// Make sure the instance directory exists so textbooks can be copied in
+		File dirCheck = new File("instances/" + instanceID);
+		if(!dirCheck.exists())
+			if (!dirCheck.mkdirs()) {
+				UserInput.showErrorMessage("Failed to create instance directory!", "I/O Error");
+				return null;
+			}
+
 		// Store any textbooks
 		List<TextbookInfo> textbooks = textbookCard.getTextbooks();
 		JSONArray textbookFiles = new JSONArray();
 		for (TextbookInfo bookInfo : textbooks) {
-			File dirCheck = new File("./instances/" + instanceID);
-			if(!dirCheck.exists())
-				dirCheck.mkdirs();
-			TextbookDirectory.storeTextbook(instanceID, bookInfo.getTextbookFile()).ifPresentOrElse(
-					file -> {
-						String bookName = file.getName();
-						JSONObject textbookInfo = new JSONObject();
-						textbookInfo.put("file_name", bookName);
-						textbookInfo.put("title", bookInfo.getTitle());
-						textbookInfo.put("author", bookInfo.getAuthor());
-						textbookFiles.put(textbookInfo);
-					},
-					() -> {
-						UserInput.showWarningMessage("Failed to store textbook:\n" + bookInfo.getTitle(), "Textbook Error");
-					}
-			);
+			TextbookInfo storedInfo = bookInfo.storeAndConvert(instanceID);
+			textbookFiles.put(storedInfo);
 		}
 		configJSON.put("textbook_files", textbookFiles);
 
