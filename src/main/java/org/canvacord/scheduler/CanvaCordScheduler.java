@@ -1,6 +1,9 @@
 package org.canvacord.scheduler;
 
 import org.canvacord.instance.Instance;
+import org.canvacord.main.CanvaCord;
+import org.canvacord.reminder.Reminder;
+import org.canvacord.reminder.ReminderManager;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
@@ -23,11 +26,12 @@ public class CanvaCordScheduler {
 			scheduler = StdSchedulerFactory.getDefaultScheduler();
 			CanvasFetchScheduler.init();
 			NotificationScheduler.init();
+			ReminderScheduler.init();
 			scheduler.start();
 		}
 		catch (SchedulerException e) {
 			e.printStackTrace();
-			System.exit(-1);
+			CanvaCord.explode(e.getMessage());
 		}
 
 	}
@@ -50,6 +54,7 @@ public class CanvaCordScheduler {
 	public static void scheduleInstance(Instance instance) throws SchedulerException {
 		CanvasFetchScheduler.scheduleInstance(instance);
 		NotificationScheduler.scheduleInstance(instance);
+		ReminderScheduler.scheduleInstance(instance);
 	}
 
 	/**
@@ -61,6 +66,7 @@ public class CanvaCordScheduler {
 	public static void removeInstance(Instance instance) throws SchedulerException {
 		CanvasFetchScheduler.removeInstance(instance);
 		NotificationScheduler.removeInstance(instance);
+		ReminderScheduler.removeInstance(instance);
 	}
 
 }
