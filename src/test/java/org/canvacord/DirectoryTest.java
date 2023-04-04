@@ -7,16 +7,16 @@ public class DirectoryTest {
     public static void main(String[] Args) throws IOException {
         //instantiate scanner
         Scanner input = new Scanner(System.in);
-        System.out.println("Enter Course ID");
+        System.out.println("Enter Instance ID");
         //Receives courseID from user input
-        String courseID = input.nextLine();
+        String instanceID = input.nextLine();
         //Checks to see if the textbook exists in /config/textbooks
-        if(!TextbookDirectory.exists(courseID)){
-            System.out.println("There currently is no textbook that exists for course: " + courseID);
+        if(!TextbookDirectory.exists(instanceID)){
+            System.out.println("There currently is no textbook that exists for instance: " + instanceID);
         }
         System.out.println("Please select a textbook to add to the local directory");
         //prompts the user to choose a file from a directory
-        TextbookDirectory.storeTextbook(courseID);
-        System.out.println("There now exists: " + TextbookDirectory.getNumberOfTextbooks(courseID) + " textbooks in course: " + courseID);
+        TextbookDirectory.storeTextbook(instanceID);
+        System.out.println("There now exists: " + TextbookDirectory.getNumberOfTextbooks(instanceID) + " textbooks in instance: " + instanceID);
     }
 }
