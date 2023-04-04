@@ -14,9 +14,11 @@ import java.util.Optional;
 public record TextbookInfo(JSONObject textbookJSON) {
 
 	public File getTextbookFile() {
-		if (textbookJSON.has("file_path") && textbookJSON.has("file_name"))
+		if (textbookJSON.has("file_path") && textbookJSON.has("file_name")) {
 			CanvaCord.explode("Bad TextbookInfo data");
-		if (textbookJSON.has("file_path")) {
+			return null;
+		}
+		else if (textbookJSON.has("file_path")) {
 			return Paths.get(textbookJSON.getString("file_path")).toFile();
 		}
 		else if (textbookJSON.has("file_name")) {
@@ -24,7 +26,10 @@ public record TextbookInfo(JSONObject textbookJSON) {
 			String instanceID = name.substring(0, name.indexOf('_'));
 			return Paths.get("instances/" + instanceID + "/" + name).toFile();
 		}
-		else return null;
+		else {
+			CanvaCord.explode("Bad TextbookInfo data");
+			return null;
+		}
 	}
 
 	public String getTitle() {
