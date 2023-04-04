@@ -326,7 +326,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		JSONArray textbookFiles = new JSONArray();
 		for (TextbookInfo bookInfo : textbooks) {
 			TextbookInfo storedInfo = bookInfo.storeAndConvert(instanceID);
-			textbookFiles.put(storedInfo);
+			textbookFiles.put(storedInfo.textbookJSON());
 		}
 		configJSON.put("textbook_files", textbookFiles);
 
