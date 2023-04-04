@@ -3,6 +3,8 @@ package org.canvacord.reminder;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.UUID;
 
 public record Reminder(String reminderID, long userID, long channelID, LocalDateTime triggerDate, String message) {
@@ -38,6 +40,10 @@ public record Reminder(String reminderID, long userID, long channelID, LocalDate
 		result.put("trigger_date", triggerDate.toString());
 		result.put("message", message);
 		return result;
+	}
+
+	public Date getTriggerDateAsDate() {
+		return Date.from(triggerDate.atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 }

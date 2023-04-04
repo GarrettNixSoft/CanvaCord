@@ -50,6 +50,14 @@ public class ReminderManager {
 		return FileUtil.getJSONFileAsJSONArray(remindersFile).orElseGet(() -> new JSONArray("[]"));
 	}
 
+	public static List<Reminder> getRemindersForInstance(String instanceID) {
+		return Collections.unmodifiableList(storedReminders.get(instanceID));
+	}
+
+	public static List<Reminder> getRemindersForInstance(Instance instance) {
+		return getRemindersForInstance(instance.getInstanceID());
+	}
+
 	public static void registerReminderSent(Instance instance, Reminder reminder) {
 		// TODO
 	}

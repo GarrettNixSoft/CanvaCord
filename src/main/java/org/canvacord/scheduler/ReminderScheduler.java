@@ -1,13 +1,15 @@
 package org.canvacord.scheduler;
 
 import org.canvacord.instance.Instance;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
+import org.canvacord.reminder.Reminder;
+import org.canvacord.reminder.ReminderManager;
+import org.canvacord.scheduler.job.NotificationJob;
+import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class ReminderScheduler {
 
-	private static Scheduler fetchScheduler;
+	private static Scheduler reminderScheduler;
 	private static final String GROUP_ID = "remindMe";
 
 	/**
@@ -17,18 +19,55 @@ public class ReminderScheduler {
 	 */
 	public static void init() throws SchedulerException {
 
-		fetchScheduler = StdSchedulerFactory.getDefaultScheduler();
+		reminderScheduler = StdSchedulerFactory.getDefaultScheduler();
 
 		System.out.println("Reminder Scheduler initialized");
 
 	}
 
 	public static void scheduleInstance(Instance instance) throws SchedulerException {
-		// TODO
+
+		for (Reminder reminder : ReminderManager.getRemindersForInstance(instance))
+			scheduleReminder(instance, reminder);
+
+		System.out.println("Scheduled reminders for instance " + instance.getName());
+
 	}
 
 	public static void removeInstance(Instance instance) throws SchedulerException {
-		// TODO
+
+		for (Reminder reminder : ReminderManager.getRemindersForInstance(instance)) {
+			JobKey key = new JobKey(instance.getInstanceID() + "_" + reminder.reminderID(), GROUP_ID);
+			reminderScheduler.deleteJob(key);
+		}
+
+		System.out.println("Removed reminders for instance " + instance.getInstanceID());
+
+	}
+
+	// ================================ UTILITY ================================
+	private static void scheduleReminder(Instance instance, Reminder reminder) throws SchedulerException {
+
+		JobDataMap dataMap = new JobDataMap();
+		dataMap.put("reminder", reminder);
+
+		// Build a job for sending reminders
+		JobDetail reminderJob = JobBuilder.newJob(NotificationJob.class)
+				.withIdentity(instance.getInstanceID() + "_" + reminder.reminderID(), GROUP_ID)
+				.usingJobData(dataMap)
+				.build();
+
+		Trigger trigger = TriggerBuilder.newTrigger()
+				.withIdentity(instance.getInstanceID() + "_" + reminder.reminderID(), GROUP_ID)
+				.startAt(reminder.getTriggerDateAsDate())
+				.withSchedule(
+					SimpleScheduleBuilder.simpleSchedule()
+							.withRepeatCount(0)
+							.withIntervalInMinutes(1)
+				).build();
+
+		reminderScheduler.scheduleJob(reminderJob, trigger);
+
 	}
 
 }
