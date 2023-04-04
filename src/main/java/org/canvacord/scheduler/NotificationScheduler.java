@@ -53,8 +53,16 @@ public class NotificationScheduler {
 	 * @throws SchedulerException if something goes wrong removing the Instance's jobs
 	 */
 	public static void removeInstance(Instance instance) throws SchedulerException {
-		JobKey key = new JobKey(instance.getInstanceID(), GROUP_ID);
-		notifyScheduler.deleteJob(key);
+
+		List<CanvaCordNotification> notifications =  instance.getConfiguredNotifications(false);
+
+		for (CanvaCordNotification notification : notifications) {
+			JobKey key = new JobKey(instance.getInstanceID() + "_" + notification.getName(), GROUP_ID);
+			notifyScheduler.deleteJob(key);
+		}
+
+		System.out.println("Removed notifications for instance " + instance.getInstanceID());
+
 	}
 
 	// ================================ UTILITY ================================
