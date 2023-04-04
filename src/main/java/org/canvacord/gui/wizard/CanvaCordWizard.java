@@ -31,7 +31,7 @@ public abstract class CanvaCordWizard extends JDialog {
 	private JButton cancelButton;
 
 	// REGISTERED CARDS
-	private Map<String, WizardCard> registeredCards;
+	private final Map<String, WizardCard> registeredCards;
 
 	// CURRENT CARD
 	private WizardCard currentCard;
@@ -196,7 +196,7 @@ public abstract class CanvaCordWizard extends JDialog {
 		}
 		// tell the CardLayout to show the new card
 		cardLayout.show(cardPanel, currentCard.toString());
-		System.out.println("Show " + currentCard + " (width " + currentCard.getWidth() + ")");
+//		System.out.println("Show " + currentCard + " (width " + currentCard.getWidth() + ")");
 		// Assign the new current card and call its function for navigating to it
 		this.currentCard = currentCard;
 		this.currentCard.navigateTo();
