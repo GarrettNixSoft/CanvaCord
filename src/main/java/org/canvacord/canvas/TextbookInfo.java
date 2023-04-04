@@ -1,5 +1,6 @@
 package org.canvacord.canvas;
 
+import org.canvacord.main.CanvaCord;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.file.TextbookDirectory;
@@ -13,6 +14,8 @@ import java.util.Optional;
 public record TextbookInfo(JSONObject textbookJSON) {
 
 	public File getTextbookFile() {
+		if (textbookJSON.has("file_path") && textbookJSON.has("file_name"))
+			CanvaCord.explode("Bad TextbookInfo data");
 		if (textbookJSON.has("file_path")) {
 			return Paths.get(textbookJSON.getString("file_path")).toFile();
 		}
