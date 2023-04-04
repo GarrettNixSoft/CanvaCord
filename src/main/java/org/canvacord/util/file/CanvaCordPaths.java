@@ -46,6 +46,19 @@ public class CanvaCordPaths {
 		return getInstanceCachePath(tokens[0], Long.parseLong(tokens[1]));
 	}
 
+	public static Path getInstanceRemindersPath(String courseID, long serverID) {
+		return Paths.get("instances/" + instanceFormat(courseID, serverID) + "/reminders.json");
+	}
+
+	public static Path getInstanceRemindersPath(Instance instance) {
+		return getInstanceRemindersPath(instance.getCourseID(), instance.getServerID());
+	}
+
+	public static Path getInstanceRemindersPath(String instanceID) {
+		String[] tokens = instanceID.split("-");
+		return getInstanceRemindersPath(tokens[0], Long.parseLong(tokens[1]));
+	}
+
 	public static String instanceFormat(String courseID, long serverID) {
 		return courseID + "-" + serverID;
 	}
