@@ -258,6 +258,7 @@ public class FileUtil {
 			bytes = Files.size(file.toPath());
 		}
 		catch (IOException e) {
+			e.printStackTrace();
 			bytes = 0;
 		}
 
