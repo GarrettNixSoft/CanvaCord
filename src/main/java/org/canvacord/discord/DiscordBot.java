@@ -1,5 +1,6 @@
 package org.canvacord.discord;
 
+import org.canvacord.discord.commands.CommandHandler;
 import org.canvacord.persist.ConfigManager;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -47,6 +48,7 @@ public class DiscordBot {
 		try {
 			api = API_BUILDER.login().get();
 			connected = true;
+			api.addSlashCommandCreateListener(event -> CommandHandler.executeCommand(event.getSlashCommandInteraction()));
 			return true;
 		}
 		catch (Exception e) {
