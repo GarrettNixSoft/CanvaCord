@@ -301,11 +301,9 @@ public class Instance {
 	}
 
 	// ================ UTILITIES ================
-	public static boolean isValidInstanceData(File[] dirContents) {
-		return 	(FileUtil.getFileName(dirContents[0]).equals("config") &&
-				FileUtil.getFileName(dirContents[1]).equals("data")) ||
-				(FileUtil.getFileName(dirContents[0]).equals("data") &&
-				FileUtil.getFileName(dirContents[1]).equals("config"));
+	public static boolean isValidInstanceData(File dir) {
+		return 	(FileUtil.dirContainsFileNamed(dir, "config") &&
+				FileUtil.dirContainsFileNamed(dir, "data"));
 	}
 
 }

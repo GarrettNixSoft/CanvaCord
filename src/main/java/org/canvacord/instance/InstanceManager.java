@@ -48,25 +48,37 @@ public class InstanceManager {
 			// Iterate over the files and attempt to read them as instances
 			for (File file : potentialInstances) {
 
+				System.out.println("Potential instance: " + file.getName());
+
 				try {
 					// Instances are contained in subdirectories; if this is not a directory, skip it
-					if (!file.isDirectory())
+					if (!file.isDirectory()) {
+						System.out.println("Abandoning; not a directory");
 						continue;
+					}
 
 					// List the instance files
 					File[] instanceFiles = file.listFiles();
 
 					// Instances contain 2 files: config and data
-					if (instanceFiles.length != 2)
+					if (instanceFiles.length < 2) {
+						System.out.println("Abandoning; too few files");
 						continue;
+					}
 
 					// Both files must be JSON files
-					if (!FileUtil.getFileExtension(instanceFiles[0]).equals("json") ||
-						!FileUtil.getFileExtension(instanceFiles[1]).equals("json"))
+					int jsonCount = 0;
+					for (File checkFile : instanceFiles) {
+						if (FileUtil.getFileExtension(checkFile).equals("json"))
+							jsonCount++;
+					}
+					if (jsonCount < 2) {
+						System.out.println("Abandoning; too few JSON files");
 						continue;
+					}
 
 					// The two JSON files must be named config.json and data.json
-					if (Instance.isValidInstanceData(instanceFiles)) {
+					if (Instance.isValidInstanceData(file)) {
 						// Get the instance ID from the directory name
 						String instanceID = FileUtil.getFileName(file);
 						// Load the instance
@@ -80,6 +92,7 @@ public class InstanceManager {
 
 				}
 				catch (NullPointerException e) {
+					e.printStackTrace();
 					UserInput.showErrorMessage("There is bad data in the instances folder.", "Bad Instance Data");
 				}
 			}

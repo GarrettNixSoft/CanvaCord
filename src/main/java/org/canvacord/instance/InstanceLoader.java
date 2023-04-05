@@ -21,7 +21,6 @@ public class InstanceLoader {
 
 		// Check for "instances" folder in the working directory
 		File allInstancesDir = Paths.get("instances/").toFile();
-		File instanceDir = Paths.get("instances/" + instanceID).toFile();
 
 		// If it's missing, attempt to create it
 		if (!allInstancesDir.exists()) {
@@ -34,7 +33,7 @@ public class InstanceLoader {
 		}
 		// Otherwise if it exists, but is not a directory, throw an error
 		else if (!allInstancesDir.isDirectory())
-			throw new CanvaCordException("instances is a file, not a directory!");
+			throw new CanvaCordException("/instances is a file, not a directory!");
 
 		// Otherwise, check for the target file
 		File instanceFile = Paths.get("instances/" + instanceID + "/config.json").toFile();
@@ -48,6 +47,7 @@ public class InstanceLoader {
 			if (instanceJSON.isPresent()) {
 				Instance parsedInstance = InstanceParser.parseInstance(instanceID, instanceJSON.get());
 				CacheManager.loadInstanceData(parsedInstance);
+				System.out.println("Loaded instance " + instanceID);
 				return Optional.of(parsedInstance);
 			}
 			else
