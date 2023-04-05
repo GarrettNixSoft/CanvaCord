@@ -1,5 +1,6 @@
 package org.canvacord.util.file;
 
+import org.canvacord.exception.CanvaCordException;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringConverter;
 import org.json.JSONArray;
@@ -360,18 +361,15 @@ public class FileUtil {
 
 	public static boolean dirContainsFileNamed(File dir, String name) {
 		if (!dir.isDirectory()) {
-			System.err.println(dir.getName() + " is not a directory");
-			return false;
+			throw new CanvaCordException(dir.getName() + " is not a directory");
 		}
 		File[] dirContents = dir.listFiles();
 		if (dirContents == null)
 			return false;
 		for (File file : dirContents) {
-			System.out.println("Found " + getFileName(file));
 			if (getFileName(file).equals(name))
 				return true;
 		}
-		System.err.println("No file named " + name + " found");
 		return false;
 	}
 

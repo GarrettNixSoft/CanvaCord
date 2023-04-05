@@ -48,8 +48,6 @@ public class InstanceManager {
 			// Iterate over the files and attempt to read them as instances
 			for (File file : potentialInstances) {
 
-				System.out.println("Potential instance: " + file.getName());
-
 				try {
 					// Instances are contained in subdirectories; if this is not a directory, skip it
 					if (!file.isDirectory()) {
