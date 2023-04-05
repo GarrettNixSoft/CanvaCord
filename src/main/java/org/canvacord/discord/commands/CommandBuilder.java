@@ -35,10 +35,6 @@ public class CommandBuilder {
 
 
 		// help cmd has to be LAST to get all registered COMMAND ID's
-		SlashCommandBuilder helpCommand = help.getBuilder()
-				.setOptions(Collections.singletonList(SlashCommandOption.createWithChoices(
-						SlashCommandOptionType.STRING,"commands","(optional) select a command",false,
-						helpCommandOptionChoices)));
 		registerCommandServer(HelpCommand.class, server);
 
 		// THE COMMAND CLASSES BELOW DO NOT EXIST YET. when they do, move these into their getbuilder method
