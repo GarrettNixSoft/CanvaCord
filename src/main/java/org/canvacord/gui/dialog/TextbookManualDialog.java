@@ -132,7 +132,7 @@ public class TextbookManualDialog extends CanvaCordDialog {
 		chooseButton.addActionListener(event -> {
 			FileGetter.getFile(System.getProperty("user.dir"), "PDF files", "pdf").ifPresent(
 					file -> {
-						pathField.setText(file.getPath());
+						pathField.setText(file.getAbsolutePath());
 					}
 			);
 		});
@@ -142,7 +142,7 @@ public class TextbookManualDialog extends CanvaCordDialog {
 	private void prefillGUI(TextbookInfo infoToEdit) {
 		titleField.setText(infoToEdit.getTitle());
 		authorField.setText(infoToEdit.getAuthor());
-		pathField.setText(Objects.requireNonNull(infoToEdit.getTextbookFile()).getPath());
+		pathField.setText(Objects.requireNonNull(infoToEdit.getTextbookFile()).getAbsolutePath());
 	}
 
 	public Optional<TextbookInfo> getResult() {
