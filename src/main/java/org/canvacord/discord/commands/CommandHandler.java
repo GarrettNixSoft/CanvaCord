@@ -14,10 +14,16 @@ public class CommandHandler {
 
 	private static final Map<Long, Command> commands = new HashMap<>();
 
-	public static long registerCommandGlobal(SlashCommandBuilder slashCommand, Command command, DiscordApi api) {
-		SlashCommand globalCommand = slashCommand.createGlobal(api).join();
-		commands.put(globalCommand.getId(), command);
-		return globalCommand.getId();
+	public static long registerCommandGlobal(Class<? extends Command> commandType, DiscordApi api) {
+		try {
+			Command commandObj = commandType.getConstructor().newInstance();
+			SlashCommand globalCommand = commandObj.getBuilder().createGlobal(api).join();
+			commands.put(globalCommand.getId(), commandObj);
+			return globalCommand.getId();
+		}
+		catch (Exception e) {
+			throw new CanvaCordException(e.getMessage());
+		}
 	}
 
 	public static long registerCommandServer(Class<? extends Command> commandType, Server server) {
