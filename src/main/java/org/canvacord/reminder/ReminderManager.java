@@ -55,7 +55,8 @@ public class ReminderManager {
 	}
 
 	public static void registerReminderSent(Instance instance, Reminder reminder) {
-		// TODO
+		storedReminders.get(instance.getInstanceID()).remove(reminder);
+		writeRemindersFile(instance);
 	}
 
 	private static JSONArray checkRemindersFile(Instance instance) {
