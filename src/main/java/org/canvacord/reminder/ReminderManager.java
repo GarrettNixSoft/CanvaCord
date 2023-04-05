@@ -1,5 +1,6 @@
 package org.canvacord.reminder;
 
+import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.main.CanvaCord;
@@ -31,12 +32,30 @@ public class ReminderManager {
 			storedReminders.put(instance.getInstanceID(), reminders);
 			// check the reminders file for the instance
 			JSONArray remindersData = checkRemindersFile(instance);
+			System.out.println(remindersData.toString(4));
 			// load all reminders for the instance
 			for (int i = 0; i < remindersData.length(); i++) {
 				JSONObject reminderData = remindersData.getJSONObject(i);
 				reminders.add(Reminder.load(reminderData));
 			}
 		}
+	}
+
+	public static List<Reminder> getRemindersForInstance(String instanceID) {
+		return Collections.unmodifiableList(storedReminders.get(instanceID));
+	}
+
+	public static List<Reminder> getRemindersForInstance(Instance instance) {
+		return getRemindersForInstance(instance.getInstanceID());
+	}
+
+	public static void addNewReminder(Instance instance, Reminder reminder) {
+		storedReminders.computeIfAbsent(instance.getInstanceID(), k -> new ArrayList<>()).add(reminder);
+		writeRemindersFile(instance);
+	}
+
+	public static void registerReminderSent(Instance instance, Reminder reminder) {
+		// TODO
 	}
 
 	private static JSONArray checkRemindersFile(Instance instance) {
@@ -50,16 +69,13 @@ public class ReminderManager {
 		return FileUtil.getJSONFileAsJSONArray(remindersFile).orElseGet(() -> new JSONArray("[]"));
 	}
 
-	public static List<Reminder> getRemindersForInstance(String instanceID) {
-		return Collections.unmodifiableList(storedReminders.get(instanceID));
-	}
-
-	public static List<Reminder> getRemindersForInstance(Instance instance) {
-		return getRemindersForInstance(instance.getInstanceID());
-	}
-
-	public static void registerReminderSent(Instance instance, Reminder reminder) {
-		// TODO
+	private static void writeRemindersFile(Instance instance) {
+		JSONArray remindersArray = new JSONArray();
+		for (Reminder reminder : storedReminders.get(instance.getInstanceID())) {
+			remindersArray.put(reminder.toJSON());
+		}
+		boolean success = FileUtil.writeJSONArray(remindersArray, CanvaCordPaths.getInstanceRemindersPath(instance).toFile());
+		if (!success) throw new CanvaCordException("Failed to write reminders JSON for instance " + instance.getName());
 	}
 
 }

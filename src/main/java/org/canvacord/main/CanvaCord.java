@@ -4,6 +4,7 @@ import org.canvacord.exception.ExplosionHandler;
 import org.canvacord.gui.CanvaCordApp;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
+import org.canvacord.reminder.ReminderManager;
 import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.setup.FirstRunSetup;
 import org.canvacord.util.LookAndFeel;
@@ -27,6 +28,7 @@ public class CanvaCord {
 		// initialize CanvaCord components
 		InstanceManager.loadInstances();
 		CanvaCordScheduler.init();
+		ReminderManager.init();
 
 		// run the application!
 		CanvaCordApp.run();

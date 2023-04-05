@@ -193,6 +193,70 @@ public class FileUtil {
 		}
 	}
 
+	public static boolean writeJSONArray(JSONArray json, File file) {
+		// wrap in a generic try/catch for any unexpected errors
+		try {
+			// if the file doesn't exist,
+			if (!file.exists()) {
+				// attempt to create it;
+				try {
+					boolean success = file.createNewFile();
+					if (success) {
+						// if the creation succeeds, write the JSON to it
+						writeJSONArrayToFile(json, file);
+						return true;
+					}
+					else throw new IOException("move to catch block");
+				}
+				// if creation failed,
+				catch (IOException e) {
+					// it may be because the path specifies some number of parent directories that don't exist;
+					int sepIndex = file.getPath().lastIndexOf(SEPARATOR);
+					String directoryPath = file.getPath().substring(0, sepIndex);
+					File directory = new File(directoryPath);
+					// try creating those parent directories,
+					if (directory.mkdirs()) {
+						// then try creating the file again;
+						if (file.createNewFile()) {
+							// if succeeded, write to it
+							writeJSONArrayToFile(json, file);
+							return true;
+						} else throw new RuntimeException("File " + file + " did not exist and could not be created");
+					}
+					else throw new RuntimeException("File " + file + " did not exist and could not be created");
+				}
+			}
+			// otherwise, if the file does exist, overwrite it
+			else {
+				writeJSONArrayToFile(json, file);
+				return true;
+			}
+		} catch (Exception e) {
+			// generic fail state
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private static void writeJSONArrayToFile(JSONArray json, File file) {
+		try {
+			FileWriter fw = new FileWriter(file);
+			BufferedWriter writer = new BufferedWriter(fw);
+			String jsonStr = json.toString(4);
+//					Logger.log("JSON to write to file: " + jsonStr);
+			String[] data = jsonStr.split("\n");
+			for (String line : data) {
+				writer.write(line);
+				writer.write(System.lineSeparator());
+			}
+			// and done
+			writer.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Validate a file.
 	 * @param file the file to validate
