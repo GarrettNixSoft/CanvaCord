@@ -3,6 +3,7 @@ package org.canvacord.gui.dialog;
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.TextPrompt;
+import org.canvacord.instance.Instance;
 import org.canvacord.util.file.FileGetter;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;

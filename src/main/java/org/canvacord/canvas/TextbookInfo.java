@@ -1,6 +1,8 @@
 package org.canvacord.canvas;
 
+import org.canvacord.instance.Instance;
 import org.canvacord.main.CanvaCord;
+import org.canvacord.util.Globals;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.file.TextbookDirectory;
@@ -23,8 +25,7 @@ public record TextbookInfo(JSONObject textbookJSON) {
 		}
 		else if (textbookJSON.has("file_name")) {
 			String name = textbookJSON.getString("file_name");
-			String instanceID = name.substring(0, name.indexOf('_'));
-			return Paths.get("instances/" + instanceID + "/" + name).toFile();
+			return Paths.get("instances/" + Globals.EDIT_INSTANCE_ID + "/" + name).toFile();
 		}
 		else {
 			CanvaCord.explode("Bad TextbookInfo data");
@@ -40,9 +41,9 @@ public record TextbookInfo(JSONObject textbookJSON) {
 		return textbookJSON.optString("author", "None Specified");
 	}
 
-	public TextbookInfo storeAndConvert(String instanceID) {
+	public TextbookInfo storeAndConvert() {
 		File file = getTextbookFile();
-		Optional<File> storedFile =	TextbookDirectory.storeTextbook(instanceID, file);
+		Optional<File> storedFile =	TextbookDirectory.storeTextbook(Globals.EDIT_INSTANCE_ID, file);
 		if (storedFile.isPresent()) {
 			JSONObject textbookData = new JSONObject();
 			textbookData.put("title", getTitle());

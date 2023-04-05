@@ -6,11 +6,10 @@ import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.*;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceConfiguration;
+import org.canvacord.util.Globals;
 import org.canvacord.util.Profiler;
 import org.canvacord.util.file.FileUtil;
-import org.canvacord.util.file.TextbookDirectory;
 import org.canvacord.util.input.UserInput;
-import org.checkerframework.checker.units.qual.C;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -45,6 +44,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 	public InstanceCreateWizard(Instance instanceToEdit) {
 		this();
+		Globals.EDIT_INSTANCE_ID = instanceToEdit.getInstanceID();
 		prefillCards(instanceToEdit);
 	}
 
@@ -325,7 +325,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		List<TextbookInfo> textbooks = textbookCard.getTextbooks();
 		JSONArray textbookFiles = new JSONArray();
 		for (TextbookInfo bookInfo : textbooks) {
-			TextbookInfo storedInfo = bookInfo.storeAndConvert(instanceID);
+			TextbookInfo storedInfo = bookInfo.storeAndConvert();
 			textbookFiles.put(storedInfo.textbookJSON());
 		}
 		configJSON.put("textbook_files", textbookFiles);
