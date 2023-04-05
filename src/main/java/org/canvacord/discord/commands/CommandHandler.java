@@ -1,5 +1,6 @@
 package org.canvacord.discord.commands;
 
+import org.canvacord.exception.CanvaCordException;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.interaction.SlashCommand;
@@ -19,10 +20,16 @@ public class CommandHandler {
 		return globalCommand.getId();
 	}
 
-	public static long registerCommandServer(SlashCommandBuilder slashCommand, Command command, Server server) {
-		SlashCommand serverCommand = slashCommand.createForServer(server).join();
-		commands.put(serverCommand.getId(), command);
-		return serverCommand.getId();
+	public static long registerCommandServer(Class<? extends Command> commandType, Server server) {
+		try {
+			Command commandObj = commandType.getConstructor().newInstance();
+			SlashCommand serverCommand = commandObj.getBuilder().createForServer(server).join();
+			commands.put(serverCommand.getId(), commandObj);
+			return serverCommand.getId();
+		}
+		catch (Exception e) {
+			throw new CanvaCordException(e.getMessage());
+		}
 	}
 
 	public static void executeCommand(SlashCommandInteraction interaction) {

@@ -30,7 +30,7 @@ public class CommandBuilder {
 
 		for (Command command:serverActiveCommands){
 			SlashCommandBuilder build = command.getBuilder();
-			long commandID = registerCommandServer(build,command,server);
+			long commandID = registerCommandServer(command.getClass(), server);
 			helpCommandOptionChoices.add(SlashCommandOptionChoice.create(command.getName(),String.valueOf(commandID)));
 		}
 
@@ -40,7 +40,7 @@ public class CommandBuilder {
 				.setOptions(Collections.singletonList(SlashCommandOption.createWithChoices(
 						SlashCommandOptionType.STRING,"commands","(optional) select a command",false,
 						helpCommandOptionChoices)));
-		registerCommandServer(helpCommand,help,server);
+		registerCommandServer(HelpCommand.class, server);
 
 		// THE COMMAND CLASSES BELOW DO NOT EXIST YET. when they do, move these into their getbuilder method
 		// but replace "build" with "Slashcommand.with(getName(),getShortDescription())"
