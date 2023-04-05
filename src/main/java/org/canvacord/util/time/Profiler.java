@@ -1,4 +1,4 @@
-package org.canvacord.util;
+package org.canvacord.util.time;
 
 public class Profiler {
 

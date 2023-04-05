@@ -1,7 +1,6 @@
 package org.canvacord.entity;
 
-import org.canvacord.util.CanvaCordWeekdayWrapper;
-import org.canvacord.util.string.StringConverter;
+import org.canvacord.util.time.CanvaCordWeekdayWrapper;
 import org.canvacord.util.string.StringUtils;
 import org.json.JSONObject;
 

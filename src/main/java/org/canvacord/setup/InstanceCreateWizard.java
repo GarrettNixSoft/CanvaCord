@@ -7,15 +7,13 @@ import org.canvacord.gui.wizard.cards.instance.*;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.Globals;
-import org.canvacord.util.Profiler;
+import org.canvacord.util.time.Profiler;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.swing.*;
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;

@@ -3,7 +3,7 @@ package org.canvacord.scheduler;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.scheduler.job.CanvasFetchJob;
-import org.canvacord.util.CanvaCordTime;
+import org.canvacord.util.time.CanvaCordTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.quartz.*;

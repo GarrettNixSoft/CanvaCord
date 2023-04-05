@@ -1,4 +1,4 @@
-package org.canvacord.util;
+package org.canvacord.util.time;
 
 import org.json.JSONArray;
 import org.quartz.DateBuilder;

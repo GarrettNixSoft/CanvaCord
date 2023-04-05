@@ -5,7 +5,7 @@ import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.scheduler.job.NotificationJob;
-import org.canvacord.util.CanvaCordTime;
+import org.canvacord.util.time.CanvaCordTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.quartz.*;
