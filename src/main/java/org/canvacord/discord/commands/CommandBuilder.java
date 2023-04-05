@@ -29,7 +29,6 @@ public class CommandBuilder {
 		*/
 
 		for (Command command:serverActiveCommands){
-			SlashCommandBuilder build = command.getBuilder();
 			long commandID = registerCommandServer(command.getClass(), server);
 			helpCommandOptionChoices.add(SlashCommandOptionChoice.create(command.getName(),String.valueOf(commandID)));
 		}
