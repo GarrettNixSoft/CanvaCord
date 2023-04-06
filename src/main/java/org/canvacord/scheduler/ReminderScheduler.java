@@ -3,7 +3,7 @@ package org.canvacord.scheduler;
 import org.canvacord.instance.Instance;
 import org.canvacord.reminder.Reminder;
 import org.canvacord.reminder.ReminderManager;
-import org.canvacord.scheduler.job.NotificationJob;
+import org.canvacord.scheduler.job.ReminderJob;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -50,9 +50,10 @@ public class ReminderScheduler {
 
 		JobDataMap dataMap = new JobDataMap();
 		dataMap.put("reminder", reminder);
+		dataMap.put("instance", instance);
 
 		// Build a job for sending reminders
-		JobDetail reminderJob = JobBuilder.newJob(NotificationJob.class)
+		JobDetail reminderJob = JobBuilder.newJob(ReminderJob.class)
 				.withIdentity(instance.getInstanceID() + "_" + reminder.reminderID(), GROUP_ID)
 				.usingJobData(dataMap)
 				.build();

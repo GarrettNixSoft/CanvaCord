@@ -32,8 +32,8 @@ public class ReminderJob implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
 		// Grab the required objects for this job
-		instance = (Instance) context.get("instance");
-		reminder = (Reminder) context.get("reminder");
+		instance = (Instance) context.getMergedJobDataMap().get("instance");
+		reminder = (Reminder) context.getMergedJobDataMap().get("reminder");
 
 		// Fetch the Discord API
 		DiscordApi discordApi = DiscordBot.getBotInstance().getApi();
