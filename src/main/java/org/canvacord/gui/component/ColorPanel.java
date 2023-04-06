@@ -1,7 +1,5 @@
 package org.canvacord.gui.component;
 
-import org.checkerframework.checker.units.qual.C;
-
 import javax.swing.*;
 import java.awt.*;
 

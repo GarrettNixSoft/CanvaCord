@@ -1,7 +1,6 @@
 package org.canvacord.persist;
 
 import org.canvacord.entity.CanvaCordNotification;
-import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.util.data.JSONUtils;

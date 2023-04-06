@@ -1,6 +1,8 @@
 package org.canvacord;
+
 import org.canvacord.util.file.TextbookDirectory;
-import java.io.*;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class DirectoryTest {

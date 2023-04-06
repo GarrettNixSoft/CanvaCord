@@ -13,13 +13,10 @@ import org.canvacord.util.input.UserInput;
 
 import javax.swing.*;
 import java.awt.*;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import org.json.JSONObject;
 
 public class TextbookCard extends InstanceConfigCard {
 

@@ -4,18 +4,15 @@ import org.canvacord.discord.DiscordBot;
 import org.canvacord.entity.CanvaCordNotificationTarget;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.CanvaCordFonts;
-import org.canvacord.gui.dialog.ClassMeetingDialog;
 import org.canvacord.gui.dialog.ClassScheduleDialog;
 import org.canvacord.gui.dialog.CreateChannelDialog;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.instance.Instance;
 import org.canvacord.util.input.UserInput;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.ServerChannel;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.server.Server;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.swing.*;

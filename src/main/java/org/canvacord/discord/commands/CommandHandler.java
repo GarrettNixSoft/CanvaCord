@@ -9,7 +9,6 @@ import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandInteraction;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CommandHandler {

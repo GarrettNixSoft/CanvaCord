@@ -1,8 +1,6 @@
 package org.canvacord;
 
 import org.canvacord.setup.FirstRunSetup;
-import org.javacord.api.DiscordApi;
-import org.javacord.api.DiscordApiBuilder;
 
 public class DiscordServerBot {
 

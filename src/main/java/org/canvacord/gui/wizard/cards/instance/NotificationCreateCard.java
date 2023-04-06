@@ -2,7 +2,6 @@ package org.canvacord.gui.wizard.cards.instance;
 
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
-import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.NotificationCreateDialog;
@@ -11,16 +10,13 @@ import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.instance.Instance;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.input.UserInput;
-import org.canvacord.util.string.StringConverter;
 import org.canvacord.util.string.StringUtils;
 import org.json.JSONArray;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class NotificationCreateCard extends InstanceConfigCard {
 

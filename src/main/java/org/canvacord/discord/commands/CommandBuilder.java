@@ -1,9 +1,11 @@
 package org.canvacord.discord.commands;
 
 import org.javacord.api.entity.server.Server;
-import org.javacord.api.interaction.*;
+import org.javacord.api.interaction.SlashCommandOptionChoice;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import static org.canvacord.discord.commands.CommandHandler.registerCommandServer;
 

@@ -1,12 +1,8 @@
 package org.canvacord;
 
 import org.canvacord.discord.DiscordBot;
-import org.canvacord.instance.*;
-import org.canvacord.persist.CacheManager;
-import org.canvacord.setup.InstanceCreateWizard;
-
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import org.canvacord.instance.InstanceLoader;
+import org.canvacord.instance.InstanceManager;
 
 
 public class PrefillGuiTest {

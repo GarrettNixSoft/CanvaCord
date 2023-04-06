@@ -1,11 +1,14 @@
 package org.canvacord.gui.component;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.event.*;
-import javax.swing.text.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
+import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 /**
  *  NOTE: This class was provided by Rob Camick -- <a href="https://tips4java.wordpress.com/2009/11/29/text-prompt/">Source Here</a>.

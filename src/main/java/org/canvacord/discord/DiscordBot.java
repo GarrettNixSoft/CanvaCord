@@ -8,7 +8,6 @@ import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.permission.Permissions;
 import org.javacord.api.entity.server.Server;
-import org.json.JSONObject;
 
 import java.util.Collection;
 import java.util.Optional;
