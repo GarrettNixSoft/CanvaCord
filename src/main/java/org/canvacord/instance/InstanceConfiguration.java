@@ -47,6 +47,7 @@ public class InstanceConfiguration {
 	private final List<CanvaCordRole> configuredRoles = new ArrayList<>();
 	private final List<CanvaCordRole> registeredRoles = new ArrayList<>();
 	private final List<CanvaCordNotification> configuredNotifications = new ArrayList<>();
+	private final Map<String, Boolean> availableCommands = new HashMap<>();
 	private final Map<Long, Class<? extends Command>> registeredCommands = new HashMap<>();
 
 	/**
@@ -230,6 +231,17 @@ public class InstanceConfiguration {
 		return result;
 	}
 
+	public Map<String, Boolean> getAvailableCommands(boolean refresh) {
+		if (refresh || availableCommands.isEmpty()) {
+			refresh();
+			JSONObject availability = configJSON.getJSONObject("command_availability");
+			for (String key : availability.keySet()) {
+				availableCommands.put(key, availability.getBoolean(key));
+			}
+		}
+		return availableCommands;
+	}
+
 	public Map<Long, Class<? extends Command>> getRegisteredCommands(boolean refresh) {
 		// refresh from disk if requested or if the map is empty (probably never loaded)
 		if (refresh || registeredCommands.isEmpty()) {
@@ -242,18 +254,7 @@ public class InstanceConfiguration {
 			for (String key : commandIDs.keySet()) {
 				long id = commandIDs.getLong(key);
 				if (id != -1) {
-					switch (key) {
-						case "assignments_list" -> {}
-						case "syllabus" -> {}
-						case "assignments_search" -> {}
-						case "remind_me" -> registeredCommands.put(id, RemindMeCommand.class);
-						case "announcement_details" -> {}
-						case "assignments_active" -> {}
-						case "assignment_details" -> {}
-						case "announcements_search" -> {}
-						case "textbooks" -> {}
-						case "announcements_list" -> {}
-					}
+					registeredCommands.put(id, Command.COMMAND_NAMES.get(key));
 				}
 			}
 		}
