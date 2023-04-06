@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public class ReminderEncryption {
 
-	// THe cipher object to use for actually performing cryptographic functions
+	// The cipher object to use for actually performing cryptographic functions
 	private static final Cipher cipher;
 
 	static {
