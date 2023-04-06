@@ -7,8 +7,10 @@ import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.exception.CanvaCordException;
+import org.canvacord.util.compare.ListComparator;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
+import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -41,6 +43,12 @@ public class InstanceConfiguration {
 		initDefaults();
 	}
 
+	// ================ CACHED VALUES ================
+	private final List<CanvaCordRole> configuredRoles = new ArrayList<>();
+	private final List<CanvaCordRole> registeredRoles = new ArrayList<>();
+	private final List<CanvaCordNotification> configuredNotifications = new ArrayList<>();
+	private final Map<Long, Class<? extends Command>> registeredCommands = new HashMap<>();
+
 	/**
 	 * Any values not set in the JSONObject passed to the constructor
 	 * will have default values inserted here. For example if no fetch
@@ -64,6 +72,29 @@ public class InstanceConfiguration {
 			configJSON = readFromDisk.get();
 		else
 			throw new CanvaCordException("Failed to refresh instance configuration");
+	}
+
+	public void verify() {
+		// ================ VERIFY ROLES ================
+		// refresh the roles from the config file and Discord
+		getConfiguredRoles(true);
+		getRegisteredRoles(true);
+
+		// Check for a difference between the two lists
+		ListComparator<CanvaCordRole> comparator = new ListComparator<>();
+		if (!(comparator.listsIdentical(configuredRoles, registeredRoles))) {
+			// Ask the user if they want to fix this problem now
+			if (UserInput.askToConfirm("Some roles configured for instance " + getInstanceName() + " do not appear to be registered in the target Discord server. Attempt to create them now?", "Missing Roles")) {
+				// Get a list of all roles that are configured in the file but not found on Discord
+				List<CanvaCordRole> unregisteredRoles = comparator.listDifference(configuredRoles, registeredRoles);
+				// Attempt to create all of those roles
+				// TODO this is part of Andrew's use case
+			}
+
+		}
+
+		// ================ VERIFY CHANNELS ================
+		// TODO
 	}
 
 	// TODO: getters
@@ -142,22 +173,35 @@ public class InstanceConfiguration {
 		return configJSON.getJSONArray("notifications");
 	}
 
-	public List<CanvaCordRole> getConfiguredRoles() {
-		List<CanvaCordRole> result = new ArrayList<>();
-		JSONArray jsonRoles = getInstanceRoles();
-		for (int i = 0; i < jsonRoles.length(); i++) {
-			result.add(new CanvaCordRole(jsonRoles.getJSONObject(i)));
+	public List<CanvaCordRole> getConfiguredRoles(boolean refresh) {
+		if (refresh || configuredRoles.isEmpty()) {
+			refresh();
+			configuredRoles.clear();
+			JSONArray jsonRoles = getInstanceRoles();
+			for (int i = 0; i < jsonRoles.length(); i++) {
+				configuredRoles.add(new CanvaCordRole(jsonRoles.getJSONObject(i)));
+			}
 		}
-		return result;
+		return configuredRoles;
 	}
 
-	public List<CanvaCordNotification> getConfiguredNotifications() {
-		List<CanvaCordNotification> result = new ArrayList<>();
-		JSONArray jsonNotifications = getInstanceNotifications();
-		for (int i = 0; i < jsonNotifications.length(); i++) {
-			result.add(new CanvaCordNotification(jsonNotifications.getJSONObject(i), configJSON.getJSONArray("roles")));
+	public List<CanvaCordRole> getRegisteredRoles(boolean refresh) {
+		if (refresh || registeredRoles.isEmpty()) {
+			// TODO fetch from Discord
 		}
-		return result;
+		return registeredRoles;
+	}
+
+	public List<CanvaCordNotification> getConfiguredNotifications(boolean refresh) {
+		if (refresh || configuredNotifications.isEmpty()) {
+			refresh();
+			configuredNotifications.clear();
+			JSONArray jsonNotifications = getInstanceNotifications();
+			for (int i = 0; i < jsonNotifications.length(); i++) {
+				configuredNotifications.add(new CanvaCordNotification(jsonNotifications.getJSONObject(i), configJSON.getJSONArray("roles")));
+			}
+		}
+		return configuredNotifications;
 	}
 
 	public JSONObject getFetchSchedule() {
@@ -187,27 +231,29 @@ public class InstanceConfiguration {
 	}
 
 	public Map<Long, Class<? extends Command>> getRegisteredCommands(boolean refresh) {
-		// refresh from disk if requested
-		if (refresh) refresh();
-		// populate a map
-		Map<Long, Class<? extends Command>> registeredCommands = new HashMap<>();
-		// load IDs from the config JSON
-		JSONObject commandIDs = configJSON.getJSONObject("command_ids");
-		// iterate over each command key
-		for (String key : commandIDs.keySet()) {
-			long id = commandIDs.getLong(key);
-			if (id != -1) {
-				switch (key) {
-					case "assignments_list" -> {}
-					case "syllabus" -> {}
-					case "assignments_search" -> {}
-					case "remind_me" -> registeredCommands.put(id, RemindMeCommand.class);
-					case "announcement_details" -> {}
-					case "assignments_active" -> {}
-					case "assignment_details" -> {}
-					case "announcements_search" -> {}
-					case "textbooks" -> {}
-					case "announcements_list" -> {}
+		// refresh from disk if requested or if the map is empty (probably never loaded)
+		if (refresh || registeredCommands.isEmpty()) {
+			refresh();
+			// populate a map
+			registeredCommands.clear();
+			// load IDs from the config JSON
+			JSONObject commandIDs = configJSON.getJSONObject("command_ids");
+			// iterate over each command key
+			for (String key : commandIDs.keySet()) {
+				long id = commandIDs.getLong(key);
+				if (id != -1) {
+					switch (key) {
+						case "assignments_list" -> {}
+						case "syllabus" -> {}
+						case "assignments_search" -> {}
+						case "remind_me" -> registeredCommands.put(id, RemindMeCommand.class);
+						case "announcement_details" -> {}
+						case "assignments_active" -> {}
+						case "assignment_details" -> {}
+						case "announcements_search" -> {}
+						case "textbooks" -> {}
+						case "announcements_list" -> {}
+					}
 				}
 			}
 		}

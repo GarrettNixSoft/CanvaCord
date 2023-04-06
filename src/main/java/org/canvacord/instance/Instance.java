@@ -41,11 +41,6 @@ public class Instance {
 	// components
 	private final InstanceConfiguration configuration;
 
-	// entities
-	private final List<CanvaCordRole> configuredRoles = new ArrayList<>();
-	private final List<CanvaCordRole> registeredRoles = new ArrayList<>();
-	private final List<CanvaCordNotification> configuredNotifications = new ArrayList<>();
-
 	public Instance(String courseID, long serverID) throws InstantiationException {
 		// enforce uniqueness
 		if (courseIDs.contains(courseID))
@@ -105,26 +100,7 @@ public class Instance {
 	 */
 	public void verify() throws CanvaCordException {
 
-		// ================ VERIFY ROLES ================
-		// refresh the roles from the config file and Discord
-		getConfiguredRoles(true);
-		getRegisteredRoles(true);
-
-		// Check for a difference between the two lists
-		ListComparator<CanvaCordRole> comparator = new ListComparator<>();
-		if (!(comparator.listsIdentical(configuredRoles, registeredRoles))) {
-			// Ask the user if they want to fix this problem now
-			if (UserInput.askToConfirm("Some roles configured for instance " + getName() + " do not appear to be registered in the target Discord server. Attempt to create them now?", "Missing Roles")) {
-				// Get a list of all roles that are configured in the file but not found on Discord
-				List<CanvaCordRole> unregisteredRoles = comparator.listDifference(configuredRoles, registeredRoles);
-				// Attempt to create all of those roles
-				// TODO this is part of Andrew's use case
-			}
-
-		}
-
-		// ================ VERIFY CHANNELS ================
-		// TODO
+		configuration.verify();
 
 	}
 
@@ -242,31 +218,15 @@ public class Instance {
 	}
 
 	public List<CanvaCordRole> getConfiguredRoles(boolean refresh) {
-		// If a refresh is requested, reload the list from the config file
-		if (refresh) {
-			configuration.refresh();
-			configuredRoles.clear();
-			configuredRoles.addAll(configuration.getConfiguredRoles());
-		}
-		return configuredRoles;
+		return configuration.getConfiguredRoles(refresh);
 	}
 
 	public List<CanvaCordRole> getRegisteredRoles(boolean refresh) {
-		// If a refresh is requested, reload the list from Discord
-		if (refresh) {
-			// TODO
-		}
-		return registeredRoles;
+		return configuration.getRegisteredRoles(refresh);
 	}
 
 	public List<CanvaCordNotification> getConfiguredNotifications(boolean refresh) {
-		// If a refresh is requested, reload the list from the config file
-		if (refresh) {
-			configuration.refresh();
-			configuredNotifications.clear();
-			configuredNotifications.addAll(configuration.getConfiguredNotifications());
-		}
-		return configuredNotifications;
+		return configuration.getConfiguredNotifications(refresh);
 	}
 
 	public JSONObject getCanvasFetchSchedule() {
