@@ -1,5 +1,6 @@
 package org.canvacord.main;
 
+import org.canvacord.discord.DiscordBot;
 import org.canvacord.exception.ExplosionHandler;
 import org.canvacord.gui.CanvaCordApp;
 import org.canvacord.instance.InstanceManager;
@@ -26,13 +27,18 @@ public class CanvaCord {
 		checkSetup();
 
 		// initialize CanvaCord components
-		InstanceManager.loadInstances();
-		CanvaCordScheduler.init();
-		ReminderManager.init();
+		init();
 
 		// run the application!
 		CanvaCordApp.run();
 
+	}
+
+	private static void init() {
+		DiscordBot.getBotInstance().login();
+		InstanceManager.loadInstances();
+		CanvaCordScheduler.init();
+		ReminderManager.init();
 	}
 
 	private static void checkSetup() {

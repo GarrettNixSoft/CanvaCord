@@ -46,7 +46,7 @@ public class ReminderScheduler {
 	}
 
 	// ================================ UTILITY ================================
-	private static void scheduleReminder(Instance instance, Reminder reminder) throws SchedulerException {
+	public static void scheduleReminder(Instance instance, Reminder reminder) throws SchedulerException {
 
 		JobDataMap dataMap = new JobDataMap();
 		dataMap.put("reminder", reminder);
@@ -67,6 +67,8 @@ public class ReminderScheduler {
 				).build();
 
 		reminderScheduler.scheduleJob(reminderJob, trigger);
+
+		System.out.println("Scheduled a reminder");
 
 	}
 

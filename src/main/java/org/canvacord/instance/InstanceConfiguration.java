@@ -1,6 +1,8 @@
 package org.canvacord.instance;
 
 import org.canvacord.canvas.TextbookInfo;
+import org.canvacord.discord.commands.Command;
+import org.canvacord.discord.commands.RemindMeCommand;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.entity.ClassMeeting;
@@ -13,9 +15,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class InstanceConfiguration {
 
@@ -184,6 +184,35 @@ public class InstanceConfiguration {
 			result.add(new TextbookInfo(textbookData.getJSONObject(i)));
 		}
 		return result;
+	}
+
+	public Map<Long, Class<? extends Command>> getRegisteredCommands(boolean refresh) {
+		// refresh from disk if requested
+		if (refresh) refresh();
+		// populate a map
+		Map<Long, Class<? extends Command>> registeredCommands = new HashMap<>();
+		// load IDs from the config JSON
+		JSONObject commandIDs = configJSON.getJSONObject("command_ids");
+		// iterate over each command key
+		for (String key : commandIDs.keySet()) {
+			long id = commandIDs.getLong(key);
+			if (id != -1) {
+				switch (key) {
+					case "assignments_list" -> {}
+					case "syllabus" -> {}
+					case "assignments_search" -> {}
+					case "remind_me" -> registeredCommands.put(id, RemindMeCommand.class);
+					case "announcement_details" -> {}
+					case "assignments_active" -> {}
+					case "assignment_details" -> {}
+					case "announcements_search" -> {}
+					case "textbooks" -> {}
+					case "announcements_list" -> {}
+				}
+			}
+		}
+		// send it back
+		return registeredCommands;
 	}
 
 	// ================================ UTILITY ================================

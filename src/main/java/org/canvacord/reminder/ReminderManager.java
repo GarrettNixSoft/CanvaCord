@@ -4,11 +4,13 @@ import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.main.CanvaCord;
+import org.canvacord.scheduler.ReminderScheduler;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.quartz.SchedulerException;
 
 import java.io.File;
 import java.util.*;
@@ -52,6 +54,12 @@ public class ReminderManager {
 	public static void addNewReminder(Instance instance, Reminder reminder) {
 		storedReminders.computeIfAbsent(instance.getInstanceID(), k -> new ArrayList<>()).add(reminder);
 		writeRemindersFile(instance);
+		try {
+			ReminderScheduler.scheduleReminder(instance, reminder);
+		}
+		catch (SchedulerException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void registerReminderSent(Instance instance, Reminder reminder) {

@@ -26,7 +26,6 @@ public class Instance {
 	// enforcing uniqueness
 	private static final Set<String> courseIDs = new HashSet<>();
 	private static final Set<Long> serverIDs = new HashSet<>();
-	private static final Map<Long,Command> serverCommands = new HashMap<>();
 
 	public static void acknowledgeDeleted(Instance instance) {
 		courseIDs.remove(instance.getCourseID());
@@ -290,9 +289,9 @@ public class Instance {
 		return configuration.getCommandAvailability();
 	}
 
-	public Map<Long,Command> getRegisteredCommands() {
+	public Map<Long, Class<? extends Command>> getRegisteredCommands() {
 		//TODO: actually populate this hashmap?
-		return serverCommands;
+		return configuration.getRegisteredCommands(false);
 	}
 
 	public String getStatus() {
