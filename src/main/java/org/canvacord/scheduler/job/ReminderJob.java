@@ -3,6 +3,7 @@ package org.canvacord.scheduler.job;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.instance.Instance;
 import org.canvacord.reminder.Reminder;
+import org.canvacord.reminder.ReminderEncryption;
 import org.canvacord.reminder.ReminderManager;
 import org.canvacord.util.time.CanvaCordTime;
 import org.javacord.api.DiscordApi;
@@ -35,6 +36,12 @@ public class ReminderJob implements Job {
 		instance = (Instance) context.getMergedJobDataMap().get("instance");
 		reminder = (Reminder) context.getMergedJobDataMap().get("reminder");
 
+		Reminder original = reminder;
+
+		// If the reminder was encrypted, decrypt it now
+		if (reminder.encrypted())
+			reminder = ReminderEncryption.decryptReminder(reminder);
+
 		// Fetch the Discord API
 		DiscordApi discordApi = DiscordBot.getBotInstance().getApi();
 
@@ -57,7 +64,7 @@ public class ReminderJob implements Job {
 		// TODO anything else?
 
 		// Remove this reminder from the instance data
-		ReminderManager.registerReminderSent(instance, reminder);
+		ReminderManager.registerReminderSent(instance, original);
 
 	}
 }
