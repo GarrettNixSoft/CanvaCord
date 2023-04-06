@@ -14,11 +14,11 @@ public abstract class Command {
 
 	protected abstract SlashCommandBuilder getBuilder();
 
-	public static final Map<String, Class<? extends Command>> COMMAND_NAMES = new HashMap<>();
+	public static final Map<String, Class<? extends Command>> COMMANDS_BY_NAME = new HashMap<>();
 
 	static {
-		COMMAND_NAMES.put("help", HelpCommand.class);
-		COMMAND_NAMES.put("remindme", RemindMeCommand.class);
+		COMMANDS_BY_NAME.put("help", HelpCommand.class);
+		COMMANDS_BY_NAME.put("remindme", RemindMeCommand.class);
 	}
 
 }
