@@ -5,6 +5,7 @@ import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.main.CanvaCord;
 import org.canvacord.reminder.Reminder;
+import org.canvacord.reminder.ReminderEncryption;
 import org.canvacord.reminder.ReminderManager;
 import org.canvacord.util.time.CanvaCordTime;
 import org.javacord.api.entity.channel.TextChannel;
@@ -94,8 +95,22 @@ public class RemindMeCommand extends Command {
 			return;
 		}
 
+		// Grab the encryption flag
+		Optional<SlashCommandInteractionOption> encryptOption = interaction.getOptionByIndex(2);
+		if (encryptOption.isEmpty()) {
+			responseBuilder.setContent("Missing encrypt flag.").respond();
+			return;
+		}
+
+		// Validate the data type
+		Optional<Boolean> encrypt = encryptOption.get().getBooleanValue();
+		if (encrypt.isEmpty()) {
+			responseBuilder.setContent("Bad encrypt flag data type.").respond();
+			return;
+		}
+
 		// Grab the message value
-		Optional<SlashCommandInteractionOption> messageOption = interaction.getOptionByIndex(2);
+		Optional<SlashCommandInteractionOption> messageOption = interaction.getOptionByIndex(3);
 		if (messageOption.isPresent()) {
 			// validate the data type
 			if (messageOption.get().getStringValue().isEmpty()) {
@@ -130,6 +145,10 @@ public class RemindMeCommand extends Command {
 
 		// Build a reminder
 		Reminder reminder = Reminder.buildNew(user.getId(), channel.getId(), reminderTime, message);
+
+		// Encrypt if requested
+		if (encrypt.get())
+			reminder = ReminderEncryption.encryptReminder(reminder);
 
 		// Register the reminder
 		ReminderManager.addNewReminder(instance, reminder);
@@ -174,6 +193,12 @@ public class RemindMeCommand extends Command {
 							"minutes"
 						)
 					)
+				),
+				SlashCommandOption.create(
+					SlashCommandOptionType.BOOLEAN,
+					"encrypted",
+					"Whether to encrypt your reminder message.",
+					true
 				),
 				SlashCommandOption.create(
 					SlashCommandOptionType.STRING,

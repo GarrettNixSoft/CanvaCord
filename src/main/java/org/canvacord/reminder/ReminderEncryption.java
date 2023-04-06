@@ -1,16 +1,20 @@
 package org.canvacord.reminder;
 
+import org.canvacord.main.CanvaCord;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Random;
 
 public class ReminderEncryption {
 
-	private static final KeyGenerator keyGenerator;
+	private static KeyGenerator keyGenerator;
 	private static final Cipher cipher;
 
 	static {
@@ -25,22 +29,32 @@ public class ReminderEncryption {
 
 	public static Reminder encryptReminder(Reminder reminder) {
 		SecretKey secretKey = getKey(reminder.userID());
+		System.out.println("encryption key: " + secretKey.toString());
 		String encryptedMessage = encryptMessage(reminder.message(), secretKey);
 		return new Reminder(reminder.reminderID(), reminder.userID(), reminder.channelID(),
-							reminder.createdAt(), reminder.triggerDate(), encryptedMessage);
+							reminder.createdAt(), reminder.triggerDate(), true, encryptedMessage);
 	}
 
 	public static Reminder decryptReminder(Reminder reminder) {
 		SecretKey secretKey = getKey(reminder.userID());
+		System.out.println("decryption key: " + secretKey.toString());
 		String decryptedMessage = decryptMessage(reminder.message(), secretKey);
 		return new Reminder(reminder.reminderID(), reminder.userID(), reminder.channelID(),
-							reminder.createdAt(), reminder.triggerDate(), decryptedMessage);
+							reminder.createdAt(), reminder.triggerDate(), true, decryptedMessage);
 	}
 
 	private static SecretKey getKey(long userID) {
-		SecureRandom secureRandom = new SecureRandom();
-		secureRandom.setSeed(userID);
-		return keyGenerator.generateKey();
+		try {
+			keyGenerator = KeyGenerator.getInstance("AES");
+		}
+		catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+			CanvaCord.explode();
+		}
+		Random random = new Random(userID);
+		byte[] bytes = new byte[32];
+		random.nextBytes(bytes);
+		return new SecretKeySpec(bytes, "AES");
 	}
 
 	private static String encryptMessage(String message, SecretKey secretKey) {

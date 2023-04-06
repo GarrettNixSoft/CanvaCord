@@ -7,7 +7,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
 
-public record Reminder(String reminderID, long userID, long channelID, LocalDateTime createdAt, LocalDateTime triggerDate, String message) {
+public record Reminder(String reminderID, long userID, long channelID, LocalDateTime createdAt, LocalDateTime triggerDate, boolean encrypted, String message) {
 
 	/**
 	 * Builds a new Reminder using the given fields and with a random UUID.
@@ -19,7 +19,7 @@ public record Reminder(String reminderID, long userID, long channelID, LocalDate
 	 */
 	public static Reminder buildNew(long userID, long channelID, LocalDateTime triggerDate, String message) {
 		String reminderID = UUID.randomUUID().toString();
-		return new Reminder(reminderID, userID, channelID, LocalDateTime.now(), triggerDate, message);
+		return new Reminder(reminderID, userID, channelID, LocalDateTime.now(), triggerDate, false, message);
 	}
 
 	public static Reminder load(JSONObject reminderData) {
@@ -28,9 +28,10 @@ public record Reminder(String reminderID, long userID, long channelID, LocalDate
 		long channelID = reminderData.getLong("channel_id");
 		LocalDateTime createdAt = LocalDateTime.parse(reminderData.getString("created_at"));
 		LocalDateTime triggerDate = LocalDateTime.parse(reminderData.getString("trigger_date"));
+		boolean encrypted = reminderData.getBoolean("encrypted");
 		String message = reminderData.getString("message");
 		// TODO if encrypted, decrypt
-		return new Reminder(reminderID, userID, channelID, createdAt, triggerDate, message);
+		return new Reminder(reminderID, userID, channelID, createdAt, triggerDate, encrypted, message);
 	}
 
 	public JSONObject toJSON() {
@@ -40,6 +41,7 @@ public record Reminder(String reminderID, long userID, long channelID, LocalDate
 		result.put("channel_id", channelID);
 		result.put("created_at", createdAt.toString());
 		result.put("trigger_date", triggerDate.toString());
+		result.put("encrypted", encrypted);
 		result.put("message", message);
 		return result;
 	}
