@@ -260,6 +260,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		String courseID = courseAndServerCard.getCourseID();
 		long serverID = courseAndServerCard.getServerID();
 		String instanceID = courseID + "-" + serverID;
+		Globals.EDIT_INSTANCE_ID = instanceID;
 
 		// Put them into the JSON object
 		configJSON.put("course_id", courseID);
