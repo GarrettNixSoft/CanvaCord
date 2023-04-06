@@ -68,7 +68,7 @@ public class CommandHandler {
 		}
 		else {
 			// Unregistered command!
-			throw new RuntimeException();
+			throw new CanvaCordException("Unregistered command found");
 		}
 	}
 
