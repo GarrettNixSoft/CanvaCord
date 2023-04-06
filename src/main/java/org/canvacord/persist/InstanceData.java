@@ -22,19 +22,19 @@ public class InstanceData {
 	protected JSONObject getJSON() {return instanceData; }
 
 	public JSONArray getPastAssignments(CanvaCordNotification notification) {
-		return instanceData.getJSONArray(notification.getName() + "past_assignments");
+		return instanceData.getJSONArray(notification.getName() + "_past_assignments");
 	}
 
 	public JSONArray getNewAssignments(CanvaCordNotification notification) {
-		return instanceData.getJSONArray(notification.getName() + "new_assignments");
+		return instanceData.getJSONArray(notification.getName() + "_new_assignments");
 	}
 
 	public JSONArray getPastAnnouncements(CanvaCordNotification notification) {
-		return instanceData.getJSONArray(notification.getName() + "past_announcements");
+		return instanceData.getJSONArray(notification.getName() + "_past_announcements");
 	}
 
 	public JSONArray getNewAnnouncements(CanvaCordNotification notification) {
-		return instanceData.getJSONArray(notification.getName() + "new_announcements");
+		return instanceData.getJSONArray(notification.getName() + "_new_announcements");
 	}
 
 	// ================ OPERATIONS ================
