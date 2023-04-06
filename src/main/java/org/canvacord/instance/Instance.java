@@ -245,8 +245,8 @@ public class Instance {
 		return configuration.getClassReminderSchedule();
 	}
 
-	public JSONObject getCommandAvailability() {
-		return configuration.getCommandAvailability();
+	public Map<String, Boolean> getAvailableCommands(boolean refresh) {
+		return configuration.getAvailableCommands(refresh);
 	}
 
 	public Map<Long, Class<? extends Command>> getRegisteredCommands() {
