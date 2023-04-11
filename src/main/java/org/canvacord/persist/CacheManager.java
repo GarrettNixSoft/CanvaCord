@@ -46,11 +46,11 @@ public class CacheManager {
 			System.out.println("instance has " + instance.getConfiguredNotifications(false).size() + " notifications");
 
 			for (CanvaCordNotification notification : instance.getConfiguredNotifications(true)) {
-				emptyInstanceData.put(notification.getName() + "_new_assignments", new JSONArray());
-				emptyInstanceData.put(notification.getName() + "_past_assignments", new JSONArray());
-				emptyInstanceData.put(notification.getName() + "_new_announcements", new JSONArray());
-				emptyInstanceData.put(notification.getName() + "_past_announcements", new JSONArray());
+				emptyInstanceData.put(notification.getName() + "_new", new JSONArray());
+				emptyInstanceData.put(notification.getName() + "_old", new JSONArray());
 			}
+
+			emptyInstanceData.put("due_dates", new JSONObject());
 
 
 			if (!FileUtil.writeJSON(emptyInstanceData, targetFile))

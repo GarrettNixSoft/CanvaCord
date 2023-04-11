@@ -122,7 +122,9 @@ public class CommandToggleCard extends InstanceConfigCard {
 	public List<CommandRecord> getCommandStates() {
 		List<CommandRecord> result = new ArrayList<>();
 		for (JCheckBox checkBox : checkBoxes) {
-			result.add(new CommandRecord(checkBox.getText().toLowerCase().replaceAll(" ", "_"), checkBox.isSelected()));
+			String commandName = checkBox.getText().toLowerCase().replaceAll(" ", "_");
+			if (commandName.equals("remind_me")) commandName = "remindme"; // TODO DO THIS BETTER
+			result.add(new CommandRecord(commandName, checkBox.isSelected()));
 		}
 		return result;
 	}
