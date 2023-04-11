@@ -1,11 +1,15 @@
 package org.canvacord.discord.notification;
 
+import edu.ksu.canvas.model.announcement.Announcement;
 import edu.ksu.canvas.model.assignment.Assignment;
 import org.canvacord.entity.CanvaCordNotification;
+import org.canvacord.util.data.Pair;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-public class AssignmentNotifier {
+public class CanvasNotifier {
 
 	/**
 	 * Send notifications to users about newly posted assignments.
@@ -28,7 +32,7 @@ public class AssignmentNotifier {
 	 * @param assignments the assignments whose due dates were changed
 	 * @return {@code true} if the notification is sent successfully, or false otherwise
 	 */
-	public static boolean notifyDueDateChanged(CanvaCordNotification notificationConfig, List<Assignment> assignments) {
+	public static boolean notifyDueDateChanged(CanvaCordNotification notificationConfig, Map<Assignment, Pair<Date, Date>> assignments) {
 		// TODO
 		return false;
 	}
@@ -42,6 +46,11 @@ public class AssignmentNotifier {
 	 * @return {@code true} if the notification is sent successfully, or false otherwise
 	 */
 	public static boolean notifyDueDateApproaching(CanvaCordNotification notificationConfig, List<Assignment> assignments) {
+		// TODO
+		return false;
+	}
+
+	public static boolean notifyNewAnnouncements(CanvaCordNotification notification, List<Announcement> announcements) {
 		// TODO
 		return false;
 	}
