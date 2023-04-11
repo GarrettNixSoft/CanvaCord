@@ -113,7 +113,12 @@ public class CanvasApi {
 		ListCourseAssignmentsOptions options = new ListCourseAssignmentsOptions(courseID);
 
 		List<Assignment> result = reader.listCourseAssignments(options);
-		CacheManager.cacheAssignments(InstanceManager.getInstanceByCourseID(courseID).get().getInstanceID(), result);
+		try {
+			CacheManager.cacheAssignments(InstanceManager.getInstanceByCourseID(courseID).get().getInstanceID(), result);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		return result;
 

@@ -60,6 +60,7 @@ public class InstanceData {
 		}
 		JSONObject dueDates = new JSONObject();
 		for (long id : cachedDueDates.keySet()) {
+			if (cachedDueDates.get(id) == null) continue;
 			dueDates.put("" + id, FORMATTER.format(cachedDueDates.get(id)));
 		}
 		result.put("due_dates", dueDates);
@@ -81,7 +82,7 @@ public class InstanceData {
 	// ================ OPERATIONS ================
 	public void processAssignment(long assignmentID) {
 		for (CanvaCordNotification notification : owner.getConfiguredNotifications(false)) {
-			entityPools.get(notification).discoverNew(assignmentID);
+			entityPools.get(notification).processEntity(assignmentID);
 		}
 	}
 
@@ -91,12 +92,12 @@ public class InstanceData {
 
 	public void processAnnouncement(long announcementID) {
 		for (CanvaCordNotification notification : owner.getConfiguredNotifications(false)) {
-			entityPools.get(notification).discoverNew(announcementID);
+			entityPools.get(notification).processEntity(announcementID);
 		}
 	}
 
 	public void moveAnnouncement(long announcementID, CanvaCordNotification notification) {
-		entityPools.get(notification).discoverNew(announcementID);
+		entityPools.get(notification).moveToOld(announcementID);
 	}
 
 }

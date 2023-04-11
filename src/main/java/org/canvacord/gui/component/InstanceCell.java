@@ -6,6 +6,7 @@ import org.canvacord.gui.CanvaCordApp;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
+import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.Globals;
 import org.canvacord.util.input.UserInput;
 
@@ -259,8 +260,11 @@ public class InstanceCell extends JPanel {
 		optionsButton.addActionListener(event -> {
 
 			// TODO make this do useful things; for now, use it for testing instance deletion
-			if (UserInput.askToConfirm("Delete this instance?", "Delete Test"))
-				InstanceManager.deleteInstance(instance);
+//			if (UserInput.askToConfirm("Delete this instance?", "Delete Test"))
+//				InstanceManager.deleteInstance(instance);
+
+			new InstanceCreateWizard(instance)
+					.runWizard();
 
 		});
 

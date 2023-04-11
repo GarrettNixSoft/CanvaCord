@@ -38,9 +38,8 @@ public class CanvasEntityPool {
 			newEntities.add(oldEntityData.getLong(i));
 	}
 
-	public void discoverNew(long entityID) {
-		if (!newEntities.add(entityID))
-			throw new CanvaCordException("Entity " + entityID + " is not new!");
+	public void processEntity(long entityID) {
+		if (!newEntities.contains(entityID) && !oldEntities.contains(entityID)) newEntities.add(entityID);
 	}
 
 	public Set<Long> getNewEntities() {

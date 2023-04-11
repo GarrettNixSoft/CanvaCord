@@ -2,6 +2,7 @@ package org.canvacord;
 
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.DiscordBot;
+import org.canvacord.discord.commands.CommandHandler;
 import org.canvacord.discord.commands.ModuleCommand;
 import org.canvacord.discord.commands.RemindMeCommand;
 import org.canvacord.instance.InstanceManager;
@@ -28,24 +29,20 @@ public class ModuleCommandTest {
 
         DiscordApi api = bot.getApi();
 
+        InstanceManager.loadInstances();
+        CommandHandler.init();
+
 
 
         //First and only server
-        Server server = api.getServers().iterator().next();
+        Server server = api.getServerById(1016848330992656415L).get();
 
-        ModuleCommand command = new ModuleCommand();
+        CommandHandler.registerCommandServer(ModuleCommand.class, server);
 
-        // Create the command in the target server
-        command.getBuilder(null)
-                .createForServer(server)
-                .join();
-        //if I need to delete
-        //command.delete();
-
-        api.addSlashCommandCreateListener(event -> {
-            SlashCommandInteraction interaction = event.getSlashCommandInteraction();
-            if (interaction.getFullCommandName().toLowerCase().contains("modulelist"))
-                command.execute(event.getSlashCommandInteraction());
-        });
+//        api.addSlashCommandCreateListener(event -> {
+//            SlashCommandInteraction interaction = event.getSlashCommandInteraction();
+//            if (interaction.getFullCommandName().toLowerCase().contains("modulelist"))
+//                command.execute(event.getSlashCommandInteraction());
+//        });
     }
 }

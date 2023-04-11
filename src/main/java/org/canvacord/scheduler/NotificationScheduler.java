@@ -75,7 +75,7 @@ public class NotificationScheduler {
 		// Build a job for sending notifications
 		JobDetail notifyJob = JobBuilder.newJob(NotificationJob.class)
 				.withIdentity(instance.getInstanceID() + "_" + notification.getName(), GROUP_ID)
-				.usingJobData("serverID", instance.getServerID())
+				.usingJobData("server", instance.getServerID())
 				.usingJobData(dataMap)
 				.build();
 

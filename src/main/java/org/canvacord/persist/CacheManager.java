@@ -163,11 +163,11 @@ public class CacheManager {
 	}
 
 	public static Map<Long, Assignment> getCachedAssignments(String instanceID) {
-		return Collections.unmodifiableMap(assignmentCache.get(instanceID));
+		return Collections.unmodifiableMap(assignmentCache.computeIfAbsent(instanceID, k -> new HashMap<>()));
 	}
 
 	public static Map<Long, Announcement> getCachedAnnouncements(String instanceID) {
-		return Collections.unmodifiableMap(announcementCache.get(instanceID));
+		return Collections.unmodifiableMap(announcementCache.computeIfAbsent(instanceID, k -> new HashMap<>()));
 	}
 
 	public static Map<Long, Date> getCachedDueDates(String instanceID) {
@@ -183,7 +183,17 @@ public class CacheManager {
 		Map<Long, Date> dueDates = instanceData.get(instanceID).getCachedDueDates();
 
 		// can't detect a changed due date if there's no previously saved due date
-		if (!dueDates.containsKey(assignment.getId())) return;
+		if (!dueDates.containsKey(assignment.getId())) {
+			if (assignment.getDueAt() == null) {
+				dueDates.put(assignment.getId(), new Date(Long.MAX_VALUE));
+				System.out.println("NO DUE DATE FOR ASSIGNMENT: " + assignment.getName());
+			}
+			else {
+				System.out.println("STORED DUE DATE: " + assignment.getDueAt());
+				dueDates.put(assignment.getId(), assignment.getDueAt());
+			}
+			return;
+		}
 
 		// Get the saved due date and the current due date
 		Date savedDueDate = dueDates.get(assignment.getId());

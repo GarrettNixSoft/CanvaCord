@@ -53,7 +53,7 @@ public class ModuleCommand extends Command implements ButtonClickListener {
     @Override
     public void execute(SlashCommandInteraction interaction) {
         // get instance, server,
-        Instance instanceForCourse = null;
+        Instance instanceForCourse = InstanceManager.getInstanceByServerID(interaction.getServer().get().getId()).get();
         Server server = interaction.getServer().orElseThrow(CanvaCordException::new);
         //instanceForCourse = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(CanvaCordException::new);
         //String courseID = instanceForCourse.getCourseID();
@@ -68,7 +68,7 @@ public class ModuleCommand extends Command implements ButtonClickListener {
             //long course = Long.parseLong(32109L);
             CanvasApi canvasApi = new CanvasApi(c.getCanvasURL(), c.getCanvasToken());
             try {
-                fetchedModules = canvasApi.getAllModules(32109L, c.getCanvasToken());
+                fetchedModules = canvasApi.getAllModules(Long.parseLong(instanceForCourse.getCourseID()), c.getCanvasToken());
             } catch (IOException e) {
                 e.printStackTrace();
             }

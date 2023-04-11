@@ -45,6 +45,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		this();
 		Globals.EDIT_INSTANCE_ID = instanceToEdit.getInstanceID();
 		prefillCards(instanceToEdit);
+		setCurrentCard(courseAndServerCard);
 	}
 
 	private void disableNext(String message) {

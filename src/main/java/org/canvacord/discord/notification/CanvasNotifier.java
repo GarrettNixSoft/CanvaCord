@@ -21,7 +21,7 @@ public class CanvasNotifier {
 	 */
 	public static boolean notifyNewAssignments(CanvaCordNotification notificationConfig, List<Assignment> assignments) {
 		// TODO
-		return false;
+		return true;
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class CanvasNotifier {
 	 */
 	public static boolean notifyDueDateChanged(CanvaCordNotification notificationConfig, Map<Assignment, Pair<Date, Date>> assignments) {
 		// TODO
-		return false;
+		return true;
 	}
 
 	/**
@@ -47,12 +47,12 @@ public class CanvasNotifier {
 	 */
 	public static boolean notifyDueDateApproaching(CanvaCordNotification notificationConfig, List<Assignment> assignments) {
 		// TODO
-		return false;
+		return true;
 	}
 
 	public static boolean notifyNewAnnouncements(CanvaCordNotification notification, List<Announcement> announcements) {
 		// TODO
-		return false;
+		return true;
 	}
 
 }

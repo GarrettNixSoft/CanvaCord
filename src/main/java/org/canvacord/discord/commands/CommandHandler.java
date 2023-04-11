@@ -49,6 +49,7 @@ public class CommandHandler {
 			return serverCommand.getId();
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			throw new CanvaCordException(e.getMessage());
 		}
 	}
