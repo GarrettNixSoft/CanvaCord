@@ -19,6 +19,7 @@ public abstract class Command {
 	static {
 		COMMAND_NAMES.put("help", HelpCommand.class);
 		COMMAND_NAMES.put("remindme", RemindMeCommand.class);
+		COMMAND_NAMES.put("modulelist", ModuleCommand.class);
 	}
 
 }

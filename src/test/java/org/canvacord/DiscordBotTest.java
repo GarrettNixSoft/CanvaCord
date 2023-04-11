@@ -44,8 +44,8 @@ public class DiscordBotTest {
         String[] stringArray = new String[5];
         String moduleStrings = "";
 
-        JSONArray modules = canvasApi.getAllModules(32202L, c.getCanvasToken());
-        JSONArray modulesInfo = canvasApi.getModuleInfo(32202L, c.getCanvasToken());
+        JSONArray modules = canvasApi.getAllModules(32109L, c.getCanvasToken());
+        //JSONArray modulesInfo = canvasApi.getModuleInfo(32109L, c.getCanvasToken());
 
         int j = 0;
 
@@ -67,6 +67,7 @@ public class DiscordBotTest {
             }
 
 
+            /*
             moduleStrings += modulesInfo.getJSONObject(i).get("title").toString() + "\n";
 
             if (modulesInfo.getJSONObject(i).get("type").toString().equals("File")){
@@ -78,6 +79,28 @@ public class DiscordBotTest {
             else {
                 moduleStrings += modules.getJSONObject(i).get("external_url").toString() + "\n";
             }
+
+            if (modules.getJSONObject(i).has("display_name")) {
+                moduleStrings += modules.getJSONObject(i).get("url").toString() + "\n";
+            }
+            else if (modules.getJSONObject(i).has("title")){
+
+            }
+
+            *
+             */
+            /*
+            if (modulesInfo.getJSONObject(i).get("type").toString().equals("File")){
+                moduleStrings += modules.getJSONObject(i).get("url").toString() + "\n";
+            }
+            else if(modulesInfo.getJSONObject(i).get("type").toString().equals("Page")){
+                moduleStrings += modules.getJSONObject(i).get("html_url").toString() + "\n";
+            }
+            else {
+                moduleStrings += modules.getJSONObject(i).get("external_url").toString() + "\n";
+            }
+
+             */
             //+ modules.getJSONObject(i).get("url").toString() + "\n";
         }
 
@@ -87,7 +110,7 @@ public class DiscordBotTest {
                 .join();
 
         //if I need to delete
-        //command.delete();
+        command.delete();
 
         String finalModuleStrings = moduleStrings;
         String finalModuleStrings1 = moduleStrings;
