@@ -34,7 +34,7 @@ public class ModuleCommandTest {
         ModuleCommand command = new ModuleCommand();
 
         // Create the command in the target server
-        command.getBuilder()
+        command.getBuilder(null)
                 .createForServer(server)
                 .join();
         //if I need to delete
