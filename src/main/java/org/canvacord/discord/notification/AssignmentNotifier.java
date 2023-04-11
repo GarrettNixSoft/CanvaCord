@@ -21,27 +21,27 @@ public class AssignmentNotifier {
 	}
 
 	/**
-	 * Send notifications to users about a changed due date.
+	 * Send notifications to users about changed due dates.
 	 * @param notificationConfig a notification configured by the Owner which specifies
 	 *                           the target channel, roles to ping, and message format
 	 *                           to be used
-	 * @param assignment the assignment whose due date was changed
+	 * @param assignments the assignments whose due dates were changed
 	 * @return {@code true} if the notification is sent successfully, or false otherwise
 	 */
-	public static boolean notifyDueDateChanged(CanvaCordNotification notificationConfig, Assignment assignment) {
+	public static boolean notifyDueDateChanged(CanvaCordNotification notificationConfig, List<Assignment> assignments) {
 		// TODO
 		return false;
 	}
 
 	/**
-	 * Send notifications to users about an approaching assignment due date.
+	 * Send notifications to users about approaching assignment due dates.
 	 * @param notificationConfig a notification configured by the Owner which specifies
 	 *                           the target channel, roles to ping, and message format
 	 *                           to be used
-	 * @param assignment the assignment that is due soon
+	 * @param assignments the assignment that is due soon
 	 * @return {@code true} if the notification is sent successfully, or false otherwise
 	 */
-	public static boolean notifyDueDateApproaching(CanvaCordNotification notificationConfig, Assignment assignment) {
+	public static boolean notifyDueDateApproaching(CanvaCordNotification notificationConfig, List<Assignment> assignments) {
 		// TODO
 		return false;
 	}
