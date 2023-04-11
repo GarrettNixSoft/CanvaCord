@@ -28,13 +28,15 @@ public class ModuleCommandTest {
 
         DiscordApi api = bot.getApi();
 
+
+
         //First and only server
         Server server = api.getServers().iterator().next();
 
         ModuleCommand command = new ModuleCommand();
 
         // Create the command in the target server
-        command.getBuilder()
+        command.getBuilder(null)
                 .createForServer(server)
                 .join();
         //if I need to delete
