@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Command {
+
 	public abstract String getDescription();
 	public abstract String getShortDescription(); // "need" this for the command builder/ can be changed
 	public abstract String getName();

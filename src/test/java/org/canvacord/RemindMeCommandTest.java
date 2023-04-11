@@ -27,7 +27,7 @@ public class RemindMeCommandTest {
 		RemindMeCommand command = new RemindMeCommand();
 
 		// Create the command in the target server
-		command.getBuilder()
+		command.getBuilder(null)
 				.createForServer(api.getServerById(serverID).get())
 				.join();
 
