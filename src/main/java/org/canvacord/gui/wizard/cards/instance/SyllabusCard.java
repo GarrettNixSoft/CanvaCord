@@ -107,7 +107,7 @@ public class SyllabusCard extends InstanceConfigCard {
 		addSyllabusButton.addActionListener(event -> {
 			FileGetter.getFile(System.getProperty("user.dir"), "PDF or DOC files", "pdf", "doc", "docx").ifPresent(
 				file -> {
-					syllabusFileLabel.setText(file.getPath());
+					syllabusFileLabel.setText(file.getAbsolutePath());
 					syllabusFile = file;
 				}
 			);
@@ -130,8 +130,8 @@ public class SyllabusCard extends InstanceConfigCard {
 	 */
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
-		syllabusFile = new File("./instances/" + instanceToEdit.getCourseID() + "_" + instanceToEdit.getServerID() + "/syllabus.pdf");
-		syllabusFileLabel.setText(syllabusFile.getPath());
+		syllabusFile = new File("instances/" + instanceToEdit.getCourseID() + "_" + instanceToEdit.getServerID() + "/syllabus.pdf");
+		syllabusFileLabel.setText(syllabusFile.getAbsolutePath());
 	}
 
 	public Optional<File> getSyllabusFile() {
