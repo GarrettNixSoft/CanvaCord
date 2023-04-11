@@ -257,68 +257,53 @@ public class CanvasApi {
 		ListModulesOptions options = new ListModulesOptions(courseID);
 		List<Module> modules = reader.getModulesInCourse(options);
 
-		// will hold all downloadable module json objects
+		// will hold all modules
 		JSONArray allModules = new JSONArray();
 
-		//Holds all the urls that are in different arrays
-		List<String> urls = new ArrayList<>();
-
-		//add urls from modules
-		for(int i = 0; i < modules.size(); i++) {
-			urls.add(modules.get(i).getItemsUrl().toString());
-		}
 
 		//FOR LOOP ALL THIS
 
+		for (int i = 0; i < modules.size(); i++) {
 
-
-		for (int i = 0; i < urls.size(); i++) {
-
-			StringBuffer response = httpRequest(urls.get(i), tokenStr);
-
-			// Print as a string
-			System.out.println(response.toString());
+			//make http call
+			StringBuffer response = httpRequest(modules.get(i).getItemsUrl().toString(), tokenStr);
 
 			// Put url in JSON Array Object
 			JSONArray jsonArr = new JSONArray(response.toString());
 
-			// Print JSON Object
+			// Add JSON object to allModules array
 			for (int j = 0; j < jsonArr.length(); j++) {
-				// if jsonObj is a file throw it into the downloadableModules JSON Array
 				JSONObject jsonObj = jsonArr.getJSONObject(j);
-				// if object is a file then add it to array
 				allModules.put(jsonArr.getJSONObject(j));
-
 			}
-		}
 
-		for(int i = 0; i < allModules.length(); i++) {
-			System.out.println(allModules.getJSONObject(i));
+
 		}
 
 		// Get one level deeper into the downloadable link url
 		for(int i = 0; i < allModules.length(); i++) {
 
+			// if module is a file type then we need to make another http call in order to get download link
 			if (allModules.getJSONObject(i).get("type").toString().equals("File")) {
 
 				StringBuffer response = httpRequest(allModules.getJSONObject(i).get("url").toString(), tokenStr);
 
-				// Print as a string
-				System.out.println(response.toString());
-
 				JSONObject json = new JSONObject(response.toString());
+				//add title to json object
+				json.put("title",allModules.getJSONObject(i).get("title").toString());
 				//replace with new json object containing downloadable url
 				allModules.put(i, json);
 			}
-			else {
-
+			// if json object has page url, then add a regular url
+			else if (allModules.getJSONObject(i).has("page_url")){
+				allModules.getJSONObject(i).put("url", allModules.getJSONObject(i).get("html_url").toString());
 			}
-
+			// if json object has a html url, then add a regular url
+			else if (allModules.getJSONObject(i).has("external_url")){
+				allModules.getJSONObject(i).put("url", allModules.getJSONObject(i).get("external_url").toString());
+			}
 		}
-
 		return allModules;
-
-
 	}
 
 	public JSONArray getModuleInfo(Long courseID, String tokenStr) throws IOException {
