@@ -1,6 +1,7 @@
 package org.canvacord.setup;
 
 import org.canvacord.canvas.TextbookInfo;
+import org.canvacord.discord.commands.Command;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.*;
@@ -352,6 +353,9 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 			commandsRecord.put(commandRecord.name(), commandRecord.defaultState());
 		}
 		configJSON.put("command_availability", commandsRecord);
+
+		boolean doCustomReminders = commandsRecord.getBoolean("remindme");
+		configJSON.put("do_custom_reminders", doCustomReminders);
 
 		// Wrap it all up in a nice InstanceConfiguration object for convenience
 		return new InstanceConfiguration(configJSON);
