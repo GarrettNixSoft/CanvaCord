@@ -115,7 +115,7 @@ public class ModuleCommand extends Command implements ButtonClickListener {
 
 
     @Override
-    public SlashCommandBuilder getBuilder() {
+    public SlashCommandBuilder getBuilder(Instance instance) {
         return SlashCommand.with(getName(),getShortDescription());
     }
 
