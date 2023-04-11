@@ -1,27 +1,56 @@
 package org.canvacord.scheduler.job;
 
+import edu.ksu.canvas.model.announcement.Announcement;
+import edu.ksu.canvas.model.assignment.Assignment;
+import org.canvacord.discord.notification.CanvasNotifier;
 import org.canvacord.entity.CanvaCordNotification;
+import org.canvacord.exception.CanvaCordException;
+import org.canvacord.instance.Instance;
+import org.canvacord.instance.InstanceManager;
+import org.canvacord.persist.AssignmentFilter;
+import org.canvacord.persist.CacheManager;
+import org.canvacord.util.data.Pair;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 public class NotificationJob implements Job {
-
-    private long serverID;
-    private CanvaCordNotification notification;
-
-    public void setServerID(long serverID) {
-        this.serverID = serverID;
-    }
-
-    public void setCanvaCordNotification(CanvaCordNotification notification) {
-        this.notification = notification;
-    }
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
 
-        System.out.println("Sending notifications to server " + serverID);
+        JobDataMap dataMap = context.getMergedJobDataMap();
+
+        Instance instance = InstanceManager.getInstanceByServerID(dataMap.getLong("server")).get();
+        CanvaCordNotification notification = (CanvaCordNotification) dataMap.get("notification");
+
+        switch (notification.getEventType()) {
+            case NEW_ASSIGNMENT -> {
+                List<Assignment> newAssignments = CacheManager.getNewAssignments(instance, notification);
+                boolean success = CanvasNotifier.notifyNewAssignments(notification, newAssignments);
+                if (!success) throw new CanvaCordException("New Assignments notification failed");
+            }
+            case NEW_ANNOUNCEMENT -> {
+                List<Announcement> newAnnouncements = CacheManager.getNewAnnouncements(instance, notification);
+                boolean success = CanvasNotifier.notifyNewAnnouncements(notification, newAnnouncements);
+                if (!success) throw new CanvaCordException("New Announcements notification failed");
+            }
+            case ASSIGNMENT_DUE_DATE_CHANGED -> {
+                Map<Assignment, Pair<Date, Date>> assignmentsWithChangedDueDates = AssignmentFilter.getAssignmentsWithChangedDueDates(instance);
+                boolean success = CanvasNotifier.notifyDueDateChanged(notification, assignmentsWithChangedDueDates);
+                if (!success) throw new CanvaCordException("Changed due dates notification failed");
+            }
+            case ASSIGNMENT_DUE_DATE_APPROACHING -> {
+                // TODO
+            }
+        }
+
+        System.out.println("Sending notifications to server " + instance.getServerID());
 
     }
 

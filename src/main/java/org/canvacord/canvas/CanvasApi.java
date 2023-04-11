@@ -12,6 +12,8 @@ import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.*;
+import org.canvacord.instance.InstanceManager;
+import org.canvacord.persist.CacheManager;
 import org.canvacord.persist.ConfigManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -110,7 +112,10 @@ public class CanvasApi {
 
 		ListCourseAssignmentsOptions options = new ListCourseAssignmentsOptions(courseID);
 
-		return reader.listCourseAssignments(options);
+		List<Assignment> result = reader.listCourseAssignments(options);
+		CacheManager.cacheAssignments(InstanceManager.getInstanceByCourseID(courseID).get().getInstanceID(), result);
+
+		return result;
 
 	}
 
@@ -131,7 +136,10 @@ public class CanvasApi {
 
 		ListCourseAnnouncementsOptions options = new ListCourseAnnouncementsOptions(courseID);
 
-		return reader.listCourseAnnouncements(options);
+		List<Announcement> result = reader.listCourseAnnouncements(options);
+		CacheManager.cacheAnnouncements(InstanceManager.getInstanceByCourseID(courseID).get().getInstanceID(), result);
+
+		return result;
 
 	}
 
