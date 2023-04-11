@@ -1,5 +1,6 @@
 package org.canvacord.discord.commands;
 
+import org.canvacord.instance.Instance;
 import org.javacord.api.interaction.SlashCommandBuilder;
 import org.javacord.api.interaction.SlashCommandInteraction;
 
@@ -12,7 +13,7 @@ public abstract class Command {
 	public abstract String getName();
 	public abstract void execute(SlashCommandInteraction interaction);
 
-	protected abstract SlashCommandBuilder getBuilder();
+	protected abstract SlashCommandBuilder getBuilder(Instance instance);
 
 	public static final Map<String, Class<? extends Command>> COMMANDS_BY_NAME = new HashMap<>();
 

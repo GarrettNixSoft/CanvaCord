@@ -156,7 +156,7 @@ public class RemindMeCommand extends Command {
 	}
 
 	@Override
-	public SlashCommandBuilder getBuilder() {
+	public SlashCommandBuilder getBuilder(Instance instance) {
 		return SlashCommand.with(
 			getName(),
 			getDescription(),

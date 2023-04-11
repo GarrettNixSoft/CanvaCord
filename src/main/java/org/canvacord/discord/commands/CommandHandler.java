@@ -30,7 +30,7 @@ public class CommandHandler {
 	public static long registerCommandGlobal(Class<? extends Command> commandType, DiscordApi api) {
 		try {
 			Command commandObj = commandType.getConstructor().newInstance();
-			SlashCommand globalCommand = commandObj.getBuilder().createGlobal(api).join();
+			SlashCommand globalCommand = commandObj.getBuilder(null).createGlobal(api).join();
 			globalCommands.put(globalCommand.getId(), commandType);
 			return globalCommand.getId();
 		}
@@ -41,9 +41,10 @@ public class CommandHandler {
 
 	public static long registerCommandServer(Class<? extends Command> commandType, Server server) {
 		try {
-			String instanceID = InstanceManager.getInstanceByServerID(server.getId()).get().getInstanceID();
+			Instance instance = InstanceManager.getInstanceByServerID(server.getId()).get();
+			String instanceID = instance.getInstanceID();
 			Command commandObj = commandType.getConstructor().newInstance();
-			SlashCommand serverCommand = commandObj.getBuilder().createForServer(server).join();
+			SlashCommand serverCommand = commandObj.getBuilder(instance).createForServer(server).join();
 			serverCommands.get(instanceID).put(serverCommand.getId(), commandType);
 			return serverCommand.getId();
 		}
