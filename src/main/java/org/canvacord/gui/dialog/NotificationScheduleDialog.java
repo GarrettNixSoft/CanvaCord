@@ -1,10 +1,8 @@
 package org.canvacord.gui.dialog;
 
-import com.mysql.cj.jdbc.JdbcPreparedStatement;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
-import org.canvacord.util.data.JSONUtils;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
 import org.json.JSONObject;

@@ -1,5 +1,6 @@
 package org.canvacord.discord.commands;
 
+import org.canvacord.instance.Instance;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.*;
@@ -92,7 +93,7 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 	}
 
 	@Override
-	public SlashCommandBuilder getBuilder() {
+	public SlashCommandBuilder getBuilder(Instance instance) {
 		return SlashCommand.with(getName(),getShortDescription());
 	}
 

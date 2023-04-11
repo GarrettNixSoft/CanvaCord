@@ -1,19 +1,15 @@
 package org.canvacord.gui.dialog;
 
-import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorIcon;
-import org.canvacord.gui.wizard.cards.instance.NotificationCreateCard;
 import org.canvacord.util.input.UserInput;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.DayOfWeek;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class ClassScheduleDialog extends CanvaCordDialog {
 

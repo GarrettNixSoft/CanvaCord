@@ -2,8 +2,6 @@ package org.canvacord.scheduler;
 
 import org.canvacord.instance.Instance;
 import org.canvacord.main.CanvaCord;
-import org.canvacord.reminder.Reminder;
-import org.canvacord.reminder.ReminderManager;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;

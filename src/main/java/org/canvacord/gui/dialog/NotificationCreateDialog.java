@@ -1,6 +1,5 @@
 package org.canvacord.gui.dialog;
 
-import edu.ksu.canvas.model.assignment.Assignment;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordNotificationTarget;
@@ -8,7 +7,6 @@ import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
-import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.CourseAndServerCard;
 import org.canvacord.main.CanvaCord;
 import org.canvacord.setup.InstanceCreateWizard;
@@ -27,11 +25,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class NotificationCreateDialog extends CanvaCordDialog {
 

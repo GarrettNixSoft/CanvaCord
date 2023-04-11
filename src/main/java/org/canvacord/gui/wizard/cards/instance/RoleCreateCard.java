@@ -1,6 +1,5 @@
 package org.canvacord.gui.wizard.cards.instance;
 
-import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorIcon;

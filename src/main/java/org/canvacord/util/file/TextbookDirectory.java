@@ -1,7 +1,8 @@
 package org.canvacord.util.file;
-import java.io.*;
-import java.util.Optional;
+
+import java.io.File;
 import java.nio.file.Files;
+import java.util.Optional;
 
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 

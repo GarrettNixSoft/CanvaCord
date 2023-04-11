@@ -1,10 +1,7 @@
 package org.canvacord.canvas;
 
-import org.canvacord.instance.Instance;
 import org.canvacord.main.CanvaCord;
 import org.canvacord.util.Globals;
-import org.canvacord.util.file.CanvaCordPaths;
-import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.file.TextbookDirectory;
 import org.canvacord.util.input.UserInput;
 import org.json.JSONObject;

@@ -1,40 +1,13 @@
 package org.canvacord;
 
-import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.interfaces.AccountReader;
-import edu.ksu.canvas.model.Account;
-import edu.ksu.canvas.model.Course;
-import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
-import edu.ksu.canvas.oauth.OauthToken;
-import org.canvacord.canvas.CanvasApi;
-import edu.ksu.canvas.interfaces.AssignmentReader;
-import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.model.Module;
-import edu.ksu.canvas.interfaces.ModuleReader;
-import edu.ksu.canvas.requestOptions.ListModulesOptions;
-
-import java.io.*;
-import java.net.*;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-
-
-import org.canvacord.util.input.UserInput;
+import org.canvacord.canvas.CanvasApi;
+import org.json.JSONArray;
 
 import java.io.IOException;
-import java.net.URL;
-
-import org.canvacord.util.net.RemoteFileGetter;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.swing.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 
 public class RetrieveModulesTest {

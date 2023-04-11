@@ -1,13 +1,7 @@
 package org.canvacord;
 
-import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.interfaces.AccountReader;
-import edu.ksu.canvas.model.Account;
-import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
-import edu.ksu.canvas.oauth.OauthToken;
-import org.canvacord.canvas.CanvasApi;
-import edu.ksu.canvas.interfaces.AssignmentReader;
 import edu.ksu.canvas.model.assignment.Assignment;
+import org.canvacord.canvas.CanvasApi;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -2,7 +2,6 @@ package org.canvacord;
 
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.instance.InstanceManager;
-import org.canvacord.setup.InstanceCreateWizard;
 
 import javax.swing.*;
 

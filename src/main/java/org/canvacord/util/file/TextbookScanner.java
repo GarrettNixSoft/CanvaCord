@@ -1,8 +1,10 @@
 package org.canvacord.util.file;
-import java.io.File;
-import java.io.IOException;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+
+import java.io.File;
+import java.io.IOException;
 public class TextbookScanner {
     public static String getTextbookName(){
         String searchWord = "book";

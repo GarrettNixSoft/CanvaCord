@@ -1,9 +1,7 @@
 package org.canvacord.discord.commands;
 
-import org.canvacord.gui.component.TextPrompt;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
-import org.canvacord.main.CanvaCord;
 import org.canvacord.reminder.Reminder;
 import org.canvacord.reminder.ReminderEncryption;
 import org.canvacord.reminder.ReminderManager;
@@ -20,7 +18,6 @@ import org.javacord.api.interaction.callback.InteractionImmediateResponseBuilder
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 public class RemindMeCommand extends Command {
 
@@ -159,7 +156,7 @@ public class RemindMeCommand extends Command {
 	}
 
 	@Override
-	public SlashCommandBuilder getBuilder() {
+	public SlashCommandBuilder getBuilder(Instance instance) {
 		return SlashCommand.with(
 			getName(),
 			getDescription(),

@@ -7,7 +7,6 @@ import org.canvacord.main.CanvaCord;
 import org.canvacord.scheduler.ReminderScheduler;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
-import org.canvacord.util.input.UserInput;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.quartz.SchedulerException;

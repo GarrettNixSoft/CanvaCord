@@ -2,24 +2,25 @@ package org.canvacord.instance;
 
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.canvas.TextbookInfo;
+import org.canvacord.discord.commands.Command;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
-import org.canvacord.discord.commands.Command;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.FetchStage;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.persist.CacheManager;
 import org.canvacord.scheduler.CanvaCordScheduler;
-import org.canvacord.util.compare.ListComparator;
 import org.canvacord.util.file.FileUtil;
-import org.canvacord.util.input.UserInput;
 import org.json.JSONObject;
 import org.quartz.SchedulerException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Instance {
 

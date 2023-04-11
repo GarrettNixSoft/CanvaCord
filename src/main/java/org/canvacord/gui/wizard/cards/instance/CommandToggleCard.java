@@ -1,6 +1,7 @@
 package org.canvacord.gui.wizard.cards.instance;
 
-import org.canvacord.discord.commands.CommandDescriptor;
+import org.canvacord.discord.commands.Command;
+import org.canvacord.discord.commands.RemindMeCommand;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
@@ -108,11 +109,11 @@ public class CommandToggleCard extends InstanceConfigCard {
 		addCommandRecord("Announcements List", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_list"), null);
 		addCommandRecord("Announcements Search", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_search"), null);
 		addCommandRecord("Announcement Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcement_details"), null);
-		addCommandRecord("Remind Me", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("remind_me"), null);
+		addCommandRecord("Remind Me", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("remindme"), RemindMeCommand.class);
 		//future to do iterate and prefill gui
 	}
 
-	private void addCommandRecord(String name, boolean defaultState, CommandDescriptor descriptor) {
+	private void addCommandRecord(String name, boolean defaultState, Class<? extends Command> command) {
 		commands.add(new CommandRecord(name, defaultState));
 	}
 

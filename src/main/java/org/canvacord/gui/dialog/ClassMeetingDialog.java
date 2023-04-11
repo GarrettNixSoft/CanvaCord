@@ -3,8 +3,8 @@ package org.canvacord.gui.dialog;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.util.CanvaCordModels;
-import org.canvacord.util.time.CanvaCordWeekdayWrapper;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.time.CanvaCordWeekdayWrapper;
 import org.json.JSONObject;
 import org.quartz.DateBuilder;
 

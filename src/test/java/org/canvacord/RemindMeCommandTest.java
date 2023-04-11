@@ -1,7 +1,6 @@
 package org.canvacord;
 
 import org.canvacord.discord.DiscordBot;
-import org.canvacord.discord.commands.Command;
 import org.canvacord.discord.commands.RemindMeCommand;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
@@ -28,7 +27,7 @@ public class RemindMeCommandTest {
 		RemindMeCommand command = new RemindMeCommand();
 
 		// Create the command in the target server
-		command.getBuilder()
+		command.getBuilder(null)
 				.createForServer(api.getServerById(serverID).get())
 				.join();
 

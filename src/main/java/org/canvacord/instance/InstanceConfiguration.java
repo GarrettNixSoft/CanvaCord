@@ -2,7 +2,6 @@ package org.canvacord.instance;
 
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.discord.commands.Command;
-import org.canvacord.discord.commands.RemindMeCommand;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.entity.ClassMeeting;
@@ -15,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
@@ -254,7 +252,7 @@ public class InstanceConfiguration {
 			for (String key : commandIDs.keySet()) {
 				long id = commandIDs.getLong(key);
 				if (id != -1) {
-					registeredCommands.put(id, Command.COMMAND_NAMES.get(key));
+					registeredCommands.put(id, Command.COMMANDS_BY_NAME.get(key));
 				}
 			}
 		}

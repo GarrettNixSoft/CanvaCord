@@ -1,25 +1,15 @@
 package org.canvacord;
 
-import edu.ksu.canvas.model.Module;
 import org.canvacord.canvas.CanvasApi;
-import org.canvacord.discord.commands.Command;
-import org.canvacord.discord.commands.CommandBuilder;
+import org.canvacord.discord.DiscordBot;
 import org.canvacord.persist.ConfigManager;
 import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.channel.*;
-import org.canvacord.discord.DiscordBot;
-import org.javacord.api.entity.message.MessageBuilder;
-import org.javacord.api.entity.message.component.ActionRow;
-import org.javacord.api.entity.message.component.Button;
-import org.javacord.api.entity.permission.PermissionType;
 import org.javacord.api.entity.server.Server;
-import org.javacord.api.interaction.*;
+import org.javacord.api.interaction.SlashCommand;
+import org.javacord.api.interaction.SlashCommandInteraction;
 import org.json.JSONArray;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.*;
 
 public class DiscordBotTest {
 

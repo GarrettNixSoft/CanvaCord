@@ -1,6 +1,5 @@
 package org.canvacord.gui.dialog;
 
-import org.canvacord.discord.DiscordBot;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.util.input.UserInput;
 import org.javacord.api.entity.channel.ServerTextChannel;
