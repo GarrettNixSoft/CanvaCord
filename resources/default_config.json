@@ -87,6 +87,7 @@
 		"assignment_details": -1,
 		"announcements_search": -1,
 		"textbooks": -1,
-		"announcements_list": -1
+		"announcements_list": -1,
+		"module_list":  -1
 	}
 }
