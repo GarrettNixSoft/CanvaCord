@@ -627,10 +627,6 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 			return Optional.empty();
 		else {
 			// validate all selections
-			if (roleSelector.getSelectedItem() == null) {
-				CanvaCord.explode();
-				throw new CanvaCordException("Something blew up");
-			}
 			if (eventSelector.getSelectedItem() == null) {
 				CanvaCord.explode();
 				throw new CanvaCordException("Something exploded");
