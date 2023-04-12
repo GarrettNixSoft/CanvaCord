@@ -8,6 +8,7 @@ import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.DangerousProgressBar;
 import org.canvacord.gui.component.TextPrompt;
+import org.canvacord.gui.dialog.ChooseCourseDialog;
 import org.canvacord.gui.task.BackgroundTask;
 import org.canvacord.gui.task.VerifyBackgroundTask;
 import org.canvacord.gui.wizard.CanvaCordWizard;
@@ -40,6 +41,9 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 	private JLabel serverVerifyLabel;
 	private DangerousProgressBar courseVerifyBar;
 	private DangerousProgressBar serverVerifyBar;
+
+	private JButton coursePickButton;
+	private JButton serverPickButton;
 
 	// verification status
 	private boolean verifiedCanvasCourse = false;
@@ -105,6 +109,13 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 
 		inputPanel.add(courseInputLabel);
 		inputPanel.add(courseInputField);
+
+		coursePickButton = new JButton("Choose");
+		coursePickButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		coursePickButton.setMargin(new Insets(2,2,2,2));
+		coursePickButton.setBounds(fieldX + fieldWidth + 20, canvasY, 64, 24);
+		inputPanel.add(coursePickButton);
+
 		// ================ SERVER ID INPUT ================
 		JLabel serverInputLabel = new JLabel("Enter Discord Server ID: ");
 		serverInputLabel.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
@@ -118,6 +129,12 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 
 		inputPanel.add(serverInputLabel);
 		inputPanel.add(serverInputField);
+
+		serverPickButton = new JButton("Choose");
+		serverPickButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		serverPickButton.setMargin(new Insets(2,2,2,2));
+		serverPickButton.setBounds(fieldX + fieldWidth + 20, discordY, 64, 24);
+		inputPanel.add(serverPickButton);
 
 		// ================ VERIFICATION PANEL ================
 		JPanel verifyPanel = new JPanel();
@@ -241,6 +258,16 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 
 		courseInputField.getDocument().addDocumentListener(courseEditListener);
 		serverInputField.getDocument().addDocumentListener(serverEditListener);
+
+		coursePickButton.addActionListener(event -> {
+			ChooseCourseDialog.chooseCourse().ifPresent(
+					course -> {
+						courseInputField.setText("" + course.getId());
+					}
+			);
+		});
+
+		// TODO
 
 		// Add logic to the button being pressed
 		verifyButton.addActionListener(event -> {

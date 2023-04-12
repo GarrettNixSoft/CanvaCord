@@ -76,13 +76,22 @@ public class CanvasApi {
 
 
 	// ******************************** FETCHING CANVAS OBJECTS ********************************
-	public List<Course> getCourses(String userID) throws IOException {
+	public List<Course> getCourses(String userID) {
 
-		CourseReader reader = API.getReader(CourseReader.class, TOKEN);
+		try {
+			CourseReader reader = API.getReader(CourseReader.class, TOKEN);
 
-		ListUserCoursesOptions options = new ListUserCoursesOptions(userID);
+			ListUserCoursesOptions options = new ListUserCoursesOptions(userID);
 
-		return reader.listUserCourses(options);
+			List<Course> result = reader.listUserCourses(options);
+			System.out.println("Fetched " + result.size() + " courses from Canvas");
+
+			return result;
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
 
 	}
 
