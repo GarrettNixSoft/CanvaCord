@@ -106,11 +106,24 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 		}
 
 		if (nameField.getText().contains(" ")) {
-			UserInput.showErrorMessage("Please don't include spaces in the notification name.", "Spaces In Name");
+			UserInput.showErrorMessage("Please don't include spaces in\nthe notification name.", "Spaces In Name");
 			return false;
 		}
 
-		// TODO warn if message format is close to cap
+		if (scheduleObject == null || scheduleObject.isEmpty()) {
+			UserInput.showErrorMessage("You must set a schedule for\nthe notification.", "No Schedule Set");
+			return false;
+		}
+
+		if (messageArea.getDocument().getLength() > CHAR_LIMIT * 0.85) {
+			return UserInput.askToConfirm(
+					"""
+							Your message is close to the character limit.
+							When variables are filled in, the actual message
+							may end up exceeding the limit, which may result
+							in notification text being truncated. Proceed?""",
+					"Long Message");
+		}
 
 		return true;
 
@@ -610,7 +623,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 	}
 
 	private Optional<CanvaCordNotification> getResult() {
-		if (cancelled || !verifyInputs())
+		if (cancelled)
 			return Optional.empty();
 		else {
 			// validate all selections
