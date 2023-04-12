@@ -19,7 +19,7 @@ public class ChooseCourseDialog extends CanvaCordDialog {
 	private static final int WIDTH = 400;
 	private static final int HEIGHT = 150;
 
-	private static List<Course> canvasCourses;
+	private static final List<Course> canvasCourses = new ArrayList<>();
 
 	private JComboBox<CourseWrapper> courseSelector;
 
@@ -44,8 +44,6 @@ public class ChooseCourseDialog extends CanvaCordDialog {
 	}
 
 	private void buildGUI() {
-
-		canvasCourses = new ArrayList<>();
 
 		final int componentX = 20;
 		final int labelY = 4;

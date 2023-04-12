@@ -9,6 +9,7 @@ import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.DangerousProgressBar;
 import org.canvacord.gui.component.TextPrompt;
 import org.canvacord.gui.dialog.ChooseCourseDialog;
+import org.canvacord.gui.dialog.ChooseServerDialog;
 import org.canvacord.gui.task.BackgroundTask;
 import org.canvacord.gui.task.VerifyBackgroundTask;
 import org.canvacord.gui.wizard.CanvaCordWizard;
@@ -267,7 +268,13 @@ public class CourseAndServerCard extends InstanceConfigCard implements Backgroun
 			);
 		});
 
-		// TODO
+		serverPickButton.addActionListener(event -> {
+			ChooseServerDialog.chooseServer().ifPresent(
+					server -> {
+						serverInputField.setText("" + server.getId());
+					}
+			);
+		});
 
 		// Add logic to the button being pressed
 		verifyButton.addActionListener(event -> {

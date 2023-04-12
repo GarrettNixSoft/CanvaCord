@@ -37,6 +37,15 @@ public class LongTaskDialog extends JDialog {
 		System.out.println("Running long task...");
 		long time = Profiler.executeProfiled(task::execute);
 		System.out.println("Ran long task in " + time + "ms");
+		int minTime = 100;
+		if (time < minTime) {
+			try {
+				Thread.sleep(minTime - time);
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		setVisible(false);
 	}
 
