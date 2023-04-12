@@ -2,6 +2,7 @@ package org.canvacord.gui.wizard.cards.instance;
 
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.entity.CanvaCordNotificationTarget;
+import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.dialog.CreateChannelDialog;
 import org.canvacord.gui.wizard.CanvaCordWizard;
@@ -171,6 +172,20 @@ public class MeetingMarkersCard extends InstanceConfigCard {
 		else {
 			for (JComponent component : toggleComponents)
 				component.setEnabled(false);
+		}
+		checkScheduleSet();
+	}
+
+	private void checkScheduleSet() {
+		if (!getParentWizard().isComplete()) return;
+		List<ClassMeeting> schedule = ((MeetingRemindersCard) getParentWizard().getCard("meeting_reminder_config")).getClassSchedule();
+		if (doMeetingMarkers.isSelected() && (schedule == null || schedule.isEmpty())) {
+			getParentWizard().setNextButtonEnabled(false);
+			getParentWizard().setNextButtonTooltip("<html>You must configure a class schedule<br>if meeting markers are enabled.</html>");
+		}
+		else {
+			getParentWizard().setNextButtonEnabled(true);
+			getParentWizard().setNextButtonTooltip(null);
 		}
 	}
 

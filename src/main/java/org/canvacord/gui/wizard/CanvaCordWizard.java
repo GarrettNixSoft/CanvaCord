@@ -42,6 +42,9 @@ public abstract class CanvaCordWizard extends JDialog {
 	// Finish action
 	private BackgroundTask<Boolean> finishTask;
 
+	// Build completion flag
+	private boolean finalized = false;
+
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 500;
 
@@ -163,6 +166,15 @@ public abstract class CanvaCordWizard extends JDialog {
 	 * Subclasses should build and register their cards in this method.
 	 */
 	protected abstract void initCards();
+
+	public void buildComplete() {
+		if (finalized) throw new CanvaCordException("Cannot call buildComplete() twice!");
+		finalized = true;
+	}
+
+	public boolean isComplete() {
+		return finalized;
+	}
 
 	public void setBackButtonEnabled(boolean enabled) {
 		this.backButton.setEnabled(enabled);

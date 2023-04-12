@@ -230,6 +230,7 @@ public class MeetingRemindersCard extends InstanceConfigCard {
 				this.classSchedule = new ArrayList<>(newSchedule);
 				describeClassSchedule();
 			}
+			checkScheduleSet();
 		});
 
 		// ================ CREATE DISCORD CHANNEL ================
@@ -279,6 +280,7 @@ public class MeetingRemindersCard extends InstanceConfigCard {
 			for (JComponent component : toggleComponents)
 				component.setEnabled(false);
 		}
+		checkScheduleSet();
 	}
 
 	public void onNavigateTo() {
@@ -289,6 +291,17 @@ public class MeetingRemindersCard extends InstanceConfigCard {
 
 	private void checkScanSyllabusButton() {
 		// TODO determine whether scan button should be enabled
+	}
+
+	private void checkScheduleSet() {
+		if (doMeetingReminders.isSelected() && (classSchedule == null || classSchedule.isEmpty())) {
+			getParentWizard().setNextButtonEnabled(false);
+			getParentWizard().setNextButtonTooltip("<html>You must configure a class schedule<br>if meeting reminders are enabled.</html>");
+		}
+		else {
+			getParentWizard().setNextButtonEnabled(true);
+			getParentWizard().setNextButtonTooltip(null);
+		}
 	}
 
 	private void refreshServers() {

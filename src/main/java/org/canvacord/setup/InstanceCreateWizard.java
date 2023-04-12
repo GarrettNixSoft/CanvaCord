@@ -186,6 +186,8 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		registerCard(meetingMarkersCard);
 		registerCard(commandToggleCard);
 
+		buildComplete();
+
 	}
 
 	/**
@@ -337,12 +339,15 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		configJSON.put("reminders_schedule", meetingRemindersCard.getReminderSchedule());
 		configJSON.put("meeting_reminders_channel", meetingRemindersCard.getTargetChannelID());
 
-		// store class schedule
-		JSONArray classSchedule = new JSONArray();
-		for (ClassMeeting meeting : meetingRemindersCard.getClassSchedule()) {
-			classSchedule.put(meeting.getJSON());
+		// store class schedule if necessary
+		if (meetingRemindersCard.doMeetingReminders() || meetingMarkersCard.doMeetingMarkers()) {
+			JSONArray classSchedule = new JSONArray();
+			for (ClassMeeting meeting : meetingRemindersCard.getClassSchedule()) {
+				classSchedule.put(meeting.getJSON());
+			}
+			configJSON.put("class_schedule", classSchedule);
 		}
-		configJSON.put("class_schedule", classSchedule);
+		else configJSON.put("class_schedule", new JSONArray());
 
 		// Configure class meeting markers
 		configJSON.put("do_meeting_markers", meetingMarkersCard.doMeetingMarkers());
