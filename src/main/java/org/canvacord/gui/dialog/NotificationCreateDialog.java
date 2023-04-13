@@ -13,6 +13,8 @@ import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.gui.DocumentSizeFilter;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringUtils;
+import org.canvacord.util.time.LongTask;
+import org.canvacord.util.time.LongTaskDialog;
 import org.javacord.api.entity.channel.ServerChannel;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.server.Server;
@@ -504,38 +506,41 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 	}
 
 	private void refreshServers() {
-		// disable selection during the refresh
-		channelSelector.setEnabled(false);
-		// get the server ID
-		long serverID = ((CourseAndServerCard) parentWizard.getCard("course_server")).getServerID();
-		// Fetch the server
-		DiscordBot.getBotInstance().getServerByID(serverID).ifPresentOrElse(
-				// If the fetch succeeded,
-				server -> {
-					// Clear the channel list
-					availableChannels.clear();
-					// Store the server reference
-					targetServer = server;
-					// Get channels and filter them to just text channels
-					List<ServerChannel> channels = server.getChannels()
-							.stream().filter(ch -> ch instanceof ServerTextChannel).toList();
-					for (ServerChannel channel : channels) {
-						// This should be safe because of the above filter
-						ServerTextChannel textChannel = channel.asServerTextChannel().get();
-						// Put them into the selector
-						CanvaCordNotificationTarget target = new CanvaCordNotificationTarget(textChannel);
-						availableChannels.add(target);
-						channelSelector.addItem(target);
-						channelSelector.setEnabled(true);
+		LongTask refreshTask = () -> {
+			// disable selection during the refresh
+			channelSelector.setEnabled(false);
+			// get the server ID
+			long serverID = ((CourseAndServerCard) parentWizard.getCard("course_server")).getServerID();
+			// Fetch the server
+			DiscordBot.getBotInstance().getServerByID(serverID).ifPresentOrElse(
+					// If the fetch succeeded,
+					server -> {
+						// Clear the channel list
+						availableChannels.clear();
+						// Store the server reference
+						targetServer = server;
+						// Get channels and filter them to just text channels
+						List<ServerChannel> channels = server.getChannels()
+								.stream().filter(ch -> ch instanceof ServerTextChannel).toList();
+						for (ServerChannel channel : channels) {
+							// This should be safe because of the above filter
+							ServerTextChannel textChannel = channel.asServerTextChannel().get();
+							// Put them into the selector
+							CanvaCordNotificationTarget target = new CanvaCordNotificationTarget(textChannel);
+							availableChannels.add(target);
+							channelSelector.addItem(target);
+							channelSelector.setEnabled(true);
+						}
+					},
+					// Otherwise if the fetch failed,
+					() -> {
+						// Warn the user and keep the selector disabled until a successful refresh occurs
+						UserInput.showErrorMessage("Could not retrieve the target\nDiscord Server.", "Can't Reach Discord");
+						channelSelector.setEnabled(false);
 					}
-				},
-				// Otherwise if the fetch failed,
-				() -> {
-					// Warn the user and keep the selector disabled until a successful refresh occurs
-					UserInput.showErrorMessage("Could not retrieve the target\nDiscord Server.", "Can't Reach Discord");
-					channelSelector.setEnabled(false);
-				}
-		);
+			);
+		};
+		LongTaskDialog.runLongTask(refreshTask, "Loading Discord servers...", "Fetch");
 	}
 
 	private void updateSelectedRolesField() {
