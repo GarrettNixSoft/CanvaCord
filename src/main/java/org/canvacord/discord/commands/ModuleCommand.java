@@ -52,23 +52,22 @@ public class ModuleCommand extends Command implements ButtonClickListener {
 
     @Override
     public void execute(SlashCommandInteraction interaction) {
-        // get instance, server,
-        Instance instanceForCourse = InstanceManager.getInstanceByServerID(interaction.getServer().get().getId()).get();
+        // get instance, server, course id
         Server server = interaction.getServer().orElseThrow(CanvaCordException::new);
-        //instanceForCourse = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(CanvaCordException::new);
-        //String courseID = instanceForCourse.getCourseID();
+        instance = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(CanvaCordException::new);
+        String courseID = instance.getCourseID();
         //CompletableFuture<InteractionOriginalResponseUpdater> response;
         DiscordApi api = interaction.getApi();
         interaction.respondLater(true).thenAccept(interactionOriginalResponseUpdater -> {
 
-            // might need to change this
+            // not sure if im doing this part right
             ConfigManager c = new ConfigManager();
             c.loadConfig();
 
-            //long course = Long.parseLong(32109L);
+
             CanvasApi canvasApi = new CanvasApi(c.getCanvasURL(), c.getCanvasToken());
             try {
-                fetchedModules = canvasApi.getAllModules(Long.parseLong(instanceForCourse.getCourseID()), c.getCanvasToken());
+                fetchedModules = canvasApi.getAllModules(32109L, c.getCanvasToken());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -90,14 +89,14 @@ public class ModuleCommand extends Command implements ButtonClickListener {
         });
     }
     private List<EmbedBuilder> assignmentEmbeds(){
-        List <EmbedBuilder> assignmentEmbeds = new ArrayList<>();
+        List <EmbedBuilder> moduleEmbeds = new ArrayList<>();
         for (int i=0; i < fetchedModules.length(); i++) {
             System.out.println(fetchedModules.getJSONObject(i).get("title").toString());
             EmbedBuilder assignmentEmbed = new EmbedBuilder()
                     .setTitle(fetchedModules.getJSONObject(i).get("title").toString())
                     .setUrl(fetchedModules.getJSONObject(i).get("url").toString())
                     .setColor(Color.RED);
-            /*]]
+            /*
             if (assignment.getDescription()!= null){
                 assignmentEmbed.setDescription(assignment.getDescription());
             }
@@ -108,9 +107,9 @@ public class ModuleCommand extends Command implements ButtonClickListener {
                 assignmentEmbed.addField("Due",assignment.getDueAt().toString());
             }
             */
-            assignmentEmbeds.add(assignmentEmbed);
+            moduleEmbeds.add(assignmentEmbed);
         }
-        return assignmentEmbeds;
+        return moduleEmbeds;
     }
 
 
