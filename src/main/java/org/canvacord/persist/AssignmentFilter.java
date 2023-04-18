@@ -8,9 +8,9 @@ import java.util.*;
 
 public class AssignmentFilter {
 
-	public static Map<Assignment, Pair<Date, Date>> getAssignmentsWithChangedDueDates(Instance instance) {
+	public static List<Pair<Assignment, Pair<Date, Date>>> getAssignmentsWithChangedDueDates(Instance instance) {
 
-		Map<Assignment, Pair<Date, Date>> result = new HashMap<>();
+		List<Pair<Assignment, Pair<Date, Date>>> result = new ArrayList<>();
 
 		Map<Long, Assignment> cachedAssignments = CacheManager.getCachedAssignments(instance.getInstanceID());
 		Map<Long, Pair<Date, Date>> changedDueDates = CacheManager.getCachedChangedDueDates(instance.getInstanceID());
@@ -19,7 +19,7 @@ public class AssignmentFilter {
 			if (changedDueDates.containsKey(id)) {
 				Pair<Date, Date> datePair = changedDueDates.get(id);
 				Assignment assignment = cachedAssignments.get(id);
-				result.put(assignment, datePair);
+				result.add(new Pair<>(assignment, datePair));
 			}
 		}
 

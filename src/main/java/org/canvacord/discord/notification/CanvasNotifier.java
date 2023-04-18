@@ -32,7 +32,7 @@ public class CanvasNotifier {
 	 * @param assignments the assignments whose due dates were changed
 	 * @return {@code true} if the notification is sent successfully, or false otherwise
 	 */
-	public static boolean notifyDueDateChanged(CanvaCordNotification notificationConfig, Map<Assignment, Pair<Date, Date>> assignments) {
+	public static boolean notifyDueDateChanged(CanvaCordNotification notificationConfig, List<Pair<Assignment, Pair<Date, Date>>> assignments) {
 		// TODO
 		return true;
 	}

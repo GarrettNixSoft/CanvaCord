@@ -41,7 +41,7 @@ public class NotificationJob implements Job {
                 if (!success) throw new CanvaCordException("New Announcements notification failed");
             }
             case ASSIGNMENT_DUE_DATE_CHANGED -> {
-                Map<Assignment, Pair<Date, Date>> assignmentsWithChangedDueDates = AssignmentFilter.getAssignmentsWithChangedDueDates(instance);
+                List<Pair<Assignment, Pair<Date, Date>>> assignmentsWithChangedDueDates = AssignmentFilter.getAssignmentsWithChangedDueDates(instance);
                 boolean success = CanvasNotifier.notifyDueDateChanged(notification, assignmentsWithChangedDueDates);
                 if (!success) throw new CanvaCordException("Changed due dates notification failed");
             }
