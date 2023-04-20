@@ -4,6 +4,7 @@ import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.javacord.api.DiscordApi;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.*;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -16,6 +17,7 @@ import org.javacord.api.listener.interaction.ButtonClickListener;
 import org.javacord.api.listener.interaction.SelectMenuChooseListener;
 
 import java.util.*;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeUnit;
 
 //TODO: since Command.COMMANDS_BY_NAME exists now, we might not need to do any of the nonsense with longs
@@ -61,33 +63,41 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 		try {
 			commandOptionId = Long.parseLong(commandIdFromInteraction);
 		} catch (NumberFormatException e){
-			System.out.println("Error has been made registering command!");
+			interaction.createImmediateResponder()
+					.setContent("An error has occurred. Sorry! Try again, or contact the bot owner.")
+					.setFlags(MessageFlag.EPHEMERAL).respond();
+			throw new CanvaCordException(e.getMessage());
 		}
 
 		Long serverID = interaction.getRegisteredCommandServerId().orElseThrow(()->new CanvaCordException("Server not found"));
 		Instance canvaCordInstance = InstanceManager.getInstanceByServerID(serverID).orElseThrow(()->new CanvaCordException("Instance not found"));
 		commandList.putAll(canvaCordInstance.getRegisteredCommands());
 
-		DiscordApi api = interaction.getApi(); //need the API to attach listeners
-
 		InteractionImmediateResponseBuilder response = null;
+
 		try {
 			response = interaction.createImmediateResponder()
 					.addEmbed(new EmbedBuilder() //body of message
 							.setTitle("/"+getCommandName(commandList.get(commandOptionId)))
-							.addField("Description",commandList.get(commandOptionId).getDeclaredConstructor().newInstance().getDescription())
+							.setDescription(commandList.get(commandOptionId).getDeclaredConstructor().newInstance().getDescription())
 							.setFooter("See the GitHub for complete documentation: https://github.com/GarrettNixSoft/CanvaCord"))
 					.setFlags(MessageFlag.EPHEMERAL);
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			interaction.createImmediateResponder()
+					.setContent("An error has occurred. Sorry! Try again, or contact the bot owner.")
+					.setFlags(MessageFlag.EPHEMERAL).respond();
+			throw new CanvaCordException(e.getMessage());
 		}
 
 		if (commandOptionId == interaction.getCommandId()){  //IF IS DEFAULT HELP COMMAND
-			response.addComponents(getButtonRow()).respond()
-					.thenAccept(originalResponse -> { //attach the listeners for component interactions
-						api.addButtonClickListener(this).removeAfter(10, TimeUnit.MINUTES); //FIXME FIXME FIXME FIXME FIXME FIXME FIXME FIXME
-						api.addSelectMenuChooseListener(this).removeAfter(10, TimeUnit.MINUTES);
-					}); // see if there are better ways to attach listeners to interactionimmediateresponders
+			Message responseMessage = null;
+			try {
+				responseMessage = response.addComponents(getButtonRow()).respond().join().update().join();
+				responseMessage.addButtonClickListener(this).removeAfter(10, TimeUnit.MINUTES);
+				responseMessage.addSelectMenuChooseListener(this).removeAfter(10, TimeUnit.MINUTES);
+			}
+			catch(CompletionException | NullPointerException ignored){ } // fix me (or don't !)
+
 		} else { //regular command responses do not need the buttons or listeners
 			response.respond();
 		}
@@ -112,10 +122,6 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 	public void onButtonClick(ButtonClickEvent event){
 		ButtonInteraction interaction = event.getButtonInteraction();
 		String buttonID = interaction.getCustomId();
-
-		if (!buttonID.equals("Commands")&&!buttonID.equals("Tutorial")){
-			return;
-		}
 
 		ComponentInteractionOriginalMessageUpdater response = interaction.createOriginalMessageUpdater()
 				.removeAllEmbeds()
