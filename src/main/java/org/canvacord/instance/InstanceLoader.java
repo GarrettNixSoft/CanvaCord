@@ -17,7 +17,7 @@ public class InstanceLoader {
 	 * @return an Instance object constructed from the data saved to disk
 	 * @throws CanvaCordException when the instances directory is not found and cannot be created for some reason
 	 */
-	public static Optional<Instance> loadInstance(String instanceID) throws CanvaCordException {
+	protected static Optional<Instance> loadInstance(String instanceID) throws CanvaCordException {
 
 		// Check for "instances" folder in the working directory
 		File allInstancesDir = Paths.get("instances/").toFile();
@@ -54,16 +54,6 @@ public class InstanceLoader {
 				throw new CanvaCordException("Failed to load instance file! " + instanceFile.getPath());
 		}
 
-	}
-
-	/**
-	 * Check whether a given file is a potentially valid CanvaCord instance file.
-	 * At the moment, this just means its file extension indicates it's a JSON file.
-	 * @param file the file to check
-	 * @return {@code true} if the file exists and is potentially a valid CanvaCord instance file
-	 */
-	private static boolean isValidInstanceFile(File file) {
-		return file.exists() && FileUtil.getFileExtension(file).equalsIgnoreCase("json");
 	}
 
 }
