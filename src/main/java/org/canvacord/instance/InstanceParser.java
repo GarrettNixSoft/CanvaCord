@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class InstanceParser {
 
-	public static Instance parseInstance(String instanceID, JSONObject instanceJSON) throws CanvaCordException {
+	protected static Instance parseInstance(String instanceID, JSONObject instanceJSON) throws CanvaCordException {
 
 		long serverID = instanceJSON.getLong("server_id");
 		String courseID = instanceJSON.getString("course_id");
