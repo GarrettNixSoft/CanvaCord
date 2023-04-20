@@ -17,7 +17,7 @@ public class InstanceLoader {
 	 * @return an Instance object constructed from the data saved to disk
 	 * @throws CanvaCordException when the instances directory is not found and cannot be created for some reason
 	 */
-	public static Optional<Instance> loadInstance(String instanceID) throws CanvaCordException {
+	protected static Optional<Instance> loadInstance(String instanceID) throws CanvaCordException {
 
 		// Check for "instances" folder in the working directory
 		File allInstancesDir = Paths.get("instances/").toFile();

@@ -15,7 +15,8 @@ public class PrefillGuiTest {
         wizard.runWizard();
 
         InstanceManager.generateNewInstance(); */
-        InstanceManager.editNewInstance(InstanceLoader.loadInstance("32150-1083546251661938829").get()).ifPresentOrElse(
+        InstanceManager.loadInstances();
+        InstanceManager.editNewInstance(InstanceManager.getInstanceByCourseID("32150").get()).ifPresentOrElse(
                 instance -> System.out.println("Successfully generated instance " + instance.getName()),
                 () -> System.out.println("Failed instance creation, for one reason or another")
         );
