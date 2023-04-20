@@ -7,7 +7,6 @@ import org.canvacord.discord.DiscordBot;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.component.*;
 import org.javacord.api.entity.message.component.Button;
@@ -65,9 +64,9 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
                 
                 **Past:** Assignments past the due date.
                 **Undated:** Assignments that have no date assigned in Canvas.
-                **Upcoming:** Assignments that are due within a week.
+                **Upcoming:** Assignments that are due soon.
                 **Future:** Assignments where the due date has not yet occurred.
-                """;//TODO is the upcoming thing true?
+                """;
     }
 
     @Override
@@ -91,7 +90,6 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
         instance = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(()->new CanvaCordException("Instance not found"));
         CanvasApi canvasApi = CanvasApi.getInstance();
         String courseID = instance.getCourseID();
-        DiscordApi api = interaction.getApi();
 
         // Use respondLater to send a response that takes longer than 3 seconds
         // set the value to true to make it ephemeral
@@ -114,7 +112,7 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
             }
 
             if (!interaction.getFullCommandName().contains("details")){
-                sendAssignmentList(interactionOriginalResponseUpdater,api);
+                sendAssignmentList(interactionOriginalResponseUpdater);
             }
             else{
                 sendAssignmentDetails(interactionOriginalResponseUpdater);
@@ -139,7 +137,7 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
         interactionOriginalResponseUpdater.update();
 
     }
-    private void sendAssignmentList(InteractionOriginalResponseUpdater interactionOriginalResponseUpdater, DiscordApi api){
+    private void sendAssignmentList(InteractionOriginalResponseUpdater interactionOriginalResponseUpdater){
         // get the minimum between the default value or the num of fetched assignments
 
         int pageEnd = Math.min(assignmentsPerPage,assignments.size());
