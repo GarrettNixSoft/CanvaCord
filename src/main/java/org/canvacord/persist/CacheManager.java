@@ -204,10 +204,12 @@ public class CacheManager {
 
 	public static void markSent(Instance instance, CanvaCordNotification notification, Assignment assignment) {
 		instanceData.get(instance.getInstanceID()).moveAssignment(assignment.getId(), notification);
+		writeInstanceData(instance.getInstanceID());
 	}
 
 	public static void markSent(Instance instance, CanvaCordNotification notification, Announcement announcement) {
 		instanceData.get(instance.getInstanceID()).moveAnnouncement(announcement.getId(), notification);
+		writeInstanceData(instance.getInstanceID());
 	}
 
 }
