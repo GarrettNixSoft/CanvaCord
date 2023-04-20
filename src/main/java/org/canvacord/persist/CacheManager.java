@@ -26,12 +26,6 @@ public class CacheManager {
 
 	private static final Map<String, Map<Long, Pair<Date, Date>>> cachedChangedDueDates = new HashMap<>();
 
-	public static void init() {
-		for (Instance instance : InstanceManager.getInstances()) {
-			// TODO
-		}
-	}
-
 	public static InstanceData createInstanceData(Instance instance) throws CanvaCordException {
 
 		File targetFile = Paths.get("instances/" + instance.getInstanceID() + "/data.json").toFile();
@@ -206,6 +200,14 @@ public class CacheManager {
 
 		// Add the current due date to the cache
 		dueDates.put(assignment.getId(), currentDueDate);
+	}
+
+	public static void markSent(Instance instance, CanvaCordNotification notification, Assignment assignment) {
+		instanceData.get(instance.getInstanceID()).moveAssignment(assignment.getId(), notification);
+	}
+
+	public static void markSent(Instance instance, CanvaCordNotification notification, Announcement announcement) {
+		instanceData.get(instance.getInstanceID()).moveAnnouncement(announcement.getId(), notification);
 	}
 
 }
