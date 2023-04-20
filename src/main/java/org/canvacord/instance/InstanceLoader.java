@@ -56,14 +56,4 @@ public class InstanceLoader {
 
 	}
 
-	/**
-	 * Check whether a given file is a potentially valid CanvaCord instance file.
-	 * At the moment, this just means its file extension indicates it's a JSON file.
-	 * @param file the file to check
-	 * @return {@code true} if the file exists and is potentially a valid CanvaCord instance file
-	 */
-	private static boolean isValidInstanceFile(File file) {
-		return file.exists() && FileUtil.getFileExtension(file).equalsIgnoreCase("json");
-	}
-
 }
