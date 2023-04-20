@@ -10,7 +10,7 @@ Users running CanvaCord can create one or more Instances to serve as a bridge be
 
 Before getting started with CanvaCord, users need to have a Canvas account and a Discord Bot to use.
 
-Users can obtain an Access Token to the Canvas API from their Canvas account settings page.
+Users can obtain an Access Token to the Canvas API from their [Canvas account settings page](https://csulb.instructure.com/profile/settings).
 
 Discord bots can be created via the [Discord Developer Portal](https://discord.com/developers).
 
