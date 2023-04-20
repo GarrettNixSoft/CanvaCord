@@ -1,12 +1,14 @@
 package org.canvacord.discord.commands;
 
 import edu.ksu.canvas.model.assignment.Assignment;
-import org.canvacord.canvas.AssignmentFetcher;
+import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
+import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.javacord.api.DiscordApi;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.component.*;
 import org.javacord.api.entity.message.component.Button;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -28,13 +30,44 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
     private final int assignmentsPerPage = 3;
     private int currentPage;
     private Instance instance;
-    List<Assignment> assignments = new ArrayList<>();
+    private List<Assignment> assignments;
+
+
+    private final List<SlashCommandOptionChoice> slashCommandBucketChoices = Arrays.asList(
+            SlashCommandOptionChoice.create("Past","past"),
+            SlashCommandOptionChoice.create("Undated","undated"),
+            SlashCommandOptionChoice.create("Upcoming","upcoming"),
+            SlashCommandOptionChoice.create("Future","future"));
+
+    private final Map<String, ListCourseAssignmentsOptions.Bucket> bucketsFromString = Map.of(
+            "past", ListCourseAssignmentsOptions.Bucket.PAST,
+            "undated",ListCourseAssignmentsOptions.Bucket.UNDATED,
+            "upcoming",ListCourseAssignmentsOptions.Bucket.UPCOMING,
+            "future",ListCourseAssignmentsOptions.Bucket.FUTURE);
 
     @Override
     public String getDescription() {
         return """
-                the
-                """;
+                The assignment command fetches assignments from the Canvas course and outputs them in a variety of ways.
+                
+                **Parameters:**
+                ***/assignment search <parameter> bucket <(optional) bucket>***
+                The *search* subcommand allows you to input a string (must be 2 characters or longer) which queries the course assignments for titles that match the parameters.
+                
+                ***/assignment details <parameter> bucket <(optional) bucket>***
+                The *details* subcommand operates like a search, but instead it gives you the best match in greater detail.
+                
+                ***/assignment list bucket <(optional) bucket>***
+                The *list* subcommand finds all assignments matching the bucket and outputs them in a list. (defaults to "future")
+                
+                **WHAT ARE BUCKETS?**
+                Buckets are a means by which to organize the assignments stored within Canvas! The allowed assignment command buckets are based on due date.
+                
+                **Past:** Assignments past the due date.
+                **Undated:** Assignments that have no date assigned in Canvas.
+                **Upcoming:** Assignments that are due within a week.
+                **Future:** Assignments where the due date has not yet occurred.
+                """;//TODO is the upcoming thing true?
     }
 
     @Override
@@ -50,10 +83,13 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
     @Override
     public void execute(SlashCommandInteraction interaction) {
 
+        // reset these each time the command is called
         currentPage = 0;
+        assignments = new ArrayList<>();
 
         Server server = interaction.getServer().orElseThrow(() -> new CanvaCordException("Server not found"));
         instance = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(()->new CanvaCordException("Instance not found"));
+        CanvasApi canvasApi = CanvasApi.getInstance();
         String courseID = instance.getCourseID();
         DiscordApi api = interaction.getApi();
 
@@ -62,15 +98,19 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
         interaction.respondLater(true).thenAccept(interactionOriginalResponseUpdater -> {
             String arguments = interaction.getArgumentStringValueByName("search").orElse(
                     interaction.getArgumentStringValueByName("details").orElse(null));
+            String bucket = interaction.getArgumentStringValueByName("bucket").orElse("future");
+
+            if (arguments != null && arguments.length()<2){
+                interactionOriginalResponseUpdater.setContent("Search arguments must be 2 or more characters!").update();
+                return;
+            } // could maybe handle this a different way
 
             try {
-                // if there are arguments, fetch assignments based on a search
-                // if there are not arguments, fetch active assignments
-                assignments = (arguments != null) ?
-                        AssignmentFetcher.fetchAssignmentsSearch(courseID, arguments) : AssignmentFetcher.fetchAssignmentsActive(courseID);
-            }
-            catch (IOException e) {
-                throw new RuntimeException(e);
+                assignments = canvasApi.getAssignmentsOptions(courseID,arguments,bucketsFromString.get(bucket));
+            } catch (IOException e) {
+                interactionOriginalResponseUpdater.addEmbed(
+                        new EmbedBuilder().addField("Error","An error has occurred! Results may be affected.")).update();
+                e.printStackTrace();
             }
 
             if (!interaction.getFullCommandName().contains("details")){
@@ -93,13 +133,15 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
                         (assignment.getDueAt() != null) ? assignment.getDueAt().toString() : "No due date.")
                 .setDescription(
                         (assignment.getDescription() != null) ? assignment.getDescription() : assignment.getName())
-                .addInlineField("points possible", String.valueOf(assignment.getPointsPossible()))
-                .addInlineField(" ", assignment.getSubmissionTypes().toString())
+                .addInlineField("Points Possible", String.valueOf(assignment.getPointsPossible()))
+                .addInlineField("Submission Types", assignment.getSubmissionTypes().toString())
         );
+        interactionOriginalResponseUpdater.update();
 
     }
     private void sendAssignmentList(InteractionOriginalResponseUpdater interactionOriginalResponseUpdater, DiscordApi api){
         // get the minimum between the default value or the num of fetched assignments
+
         int pageEnd = Math.min(assignmentsPerPage,assignments.size());
         for (EmbedBuilder embed : assignmentEmbeds().subList(0, pageEnd)) {
             interactionOriginalResponseUpdater.addEmbed(embed).update();
@@ -108,11 +150,10 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
         interactionOriginalResponseUpdater.addEmbed(new EmbedBuilder().setFooter("Page "+(currentPage+1) +" ("+pageEnd+"/"+assignments.size()+") results"));
 
         if (assignments.size()>assignmentsPerPage){
-            interactionOriginalResponseUpdater
+            Message response = interactionOriginalResponseUpdater
                     .addComponents(ActionRow.of(Button.danger("forward", "▶")))
-                    .update().thenAccept(originalResponse -> {
-                        api.addButtonClickListener(this).removeAfter(10, TimeUnit.MINUTES); //FIXME FIXME FIXME FIXME
-                    });
+                    .update().join();
+            response.addButtonClickListener(this).removeAfter(10, TimeUnit.MINUTES);
         }
     }
 
@@ -126,7 +167,7 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
                     .setTitle(assignment.getName())
                     .setUrl(assignment.getHtmlUrl())
                     .setColor(Color.RED)
-                    .setAuthor(DiscordBot.getBotInstance().getApi().getYourself()) //UGLY
+                    .setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
                     .addField("Due",
                             (assignment.getDueAt() != null) ? assignment.getDueAt().toString() : "No due date.")
                     .setDescription(
@@ -142,10 +183,16 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
     protected SlashCommandBuilder getBuilder(Instance instance) {
         return SlashCommand.with(getName(), getShortDescription(), Arrays.asList(
                 SlashCommandOption.createSubcommand("search", "input the name of an assignment to be found",
-                        Collections.singletonList(SlashCommandOption.create(SlashCommandOptionType.STRING, "search", "name or description of assignment", true))),
+                        Arrays.asList(SlashCommandOption.createStringOption( "search", "name or description of assignment", true),
+                                SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING,"bucket","(optional) Pick a bucket to organize the found assignments",false,
+                                        slashCommandBucketChoices))),
                 SlashCommandOption.createSubcommand("details", "input the name of an assignment to see details",
-                        Collections.singletonList(SlashCommandOption.create(SlashCommandOptionType.STRING, "details", "name or description of assignment", true))),
-                SlashCommandOption.createSubcommand("list", "list the active assignments")));
+                        Arrays.asList(SlashCommandOption.create(SlashCommandOptionType.STRING, "details", "name or description of assignment", true),
+                                SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING,"bucket","(optional) Pick a bucket to organize the found assignments.",false,
+                                        slashCommandBucketChoices))),
+                SlashCommandOption.createSubcommand("list", "list the active assignments",
+                        Collections.singletonList(SlashCommandOption.createWithChoices(SlashCommandOptionType.STRING,"bucket","(optional) Pick a bucket to organize the found assignments.",false,
+                                        slashCommandBucketChoices)))));
     }
 
     @Override

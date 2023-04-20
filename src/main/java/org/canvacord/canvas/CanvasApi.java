@@ -43,7 +43,6 @@ public class CanvasApi {
 	}
 
 
-
 	public static CanvasApi getInstance() {
 		if (instance == null) {
 			String url = ConfigManager.getCanvasURL();
@@ -59,8 +58,7 @@ public class CanvasApi {
 
 		try {
 			testInstance.getCourses(userID);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -114,22 +112,36 @@ public class CanvasApi {
 
 	}
 
-	public List<Assignment> getAssignments(String courseID) throws IOException {
+	public List<Assignment> getAssignmentsOptions(String courseID, String searchTerm,ListCourseAssignmentsOptions.Bucket bucket) throws IOException {
 
 		// get an assignment reader
 		AssignmentReader reader = API.getReader(AssignmentReader.class, TOKEN);
 
 		ListCourseAssignmentsOptions options = new ListCourseAssignmentsOptions(courseID);
 
+        if(bucket != null){
+            options.bucketFilter(bucket);
+        }
+
+		if(searchTerm != null){
+			options.searchTerm(searchTerm);
+		}
+
 		List<Assignment> result = reader.listCourseAssignments(options);
+
 		try {
 			CacheManager.cacheAssignments(InstanceManager.getInstanceByCourseID(courseID).get().getInstanceID(), result);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return result;
+
+	}
+
+	public List<Assignment> getAssignments(String courseID) throws IOException {
+
+		return getAssignmentsOptions(courseID,null,null);
 
 	}
 
@@ -191,6 +203,7 @@ public class CanvasApi {
 		return assignments;
 
 	}
+
 	// fetch modules, return json array with all downloadable files
 	public JSONArray getDownloadableModules(Long courseID, String tokenStr) throws IOException {
 
@@ -211,7 +224,6 @@ public class CanvasApi {
 		}
 
 		//FOR LOOP ALL THIS
-
 
 
 		for (int i = 0; i < urls.size(); i++) {
@@ -341,7 +353,6 @@ public class CanvasApi {
 		//FOR LOOP ALL THIS
 
 
-
 		for (int i = 0; i < urls.size(); i++) {
 
 			StringBuffer response = httpRequest(urls.get(i), tokenStr);
@@ -400,7 +411,7 @@ public class CanvasApi {
 	}
 
 	// DO NOT DELETE CODE BELOW!
-	/*
+    /*
 	String canvasBaseUrl = "https://csulb.instructure.com/";
 
 	// Get Path of Canvas Token
