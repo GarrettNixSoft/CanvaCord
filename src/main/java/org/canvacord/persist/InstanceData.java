@@ -36,7 +36,8 @@ public class InstanceData {
 			CanvasEntityPool entityPool = new CanvasEntityPool(notificationName, instanceData);
 			entityPools.put(notification, entityPool);
 		}
-		JSONObject dueDates = instanceData.getJSONObject("due_dates");
+		JSONObject dueDates = instanceData.optJSONObject("due_dates");
+		if (dueDates == null) dueDates = new JSONObject();
 		for (String idStr : dueDates.keySet()) {
 			long id = Long.parseLong(idStr);
 			Date date;
