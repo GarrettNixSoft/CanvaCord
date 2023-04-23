@@ -14,6 +14,7 @@ import org.javacord.api.entity.server.Server;
 import org.javacord.api.event.interaction.ButtonClickEvent;
 import org.javacord.api.interaction.*;
 import org.javacord.api.interaction.callback.ComponentInteractionOriginalMessageUpdater;
+import org.javacord.api.interaction.callback.InteractionOriginalResponseUpdater;
 import org.javacord.api.listener.interaction.ButtonClickListener;
 import org.json.JSONArray;
 import org.javacord.api.entity.message.component.Button;
@@ -22,13 +23,15 @@ import org.json.JSONObject;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class ModuleCommand extends Command implements ButtonClickListener {
+
 	private int assignmentsPerPage = 3; //arbitrary number
 	private int currentPage;
 	private Instance instance;
-	JSONArray fetchedModules = new JSONArray();
+	private JSONArray modulesArray = new JSONArray();
 
 
 	@Override
@@ -53,7 +56,6 @@ public class ModuleCommand extends Command implements ButtonClickListener {
 		Server server = interaction.getServer().orElseThrow(CanvaCordException::new);
 		instance = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(CanvaCordException::new);
 		//CompletableFuture<InteractionOriginalResponseUpdater> response;
-		DiscordApi api = interaction.getApi();
 
 		// grab the optional boolean for refreshing
 		boolean refresh;
@@ -65,45 +67,55 @@ public class ModuleCommand extends Command implements ButtonClickListener {
 			refresh = false;
 		}
 
-		interaction.respondLater(true).thenAccept(interactionOriginalResponseUpdater -> {
+		// Check the cache for modules
+		modulesArray = CacheManager.getCachedModuleEntities(instance.getCourseID());
 
-			// grab the API in case it's needed
-			CanvasApi canvasApi = CanvasApi.getInstance();
-
-			// Check the cache for modules
-			JSONArray cachedModules = CacheManager.getCachedModuleEntities(instance.getCourseID());
-
-			// If the user asked for a refresh, or the cache has no modules, fetch them; otherwise return what's in the cache
-			fetchedModules = refresh || cachedModules.isEmpty() ? canvasApi.getAllModuleFiles(instance.getCourseID()) : cachedModules;
-
-			if (fetchedModules.isEmpty()) {
-				interactionOriginalResponseUpdater.setFlags(MessageFlag.EPHEMERAL).setContent("An error occurred when fetching modules.").update();
-				return;
-			}
-
-			// get the minimum between the default value or the num of fetched assignments
-			assignmentsPerPage = Math.min(assignmentsPerPage,fetchedModules.length());
-			for (EmbedBuilder embed : assignmentEmbeds().subList(0, assignmentsPerPage)) {
-				interactionOriginalResponseUpdater.addEmbed(embed).update();
-			}
-
-			if (fetchedModules.length()>assignmentsPerPage) {
-				interactionOriginalResponseUpdater
-						.addComponents(ActionRow.of(Button.danger("forward", "▶")))
-						.update().thenAccept(originalResponse -> {
-							api.addButtonClickListener(this).removeAfter(10, TimeUnit.MINUTES);
-						});
-			}
-
-		});
+		if (refresh || modulesArray.isEmpty()) {
+			interaction.respondLater(true).thenAccept(interactionOriginalResponseUpdater -> {
+				modulesArray = CanvasApi.getInstance().getAllModuleFiles(instance.getCourseID());
+				buildResponse(interaction, interactionOriginalResponseUpdater, modulesArray);
+			});
+		}
+		else {
+			interaction.createImmediateResponder().respond()
+					.thenAccept(interactionOriginalResponseUpdater ->
+							buildResponse(interaction, interactionOriginalResponseUpdater, modulesArray));
+		}
 	}
+
+	private void buildResponse(SlashCommandInteraction interaction, InteractionOriginalResponseUpdater interactionOriginalResponseUpdater, JSONArray modulesArray) {
+
+		// grab the Discord API
+		DiscordApi api = interaction.getApi();
+
+		if (modulesArray.isEmpty()) {
+			interactionOriginalResponseUpdater.setFlags(MessageFlag.EPHEMERAL).setContent("An error occurred when fetching modules.").update();
+			return;
+		}
+
+		// get the minimum between the default value or the num of fetched assignments
+		assignmentsPerPage = Math.min(assignmentsPerPage, modulesArray.length());
+		for (EmbedBuilder embed : assignmentEmbeds().subList(0, assignmentsPerPage)) {
+			interactionOriginalResponseUpdater.addEmbed(embed).update();
+		}
+
+		if (modulesArray.length()>assignmentsPerPage) {
+			interactionOriginalResponseUpdater
+					.addComponents(ActionRow.of(Button.danger("forward", "▶")))
+					.update().thenAccept(originalResponse -> {
+						api.addButtonClickListener(this).removeAfter(10, TimeUnit.MINUTES);
+					});
+		}
+
+	}
+
 	private List<EmbedBuilder> assignmentEmbeds(){
 		List <EmbedBuilder> moduleEmbeds = new ArrayList<>();
-		for (int i=0; i < fetchedModules.length(); i++) {
-			System.out.println(fetchedModules.getJSONObject(i).get("title").toString());
+		for (int i=0; i < modulesArray.length(); i++) {
+			System.out.println(modulesArray.getJSONObject(i).get("title").toString());
 			EmbedBuilder assignmentEmbed = new EmbedBuilder()
-					.setTitle(fetchedModules.getJSONObject(i).get("title").toString())
-					.setUrl(fetchedModules.getJSONObject(i).get("url").toString())
+					.setTitle(modulesArray.getJSONObject(i).get("title").toString())
+					.setUrl(modulesArray.getJSONObject(i).get("url").toString())
 					.setColor(Color.RED);
             /*
             if (assignment.getDescription()!= null){
@@ -139,11 +151,11 @@ public class ModuleCommand extends Command implements ButtonClickListener {
 		int pageStart = currentPage * assignmentsPerPage;
 		int pageEnd;
 
-		if (buttonID.equals("forward") && fetchedModules.length()-(pageStart+assignmentsPerPage)>0){
+		if (buttonID.equals("forward") && modulesArray.length()-(pageStart+assignmentsPerPage)>0){
 			currentPage+=1;
 			buttons.add(Button.danger("back","◀"));
 
-			if(fetchedModules.length()-((currentPage * assignmentsPerPage)+assignmentsPerPage)>0){ //ugly yo
+			if(modulesArray.length()-((currentPage * assignmentsPerPage)+assignmentsPerPage)>0){ //ugly yo
 				buttons.add(Button.danger("forward", "▶"));
 			}
 		}
@@ -159,7 +171,7 @@ public class ModuleCommand extends Command implements ButtonClickListener {
 		}
 
 		pageStart = currentPage * assignmentsPerPage;
-		pageEnd = Math.min(pageStart + assignmentsPerPage, fetchedModules.length());
+		pageEnd = Math.min(pageStart + assignmentsPerPage, modulesArray.length());
 
 
 		response.removeAllEmbeds();
