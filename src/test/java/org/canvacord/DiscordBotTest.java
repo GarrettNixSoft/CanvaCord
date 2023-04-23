@@ -15,15 +15,14 @@ public class DiscordBotTest {
 
     public static void main(String[] args) throws IOException {
 
-        ConfigManager c = new ConfigManager();
-        c.loadConfig();
+        ConfigManager.loadConfig();
 
         DiscordBot bot = DiscordBot.getBotInstance();
         bot.login();
 
         //bot.sendMessageToChannel("lmao", 1234567890);
 
-        CanvasApi canvasApi = new CanvasApi(c.getCanvasURL(), c.getCanvasToken());
+        CanvasApi canvasApi = CanvasApi.getInstance();
 
         DiscordApi api = bot.getApi();
 
@@ -34,7 +33,7 @@ public class DiscordBotTest {
         String[] stringArray = new String[5];
         String moduleStrings = "";
 
-        JSONArray modules = canvasApi.getAllModules(32109L, c.getCanvasToken());
+        JSONArray modules = canvasApi.getAllModules(32109L, ConfigManager.getCanvasToken());
         //JSONArray modulesInfo = canvasApi.getModuleInfo(32109L, c.getCanvasToken());
 
         int j = 0;

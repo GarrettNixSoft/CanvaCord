@@ -19,13 +19,12 @@ public class ModuleCommandTest {
 
     public static void main(String[] args) throws IOException {
 
-        ConfigManager c = new ConfigManager();
-        c.loadConfig();
+        ConfigManager.loadConfig();
 
         DiscordBot bot = DiscordBot.getBotInstance();
         bot.login();
 
-        CanvasApi canvasApi = new CanvasApi(c.getCanvasURL(), c.getCanvasToken());
+        CanvasApi canvasApi = CanvasApi.getInstance();
 
         DiscordApi api = bot.getApi();
 

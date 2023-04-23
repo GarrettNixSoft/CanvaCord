@@ -36,10 +36,9 @@ public class CanvasApi {
 	private final CanvasApiFactory API;
 
 	//constructor, made it not private for testing ]
-	public CanvasApi(String canvasURL, String tokenStr) {
+	private CanvasApi(String canvasURL, String tokenStr) {
 		TOKEN = new NonRefreshableOauthToken(tokenStr);
 		API = new CanvasApiFactory(canvasURL);
-
 	}
 
 

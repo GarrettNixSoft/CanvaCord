@@ -2,6 +2,7 @@ package org.canvacord;
 
 import edu.ksu.canvas.model.Module;
 import org.canvacord.canvas.CanvasApi;
+import org.canvacord.persist.ConfigManager;
 import org.json.JSONArray;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class RetrieveModulesTest {
 
     public static void main(String[] args) throws IOException {
 
-        String canvasBaseUrl = "https://csulb.instructure.com/";
+        ConfigManager.loadConfig();
 
         // Get Path of Canvas Token
         Path fileName = Path.of("config/Canvas_Token.txt");
@@ -23,7 +24,7 @@ public class RetrieveModulesTest {
         String token = Files.readString(fileName);
 
         // Use CSULB url and token to make CanvasAPI object
-        CanvasApi canvasApi = new CanvasApi(canvasBaseUrl, token);
+        CanvasApi canvasApi = CanvasApi.getInstance();
 
         // Print Module Urls with course ID
         List<Module> modules = canvasApi.getModules(32202L);

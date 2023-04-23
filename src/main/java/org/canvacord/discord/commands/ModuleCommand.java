@@ -60,14 +60,9 @@ public class ModuleCommand extends Command implements ButtonClickListener {
         DiscordApi api = interaction.getApi();
         interaction.respondLater(true).thenAccept(interactionOriginalResponseUpdater -> {
 
-            // not sure if im doing this part right
-            ConfigManager c = new ConfigManager();
-            c.loadConfig();
-
-
-            CanvasApi canvasApi = new CanvasApi(c.getCanvasURL(), c.getCanvasToken());
+            CanvasApi canvasApi = CanvasApi.getInstance();
             try {
-                fetchedModules = canvasApi.getAllModules(32109L, c.getCanvasToken());
+                fetchedModules = canvasApi.getAllModules(Long.parseLong(instance.getCourseID()), ConfigManager.getCanvasToken());
             } catch (IOException e) {
                 e.printStackTrace();
             }
