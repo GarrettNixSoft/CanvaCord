@@ -2,9 +2,20 @@ package org.canvacord.discord.notification;
 
 import edu.ksu.canvas.model.announcement.Announcement;
 import edu.ksu.canvas.model.assignment.Assignment;
+import org.canvacord.discord.DiscordBot;
 import org.canvacord.entity.CanvaCordNotification;
+import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.util.data.Pair;
+import org.javacord.api.DiscordApi;
+import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.message.mention.AllowedMentions;
+import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
+import org.javacord.api.entity.permission.Role;
+import org.javacord.api.entity.permission.RoleBuilder;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +31,49 @@ public class CanvasNotifier {
 	 * @return {@code true} if all notifications are sent successfully, or false otherwise
 	 */
 	public static boolean notifyNewAssignments(CanvaCordNotification notificationConfig, List<Assignment> assignments) {
-		// TODO
+
+		DiscordApi api = DiscordBot.getBotInstance().getApi();
+
+		// text channel to send messages
+		TextChannel channel = api.getTextChannelById(notificationConfig.getChannelID()).orElse(null);
+
+		// Initialize message builder
+		MessageBuilder messageBuilder = new MessageBuilder();
+
+		// Create an embed builder for the message
+		EmbedBuilder embedBuilder = new EmbedBuilder()
+				.setColor(Color.GREEN)
+				.setTitle("New Assignments Posted")
+				.setDescription("New assignments have been posted on Canvas!")
+				.setFooter("CanvasNotifier");
+
+		// Add each assignment to the embed
+		for (Assignment assignment : assignments) {
+			embedBuilder.addField(assignment.getName(), "Due Date: " + assignment.getDueAt());
+		}
+
+
+		AllowedMentions allowedMentions = new AllowedMentionsBuilder()
+				.setMentionRoles(true)
+				.setMentionEveryoneAndHere(false)
+				.build();
+
+		List<CanvaCordRole> rolesToPing = notificationConfig.getRolesToPing();
+
+		for(int i = 0; i < rolesToPing.size(); i++) {
+			Role role = api.getRoleById(rolesToPing.get(i).getRoleID()).get();
+			messageBuilder
+					.append(role.getMentionTag());
+
+		}
+
+
+		// add to message builder
+		messageBuilder
+				.addEmbed(embedBuilder)
+				.setAllowedMentions(allowedMentions)
+				.send(channel);
+
 		return true;
 	}
 
