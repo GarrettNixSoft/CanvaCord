@@ -11,10 +11,15 @@ public class ModuleFetcher {
 
 	protected static JSONArray getModuleFiles(List<Module> modules, String token) throws IOException {
 
-		// will hold all modules
-		JSONArray allModules = new JSONArray();
+		JSONArray allModules = getAllModuleItems(modules, token);
+		discoverLinkedEntities(allModules, token);
+		return allModules;
 
-		//FOR LOOP ALL THIS
+	}
+
+	private static JSONArray getAllModuleItems(List<Module> modules, String token) throws IOException {
+
+		JSONArray moduleItems = new JSONArray();
 
 		for (int i = 0; i < modules.size(); i++) {
 
@@ -26,36 +31,40 @@ public class ModuleFetcher {
 
 			// Add JSON object to allModules array
 			for (int j = 0; j < jsonArr.length(); j++) {
-				allModules.put(jsonArr.getJSONObject(j));
+				moduleItems.put(jsonArr.getJSONObject(j));
 			}
-
 
 		}
 
+		return moduleItems;
+
+	}
+
+	private static void discoverLinkedEntities(JSONArray moduleItems, String token) throws IOException {
+
 		// Get one level deeper into the downloadable link url
-		for (int i = 0; i < allModules.length(); i++) {
+		for (int i = 0; i < moduleItems.length(); i++) {
 
 			// if module is a file type then we need to make another http call in order to get download link
-			if (allModules.getJSONObject(i).get("type").toString().equals("File")) {
+			if (moduleItems.getJSONObject(i).get("type").toString().equals("File")) {
 
-				StringBuffer response = CanvasApi.httpRequest(allModules.getJSONObject(i).get("url").toString(), token);
+				StringBuffer response = CanvasApi.httpRequest(moduleItems.getJSONObject(i).get("url").toString(), token);
 
 				JSONObject json = new JSONObject(response.toString());
 				//add title to json object
-				json.put("title", allModules.getJSONObject(i).get("title").toString());
+				json.put("title", moduleItems.getJSONObject(i).get("title").toString());
 				//replace with new json object containing downloadable url
-				allModules.put(i, json);
+				moduleItems.put(i, json);
 			}
 			// if json object has page url, then add a regular url
-			else if (allModules.getJSONObject(i).has("page_url")) {
-				allModules.getJSONObject(i).put("url", allModules.getJSONObject(i).get("html_url").toString());
+			else if (moduleItems.getJSONObject(i).has("page_url")) {
+				moduleItems.getJSONObject(i).put("url", moduleItems.getJSONObject(i).get("html_url").toString());
 			}
 			// if json object has a html url, then add a regular url
-			else if (allModules.getJSONObject(i).has("external_url")) {
-				allModules.getJSONObject(i).put("url", allModules.getJSONObject(i).get("external_url").toString());
+			else if (moduleItems.getJSONObject(i).has("external_url")) {
+				moduleItems.getJSONObject(i).put("url", moduleItems.getJSONObject(i).get("external_url").toString());
 			}
 		}
-		return allModules;
 
 	}
 

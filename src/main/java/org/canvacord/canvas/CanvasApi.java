@@ -215,10 +215,8 @@ public class CanvasApi {
 	public JSONArray getDownloadableModules(String courseID) {
 
 		try {
-			// get a module reader
-			ModuleReader reader = API.getReader(ModuleReader.class, TOKEN);
-			ListModulesOptions options = new ListModulesOptions(Long.parseLong(courseID));
-			List<Module> modules = reader.getModulesInCourse(options);
+
+			List<Module> modules = getModules(courseID);
 
 			// will hold all downloadable module json objects
 			JSONArray downloadableModules = new JSONArray();
