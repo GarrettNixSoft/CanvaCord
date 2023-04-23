@@ -403,6 +403,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 						case "Point Value" -> {
 							messageArea.insert("${assignment.points}", messageArea.getCaretPosition());
 						}
+						default -> {}
 					}
 
 				}
