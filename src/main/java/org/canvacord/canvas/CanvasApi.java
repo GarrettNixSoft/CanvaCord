@@ -144,14 +144,22 @@ public class CanvasApi {
 
 	}
 
-	public List<Module> getModules(Long courseID) throws IOException {
+	public List<Module> getModules(String courseID) throws IOException {
 
 		// get a module reader
 		ModuleReader reader = API.getReader(ModuleReader.class, TOKEN);
 
-		ListModulesOptions options = new ListModulesOptions(courseID);
+		try {
 
-		return reader.getModulesInCourse(options);
+			ListModulesOptions options = new ListModulesOptions(Long.parseLong(courseID));
+
+			return reader.getModulesInCourse(options);
+
+		}
+		catch (NumberFormatException e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
 
 	}
 
@@ -204,74 +212,80 @@ public class CanvasApi {
 	}
 
 	// fetch modules, return json array with all downloadable files
-	public JSONArray getDownloadableModules(Long courseID, String tokenStr) throws IOException {
+	public JSONArray getDownloadableModules(String courseID, String tokenStr) {
 
-		// get a module reader
-		ModuleReader reader = API.getReader(ModuleReader.class, TOKEN);
-		ListModulesOptions options = new ListModulesOptions(courseID);
-		List<Module> modules = reader.getModulesInCourse(options);
+		try {
+			// get a module reader
+			ModuleReader reader = API.getReader(ModuleReader.class, TOKEN);
+			ListModulesOptions options = new ListModulesOptions(Long.parseLong(courseID));
+			List<Module> modules = reader.getModulesInCourse(options);
 
-		// will hold all downloadable module json objects
-		JSONArray downloadableModules = new JSONArray();
+			// will hold all downloadable module json objects
+			JSONArray downloadableModules = new JSONArray();
 
-		//Holds all the urls that are in different arrays
-		List<String> urls = new ArrayList<>();
+			//Holds all the urls that are in different arrays
+			List<String> urls = new ArrayList<>();
 
-		//add urls from modules
-		for(int i = 0; i < modules.size(); i++) {
-			urls.add(modules.get(i).getItemsUrl().toString());
-		}
+			//add urls from modules
+			for (int i = 0; i < modules.size(); i++) {
+				urls.add(modules.get(i).getItemsUrl().toString());
+			}
 
-		//FOR LOOP ALL THIS
+			//FOR LOOP ALL THIS
 
 
-		for (int i = 0; i < urls.size(); i++) {
+			for (int i = 0; i < urls.size(); i++) {
 
-			StringBuffer response = httpRequest(urls.get(i), tokenStr);
+				StringBuffer response = httpRequest(urls.get(i), tokenStr);
 
-			// Print as a string
-			System.out.println(response.toString());
+				// Print as a string
+				System.out.println(response.toString());
 
-			// Put url in JSON Array Object
-			JSONArray jsonArr = new JSONArray(response.toString());
+				// Put url in JSON Array Object
+				JSONArray jsonArr = new JSONArray(response.toString());
 
-			// Print JSON Object
-			for (int j = 0; j < jsonArr.length(); j++) {
-				// if jsonObj is a file throw it into the downloadableModules JSON Array
-				JSONObject jsonObj = jsonArr.getJSONObject(j);
-				// if object is a file then add it to array
-				if (jsonArr.getJSONObject(j).get("type").toString().equals("File")) {
-					downloadableModules.put(jsonArr.getJSONObject(j));
+				// Print JSON Object
+				for (int j = 0; j < jsonArr.length(); j++) {
+					// if jsonObj is a file throw it into the downloadableModules JSON Array
+					JSONObject jsonObj = jsonArr.getJSONObject(j);
+					// if object is a file then add it to array
+					if (jsonArr.getJSONObject(j).get("type").toString().equals("File")) {
+						downloadableModules.put(jsonArr.getJSONObject(j));
+					}
 				}
 			}
+
+			for (int i = 0; i < downloadableModules.length(); i++) {
+				System.out.println(downloadableModules.getJSONObject(i));
+			}
+
+			// Get one level deeper into the downloadable link url
+
+			for (int i = 0; i < downloadableModules.length(); i++) {
+				// For simplification
+				String url = downloadableModules.getJSONObject(i).get("url").toString();
+
+				StringBuffer response = httpRequest(url, tokenStr);
+
+				// Print as a string
+				System.out.println(response.toString());
+
+				JSONObject json = new JSONObject(response.toString());
+				//replace with new json object containing downloadable url
+				downloadableModules.put(i, json);
+			}
+
+			for (int i = 0; i < downloadableModules.length(); i++) {
+				System.out.println(downloadableModules.getJSONObject(i));
+			}
+
+
+			return downloadableModules;
 		}
-
-		for(int i = 0; i < downloadableModules.length(); i++) {
-			System.out.println(downloadableModules.getJSONObject(i));
+		catch (IOException | NumberFormatException e) {
+			e.printStackTrace();
+			return new JSONArray();
 		}
-
-		// Get one level deeper into the downloadable link url
-
-		for(int i = 0; i < downloadableModules.length(); i++) {
-			// For simplification
-			String url = downloadableModules.getJSONObject(i).get("url").toString();
-
-			StringBuffer response = httpRequest(url, tokenStr);
-
-			// Print as a string
-			System.out.println(response.toString());
-
-			JSONObject json = new JSONObject(response.toString());
-			//replace with new json object containing downloadable url
-			downloadableModules.put(i, json);
-		}
-
-		for(int i = 0; i < downloadableModules.length(); i++) {
-			System.out.println(downloadableModules.getJSONObject(i));
-		}
-
-
-		return downloadableModules;
 
 	}
 
