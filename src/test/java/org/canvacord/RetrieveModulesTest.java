@@ -20,9 +20,6 @@ public class RetrieveModulesTest {
         // Get Path of Canvas Token
         Path fileName = Path.of("config/Canvas_Token.txt");
 
-        // read the file
-        String token = Files.readString(fileName);
-
         // Use CSULB url and token to make CanvasAPI object
         CanvasApi canvasApi = CanvasApi.getInstance();
 
@@ -32,7 +29,7 @@ public class RetrieveModulesTest {
             System.out.println(modules.get(i).getItemsUrl());
         }
 
-        JSONArray test = canvasApi.getDownloadableModules("32202", token);
+        JSONArray test = canvasApi.getDownloadableModules("32202");
 
         for(int i = 0; i < test.length(); i++) {
             System.out.println(test.getJSONObject(i).get("url"));

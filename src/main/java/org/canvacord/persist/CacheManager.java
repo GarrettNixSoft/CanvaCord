@@ -1,7 +1,9 @@
 package org.canvacord.persist;
 
+import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.model.announcement.Announcement;
 import edu.ksu.canvas.model.assignment.Assignment;
+import org.canvacord.canvas.CanvasApi;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
@@ -23,6 +25,7 @@ public class CacheManager {
 
 	private static final Map<String, Map<Long, Assignment>> assignmentCache = new HashMap<>();
 	private static final Map<String, Map<Long, Announcement>> announcementCache = new HashMap<>();
+	private static final Map<String, Map<Long, Module>> moduleCache = new HashMap<>();
 
 	private static final Map<String, Map<Long, Pair<Date, Date>>> cachedChangedDueDates = new HashMap<>();
 
@@ -156,12 +159,23 @@ public class CacheManager {
 		}
 	}
 
+	public static void cacheModules(String instanceID, List<Module> modules) {
+		for (Module module : modules) {
+			moduleCache.computeIfAbsent(instanceID, k -> new HashMap<>()).put(module.getId(), module);
+		}
+	}
+
 	public static Map<Long, Assignment> getCachedAssignments(String instanceID) {
 		return Collections.unmodifiableMap(assignmentCache.computeIfAbsent(instanceID, k -> new HashMap<>()));
 	}
 
 	public static Map<Long, Announcement> getCachedAnnouncements(String instanceID) {
 		return Collections.unmodifiableMap(announcementCache.computeIfAbsent(instanceID, k -> new HashMap<>()));
+	}
+
+	public static Map<Long, Module> getCachedModules(String instanceID, boolean refresh) {
+		if (refresh) CanvasApi.getInstance().getAllModules(InstanceManager.getInstanceByID(instanceID).get().getCourseID());
+		return Collections.unmodifiableMap(moduleCache.computeIfAbsent(instanceID, k -> new HashMap<>()));
 	}
 
 	public static Map<Long, Date> getCachedDueDates(String instanceID) {

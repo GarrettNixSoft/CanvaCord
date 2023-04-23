@@ -7,6 +7,7 @@ import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.message.MessageBuilder;
+import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.LowLevelComponent;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -21,9 +22,7 @@ import org.javacord.api.entity.message.component.Button;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -52,19 +51,30 @@ public class ModuleCommand extends Command implements ButtonClickListener {
 
     @Override
     public void execute(SlashCommandInteraction interaction) {
+
         // get instance, server, course id
         Server server = interaction.getServer().orElseThrow(CanvaCordException::new);
         instance = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(CanvaCordException::new);
-        String courseID = instance.getCourseID();
         //CompletableFuture<InteractionOriginalResponseUpdater> response;
         DiscordApi api = interaction.getApi();
+
+        // grab the optional boolean for refreshing
+        boolean refresh = false;
+        Optional<SlashCommandInteractionOption> refreshOption = interaction.getOptionByIndex(0);
+        if (refreshOption.isPresent()) {
+            Optional<Boolean> refreshValue = refreshOption.get().getBooleanValue();
+            if (refreshValue.isPresent())
+                refresh = refreshValue.get();
+        }
+
         interaction.respondLater(true).thenAccept(interactionOriginalResponseUpdater -> {
 
             CanvasApi canvasApi = CanvasApi.getInstance();
-            try {
-                fetchedModules = canvasApi.getAllModules(Long.parseLong(instance.getCourseID()), ConfigManager.getCanvasToken());
-            } catch (IOException e) {
-                e.printStackTrace();
+            fetchedModules = canvasApi.getAllModules(instance.getCourseID());
+
+            if (fetchedModules.isEmpty()) {
+                interactionOriginalResponseUpdater.setFlags(MessageFlag.EPHEMERAL).setContent("An error occurred when fetching modules.").update();
+                return;
             }
 
             // get the minimum between the default value or the num of fetched assignments
@@ -110,11 +120,13 @@ public class ModuleCommand extends Command implements ButtonClickListener {
 
     @Override
     public SlashCommandBuilder getBuilder(Instance instance) {
-        return SlashCommand.with(getName(),getShortDescription());
+        return SlashCommand.with(getName(),getShortDescription(),
+                List.of(SlashCommandOption.create(SlashCommandOptionType.BOOLEAN, "refresh", "Force CanvaCord to refresh the modules list from Canvas.", false)));
     }
 
     @Override
     public void onButtonClick(ButtonClickEvent buttonClickEvent) {
+
         ButtonInteraction interaction = buttonClickEvent.getButtonInteraction();
         ComponentInteractionOriginalMessageUpdater response = interaction.createOriginalMessageUpdater();
         String buttonID = interaction.getCustomId();

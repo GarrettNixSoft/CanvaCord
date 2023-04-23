@@ -33,7 +33,7 @@ public class DiscordBotTest {
         String[] stringArray = new String[5];
         String moduleStrings = "";
 
-        JSONArray modules = canvasApi.getAllModules(32109L, ConfigManager.getCanvasToken());
+        JSONArray modules = canvasApi.getAllModules("32109");
         //JSONArray modulesInfo = canvasApi.getModuleInfo(32109L, c.getCanvasToken());
 
         int j = 0;

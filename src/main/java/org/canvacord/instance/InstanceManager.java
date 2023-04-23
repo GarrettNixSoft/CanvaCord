@@ -107,6 +107,10 @@ public class InstanceManager {
 		return instances.values().stream().toList();
 	}
 
+	public static Optional<Instance> getInstanceByID(String instanceID) {
+		return Optional.ofNullable(instances.get(instanceID));
+	}
+
 	public static Optional<Instance> getInstanceByCourseID(String courseID) {
 		return Optional.ofNullable(instancesByCourseID.get(courseID));
 	}
