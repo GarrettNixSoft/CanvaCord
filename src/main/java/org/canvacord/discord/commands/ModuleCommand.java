@@ -4,6 +4,7 @@ import org.canvacord.canvas.CanvasApi;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
+import org.canvacord.persist.CacheManager;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.ActionRow;
@@ -16,6 +17,7 @@ import org.javacord.api.interaction.callback.ComponentInteractionOriginalMessage
 import org.javacord.api.listener.interaction.ButtonClickListener;
 import org.json.JSONArray;
 import org.javacord.api.entity.message.component.Button;
+import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.*;
@@ -54,18 +56,25 @@ public class ModuleCommand extends Command implements ButtonClickListener {
         DiscordApi api = interaction.getApi();
 
         // grab the optional boolean for refreshing
-        boolean refresh = false;
+        boolean refresh;
         Optional<SlashCommandInteractionOption> refreshOption = interaction.getOptionByIndex(0);
         if (refreshOption.isPresent()) {
             Optional<Boolean> refreshValue = refreshOption.get().getBooleanValue();
-            if (refreshValue.isPresent())
-                refresh = refreshValue.get();
+            refresh = refreshValue.orElse(false);
+        } else {
+            refresh = false;
         }
 
         interaction.respondLater(true).thenAccept(interactionOriginalResponseUpdater -> {
 
+            // grab the API in case it's needed
             CanvasApi canvasApi = CanvasApi.getInstance();
-            fetchedModules = canvasApi.getAllModuleFiles(instance.getCourseID());
+
+            // Check the cache for modules
+            JSONArray cachedModules = CacheManager.getCachedModuleEntities(instance.getCourseID());
+
+            // If the user asked for a refresh, or the cache has no modules, fetch them; otherwise return what's in the cache
+            fetchedModules = refresh || cachedModules.isEmpty() ? canvasApi.getAllModuleFiles(instance.getCourseID()) : cachedModules;
 
             if (fetchedModules.isEmpty()) {
                 interactionOriginalResponseUpdater.setFlags(MessageFlag.EPHEMERAL).setContent("An error occurred when fetching modules.").update();

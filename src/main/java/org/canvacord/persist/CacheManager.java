@@ -26,6 +26,7 @@ public class CacheManager {
 	private static final Map<String, Map<Long, Assignment>> assignmentCache = new HashMap<>();
 	private static final Map<String, Map<Long, Announcement>> announcementCache = new HashMap<>();
 	private static final Map<String, Map<Long, Module>> moduleCache = new HashMap<>();
+	private static final Map<String, JSONArray> moduleEntityCache = new HashMap<>();
 
 	private static final Map<String, Map<Long, Pair<Date, Date>>> cachedChangedDueDates = new HashMap<>();
 
@@ -165,6 +166,10 @@ public class CacheManager {
 		}
 	}
 
+	public static void cacheModuleEntities(String courseID, JSONArray moduleEntities) {
+		moduleEntityCache.put(courseID, moduleEntities);
+	}
+
 	public static Map<Long, Assignment> getCachedAssignments(String instanceID) {
 		return Collections.unmodifiableMap(assignmentCache.computeIfAbsent(instanceID, k -> new HashMap<>()));
 	}
@@ -176,6 +181,10 @@ public class CacheManager {
 	public static Map<Long, Module> getCachedModules(String instanceID, boolean refresh) {
 		if (refresh) CanvasApi.getInstance().getAllModuleFiles(InstanceManager.getInstanceByID(instanceID).get().getCourseID());
 		return Collections.unmodifiableMap(moduleCache.computeIfAbsent(instanceID, k -> new HashMap<>()));
+	}
+
+	public static JSONArray getCachedModuleEntities(String courseID) {
+		return new JSONArray(moduleEntityCache.get(courseID));
 	}
 
 	public static Map<Long, Date> getCachedDueDates(String instanceID) {

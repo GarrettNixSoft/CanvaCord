@@ -297,7 +297,11 @@ public class CanvasApi {
 
 			CacheManager.cacheModules(InstanceManager.getInstanceByCourseID(courseID).get().getInstanceID(), modules);
 
-			return ModuleFetcher.getModuleFiles(modules, TOKEN.getAccessToken());
+			JSONArray moduleEntities = ModuleFetcher.getModuleFiles(modules, TOKEN.getAccessToken());
+
+			CacheManager.cacheModuleEntities(courseID, moduleEntities);
+
+			return moduleEntities;
 
 		}
 		catch (IOException | NumberFormatException e) {
@@ -306,7 +310,7 @@ public class CanvasApi {
 		}
 	}
 
-	public JSONArray getModuleInfo(String courseID, String tokenStr) throws IOException {
+	public JSONArray getDownloadableModules(String courseID, String tokenStr) {
 
 		try {
 			// get a module reader
@@ -333,15 +337,13 @@ public class CanvasApi {
 				StringBuffer response = httpRequest(urls.get(i), tokenStr);
 
 				// Print as a string
-				System.out.println(response.toString());
+				System.out.println(response);
 
 				// Put url in JSON Array Object
 				JSONArray jsonArr = new JSONArray(response.toString());
 
 				// Print JSON Object
 				for (int j = 0; j < jsonArr.length(); j++) {
-					// if jsonObj is a file throw it into the downloadableModules JSON Array
-					JSONObject jsonObj = jsonArr.getJSONObject(j);
 					// if object is a file then add it to array
 					downloadableModules.put(jsonArr.getJSONObject(j));
 
