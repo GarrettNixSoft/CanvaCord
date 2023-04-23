@@ -109,10 +109,11 @@ public class NotificationScheduler {
 					((SimpleScheduleBuilder) scheduleBuilder).repeatForever(); // TODO determine end date
 				}
 				case "daily" -> {
-					// daily types store a time to use each day directly as fields
-					int hour = scheduleData.getInt("hour");
-					int minute = scheduleData.getInt("minute");
-					String ampm = scheduleData.getString("ampm");
+					// daily types store a time to use each day as a time object
+					JSONObject time = scheduleData.getJSONObject("time");
+					int hour = time.getInt("hour");
+					int minute = time.getInt("minute");
+					String ampm = time.getString("ampm");
 					// build a start time date
 					Date startTime = CanvaCordTime.getDateOf(hour, minute, ampm);
 					triggerBuilder.startAt(startTime);
