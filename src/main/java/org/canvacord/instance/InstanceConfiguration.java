@@ -247,7 +247,8 @@ public class InstanceConfiguration {
 			// populate a map
 			registeredCommands.clear();
 			// load IDs from the config JSON
-			JSONObject commandIDs = configJSON.getJSONObject("command_ids");
+			JSONObject commandIDs = configJSON.optJSONObject("command_ids");
+			if (commandIDs == null) commandIDs = new JSONObject();
 			// iterate over each command key
 			for (String key : commandIDs.keySet()) {
 				long id = commandIDs.getLong(key);
