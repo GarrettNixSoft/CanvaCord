@@ -174,7 +174,7 @@ public class CacheManager {
 	}
 
 	public static Map<Long, Module> getCachedModules(String instanceID, boolean refresh) {
-		if (refresh) CanvasApi.getInstance().getAllModules(InstanceManager.getInstanceByID(instanceID).get().getCourseID());
+		if (refresh) CanvasApi.getInstance().getAllModuleFiles(InstanceManager.getInstanceByID(instanceID).get().getCourseID());
 		return Collections.unmodifiableMap(moduleCache.computeIfAbsent(instanceID, k -> new HashMap<>()));
 	}
 

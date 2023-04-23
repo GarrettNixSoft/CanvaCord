@@ -4,9 +4,7 @@ import org.canvacord.canvas.CanvasApi;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
-import org.canvacord.persist.ConfigManager;
 import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.LowLevelComponent;
@@ -15,16 +13,13 @@ import org.javacord.api.entity.server.Server;
 import org.javacord.api.event.interaction.ButtonClickEvent;
 import org.javacord.api.interaction.*;
 import org.javacord.api.interaction.callback.ComponentInteractionOriginalMessageUpdater;
-import org.javacord.api.interaction.callback.InteractionOriginalResponseUpdater;
 import org.javacord.api.listener.interaction.ButtonClickListener;
 import org.json.JSONArray;
 import org.javacord.api.entity.message.component.Button;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public class ModuleCommand extends Command implements ButtonClickListener {
@@ -70,7 +65,7 @@ public class ModuleCommand extends Command implements ButtonClickListener {
         interaction.respondLater(true).thenAccept(interactionOriginalResponseUpdater -> {
 
             CanvasApi canvasApi = CanvasApi.getInstance();
-            fetchedModules = canvasApi.getAllModules(instance.getCourseID());
+            fetchedModules = canvasApi.getAllModuleFiles(instance.getCourseID());
 
             if (fetchedModules.isEmpty()) {
                 interactionOriginalResponseUpdater.setFlags(MessageFlag.EPHEMERAL).setContent("An error occurred when fetching modules.").update();

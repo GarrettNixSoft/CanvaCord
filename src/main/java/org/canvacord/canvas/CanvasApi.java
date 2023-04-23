@@ -289,7 +289,7 @@ public class CanvasApi {
 
 	}
 
-	public JSONArray getAllModules(String courseID) {
+	public JSONArray getAllModuleFiles(String courseID) {
 
 		try {
 			// get a module reader
