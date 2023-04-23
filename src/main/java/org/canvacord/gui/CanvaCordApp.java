@@ -1,5 +1,6 @@
 package org.canvacord.gui;
 
+import org.canvacord.discord.DiscordBot;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.CanvaCordEventHandler;
 import org.canvacord.exception.CanvaCordException;
@@ -352,6 +353,7 @@ public class CanvaCordApp extends JFrame {
 		try {
 			InstanceManager.stopAllInstances();
 			CanvaCordScheduler.shutDown();
+			DiscordBot.getBotInstance().disconnect();
 		}
 		catch (Exception e) {
 			UserInput.showExceptionWarning(e);
