@@ -1,4 +1,4 @@
-package org.canvacord.gui.options.card;
+package org.canvacord.gui.options.page;
 
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.instance.Instance;

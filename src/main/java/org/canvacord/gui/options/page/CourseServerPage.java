@@ -1,4 +1,4 @@
-package org.canvacord.gui.options.card;
+package org.canvacord.gui.options.page;
 
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;

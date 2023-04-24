@@ -1,6 +1,6 @@
 package org.canvacord.gui.options;
 
-import org.canvacord.gui.options.card.CourseServerPage;
+import org.canvacord.gui.options.page.CourseServerPage;
 import org.canvacord.instance.Instance;
 
 public class EditInstancePanel extends OptionsPanel {
