@@ -50,6 +50,13 @@ public class ReminderManager {
 		return getRemindersForInstance(instance.getInstanceID());
 	}
 
+	/**
+	 * Add a newly generated Reminder to an Instance's Reminder file.
+	 * This ensures generated reminders are preserved on disk if CanvaCord
+	 * terminates before the reminder is triggered.
+	 * @param instance the Instance to add the Reminder to
+	 * @param reminder the Reminder to add
+	 */
 	public static void addNewReminder(Instance instance, Reminder reminder) {
 		storedReminders.computeIfAbsent(instance.getInstanceID(), k -> new ArrayList<>()).add(reminder);
 		writeRemindersFile(instance);
@@ -61,6 +68,12 @@ public class ReminderManager {
 		}
 	}
 
+	/**
+	 * Acknowledge that a Reminder has been sent to the user who created
+	 * it, and can thus be removed and erased from disk.
+	 * @param instance the Instance the Reminder belonged to
+	 * @param reminder the Reminder that has been sent
+	 */
 	public static void registerReminderSent(Instance instance, Reminder reminder) {
 		storedReminders.get(instance.getInstanceID()).remove(reminder);
 		writeRemindersFile(instance);
@@ -69,7 +82,7 @@ public class ReminderManager {
 	private static JSONArray checkRemindersFile(Instance instance) {
 		File remindersFile = CanvaCordPaths.getInstanceRemindersPath(instance).toFile();
 		if (!remindersFile.exists()) {
-			boolean created = FileUtil.writeJSON(new JSONObject(""), remindersFile);
+			boolean created = FileUtil.writeJSONArray(new JSONArray(), remindersFile);
 			if (!created) {
 				CanvaCord.explode("Could not create reminders file for instance " + instance.getName());
 			}
