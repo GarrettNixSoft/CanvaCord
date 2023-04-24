@@ -87,7 +87,7 @@ public class ReminderEncryption {
 	}
 
 	/**
-	 * Decript a String using a {@code SecretKey}.
+	 * Decrypt a String using a {@code SecretKey}.
 	 * @param message the encrypted String to decrypt
 	 * @param secretKey the key to use in the decryption process
 	 * @return the decrypted String
