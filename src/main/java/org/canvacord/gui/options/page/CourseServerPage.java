@@ -3,19 +3,20 @@ package org.canvacord.gui.options.page;
 import net.miginfocom.swing.MigLayout;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
+import org.canvacord.gui.options.OptionPage;
 import org.canvacord.gui.options.OptionsPanel;
 import org.canvacord.instance.Instance;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CourseServerPage extends InstanceOptionsPage {
+public class CourseServerPage extends OptionPage {
 
 	private JTextField courseIDField;
 	private JTextField serverIDField;
 
-	public CourseServerPage(Instance instanceToEdit) {
-		super("Course and Server", instanceToEdit);
+	public CourseServerPage() {
+		super("Course and Server");
 	}
 
 	@Override

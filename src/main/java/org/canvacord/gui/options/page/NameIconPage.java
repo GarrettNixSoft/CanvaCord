@@ -4,6 +4,7 @@ import net.miginfocom.swing.MigLayout;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.exception.FileFormatException;
 import org.canvacord.gui.CanvaCordFonts;
+import org.canvacord.gui.options.OptionPage;
 import org.canvacord.instance.Instance;
 import org.canvacord.util.file.FileGetter;
 import org.canvacord.util.file.FileUtil;
@@ -13,21 +14,21 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class NameIconPage extends InstanceOptionsPage {
+public class NameIconPage extends OptionPage {
 
 	private JTextField nameField;
 	private JTextField iconPathField;
 	private JButton chooseButton;
 
-	public NameIconPage(Instance instanceToEdit) {
-		super("Name and Icon", instanceToEdit);
+	public NameIconPage() {
+		super("Name and Icon");
 	}
 
 	@Override
 	protected void buildGUI() {
 
 		// prepare the layout
-		setLayout(new MigLayout("", "[][][]", "[][]"));
+		setLayout(new MigLayout("insets 10 10 10 10", "[][][]", "[][]"));
 
 		// instance name editing
 		JLabel label = new JLabel("Instance Name:");

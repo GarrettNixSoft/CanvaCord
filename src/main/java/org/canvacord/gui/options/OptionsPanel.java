@@ -98,6 +98,7 @@ public abstract class OptionsPanel extends JDialog {
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(page);
 		nodeMap.put(page, node);
 		nodeMap.get(parent).add(node);
+		System.out.println("Added " + node + " to " + nodeMap.get(parent));
 		pagePanel.add(page.getName(), page);
 	}
 
@@ -201,9 +202,10 @@ public abstract class OptionsPanel extends JDialog {
 			navigateToPage(selectedPage);
 		});
 		optionPageTree.setRootVisible(false);
+		optionPageTree.setShowsRootHandles(true);
 		optionPageTree.setRowHeight(24);
 		optionPageTree.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
-		add(listScrollPane, "cell 0 0, width 180px:210px:240px, growx, growy");
+		add(listScrollPane, "cell 0 0, width 240px:240px:320px, growx, growy");
 		listScrollPane.getViewport().setView(optionPageTree);
 		// build a panel to hold everything to the right of the list
 		pagePanel = new JPanel(pageLayout = new CardLayout());

@@ -1,9 +1,7 @@
 package org.canvacord.gui.options;
 
 import edu.ksu.canvas.model.Course;
-import org.canvacord.gui.options.page.CanvasFetchPage;
-import org.canvacord.gui.options.page.CourseServerPage;
-import org.canvacord.gui.options.page.NameIconPage;
+import org.canvacord.gui.options.page.*;
 import org.canvacord.instance.Instance;
 
 public class EditInstancePanel extends OptionsPanel {
@@ -12,6 +10,10 @@ public class EditInstancePanel extends OptionsPanel {
 	private static final int HEIGHT = 640;
 
 	private final Instance instanceToEdit;
+
+	private ResourcesPage resourcesPage;
+	private MeetingsPage meetingsPage;
+	private CommandInfoPage commandInfoPage;
 
 	public EditInstancePanel(Instance instanceToEdit) {
 		super("Edit " + instanceToEdit.getName(), WIDTH, HEIGHT);
@@ -25,9 +27,21 @@ public class EditInstancePanel extends OptionsPanel {
 	}
 
 	private void buildGUI() {
-		addOptionPage(new CourseServerPage(instanceToEdit));
-		addOptionPage(new NameIconPage(instanceToEdit));
-		addOptionPage(new CanvasFetchPage(instanceToEdit));
+		addOptionPage(new CourseServerPage());
+		addOptionPage(new NameIconPage());
+		addOptionPage(new CanvasFetchPage());
+		addOptionPage(new RolesPage());
+		addOptionPage(new NotificationsPage());
+		addOptionPage(resourcesPage = new ResourcesPage());
+		addOptionPage(resourcesPage, new SyllabusPage());
+		addOptionPage(resourcesPage, new TextbooksPage());
+		addOptionPage(meetingsPage = new MeetingsPage());
+		addOptionPage(meetingsPage, new CourseSchedulePage());
+		addOptionPage(meetingsPage, new MeetingRemindersPage());
+		addOptionPage(meetingsPage, new MeetingMarkersPage());
+		addOptionPage(commandInfoPage = new CommandInfoPage());
+		addOptionPage(commandInfoPage, new CommandTogglePage());
+		addOptionPage(commandInfoPage, new CommandOptionsPage());
 	}
 
 	private void initLogic() {

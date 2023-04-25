@@ -1,23 +1,17 @@
 package org.canvacord.gui.options.page;
 
-import net.miginfocom.swing.MigLayout;
-import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.instance.Instance;
 
-public class CanvasFetchPage extends OptionPage {
+public class MeetingRemindersPage extends OptionPage {
 
-	public CanvasFetchPage() {
-		super("Canvas Fetching");
+	public MeetingRemindersPage() {
+		super("Meeting Reminders");
 	}
 
 	@Override
 	protected void buildGUI() {
-
-		setLayout(new MigLayout("", "[]", "[]"));
-
-
-
+		// TODO
 	}
 
 	@Override
@@ -31,7 +25,7 @@ public class CanvasFetchPage extends OptionPage {
 	}
 
 	@Override
-	protected void verifyInputs() throws CanvaCordException {
+	protected void verifyInputs() throws Exception {
 		// TODO
 	}
 }
