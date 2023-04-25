@@ -34,7 +34,6 @@ public class RetrievePastAssignmentsTest {
         // Get Path of Canvas Token
         //Path fileName = Path.of("config/Canvas_Token.txt");
 
-        // Now calling Files.readString() method to
         // Throw string into sting token
         //String token = Files.readString(fileName);
         String token = ConfigManager.getCanvasToken();
@@ -53,17 +52,15 @@ public class RetrievePastAssignmentsTest {
         MessageSet messages = textChannels.get(0).getMessages(100).join();
         ArrayList<Message> messageList = new ArrayList<Message>(messages);
         ArrayList<String> messageContentList = new ArrayList<String>();
+        //Seperates the messages in the channel
         for(Message message : messageList)
         {
             String[] temp = message.getContent().split("\n");
             messageContentList.addAll(Arrays.asList(temp));
         }
-//        System.out.println("This statement is: " + messageContentList.contains("this is a message"));
-//        System.out.println("message");
-        /*for(Message message : messageList) {
-            System.out.println(message.getContent());
-        }*/
+
         String combinedString = "";
+        //combines all the messages in a msg block
         for (Assignment assignment : assignments) {
             if(!messageContentList.contains(assignment.getName())) {
                 //bot.sendMessageToChannel(assignment.getName(), (long) textChannels.get(0).getId());
@@ -71,7 +68,10 @@ public class RetrievePastAssignmentsTest {
                 combinedString += assignment.getName() + "\n";
             }
         }
+        //displays message in the discord channel
         bot.sendMessageToChannel(combinedString, (long) textChannels.get(0).getId());
+
+        //waits before disconnecting the bot
         Thread.sleep(100);
         bot.disconnect();
     }
