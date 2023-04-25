@@ -1,5 +1,6 @@
 package org.canvacord.gui.options;
 
+import edu.ksu.canvas.model.Course;
 import org.canvacord.gui.options.page.CourseServerPage;
 import org.canvacord.instance.Instance;
 
@@ -39,5 +40,4 @@ public class EditInstancePanel extends OptionsPanel {
 	protected void complete(boolean success) {
 		//
 	}
-
 }

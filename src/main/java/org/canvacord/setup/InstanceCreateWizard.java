@@ -1,7 +1,6 @@
 package org.canvacord.setup;
 
 import org.canvacord.canvas.TextbookInfo;
-import org.canvacord.discord.commands.Command;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.*;
@@ -27,7 +26,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 	private InstanceSetupWelcomeCard startingCard;
 	private CourseAndServerCard courseAndServerCard;
-	private InstanceBasicConfigCard basicConfigCard;
+	private NameIconCard basicConfigCard;
 	private InstanceCanvasFetchCard canvasFetchCard;
 	private RoleCreateCard roleCreateCard;
 	private NotificationCreateCard notificationCreateCard;
@@ -69,7 +68,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 		courseAndServerCard = new CourseAndServerCard(this, "course_server");
 
 		// The third card is the first page of configuration
-		basicConfigCard = new InstanceBasicConfigCard(this, "name_icon", false);
+		basicConfigCard = new NameIconCard(this, "name_icon", false);
 
 		// The fourth card is for setting up the Canvas fetching schedule
 		canvasFetchCard = new InstanceCanvasFetchCard(this, "fetch_config", false);

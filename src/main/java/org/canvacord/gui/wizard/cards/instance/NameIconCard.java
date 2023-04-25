@@ -10,13 +10,13 @@ import org.canvacord.util.file.FileGetter;
 import javax.swing.*;
 import java.awt.*;
 
-public class InstanceBasicConfigCard extends InstanceConfigCard {
+public class NameIconCard extends InstanceConfigCard {
 
 	private JTextField nameField;
 	private JTextField iconPathField;
 	private JButton chooseFileButton;
 
-	public InstanceBasicConfigCard(CanvaCordWizard parent, String name, boolean isEndCard) {
+	public NameIconCard(CanvaCordWizard parent, String name, boolean isEndCard) {
 		super(parent, name, isEndCard, "Basic Settings");
 	}
 
