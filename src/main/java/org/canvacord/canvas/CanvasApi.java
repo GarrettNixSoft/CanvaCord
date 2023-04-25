@@ -161,6 +161,11 @@ public class CanvasApi {
 
 	}
 
+	/**
+	 * Retreives A list of Quizzes from Canvas API
+	 * 
+	 * @author Andrew Bae
+	 */
 	public List<Quiz> getQuizzes(String courseID) throws IOException {
 		QuizReader reader = API.getReader(QuizReader.class, TOKEN);
 		return reader.getQuizzesInCourse(courseID);
