@@ -45,6 +45,11 @@ public abstract class OptionPage extends JPanel {
 		return name;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
 	// ================ VALIDATION ================
 	protected abstract void verifyInputs() throws CanvaCordException;
 

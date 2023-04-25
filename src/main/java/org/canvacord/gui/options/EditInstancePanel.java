@@ -1,7 +1,9 @@
 package org.canvacord.gui.options;
 
 import edu.ksu.canvas.model.Course;
+import org.canvacord.gui.options.page.CanvasFetchPage;
 import org.canvacord.gui.options.page.CourseServerPage;
+import org.canvacord.gui.options.page.NameIconPage;
 import org.canvacord.instance.Instance;
 
 public class EditInstancePanel extends OptionsPanel {
@@ -24,6 +26,8 @@ public class EditInstancePanel extends OptionsPanel {
 
 	private void buildGUI() {
 		addOptionPage(new CourseServerPage(instanceToEdit));
+		addOptionPage(new NameIconPage(instanceToEdit));
+		addOptionPage(new CanvasFetchPage(instanceToEdit));
 	}
 
 	private void initLogic() {
@@ -34,6 +38,8 @@ public class EditInstancePanel extends OptionsPanel {
 		// TODO fill the data store with instance fields
 		dataStore.store("course_id", instanceToEdit.getCourseID());
 		dataStore.store("server_id", instanceToEdit.getServerID());
+		dataStore.store("name", instanceToEdit.getName());
+		dataStore.store("icon_path", instanceToEdit.getIconPath());
 	}
 
 	@Override

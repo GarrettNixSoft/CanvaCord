@@ -1,5 +1,6 @@
 package org.canvacord.gui.options.page;
 
+import net.miginfocom.swing.MigLayout;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.options.OptionsPanel;
@@ -26,62 +27,35 @@ public class CourseServerPage extends InstanceOptionsPage {
 		Dimension fieldSize = new Dimension(300, 28);
 		Dimension maxFieldSize = new Dimension(360, 28);
 
-		Dimension minPanelSize = new Dimension(OptionsPanel.MIN_WIDTH - OptionsPanel.MIN_LIST_WIDTH, 60);
-		Dimension panelSize = new Dimension(400, 60);
-		Dimension maxPanelSize = new Dimension(OptionsPanel.MAX_WIDTH - OptionsPanel.MAX_LIST_WIDTH, 60);
-
-		setLayout(new BorderLayout());
-
-		JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new FlowLayout());
-		add(mainPanel, BorderLayout.CENTER);
-
-		JPanel coursePanel = new JPanel();
-		coursePanel.setLayout(new BoxLayout(coursePanel, BoxLayout.X_AXIS));
-		coursePanel.setMinimumSize(minPanelSize);
-		coursePanel.setPreferredSize(panelSize);
-		coursePanel.setMinimumSize(maxPanelSize);
-		mainPanel.add(coursePanel);
-
-		mainPanel.add(Box.createVerticalStrut(30));
-
-		JPanel serverPanel = new JPanel();
-		serverPanel.setLayout(new BoxLayout(serverPanel, BoxLayout.X_AXIS));
-		serverPanel.setMinimumSize(minPanelSize);
-		serverPanel.setPreferredSize(panelSize);
-		serverPanel.setMinimumSize(maxPanelSize);
-		mainPanel.add(serverPanel);
+		setLayout(new MigLayout("", "[][grow]", "[][]"));
 
 		JLabel courseLabel = new JLabel("Course ID:");
+//		courseLabel.setAlignmentX(LEFT_ALIGNMENT);
 		courseLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
-		courseLabel.setPreferredSize(labelSize);
-		coursePanel.add(courseLabel);
-
-		coursePanel.add(Box.createHorizontalStrut(20));
+//		courseLabel.setPreferredSize(labelSize);
+		add(courseLabel, "cell 0 0");
 
 		courseIDField = new JTextField(24);
 		courseIDField.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
-		courseIDField.setMinimumSize(minFieldSize);
-		courseIDField.setPreferredSize(fieldSize);
-		courseIDField.setMaximumSize(maxFieldSize);
+//		courseIDField.setMinimumSize(minFieldSize);
+//		courseIDField.setPreferredSize(fieldSize);
+//		courseIDField.setMaximumSize(maxFieldSize);
 		courseIDField.setEditable(false);
-		coursePanel.add(courseIDField);
+		add(courseIDField, "cell 1 0");
 
 		JLabel serverLabel = new JLabel("Server ID:");
-		serverLabel.setAlignmentX(LEFT_ALIGNMENT);
+//		serverLabel.setAlignmentX(LEFT_ALIGNMENT);
 		serverLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
-		serverLabel.setPreferredSize(labelSize);
-		serverPanel.add(serverLabel);
-
-		serverPanel.add(Box.createHorizontalStrut(20));
+//		serverLabel.setPreferredSize(labelSize);
+		add(serverLabel, "cell 0 2");
 
 		serverIDField = new JTextField(24);
 		serverIDField.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
-		serverIDField.setMinimumSize(minFieldSize);
-		serverIDField.setPreferredSize(fieldSize);
-		serverIDField.setMaximumSize(maxFieldSize);
+//		serverIDField.setMinimumSize(minFieldSize);
+//		serverIDField.setPreferredSize(fieldSize);
+//		serverIDField.setMaximumSize(maxFieldSize);
 		serverIDField.setEditable(false);
-		serverPanel.add(serverIDField);
+		add(serverIDField, "cell 1 2");
 
 	}
 
@@ -101,4 +75,5 @@ public class CourseServerPage extends InstanceOptionsPage {
 		// nothing, because these inputs cannot be changed
 		// they are present only for completeness and visibility
 	}
+
 }

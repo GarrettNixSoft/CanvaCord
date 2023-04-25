@@ -1,12 +1,15 @@
 package org.canvacord.gui.options;
 
+import net.miginfocom.swing.MigLayout;
+import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.GuiDataStore;
-import org.canvacord.util.gui.ComponentUtils;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 
 import java.util.ArrayList;
@@ -19,13 +22,14 @@ public abstract class OptionsPanel extends JDialog {
 	public static final int MIN_WIDTH = 400, MAX_WIDTH = 1000;
 	public static final int MIN_HEIGHT = 400, MAX_HEIGHT = 1000;
 
-	public static final int MIN_LIST_WIDTH = 120, DEFAULT_LIST_WIDTH = 150, MAX_LIST_WIDTH = 180;
-
 	private boolean cancelled;
 
-	private JList<String> optionPageList;
+	private JTree optionPageTree;
 	private JPanel buttonPanel;
-	private JPanel contentPanel;
+	private JPanel pagePanel;
+	private CardLayout pageLayout;
+
+	private DefaultMutableTreeNode topNode;
 
 	private JButton okButton;
 	private JButton cancelButton;
@@ -33,6 +37,7 @@ public abstract class OptionsPanel extends JDialog {
 
 	private List<OptionPage> pages;
 	private Map<String, OptionPage> pageMap;
+	private Map<OptionPage, DefaultMutableTreeNode> nodeMap;
 	private OptionPage currentPage;
 
 	protected GuiDataStore dataStore;
@@ -51,6 +56,7 @@ public abstract class OptionsPanel extends JDialog {
 		// prepare for cards
 		this.pages = new ArrayList<>();
 		this.pageMap = new HashMap<>();
+		this.nodeMap = new HashMap<>();
 		// build the common layout for the whole menu
 		buildLayout();
 		updatePageList();
@@ -60,9 +66,27 @@ public abstract class OptionsPanel extends JDialog {
 		setLocationRelativeTo(null);
 	}
 
-	public void addOptionPage(OptionPage card) {
-		pages.add(card);
-		pageMap.put(card.getName(), card);
+	public void addOptionPage(OptionPage page) {
+		if (pageMap.containsKey(page.getName())) throw new CanvaCordException("Duplicate of page " + page.getName());
+		pages.add(page);
+		pageMap.put(page.getName(), page);
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode(page);
+		nodeMap.put(page, node);
+		topNode.add(node);
+		pagePanel.add(page.getName(), page);
+	}
+
+	public void addOptionPage(OptionPage parent, OptionPage page) {
+		if (!pageMap.containsKey(parent.getName()))
+			throw new CanvaCordException("Parent node passed does not exist!");
+		if (pageMap.containsKey(page.getName()))
+			throw new CanvaCordException("Duplicate of page " + page.getName());
+		pages.add(page);
+		pageMap.put(page.getName(), page);
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode(page);
+		nodeMap.put(page, node);
+		nodeMap.get(parent).add(node);
+		pagePanel.add(page.getName(), page);
 	}
 
 	public boolean verifyInputs() {
@@ -89,16 +113,17 @@ public abstract class OptionsPanel extends JDialog {
 	public void run() {
 		// show the menu
 		setVisible(true);
-		// the user exits, dispose of the window
-		dispose();
 		// run the complete task
 		complete(verifyInputs());
+		// the user exits, dispose of the window
+		dispose();
 	}
 
 	protected void selectFirstPage() {
+		updatePageList();
 		// select the first page
-		optionPageList.setSelectedIndex(0);
-		optionPageList.repaint();
+		optionPageTree.setSelectionRow(0);
+		optionPageTree.repaint();
 		// open the first page
 		currentPage = pages.get(0);
 		navigateToPage(currentPage);
@@ -118,40 +143,55 @@ public abstract class OptionsPanel extends JDialog {
 
 	protected void navigateToPage(OptionPage page) {
 		if (page == currentPage) return;
-		if (currentPage != null) currentPage.onNavigateAway();
+		if (currentPage != null) {
+			currentPage.onNavigateAway();
+		}
 		currentPage = page;
 		currentPage.onNavigateTo();
 		// populate the content panel
-		if (contentPanel.getComponents().length == 1) contentPanel.remove(0);
-		contentPanel.add(currentPage, BorderLayout.CENTER);
+		pageLayout.show(pagePanel, currentPage.getName());
+		System.out.println("Navigated to " + currentPage);
+		repaint();
 	}
 
 	protected abstract void complete(boolean success);
 
 	private void buildLayout() {
 		// use a border layout for arranging panels
-		setLayout(new BorderLayout());
+		setLayout(new MigLayout("", "[220px][grow]", "[grow][]"));
 		// build the page list and put it on the left
-		optionPageList = new JList<>();
-		optionPageList.setMinimumSize(new Dimension(MIN_LIST_WIDTH, MIN_HEIGHT - 40));
-		optionPageList.setPreferredSize(new Dimension(DEFAULT_LIST_WIDTH, getPreferredSize().height - 40));
-		optionPageList.setMaximumSize(new Dimension(MAX_LIST_WIDTH, MAX_HEIGHT - 40));
-		optionPageList.setFixedCellHeight(-1);
-		optionPageList.setLayoutOrientation(JList.VERTICAL);
-		optionPageList.setCellRenderer(new DefaultCellRenderer());
-		optionPageList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		optionPageList.addListSelectionListener(selection -> {
-			OptionPage selectedPage = pages.get(selection.getFirstIndex());
+		JScrollPane listScrollPane = new JScrollPane();
+//		listScrollPane.setMinimumSize(new Dimension(MIN_LIST_WIDTH, MIN_HEIGHT - 40));
+//		listScrollPane.setPreferredSize(new Dimension(DEFAULT_LIST_WIDTH, getPreferredSize().height - 40));
+//		listScrollPane.setMaximumSize(new Dimension(MAX_LIST_WIDTH, MAX_HEIGHT - 40));
+		// prepare the top of the tree
+		topNode = new DefaultMutableTreeNode(null);
+		// use a tree for the list
+		optionPageTree = new JTree();
+		optionPageTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+		optionPageTree.addTreeSelectionListener(selection -> {
+			// grab the selection
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode) optionPageTree.getLastSelectedPathComponent();
+			System.out.println("Selected: " + node);
+			// return if there is no selection
+			if (node == null) return;
+			// get the selected page
+			OptionPage selectedPage = (OptionPage) node.getUserObject();
+			System.out.println("Selected page: " + selectedPage);
 			navigateToPage(selectedPage);
 		});
-		add(optionPageList, BorderLayout.WEST);
+		optionPageTree.setRootVisible(false);
+		optionPageTree.setRowHeight(24);
+		optionPageTree.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
+		add(listScrollPane, "cell 0 0, growx, growy");
+		listScrollPane.getViewport().setView(optionPageTree);
 		// build a panel to hold everything to the right of the list
-		JPanel rightPanel = new JPanel();
-		rightPanel.setLayout(new BorderLayout());
-		rightPanel.setMinimumSize(new Dimension(MIN_WIDTH - 120, MIN_HEIGHT - 40));
-		rightPanel.setPreferredSize(new Dimension(getPreferredSize().width - 120, getPreferredSize().height - 40));
-		rightPanel.setMaximumSize(new Dimension(MAX_WIDTH - 150, MAX_HEIGHT - 40));
-		add(rightPanel, BorderLayout.EAST);
+		pagePanel = new JPanel(pageLayout = new CardLayout());
+		pagePanel.setBorder(new LineBorder(Color.BLACK));
+		pagePanel.setMinimumSize(new Dimension(MIN_WIDTH - 120, MIN_HEIGHT - 40));
+		pagePanel.setPreferredSize(new Dimension(getPreferredSize().width - 120, getPreferredSize().height - 40));
+		pagePanel.setMaximumSize(new Dimension(MAX_WIDTH - 150, MAX_HEIGHT - 40));
+		add(pagePanel, "cell 1 0, growx, growy");
 		// build the button panel and put it on the bottom
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -159,15 +199,9 @@ public abstract class OptionsPanel extends JDialog {
 		buttonPanel.setPreferredSize(new Dimension(getPreferredSize().width, 40));
 		buttonPanel.setMaximumSize(new Dimension(MAX_WIDTH, 40));
 		initButtons();
-		rightPanel.add(buttonPanel, BorderLayout.SOUTH);
+		add(buttonPanel, "cell 0 1 2 1");
 		// build the content panel, put it in the "center," and put the starting card in it
-		contentPanel = new JPanel();
-		contentPanel.setLayout(new BorderLayout());
-		contentPanel.setBorder(new LineBorder(Color.BLACK));
-		contentPanel.setMinimumSize(new Dimension(MIN_WIDTH - 120, MIN_HEIGHT - 40));
-		contentPanel.setPreferredSize(new Dimension(getPreferredSize().width - 120, getPreferredSize().height - 40));
-		contentPanel.setMaximumSize(new Dimension(MAX_WIDTH - 150, MAX_HEIGHT - 40));
-		rightPanel.add(contentPanel, BorderLayout.CENTER);
+		// ...
 	}
 
 	private void initButtons() {
@@ -207,45 +241,8 @@ public abstract class OptionsPanel extends JDialog {
 	}
 
 	private void updatePageList() {
-		optionPageList.setModel(new AbstractListModel<>() {
-			@Override
-			public int getSize() {
-				return pages.size();
-			}
-
-			@Override
-			public String getElementAt(int index) {
-				return pages.get(index).getName();
-			}
-		});
-	}
-
-	protected void provideCellRenderer(ListCellRenderer<String> renderer) {
-		optionPageList.setCellRenderer(renderer);
-	}
-
-	private static class DefaultCellRenderer extends JLabel implements ListCellRenderer<String> {
-
-		@Override
-		public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
-
-			setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
-			setText(value);
-			setPreferredSize(new Dimension(120, 36));
-			setOpaque(true);
-
-			setBorder(new EmptyBorder(4,4,4,4));
-
-			if (isSelected) {
-				setBackground(list.getSelectionBackground());
-				setForeground(list.getSelectionForeground());
-			} else {
-				setBackground(list.getBackground());
-				setForeground(list.getForeground());
-			}
-
-			return this;
-		}
+		optionPageTree.setModel(new DefaultTreeModel(topNode));
+		System.out.println("Updated page list, there are " + pages.size() + " available");
 	}
 
 }
