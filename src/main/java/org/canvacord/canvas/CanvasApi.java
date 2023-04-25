@@ -1,14 +1,12 @@
 package org.canvacord.canvas;
 
 import edu.ksu.canvas.CanvasApiFactory;
-import edu.ksu.canvas.interfaces.AnnouncementReader;
-import edu.ksu.canvas.interfaces.AssignmentReader;
-import edu.ksu.canvas.interfaces.CourseReader;
-import edu.ksu.canvas.interfaces.ModuleReader;
+import edu.ksu.canvas.interfaces.*;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.model.announcement.Announcement;
 import edu.ksu.canvas.model.assignment.Assignment;
+import edu.ksu.canvas.model.assignment.Quiz;
 import edu.ksu.canvas.oauth.NonRefreshableOauthToken;
 import edu.ksu.canvas.oauth.OauthToken;
 import edu.ksu.canvas.requestOptions.*;
@@ -161,6 +159,16 @@ public class CanvasApi {
 			return new ArrayList<>();
 		}
 
+	}
+
+	/**
+	 * Retreives A list of Quizzes from Canvas API
+	 * 
+	 * @author Andrew Bae
+	 */
+	public List<Quiz> getQuizzes(String courseID) throws IOException {
+		QuizReader reader = API.getReader(QuizReader.class, TOKEN);
+		return reader.getQuizzesInCourse(courseID);
 	}
 
 	public List<Announcement> getAnnouncements(String courseID) throws IOException {
