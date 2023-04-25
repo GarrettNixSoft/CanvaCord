@@ -10,6 +10,20 @@ import java.util.Date;
 
 public class CanvaCordTime {
 
+	public static final String[] WEEKDAY_STRINGS = {
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday",
+			"Sunday"
+	};
+
+	public static final String[] WEEKDAY_ABBREV = {
+			"Mo", "Tu", "We", "Thu", "Fr", "Sa", "Su"
+	};
+
 	public static Date getDateOf(int hour, int minute, String ampm) {
 
 		switch (ampm) {
