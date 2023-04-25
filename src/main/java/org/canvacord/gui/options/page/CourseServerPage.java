@@ -29,11 +29,22 @@ public class CourseServerPage extends InstanceOptionsPage {
 
 		setLayout(new MigLayout("", "[][grow]", "[][]"));
 
+		JLabel descriptionLabel = new JLabel();
+		descriptionLabel.setText(
+				"""
+				<html>Course and Server IDs for an Instance can't be changed after the
+				Instance is created. If you'd like to create another Instance with
+				the same configuration as this one, use the Copy Instance tool.</html>
+				"""
+		);
+		descriptionLabel.setFont(CanvaCordFonts.LABEL_FONT_BIGGER_THAN_SMALL_BUT_SMALLER_THAN_MEDIUM);
+		add(descriptionLabel, "cell 0 0 2 3");
+
 		JLabel courseLabel = new JLabel("Course ID:");
 //		courseLabel.setAlignmentX(LEFT_ALIGNMENT);
 		courseLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 //		courseLabel.setPreferredSize(labelSize);
-		add(courseLabel, "cell 0 0");
+		add(courseLabel, "cell 0 4");
 
 		courseIDField = new JTextField(24);
 		courseIDField.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
@@ -41,13 +52,13 @@ public class CourseServerPage extends InstanceOptionsPage {
 //		courseIDField.setPreferredSize(fieldSize);
 //		courseIDField.setMaximumSize(maxFieldSize);
 		courseIDField.setEditable(false);
-		add(courseIDField, "cell 1 0");
+		add(courseIDField, "cell 1 4");
 
 		JLabel serverLabel = new JLabel("Server ID:");
 //		serverLabel.setAlignmentX(LEFT_ALIGNMENT);
 		serverLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 //		serverLabel.setPreferredSize(labelSize);
-		add(serverLabel, "cell 0 2");
+		add(serverLabel, "cell 0 6");
 
 		serverIDField = new JTextField(24);
 		serverIDField.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
@@ -55,7 +66,7 @@ public class CourseServerPage extends InstanceOptionsPage {
 //		serverIDField.setPreferredSize(fieldSize);
 //		serverIDField.setMaximumSize(maxFieldSize);
 		serverIDField.setEditable(false);
-		add(serverIDField, "cell 1 2");
+		add(serverIDField, "cell 1 6");
 
 	}
 

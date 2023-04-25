@@ -4,14 +4,17 @@ import net.miginfocom.swing.MigLayout;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.GuiDataStore;
+import org.canvacord.gui.dialog.MultiErrorDialog;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +22,8 @@ import java.util.Map;
 
 public abstract class OptionsPanel extends JDialog {
 
-	public static final int MIN_WIDTH = 400, MAX_WIDTH = 1000;
-	public static final int MIN_HEIGHT = 400, MAX_HEIGHT = 1000;
+	public static final int MIN_WIDTH = 600, MAX_WIDTH = 1000;
+	public static final int MIN_HEIGHT = 600, MAX_HEIGHT = 1000;
 
 	private boolean cancelled;
 
@@ -46,11 +49,20 @@ public abstract class OptionsPanel extends JDialog {
 		// title the window
 		setTitle(title);
 		// determine the resizing limits
+		setResizable(true);
 		setPreferredSize(new Dimension(width, height));
 		setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
 		setMaximumSize(new Dimension(MAX_WIDTH, MAX_HEIGHT));
 		// make this window modal
 		setModalityType(ModalityType.APPLICATION_MODAL);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				cancelled = true;
+				setVisible(false);
+			}
+		});
 		// init the data store
 		this.dataStore = new GuiDataStore();
 		// prepare for cards
@@ -94,27 +106,35 @@ public abstract class OptionsPanel extends JDialog {
 		if (cancelled)
 			return false;
 
-		List<Exception> inputErrors = new ArrayList<>();
+		List<NamedError> inputErrors = new ArrayList<>();
 
 		for (OptionPage card : pages) {
 			try {
 				card.verifyInputs();
 			}
 			catch (Exception e) {
-				inputErrors.add(e);
+				inputErrors.add(new NamedError(card.getName(), e));
 			}
 		}
 
 		// TODO build an error window listing all errors
+		if (inputErrors.isEmpty())
+			return true;
 
-		return inputErrors.isEmpty();
+		else {
+			MultiErrorDialog.showMultiErrorDialog(
+					"Configuration Errors",
+					"<html>The following errors were found when trying to save your modified configuration:</html>",
+					inputErrors);
+			return false;
+		}
 	}
 
 	public void run() {
 		// show the menu
 		setVisible(true);
 		// run the complete task
-		complete(verifyInputs());
+		if (!cancelled) complete(verifyInputs());
 		// the user exits, dispose of the window
 		dispose();
 	}
@@ -183,15 +203,15 @@ public abstract class OptionsPanel extends JDialog {
 		optionPageTree.setRootVisible(false);
 		optionPageTree.setRowHeight(24);
 		optionPageTree.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
-		add(listScrollPane, "cell 0 0, growx, growy");
+		add(listScrollPane, "cell 0 0, width 180px:210px:240px, growx, growy");
 		listScrollPane.getViewport().setView(optionPageTree);
 		// build a panel to hold everything to the right of the list
 		pagePanel = new JPanel(pageLayout = new CardLayout());
-		pagePanel.setBorder(new LineBorder(Color.BLACK));
-		pagePanel.setMinimumSize(new Dimension(MIN_WIDTH - 120, MIN_HEIGHT - 40));
-		pagePanel.setPreferredSize(new Dimension(getPreferredSize().width - 120, getPreferredSize().height - 40));
-		pagePanel.setMaximumSize(new Dimension(MAX_WIDTH - 150, MAX_HEIGHT - 40));
-		add(pagePanel, "cell 1 0, growx, growy");
+		pagePanel.setBorder(new EtchedBorder());
+//		pagePanel.setMinimumSize(new Dimension(MIN_WIDTH - 120, MIN_HEIGHT - 40));
+//		pagePanel.setPreferredSize(new Dimension(getPreferredSize().width - 120, getPreferredSize().height - 40));
+//		pagePanel.setMaximumSize(new Dimension(MAX_WIDTH - 150, MAX_HEIGHT - 40));
+		add(pagePanel, "cell 1 0, width 400px:600px:800px, growx, growy");
 		// build the button panel and put it on the bottom
 		buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
