@@ -1,5 +1,6 @@
 package org.canvacord;
 
+import org.canvacord.discord.DiscordBot;
 import org.canvacord.gui.options.EditInstancePanel;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
@@ -16,6 +17,8 @@ public class NewEditorTest {
 
 		EditInstancePanel editor = new EditInstancePanel(instance);
 		editor.run();
+
+		DiscordBot.getBotInstance().disconnect();
 
 	}
 

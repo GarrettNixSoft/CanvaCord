@@ -7,9 +7,7 @@ import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
-import org.canvacord.gui.wizard.cards.instance.CourseAndServerCard;
 import org.canvacord.main.CanvaCord;
-import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.gui.DocumentSizeFilter;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringUtils;
@@ -37,11 +35,9 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 
 	private static final int CHAR_LIMIT = 400;
 
-	// Parent access for getting the server ID
-	private final InstanceCreateWizard parentWizard;
-
 	// Roles available for selection
 	private final List<CanvaCordRole> availableRoles;
+	private final long serverID;
 
 	// Naming the notification
 	private JTextField nameField;
@@ -75,14 +71,13 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 	private final Set<CanvaCordRole> selectedRoles;
 	private final List<CanvaCordNotificationTarget> availableChannels;
 
-	public NotificationCreateDialog(InstanceCreateWizard parentWizard, List<CanvaCordRole> availableRoles) {
+	public NotificationCreateDialog(long serverID, List<CanvaCordRole> availableRoles) {
 		super("New Notification", WIDTH, HEIGHT);
-
-		// assign the parent
-		this.parentWizard = parentWizard;
 
 		// roles available for assigning to notifications
 		this.availableRoles = availableRoles;
+
+		this.serverID = serverID;
 
 		// collections
 		selectedRoles = new HashSet<>();
@@ -94,8 +89,8 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 
 	}
 
-	public NotificationCreateDialog(InstanceCreateWizard parentWizard, List<CanvaCordRole> availableRoles, CanvaCordNotification notificationToEdit) {
-		this(parentWizard, availableRoles);
+	public NotificationCreateDialog(long serverID, List<CanvaCordRole> availableRoles, CanvaCordNotification notificationToEdit) {
+		this(serverID, availableRoles);
 		prefillGUI(notificationToEdit);
 	}
 
@@ -269,7 +264,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 		add(channelSelector);
 
 		SwingUtilities.invokeLater(() -> {
-			refreshServers();
+			refreshChannels();
 			channelSelector.setEnabled(true);
 			channelSelector.revalidate();
 			channelSelector.repaint();
@@ -375,11 +370,11 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 		// ================ CREATING NEW CHANNELS ================
 		newChannelButton.addActionListener(event -> {
 			if (CreateChannelDialog.createNewChannel(targetServer).isPresent())
-				refreshServers();
+				refreshChannels();
 		});
 
 		// ================ REFRESHING THE CHANNEL LIST ================
-		refreshChannelsButton.addActionListener(event -> refreshServers());
+		refreshChannelsButton.addActionListener(event -> refreshChannels());
 
 		// ================ INSERTING VARIABLES INTO LIST ================
 		insertVariableButton.addActionListener(event -> {
@@ -489,7 +484,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 		eventSelector.setSelectedItem(notificationToEdit.getEventType());
 
 		// select channel
-		refreshServers();
+		refreshChannels();
 		for (CanvaCordNotificationTarget channel : availableChannels) {
 			if (channel.id() == notificationToEdit.getChannelID()) {
 				channelSelector.setSelectedItem(channel);
@@ -506,12 +501,10 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 
 	}
 
-	private void refreshServers() {
+	private void refreshChannels() {
 		LongTask refreshTask = () -> {
 			// disable selection during the refresh
 			channelSelector.setEnabled(false);
-			// get the server ID
-			long serverID = ((CourseAndServerCard) parentWizard.getCard("course_server")).getServerID();
 			// Fetch the server
 			DiscordBot.getBotInstance().getServerByID(serverID).ifPresentOrElse(
 					// If the fetch succeeded,
@@ -541,7 +534,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 					}
 			);
 		};
-		LongTaskDialog.runLongTask(refreshTask, "Loading Discord servers...", "Fetch");
+		LongTaskDialog.runLongTask(refreshTask, "Loading Discord channels...", "Fetch");
 	}
 
 	private void updateSelectedRolesField() {
@@ -656,15 +649,15 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 		}
 	}
 
-	public static Optional<CanvaCordNotification> buildNotification(InstanceCreateWizard parentWizard, List<CanvaCordRole> availableRoles) {
-		NotificationCreateDialog dialog = new NotificationCreateDialog(parentWizard, availableRoles);
+	public static Optional<CanvaCordNotification> buildNotification(long serverID, List<CanvaCordRole> availableRoles) {
+		NotificationCreateDialog dialog = new NotificationCreateDialog(serverID, availableRoles);
 		dialog.setVisible(true);
 		dialog.dispose();
 		return dialog.getResult();
 	}
 
-	public static Optional<CanvaCordNotification> editNotification(InstanceCreateWizard parentWizard, List<CanvaCordRole> availableRoles, CanvaCordNotification notification) {
-		NotificationCreateDialog dialog = new NotificationCreateDialog(parentWizard, availableRoles, notification);
+	public static Optional<CanvaCordNotification> editNotification(long serverID, List<CanvaCordRole> availableRoles, CanvaCordNotification notification) {
+		NotificationCreateDialog dialog = new NotificationCreateDialog(serverID, availableRoles, notification);
 		dialog.setVisible(true);
 		dialog.dispose();
 		return dialog.getResult();

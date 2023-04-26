@@ -95,7 +95,8 @@ public class NotificationCreateCard extends InstanceConfigCard {
 		// ================ ADDING NEW NOTIFICATIONS ================
 		newNotificationButton.addActionListener(event -> {
 			List<CanvaCordRole> availableRoles = ((RoleCreateCard) getParentWizard().getCard("role_config")).getRoles();
-			NotificationCreateDialog.buildNotification((InstanceCreateWizard) getParentWizard(), availableRoles).ifPresent(notification -> {
+			long serverID = ((CourseAndServerCard) getParentWizard().getCard("course_server")).getServerID();
+			NotificationCreateDialog.buildNotification(serverID, availableRoles).ifPresent(notification -> {
 				notifications.add(notification);
 				updateNotificationsList();
 				if (!notifications.isEmpty())
@@ -109,7 +110,8 @@ public class NotificationCreateCard extends InstanceConfigCard {
 			if (selection == null) return;
 			int index = notificationsList.getSelectedIndex();
 			List<CanvaCordRole> availableRoles = ((RoleCreateCard) getParentWizard().getCard("role_config")).getRoles();
-			NotificationCreateDialog.editNotification((InstanceCreateWizard) getParentWizard(), availableRoles, selection).ifPresent(
+			long serverID = ((CourseAndServerCard) getParentWizard().getCard("course_server")).getServerID();
+			NotificationCreateDialog.editNotification(serverID, availableRoles, selection).ifPresent(
 					editedNotification -> {
 						notifications.set(index, editedNotification);
 						updateNotificationsList();
