@@ -154,7 +154,7 @@ public class RoleCreateCard extends InstanceConfigCard {
 			rolesByName.put(roles.get(x).getName(), roles.get(x));
 		}
 		updateRolesList();
-		if (roles.size() == 1)
+		if (!roles.isEmpty())
 			this.enableNext();
 	}
 

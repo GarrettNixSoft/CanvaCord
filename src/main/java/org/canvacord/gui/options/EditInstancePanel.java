@@ -56,6 +56,7 @@ public class EditInstancePanel extends OptionsPanel {
 		dataStore.store("icon_path", instanceToEdit.getIconPath());
 		dataStore.store("fetch_schedule", instanceToEdit.getCanvasFetchSchedule());
 		dataStore.store("roles", instanceToEdit.getConfiguredRoles());
+		dataStore.store("registered_roles", instanceToEdit.getRegisteredRoles());
 		dataStore.store("notifications", instanceToEdit.getConfiguredNotifications());
 		dataStore.store("has_syllabus", instanceToEdit.hasSyllabus());
 		dataStore.store("textbooks", instanceToEdit.getTextbooks());
