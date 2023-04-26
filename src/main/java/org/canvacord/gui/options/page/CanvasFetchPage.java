@@ -80,68 +80,81 @@ public class CanvasFetchPage extends OptionPage {
 		}
 
 		// ================ FREQUENT COMPONENTS ================
-		JLabel everyLabel = new JLabel("Every:");
-		everyLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
-		componentLists.get(FREQUENT).add(everyLabel);
-		layoutStrings.put(everyLabel, "cell 0 2");
+		JPanel frequentPanel = new JPanel();
+		frequentPanel.setLayout(new MigLayout("", "[][][]", "[]"));
+
+		JLabel frequentEveryLabel = new JLabel("Every:");
+		frequentEveryLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
+		frequentPanel.add(frequentEveryLabel, "cell 0 0");
 
 		frequentValueSpinner = new JSpinner();
 		frequentValueSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		frequentValueSpinner.setModel(CanvaCordModels.getMinutesModel());
-		componentLists.get(FREQUENT).add(frequentValueSpinner);
-		layoutStrings.put(frequentValueSpinner, "cell 1 2");
+		frequentPanel.add(frequentValueSpinner, "cell 1 0");
 
 		JLabel minutesLabel = new JLabel("Minute(s)");
 		minutesLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
-		componentLists.get(FREQUENT).add(minutesLabel);
-		layoutStrings.put(minutesLabel, "cell 2 2");
+		frequentPanel.add(minutesLabel, "cell 2 0");
+
+		componentLists.get(FREQUENT).add(frequentPanel);
+		layoutStrings.put(frequentPanel, "cell 0 2");
 
 		// ================ HOURLY COMPONENTS ================
-		componentLists.get(HOURLY).add(everyLabel);
+		JPanel hourlyPanel = new JPanel();
+		hourlyPanel.setLayout(new MigLayout("", "[][][]", "[]"));
+
+		JLabel hourlyEveryLabel = new JLabel("Every:");
+		hourlyEveryLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
+		hourlyPanel.add(hourlyEveryLabel, "cell 0 0");
 
 		hourlyValueSpinner = new JSpinner();
 		hourlyValueSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		hourlyValueSpinner.setModel(CanvaCordModels.getHoursModel());
-		componentLists.get(HOURLY).add(hourlyValueSpinner);
-		layoutStrings.put(hourlyValueSpinner, "cell 1 2");
+		hourlyPanel.add(hourlyValueSpinner, "cell 1 0");
 
 		JLabel hoursLabel = new JLabel("Hour(s)");
 		hoursLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
-		componentLists.get(HOURLY).add(hoursLabel);
-		layoutStrings.put(hoursLabel, "cell 2 2");
+		hourlyPanel.add(hoursLabel, "cell 2 0");
+
+		componentLists.get(HOURLY).add(hourlyPanel);
+		layoutStrings.put(hourlyPanel, "cell 0 2");
 
 		// ================ DAILY COMPONENTS ================
+		JPanel dailyTimePanel = new JPanel();
+		dailyTimePanel.setLayout(new MigLayout("", "[][][][][]", "[]"));
+
 		JLabel preLabel = new JLabel("Every day at:");
 		preLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
-		componentLists.get(DAILY).add(preLabel);
-		layoutStrings.put(preLabel, "cell 0 2");
+		dailyTimePanel.add(preLabel, "cell 0 0");
 
 		dailyMinuteSpinner = new JSpinner();
 		dailyMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dailyMinuteSpinner.setModel(CanvaCordModels.getMinutesModel());
 		dailyMinuteSpinner.setEditor(CanvaCordModels.getMinutesEditor(dailyMinuteSpinner));
-		componentLists.get(DAILY).add(dailyMinuteSpinner);
-		layoutStrings.put(dailyMinuteSpinner, "cell 2 2");
+		dailyTimePanel.add(dailyMinuteSpinner, "cell 2 0");
 
 		dailyHourSpinner = new JSpinner();
 		dailyHourSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		dailyHourSpinner.setModel(CanvaCordModels.getHoursModel());
-		componentLists.get(DAILY).add(dailyHourSpinner);
-		layoutStrings.put(dailyHourSpinner, "cell 1 2");
+		dailyTimePanel.add(dailyHourSpinner, "cell 1 0");
 
 		dailyAmButton = new JRadioButton("AM");
 		dailyAmButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
-		componentLists.get(DAILY).add(dailyAmButton);
-		layoutStrings.put(dailyAmButton, "cell 3 2");
+		dailyTimePanel.add(dailyAmButton, "cell 3 0");
 
 		dailyPmButton = new JRadioButton("PM");
 		dailyPmButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
-		componentLists.get(DAILY).add(dailyPmButton);
-		layoutStrings.put(dailyPmButton, "cell 4 2");
+		dailyTimePanel.add(dailyPmButton, "cell 4 0");
 
-		ButtonGroup buttonGroup = new ButtonGroup();
-		buttonGroup.add(dailyAmButton);
-		buttonGroup.add(dailyPmButton);
+		componentLists.get(DAILY).add(dailyTimePanel);
+		layoutStrings.put(dailyTimePanel, "cell 0 2");
+
+		ButtonGroup dailyButtonGroup = new ButtonGroup();
+		dailyButtonGroup.add(dailyAmButton);
+		dailyButtonGroup.add(dailyPmButton);
+
+		// default AM selection
+		dailyAmButton.setSelected(true);
 
 		// ================ WEEKLY COMPONENTS ================
 		JPanel weekdaysPanel = new JPanel();
@@ -159,9 +172,58 @@ public class CanvasFetchPage extends OptionPage {
 		}
 
 		componentLists.get(WEEKLY).add(weekdaysPanel);
-		layoutStrings.put(weekdaysPanel, "cell 0 2");
+		layoutStrings.put(weekdaysPanel, "cell 0 2 8 1");
+
+		JPanel weeklyTimePanel = new JPanel();
+		weeklyTimePanel.setLayout(new MigLayout("", "[][][][][]", "[]"));
+
+		JLabel atLabel = new JLabel("At:");
+		atLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
+		weeklyTimePanel.add(atLabel, "cell 0 0");
+
+		weeklyHourSpinner = new JSpinner();
+		weeklyHourSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		weeklyHourSpinner.setModel(CanvaCordModels.getHoursModel());
+		weeklyTimePanel.add(weeklyHourSpinner, "cell 1 0");
+
+		weeklyMinuteSpinner = new JSpinner();
+		weeklyMinuteSpinner.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		weeklyMinuteSpinner.setModel(CanvaCordModels.getMinutesModel());
+		weeklyMinuteSpinner.setEditor(CanvaCordModels.getMinutesEditor(weeklyMinuteSpinner));
+		weeklyTimePanel.add(weeklyMinuteSpinner, "cell 2 0");
+
+		weeklyAmButton = new JRadioButton("AM");
+		weeklyAmButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		weeklyTimePanel.add(weeklyAmButton, "cell 3 0");
+
+		weeklyPmButton = new JRadioButton("PM");
+		weeklyPmButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		weeklyTimePanel.add(weeklyPmButton, "cell 4 0");
+
+		componentLists.get(WEEKLY).add(weeklyTimePanel);
+		layoutStrings.put(weeklyTimePanel, "cell 0 4 5 1");
+
+		ButtonGroup weeklyButtonGroup = new ButtonGroup();
+		weeklyButtonGroup.add(weeklyAmButton);
+		weeklyButtonGroup.add(weeklyPmButton);
+
+		// default AM selection
+		weeklyAmButton.setSelected(true);
 
 		// ================ CRON COMPONENTS ================
+		JPanel cronPanel = new JPanel();
+		cronPanel.setLayout(new MigLayout("", "[][]", "[]"));
+
+		JLabel cronLabel = new JLabel("Enter Cron String:");
+		cronLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
+		cronPanel.add(cronLabel, "cell 0 0");
+
+		cronField = new JTextField(24);
+		cronField.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		cronPanel.add(cronField, "cell 1 0");
+
+		componentLists.get(CRON).add(cronPanel);
+		layoutStrings.put(cronPanel, "cell 0 2");
 
 		// TODO dynamically select starting schedule type
 		// for now, just default to frequent
