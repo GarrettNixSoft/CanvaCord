@@ -3,12 +3,11 @@ package org.canvacord.gui.options.page;
 import net.miginfocom.swing.MigLayout;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
+import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.NotificationCreateDialog;
 import org.canvacord.gui.options.OptionPage;
-import org.canvacord.gui.wizard.cards.instance.RoleCreateCard;
-import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringUtils;
 
@@ -106,7 +105,10 @@ public class NotificationsPage extends OptionPage {
 
 	@Override
 	protected void verifyInputs() throws Exception {
-		// TODO
+
+		if (notifications.isEmpty())
+			throw new CanvaCordException("You must create at least one Notification.");
+
 	}
 
 	private static class NotificationCellRenderer extends JLabel implements ListCellRenderer<CanvaCordNotification> {
