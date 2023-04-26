@@ -54,6 +54,17 @@ public class EditInstancePanel extends OptionsPanel {
 		dataStore.store("server_id", instanceToEdit.getServerID());
 		dataStore.store("name", instanceToEdit.getName());
 		dataStore.store("icon_path", instanceToEdit.getIconPath());
+		dataStore.store("fetch_schedule", instanceToEdit.getCanvasFetchSchedule());
+		dataStore.store("roles", instanceToEdit.getConfiguredRoles());
+		dataStore.store("notifications", instanceToEdit.getConfiguredNotifications());
+		dataStore.store("has_syllabus", instanceToEdit.hasSyllabus());
+		dataStore.store("textbooks", instanceToEdit.getTextbooks());
+		dataStore.store("class_schedule", instanceToEdit.getClassSchedule());
+		dataStore.store("do_meeting_reminders", instanceToEdit.doMeetingReminders());
+		dataStore.store("class_reminder_schedule", instanceToEdit.getClassReminderSchedule());
+		dataStore.store("do_meeting_markers", instanceToEdit.doMeetingMarkers());
+		dataStore.store("command_availability", instanceToEdit.getAvailableCommands());
+		dataStore.store("command_ids", instanceToEdit.getRegisteredCommands());
 	}
 
 	@Override
