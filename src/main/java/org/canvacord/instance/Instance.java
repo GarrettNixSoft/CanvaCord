@@ -218,12 +218,24 @@ public class Instance {
 		return configuration;
 	}
 
+	public List<CanvaCordRole> getConfiguredRoles() {
+		return getConfiguredRoles(false);
+	}
+
 	public List<CanvaCordRole> getConfiguredRoles(boolean refresh) {
 		return configuration.getConfiguredRoles(refresh);
 	}
 
+	public List<CanvaCordRole> getRegisteredRoles() {
+		return getRegisteredRoles(false);
+	}
+
 	public List<CanvaCordRole> getRegisteredRoles(boolean refresh) {
 		return configuration.getRegisteredRoles(refresh);
+	}
+
+	public List<CanvaCordNotification> getConfiguredNotifications() {
+		return getConfiguredNotifications(false);
 	}
 
 	public List<CanvaCordNotification> getConfiguredNotifications(boolean refresh) {
@@ -244,6 +256,10 @@ public class Instance {
 
 	public int getClassReminderSchedule() {
 		return configuration.getClassReminderSchedule();
+	}
+
+	public Map<String, Boolean> getAvailableCommands() {
+		return configuration.getAvailableCommands(false);
 	}
 
 	public Map<String, Boolean> getAvailableCommands(boolean refresh) {
