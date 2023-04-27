@@ -11,6 +11,7 @@ import org.canvacord.instance.InstanceManager;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.Globals;
 import org.canvacord.util.input.UserInput;
+import org.quartz.SchedulerException;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -147,6 +148,7 @@ public class InstanceCell extends JPanel {
 
 		// Add stop button
 		stopButton = new JButton(new ImageIcon("resources/stop_icon.png"));
+		stopButton.setEnabled(false);
 		optionsButtonPanel.add(stopButton, "cell 1 0, width " + buttonSize + ", height " + buttonSize);
 
 		// Add a button for instance options
@@ -184,9 +186,13 @@ public class InstanceCell extends JPanel {
 
 					case INSTANCE_STARTED -> {
 						statusLabel.setText("Status: Idle");
+						startButton.setEnabled(false);
+						stopButton.setEnabled(true);
 					}
 					case INSTANCE_STOPPED -> {
 						statusLabel.setText("Status: Stopped");
+						stopButton.setEnabled(false);
+						startButton.setEnabled(true);
 					}
 					case FETCH_STARTED -> {
 						statusLabel.setText("Status: Fetching...");
@@ -248,6 +254,29 @@ public class InstanceCell extends JPanel {
 
 				}
 
+			}
+
+		});
+
+		// START/STOP LOGIC
+		startButton.addActionListener(event -> {
+
+			try {
+				InstanceManager.runInstance(instance.getInstanceID());
+			} catch (SchedulerException e) {
+				e.printStackTrace();
+				UserInput.showExceptionWarning(e);
+			}
+
+		});
+
+		stopButton.addActionListener(event -> {
+
+			try {
+				InstanceManager.stopInstance(instance.getInstanceID());
+			} catch (SchedulerException e) {
+				e.printStackTrace();
+				UserInput.showExceptionWarning(e);
 			}
 
 		});
