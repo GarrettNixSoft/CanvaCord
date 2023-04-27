@@ -20,9 +20,14 @@ public class ImagePanel extends JPanel {
 		}
 	}
 
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+		if (image != null)
+			g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 	}
 }

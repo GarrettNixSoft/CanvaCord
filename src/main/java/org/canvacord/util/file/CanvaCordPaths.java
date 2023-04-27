@@ -59,6 +59,19 @@ public class CanvaCordPaths {
 		return getInstanceRemindersPath(tokens[0], Long.parseLong(tokens[1]));
 	}
 
+	public static Path getInstanceSyllabusPath(String courseID, long serverID) {
+		return Paths.get("instances/" + instanceFormat(courseID, serverID) + "/syllabus.pdf");
+	}
+
+	public static Path getInstanceSyllabusPath(Instance instance) {
+		return getInstanceSyllabusPath(instance.getCourseID(), instance.getServerID());
+	}
+
+	public static Path getInstanceSyllabusPath(String instanceID) {
+		String[] tokens = instanceID.split("-");
+		return getInstanceSyllabusPath(tokens[0], Long.parseLong(tokens[1]));
+	}
+
 	public static String instanceFormat(String courseID, long serverID) {
 		return courseID + "-" + serverID;
 	}
