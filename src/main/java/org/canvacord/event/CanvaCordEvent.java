@@ -11,7 +11,8 @@ public class CanvaCordEvent {
         FETCH_STARTED, FETCH_UPDATE, FETCH_COMPLETED, FETCH_ERROR,
         NOTIFY_STARTED, NOTIFY_UPDATE, NOTIFY_COMPLETED, NOTIFY_ERROR,
         NEW_ASSIGNMENT, NEW_ANNOUNCEMENT, ASSIGNMENT_DUE_DATE_APPROACHING,
-        ASSIGNMENT_DUE_DATE_CHANGED;
+        ASSIGNMENT_DUE_DATE_CHANGED,
+        GUI_COMPONENT_CLICKED;
 
         public static Type stringToType(String typeStr) {
             for (Type type : values()) {

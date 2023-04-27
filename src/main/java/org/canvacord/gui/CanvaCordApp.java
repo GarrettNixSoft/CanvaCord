@@ -3,6 +3,7 @@ package org.canvacord.gui;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.CanvaCordEventHandler;
+import org.canvacord.event.CanvaCordEventListener;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.component.InstanceCell;
 import org.canvacord.instance.Instance;
@@ -323,6 +324,18 @@ public class CanvaCordApp extends JFrame {
 				}
 			}
 
+		});
+
+		// ================ SELECTING INSTANCES ================
+		CanvaCordEventHandler.addEventListener(event -> {
+			if (event.getType() == CanvaCordEvent.Type.GUI_COMPONENT_CLICKED) {
+
+				// User clicked an Instance
+				InstanceCell clickedCell = (InstanceCell) event.getPayload()[0];
+
+				System.out.println("User clicked " + clickedCell.getInstance().getName());
+
+			}
 		});
 
 	}

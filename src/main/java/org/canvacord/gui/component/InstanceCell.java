@@ -1,5 +1,6 @@
 package org.canvacord.gui.component;
 
+import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.CanvaCordEventHandler;
 import org.canvacord.event.FetchStage;
 import org.canvacord.gui.CanvaCordApp;
@@ -14,6 +15,8 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.nio.file.Paths;
 
 public class InstanceCell extends JPanel {
@@ -176,6 +179,15 @@ public class InstanceCell extends JPanel {
 	}
 
 	private void initLogic(Instance instance) {
+
+		// ================ FIRE SELECTION EVENT WHEN CLICKED ================
+		InstanceCell instanceCell = this;
+		addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				CanvaCordEvent.newEvent(CanvaCordEvent.Type.GUI_COMPONENT_CLICKED, instanceCell);
+			}
+		});
 
 		// ================ LISTEN FOR NEW EVENTS ================
 		CanvaCordEventHandler.addEventListener(event -> {
