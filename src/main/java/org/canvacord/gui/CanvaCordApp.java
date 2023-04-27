@@ -6,6 +6,7 @@ import org.canvacord.event.CanvaCordEventHandler;
 import org.canvacord.event.CanvaCordEventListener;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.component.InstanceCell;
+import org.canvacord.gui.component.InstanceDetailsPanel;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.main.CanvaCord;
@@ -187,6 +188,10 @@ public class CanvaCordApp extends JFrame {
 
 		// ================ INSTANCE DETAILS PANE ================
 		detailsPanel = new JPanel();
+		detailsPanel.setLayout(new CardLayout());
+
+		detailsPanel.add("", new InstanceDetailsPanel(null));
+
 		splitPane.setRightComponent(detailsPanel);
 
 		// TODO
@@ -212,6 +217,7 @@ public class CanvaCordApp extends JFrame {
 		for (int i = 0; i < instances.size(); i++) {
 			Instance instance = instances.get(i);
 			addInstanceCell(instance);
+			addInstanceDescription(instance);
 //			if (i < instances.size() - 1) instancesPane.add(Box.createVerticalStrut(2));
 			// TODO ^ this can be placed in another map by strut hashCode and removed when the instance is deleted
 		}
@@ -247,6 +253,15 @@ public class CanvaCordApp extends JFrame {
 		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
 		if (instanceCells.isEmpty())
 			splitPane.setLeftComponent(noInstancesPanel);
+	}
+
+	private void addInstanceDescription(Instance instance) {
+		InstanceDetailsPanel instanceDetailsPanel = new InstanceDetailsPanel(instance);
+		detailsPanel.add(instance.getInstanceID(), instanceDetailsPanel);
+	}
+
+	private void removeInstanceDescription(InstanceDetailsPanel instanceDetailsPanel) {
+		// TODO
 	}
 
 	// ================ INTERACTIVITY ================
@@ -321,6 +336,7 @@ public class CanvaCordApp extends JFrame {
 					Instance deletedInstance = (Instance) event.getPayload()[0];
 					InstanceCell cellToDelete = instanceCells.get(deletedInstance.getInstanceID());
 					removeInstanceCell(cellToDelete);
+					((CardLayout) detailsPanel.getLayout()).show(detailsPanel, "");
 				}
 			}
 
@@ -334,6 +350,8 @@ public class CanvaCordApp extends JFrame {
 				InstanceCell clickedCell = (InstanceCell) event.getPayload()[0];
 
 				System.out.println("User clicked " + clickedCell.getInstance().getName());
+
+				((CardLayout) detailsPanel.getLayout()).show(detailsPanel, clickedCell.getInstance().getInstanceID());
 
 			}
 		});
