@@ -1,5 +1,6 @@
 package org.canvacord.gui.component;
 
+import net.miginfocom.swing.MigLayout;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.CanvaCordEventHandler;
 import org.canvacord.event.FetchStage;
@@ -22,8 +23,8 @@ import java.nio.file.Paths;
 public class InstanceCell extends JPanel {
 
 	// ================ COMPONENT POSITIONING AND ALIGNMENT ================
-	public static final int ICON_SIZE = 96;
-	public static final int HEIGHT = 130;
+	public static final int ICON_SIZE = 120;
+	public static final int HEIGHT = 150;
 	public static final int LABEL_HEIGHT = 40;
 	public static final int STATUS_HEIGHT = 30;
 	public static final int DETAILS_HEIGHT = HEIGHT - LABEL_HEIGHT - STATUS_HEIGHT;
@@ -37,13 +38,15 @@ public class InstanceCell extends JPanel {
 	private JLabel statusLabel;
 	private DangerousProgressBar statusBar;
 
-	// instances can be edited
+	// instances can be started, stopped, and edited
+	private JButton startButton;
+	private JButton stopButton;
 	private JButton optionsButton;
 
 	public InstanceCell(Instance instance) {
 		this.instance = instance;
-		setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - 5, HEIGHT));
-		setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - 3, HEIGHT));
+//		setMinimumSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - 5, HEIGHT));
+//		setPreferredSize(new Dimension(CanvaCordApp.MIN_INSTANCE_WIDTH - 3, HEIGHT));
 		setMaximumSize(new Dimension(10000, HEIGHT));
 		setLayout(new BorderLayout());
 		init(instance);
@@ -57,7 +60,7 @@ public class InstanceCell extends JPanel {
 	public void init(Instance instance) {
 
 		// Use a BorderLayout and add some vertical border padding
-		setLayout(new BorderLayout());
+		setLayout(new MigLayout("", "[][][grow]", "[grow]"));
 		setBorder(new BevelBorder(BevelBorder.RAISED));
 
 		// Get the icon to draw
@@ -74,104 +77,85 @@ public class InstanceCell extends JPanel {
 
 		// add the icon to the left
 		JPanel iconContainerPanel = new JPanel();
-		iconContainerPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		iconContainerPanel.setMinimumSize(new Dimension(ICON_SIZE, ICON_SIZE));
-		iconContainerPanel.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
-		iconContainerPanel.setMaximumSize(new Dimension(ICON_SIZE, ICON_SIZE));
-		iconContainerPanel.setLayout(new GridBagLayout());
+//		iconContainerPanel.setMinimumSize(new Dimension(ICON_SIZE, ICON_SIZE));
+//		iconContainerPanel.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
+//		iconContainerPanel.setMaximumSize(new Dimension(ICON_SIZE, ICON_SIZE));
+		iconContainerPanel.setLayout(new MigLayout("", "[grow]", "[grow]"));
 
 		// Show the instance icon
 		ImagePanel iconPanel = new ImagePanel(iconPath);
-		iconPanel.setMinimumSize(new Dimension(ICON_SIZE, ICON_SIZE));
-		iconPanel.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
-		iconPanel.setMaximumSize(new Dimension(ICON_SIZE, ICON_SIZE));
-		iconContainerPanel.add(iconPanel);
-		add(iconContainerPanel, BorderLayout.WEST);
+//		iconPanel.setMinimumSize(new Dimension(ICON_SIZE, ICON_SIZE));
+//		iconPanel.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
+//		iconPanel.setMaximumSize(new Dimension(ICON_SIZE, ICON_SIZE));
+		iconContainerPanel.add(iconPanel, "cell 0 0, width " + ICON_SIZE + ", height " + ICON_SIZE);
+		add(iconContainerPanel, "cell 0 0, growx, growy");
 
 		// populate the main panel
-		JPanel mainPanel = new JPanel();
-		mainPanel.setBorder(new EmptyBorder(0, 10, 0, 0));
-		mainPanel.setLayout(new BorderLayout());
-
-		// Separate the label as an upper panel
-		JPanel labelPanel = new JPanel();
-		labelPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.X_AXIS));
-		labelPanel.setMinimumSize(new Dimension(STATUS_WIDTH, LABEL_HEIGHT));
-		labelPanel.setPreferredSize(new Dimension(STATUS_WIDTH, LABEL_HEIGHT));
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new MigLayout("align left", "[]", "[][][][]"));
+		add(centerPanel, "cell 1 0");
 
 		// Show the instance's name
 		JLabel instanceLabel = new JLabel(instance.getName());
 		instanceLabel.setFont(CanvaCordFonts.HEADER_FONT);
-		labelPanel.add(instanceLabel);
-
-		mainPanel.add(labelPanel, BorderLayout.NORTH);
+		centerPanel.add(instanceLabel, "cell 1 0");
 
 		// Put all detail components in a lower panel
-		JPanel instanceDetailsPanel = new JPanel();
-		instanceDetailsPanel.setBorder(new EmptyBorder(0, 5, 0, 5));
-		instanceDetailsPanel.setMinimumSize(new Dimension(STATUS_WIDTH, DETAILS_HEIGHT));
-		instanceDetailsPanel.setPreferredSize(new Dimension(STATUS_WIDTH, DETAILS_HEIGHT));
-		instanceDetailsPanel.setLayout(new BoxLayout(instanceDetailsPanel, BoxLayout.Y_AXIS));
 
 		// Show the associated Canvas course title
 		JLabel courseLabel = new JLabel("Course: " + instance.getCourseTitle());
 		courseLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 		courseLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		instanceDetailsPanel.add(courseLabel);
-
-		instanceDetailsPanel.add(Box.createVerticalStrut(2));
+		centerPanel.add(courseLabel, "cell 1 1");
 
 		// Show the associated Discord server name
 		JLabel serverLabel = new JLabel("Server: " + instance.getServerName());
 		serverLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 		serverLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		instanceDetailsPanel.add(serverLabel);
+		centerPanel.add(serverLabel, "cell 1 2");
 
 		// Show the current status on a panel
 		JPanel statusPanel = new JPanel();
-		statusPanel.setBorder(new EmptyBorder(0, 5, 5, 5));
-		statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
-		statusPanel.setMinimumSize(new Dimension(STATUS_WIDTH, STATUS_HEIGHT));
-		statusPanel.setPreferredSize(new Dimension(STATUS_WIDTH, STATUS_HEIGHT));
+		statusPanel.setLayout(new MigLayout("", "[][grow]", "[]"));
 
 		// Show the current status as a string
 		statusLabel = new JLabel("Status: Stopped");
 		statusLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 		statusPanel.setPreferredSize(new Dimension(150, 24));
-		statusPanel.add(statusLabel);
-
-		Dimension minFiller = new Dimension(20, 5);
-		Dimension preFiller = new Dimension(50, 5);
-		Dimension maxFiller = new Dimension(Short.MAX_VALUE, 5);
-		statusPanel.add(new Box.Filler(minFiller, preFiller, maxFiller));
+		statusPanel.add(statusLabel, "cell 0 0");
 
 		// Use a progress bar to show fetch or notification progress
 		statusBar = new DangerousProgressBar(0, 100);
-		statusBar.setMinimumSize(new Dimension(300, 16));
-		statusBar.setPreferredSize(new Dimension(300, 20));
-		statusBar.setMaximumSize(new Dimension(450, 20));
+//		statusBar.setMinimumSize(new Dimension(300, 16));
+//		statusBar.setPreferredSize(new Dimension(300, 20));
+//		statusBar.setMaximumSize(new Dimension(450, 20));
 		statusBar.setMinimum(0);
 		statusBar.setMaximum(100);
-		statusPanel.add(statusBar);
+		statusPanel.add(statusBar, "cell 1 0, growx");
+
+		centerPanel.add(statusPanel, "cell 1 3, growx");
 
 		// Add a panel for the options button
 		JPanel optionsButtonPanel = new JPanel();
-		optionsButtonPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		optionsButtonPanel.setLayout(new GridBagLayout());
+		optionsButtonPanel.setLayout(new MigLayout("", "[][][]", "[]"));
+
+		final int buttonSize = 50;
+
+		// Add start button
+		startButton = new JButton(new ImageIcon("resources/start_icon.png"));
+		optionsButtonPanel.add(startButton, "cell 0 0, width " + buttonSize + ", height " + buttonSize);
+
+		// Add stop button
+		stopButton = new JButton(new ImageIcon("resources/stop_icon.png"));
+		optionsButtonPanel.add(stopButton, "cell 1 0, width " + buttonSize + ", height " + buttonSize);
 
 		// Add a button for instance options
 		optionsButton = new JButton();
 		optionsButton.setIcon(new ImageIcon("resources/options_icon.png"));
 		optionsButton.setEnabled(true);
-		optionsButtonPanel.add(optionsButton);
+		optionsButtonPanel.add(optionsButton, "cell 2 0, width " + buttonSize + ", height " + buttonSize);
 
-		mainPanel.add(instanceDetailsPanel, BorderLayout.CENTER);
-		mainPanel.add(statusPanel, BorderLayout.SOUTH);
-//		mainPanel.add(optionsButtonPanel, BorderLayout.EAST);
-
-		add(mainPanel, BorderLayout.CENTER);
-		add(optionsButtonPanel, BorderLayout.EAST);
+		add(optionsButtonPanel, "cell 2 0");
 
 		setEnabled(true);
 		setOpaque(true);

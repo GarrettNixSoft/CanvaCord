@@ -29,7 +29,7 @@ public class CanvaCordApp extends JFrame {
 	private static CanvaCordApp instance;
 
 	// ================ DIMENSIONS ================
-	public static final int DEFAULT_WIDTH = 1200;
+	public static final int DEFAULT_WIDTH = 1500;
 	public static final int DEFAULT_HEIGHT = DEFAULT_WIDTH * 3 / 4;
 
 	public static final int MIN_WIDTH = DEFAULT_WIDTH * 3 / 4;
