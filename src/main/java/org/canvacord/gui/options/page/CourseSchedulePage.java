@@ -140,6 +140,18 @@ public class CourseSchedulePage extends OptionPage {
 			colorIcon.setDoBorder(true);
 			setIcon(colorIcon);
 
+			if (isSelected) {
+				setBackground(list.getSelectionBackground());
+				setForeground(list.getSelectionForeground());
+			} else {
+				setBackground(list.getBackground());
+				setForeground(list.getForeground());
+			}
+
+			setEnabled(list.isEnabled());
+			setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+			setOpaque(true);
+
 			return this;
 
 		}
