@@ -3,6 +3,7 @@ package org.canvacord.gui.options;
 import edu.ksu.canvas.model.Course;
 import org.canvacord.gui.options.page.*;
 import org.canvacord.instance.Instance;
+import org.canvacord.util.Globals;
 
 public class EditInstancePanel extends OptionsPanel {
 
@@ -18,6 +19,7 @@ public class EditInstancePanel extends OptionsPanel {
 	public EditInstancePanel(Instance instanceToEdit) {
 		super("Edit " + instanceToEdit.getName(), WIDTH, HEIGHT);
 		this.instanceToEdit = instanceToEdit;
+		Globals.EDIT_INSTANCE_ID = instanceToEdit.getInstanceID();
 		buildGUI();
 		initLogic();
 		populateDataStore();
