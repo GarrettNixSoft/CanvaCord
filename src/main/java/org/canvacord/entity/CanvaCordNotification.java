@@ -101,12 +101,15 @@ public class CanvaCordNotification {
 	// ================================ UTILITY ================================
 	private void readRolesFromJSON(JSONArray rolesArray, JSONArray roleObjects) {
 		rolesToPing = new ArrayList<>();
-		for (Object obj : rolesArray.toList()) {
-			String roleName = (String) obj;
-			for (int i = 0; i < roleObjects.length(); i++) {
-    JSONObject roleData = roleObjects.getJSONObject(i);
-    rolesToPing.add(new CanvaCordRole(roleData));
-   }
+		for (int i = 0; i < rolesArray.length(); i++) {
+			String roleName = rolesArray.getString(i);
+			for (int j = 0; j < roleObjects.length(); j++) {
+				JSONObject roleData = roleObjects.getJSONObject(j);
+				if (roleData.getString("name").equals(roleName)) {
+					rolesToPing.add(new CanvaCordRole(roleData));
+					break;
+				}
+			}
 		}
 	}
 
