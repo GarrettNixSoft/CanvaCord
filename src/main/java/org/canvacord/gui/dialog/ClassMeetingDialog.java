@@ -39,10 +39,15 @@ public class ClassMeetingDialog extends CanvaCordDialog {
 	private ButtonGroup startGroup;
 	private ButtonGroup endGroup;
 
-	public ClassMeetingDialog() {
+	private ClassMeetingDialog() {
 		super("Create Class Meeting", WIDTH, HEIGHT);
 		buildGUI();
 		initLogic();
+	}
+
+	private ClassMeetingDialog(ClassMeeting meetingToEdit) {
+		this();
+		prefillGUI(meetingToEdit);
 	}
 
 	@Override
@@ -179,6 +184,23 @@ public class ClassMeetingDialog extends CanvaCordDialog {
 		// TODO
 	}
 
+	private void prefillGUI(ClassMeeting meetingToEdit) {
+		int weekdayPtr = 0;
+		DayOfWeek weekday = meetingToEdit.getWeekday();
+		while (weekdays[weekdayPtr] != weekday) weekdayPtr++;
+		weekdaySelector.setSelectedIndex(weekdayPtr);
+		JSONObject startTime = meetingToEdit.getStartTime();
+		startHourSpinner.setValue(startTime.getInt("hour"));
+		startMinuteSpinner.setValue(startTime.getInt("minute"));
+		if (startTime.getString("ampm").equals("am")) startAmPmButtons[0].setSelected(true);
+		else if (startTime.getString("ampm").equals("pm")) startAmPmButtons[1].setSelected(true);
+		JSONObject endTime = meetingToEdit.getEndTime();
+		endHourSpinner.setValue(endTime.getInt("hour"));
+		endMinuteSpinner.setValue(endTime.getInt("minute"));
+		if (endTime.getString("ampm").equals("am")) endAmPmButtons[0].setSelected(true);
+		else if (endTime.getString("ampm").equals("pm")) endAmPmButtons[1].setSelected(true);
+	}
+
 	public Optional<ClassMeeting> getResult() {
 		if (cancelled || !verifyInputs())
 			return Optional.empty();
@@ -204,5 +226,11 @@ public class ClassMeetingDialog extends CanvaCordDialog {
 	}
 
 	// TODO edit mode
+	public static Optional<ClassMeeting> editClassMeeting(ClassMeeting meetingToEdit) {
+		ClassMeetingDialog dialog = new ClassMeetingDialog(meetingToEdit);
+		dialog.setVisible(true);
+		dialog.dispose();
+		return dialog.getResult();
+	}
 
 }

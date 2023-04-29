@@ -24,7 +24,6 @@ import java.util.List;
 public class MeetingRemindersCard extends InstanceConfigCard {
 
 	private List<ClassMeeting> classSchedule;
-	private JSONObject reminderSchedule;
 
 	private JCheckBox doMeetingReminders;
 	private JCheckBox createRole;
