@@ -48,7 +48,7 @@ public class TextbooksPage extends OptionPage {
 
 		JScrollPane textbookPane = new JScrollPane();
 		textbookPane.getViewport().setView(textbookList);
-		add(textbookPane, "cell 0 1 5 10, growx, growy");
+		add(textbookPane, "cell 0 1 5 18, growx, growy");
 
 		newTextbookButton = new JButton(new ImageIcon("resources/new_icon.png"));
 		add(newTextbookButton, "cell 9 3");
@@ -60,7 +60,8 @@ public class TextbooksPage extends OptionPage {
 		add(deleteTextbookButton, "cell 9 9");
 
 		scanButton = new JButton("Scan");
-		add(scanButton, "cell 9 12");
+		scanButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		add(scanButton, "cell 9 12, growx");
 
 		// TODO
 	}
