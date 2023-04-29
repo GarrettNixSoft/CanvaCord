@@ -8,6 +8,8 @@ import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.main.CanvaCord;
 import org.canvacord.util.CanvaCordModels;
+import org.canvacord.util.string.StringConverter;
+import org.canvacord.util.string.StringUtils;
 import org.canvacord.util.time.CanvaCordTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -80,7 +82,7 @@ public class CanvasFetchPage extends OptionPage {
 		add(scheduleSelectPanel, "span");
 
 		for (String type : CanvasFetchScheduleType.TYPES) {
-			scheduleTypeSelector.addItem(type);
+			scheduleTypeSelector.addItem(StringUtils.uppercaseWords(type));
 			componentLists.put(type, new ArrayList<>());
 		}
 
@@ -327,6 +329,8 @@ public class CanvasFetchPage extends OptionPage {
 	}
 
 	private void updateScheduleGUI(String newScheduleType) {
+		// lower case the parameter
+		newScheduleType = newScheduleType.toLowerCase();
 		// Check for no change
 		if (newScheduleType.equals(previousScheduleType)) return;
 		// Remove all components for the previous type (if there was one)
