@@ -114,12 +114,29 @@ public class ClassScheduleDialog extends CanvaCordDialog {
 
 		// ================ EDIT MEETING ================
 		editMeetingButton.addActionListener(event -> {
-			// TODO
+			// Get selected meeting
+			ClassMeeting classMeeting = classMeetingList.getSelectedValue();
+			if (classMeeting == null) return;
+			int index = classMeetingList.getSelectedIndex();
+			ClassMeetingDialog.editClassMeeting(classMeeting).ifPresent(
+					editedMeeting -> {
+						classMeetings.set(index, editedMeeting);
+						updateMeetingsList();
+					}
+			);
 		});
 
 		// ================ DELETE MEETING ================
 		deleteMeetingButton.addActionListener(event -> {
-			// TODO
+			// Get selected meeting
+			ClassMeeting classMeeting = classMeetingList.getSelectedValue();
+			if (classMeeting == null) return;
+			int index = classMeetingList.getSelectedIndex();
+			// Ask for confirmation and delete if given
+			if (UserInput.askToConfirm("Delete this meeting?", "Confirm Deletion")) {
+				classMeetings.remove(index);
+				updateMeetingsList();
+			}
 		});
 
 	}
