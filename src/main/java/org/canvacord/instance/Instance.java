@@ -157,7 +157,7 @@ public class Instance {
 		CanvaCordScheduler.removeInstance(this);
 	}
 
-	// ******************************** GETTERS ********************************
+	// ================================ GETTERS ================================
 	public String getInstanceID() {
 		return instanceID;
 	}

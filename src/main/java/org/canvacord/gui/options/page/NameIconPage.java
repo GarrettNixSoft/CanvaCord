@@ -85,5 +85,8 @@ public class NameIconPage extends OptionPage {
 				throw new FileFormatException("Icon path must be an existing file in PNG or JPG format.");
 		}
 
+		dataStore.store("name", nameField.getText());
+		dataStore.store("icon_path", iconPathField.getText());
+
 	}
 }

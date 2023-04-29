@@ -1,9 +1,12 @@
 package org.canvacord.gui.options;
 
 import edu.ksu.canvas.model.Course;
+import edu.ksu.canvas.model.User;
 import org.canvacord.gui.options.page.*;
 import org.canvacord.instance.Instance;
+import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.Globals;
+import org.canvacord.util.input.UserInput;
 
 public class EditInstancePanel extends OptionsPanel {
 
@@ -73,6 +76,29 @@ public class EditInstancePanel extends OptionsPanel {
 
 	@Override
 	protected void complete(boolean success) {
-		//
+
+		// Don't write any changes if the editor failed
+		if (!success) return;
+
+		// Write updated data store values to the instance config
+		InstanceConfiguration instanceConfiguration = instanceToEdit.getConfiguration();
+
+		// TODO
+		instanceConfiguration.setInstanceName((String) dataStore.get("name"));
+		instanceConfiguration.setIconPath((String) dataStore.get("icon_path"));
+
+	}
+
+	@Override
+	protected void save() {
+
+		// Write updated data store values to the instance config
+		InstanceConfiguration instanceConfiguration = instanceToEdit.getConfiguration();
+
+		boolean writeSuccess = instanceConfiguration.writeChanges();
+
+		if (!writeSuccess) UserInput.showErrorMessage("An error occurred while saving the\nInstance configuration.", "Write Error");
+		else System.out.println("Changes saved");
+
 	}
 }

@@ -261,7 +261,52 @@ public class InstanceConfiguration {
 		return registeredCommands;
 	}
 
+	// ================================ SETTERS ================================
+	public void setInstanceName(String name) {
+		configJSON.put("name", name);
+	}
+
+	public void setIconPath(String path) {
+		configJSON.put("icon_path", path);
+	}
+
+	public void setHasSyllabus(boolean hasSyllabus) {
+		configJSON.put("has_syllabus", hasSyllabus);
+	}
+
+	public void setDoMeetingReminders(boolean doMeetingReminders) {
+		configJSON.put("do_meeting_reminders", doMeetingReminders);
+	}
+
+	public void setDoMeetingMarkers(boolean doMeetingMarkers) {
+		configJSON.put("do_meeting_markers", doMeetingMarkers);
+	}
+
+	public void setCreateRemindersRole(boolean createRemindersRole) {
+		configJSON.put("create_reminders_role", createRemindersRole);
+	}
+
+	public void setCreateMarkersRole(boolean createMarkersRole) {
+		configJSON.put("create_markers_role", createMarkersRole);
+	}
+
+	public void setGenerateExamEvents(boolean generateExamEvents) {
+		configJSON.put("generate_exam_events", generateExamEvents);
+	}
+
+	public void setDoCustomReminders(boolean doCustomReminders) {
+		configJSON.put("do_custom_reminders", doCustomReminders);
+	}
+
+	public void setCommandAvailability(JSONObject commandAvailability) {
+		configJSON.put("command_availability", commandAvailability);
+	}
+
 	// ================================ UTILITY ================================
+	public boolean writeChanges() {
+		return FileUtil.writeJSON(configJSON, CanvaCordPaths.getInstanceConfigPath(getCourseID(), getServerID()).toFile());
+	}
+
 	public static InstanceConfiguration defaultConfiguration(String courseID, long serverID) {
 		JSONObject defaultConfig = new JSONObject(defaultConfigJSON);
 		defaultConfig.put("course_id", courseID);

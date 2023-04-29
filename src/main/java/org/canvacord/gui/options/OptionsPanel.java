@@ -119,8 +119,10 @@ public abstract class OptionsPanel extends JDialog {
 		}
 
 		// TODO build an error window listing all errors
-		if (inputErrors.isEmpty())
+		if (inputErrors.isEmpty()) {
+			save();
 			return true;
+		}
 
 		else {
 			MultiErrorDialog.showMultiErrorDialog(
@@ -135,7 +137,11 @@ public abstract class OptionsPanel extends JDialog {
 		// show the menu
 		setVisible(true);
 		// run the complete task
-		if (!cancelled) complete(verifyInputs());
+		if (!cancelled) {
+			boolean verified = verifyInputs();
+			complete(verified);
+			if (verified) save();
+		}
 		// the user exits, dispose of the window
 		dispose();
 	}
@@ -176,6 +182,7 @@ public abstract class OptionsPanel extends JDialog {
 	}
 
 	protected abstract void complete(boolean success);
+	protected abstract void save();
 
 	private void buildLayout() {
 		// use a border layout for arranging panels
@@ -250,8 +257,7 @@ public abstract class OptionsPanel extends JDialog {
 		buttonPanel.add(Box.createHorizontalStrut(buttonSpacing));
 		// program their behavior
 		okButton.addActionListener(event -> {
-			if (verifyInputs())
-				setVisible(false);
+			setVisible(false);
 		});
 		applyButton.addActionListener(event -> {
 			verifyInputs();
