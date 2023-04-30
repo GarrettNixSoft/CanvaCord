@@ -294,6 +294,10 @@ public class InstanceConfiguration {
 		configJSON.put("create_reminders_role", createRemindersRole);
 	}
 
+	public void setClassRemindersSchedule(int remindersSchedule) {
+		configJSON.put("reminders_schedule", remindersSchedule);
+	}
+
 	public void setCreateMarkersRole(boolean createMarkersRole) {
 		configJSON.put("create_markers_role", createMarkersRole);
 	}

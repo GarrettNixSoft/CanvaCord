@@ -77,7 +77,15 @@ public class MeetingRemindersPage extends OptionPage {
 
 	@Override
 	protected void initLogic() {
-		// TODO
+
+		doMeetingReminders.addActionListener(event -> {
+			createRemindersRole.setEnabled(doMeetingReminders.isSelected());
+			reminderScheduleSpinner.setEnabled(doMeetingReminders.isSelected());
+
+			if (!doMeetingReminders.isSelected())
+				createRemindersRole.setSelected(false);
+		});
+
 	}
 
 	@Override
@@ -90,6 +98,8 @@ public class MeetingRemindersPage extends OptionPage {
 
 	@Override
 	protected void verifyInputs() throws Exception {
-		// TODO
+		dataStore.store("do_meeting_reminders", doMeetingReminders.isSelected());
+		dataStore.store("create_reminders_role", createRemindersRole.isSelected());
+		dataStore.store("class_reminder_schedule", reminderScheduleSpinner.getValue());
 	}
 }

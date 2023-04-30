@@ -58,6 +58,9 @@ public class MeetingMarkersPage extends OptionPage {
 
 		doMeetingMarkers.addActionListener(event -> {
 			createMarkersRole.setEnabled(doMeetingMarkers.isSelected());
+
+			if (!doMeetingMarkers.isSelected())
+				createMarkersRole.setSelected(false);
 		});
 
 	}
