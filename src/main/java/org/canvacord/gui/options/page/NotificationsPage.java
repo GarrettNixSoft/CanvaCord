@@ -10,6 +10,7 @@ import org.canvacord.gui.dialog.NotificationCreateDialog;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringUtils;
+import org.json.JSONArray;
 
 import javax.swing.*;
 import java.awt.*;
@@ -109,6 +110,8 @@ public class NotificationsPage extends OptionPage {
 		if (notifications.isEmpty())
 			throw new CanvaCordException("You must create at least one Notification.");
 
+		dataStore.store("configured_notifications", getNotificationsArray());
+
 	}
 
 	private static class NotificationCellRenderer extends JLabel implements ListCellRenderer<CanvaCordNotification> {
@@ -174,6 +177,14 @@ public class NotificationsPage extends OptionPage {
 		notificationsList.setModel(notificationListModel);
 		notificationsList.updateUI();
 
+	}
+
+	private JSONArray getNotificationsArray() {
+		JSONArray result = new JSONArray();
+		for (CanvaCordNotification notification : notifications) {
+			result.put(notification.getJSON());
+		}
+		return result;
 	}
 
 }

@@ -100,6 +100,6 @@ public class MeetingRemindersPage extends OptionPage {
 	protected void verifyInputs() throws Exception {
 		dataStore.store("do_meeting_reminders", doMeetingReminders.isSelected());
 		dataStore.store("create_reminders_role", createRemindersRole.isSelected());
-		dataStore.store("class_reminder_schedule", reminderScheduleSpinner.getValue());
+		dataStore.store("class_reminders_schedule", reminderScheduleSpinner.getValue());
 	}
 }

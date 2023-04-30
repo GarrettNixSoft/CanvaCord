@@ -278,6 +278,10 @@ public class InstanceConfiguration {
 		configJSON.put("roles", rolesArray);
 	}
 
+	public void setConfiguredNotifications(JSONArray notificationsArray) {
+		configJSON.put("notifications", notificationsArray);
+	}
+
 	public void setHasSyllabus(boolean hasSyllabus) {
 		configJSON.put("has_syllabus", hasSyllabus);
 	}
