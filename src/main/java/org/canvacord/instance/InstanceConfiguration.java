@@ -270,6 +270,10 @@ public class InstanceConfiguration {
 		configJSON.put("icon_path", path);
 	}
 
+	public void setFetchSchedule(JSONObject fetchSchedule) {
+		configJSON.put("canvas_fetch_schedule", fetchSchedule);
+	}
+
 	public void setHasSyllabus(boolean hasSyllabus) {
 		configJSON.put("has_syllabus", hasSyllabus);
 	}

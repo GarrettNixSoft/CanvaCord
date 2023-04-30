@@ -26,6 +26,8 @@ import static org.canvacord.entity.CanvasFetchScheduleType.*;
 
 public class CanvasFetchPage extends OptionPage {
 
+	private JSONObject fetchSchedule;
+
 	private JComboBox<String> scheduleTypeSelector;
 	private Map<String, List<JComponent>> componentLists;
 	private String previousScheduleType;
@@ -250,23 +252,23 @@ public class CanvasFetchPage extends OptionPage {
 	@Override
 	protected void prefillGUI() {
 
-		JSONObject fetchSchedule = (JSONObject) dataStore.get("fetch_schedule");
+		fetchSchedule = (JSONObject) dataStore.get("fetch_schedule");
 		String type = fetchSchedule.getString("type");
 
 		switch (type) {
 			case "interval" -> {
 				JSONObject interval = fetchSchedule.getJSONObject("interval");
 				String unit = interval.getString("unit");
-				int value = interval.getInt("amount");
+				int value = interval.getInt("value");
 				if (unit.equals("minutes")) {
-					dailyMinuteSpinner.setValue(value);
+					scheduleTypeSelector.setSelectedIndex(0);
+					frequentValueSpinner.setValue(value);
 					updateScheduleGUI(FREQUENT);
-					scheduleTypeSelector.setSelectedItem(FREQUENT);
 				}
 				else if (unit.equals("hours")) {
-					dailyHourSpinner.setValue(value);
+					scheduleTypeSelector.setSelectedIndex(1);
+					frequentValueSpinner.setValue(value);
 					updateScheduleGUI(HOURLY);
-					scheduleTypeSelector.setSelectedItem(HOURLY);
 				}
 				else {
 					CanvaCord.explode("Invalid Canvas Fetch interval unit type: " + type);
@@ -280,8 +282,8 @@ public class CanvasFetchPage extends OptionPage {
 					dailyAmButton.setSelected(true);
 				else if (ampm.equals("pm"))
 					dailyPmButton.setSelected(true);
+				scheduleTypeSelector.setSelectedIndex(2);
 				updateScheduleGUI(DAILY);
-				scheduleTypeSelector.setSelectedItem(DAILY);
 			}
 			case WEEKLY -> {
 				weeklyHourSpinner.setValue(fetchSchedule.getInt("hour"));
@@ -299,15 +301,17 @@ public class CanvasFetchPage extends OptionPage {
 						buttonPtr++;
 					weekdayButtons[buttonPtr].setSelected(true);
 				}
+				scheduleTypeSelector.setSelectedIndex(3);
 				updateScheduleGUI(WEEKLY);
-				scheduleTypeSelector.setSelectedItem(WEEKLY);
 			}
 			case CRON -> {
 				cronField.setText(fetchSchedule.getString("cron"));
+				scheduleTypeSelector.setSelectedIndex(4);
 				updateScheduleGUI(CRON);
-				scheduleTypeSelector.setSelectedItem(CRON);
 			}
 		}
+
+		System.out.println("selected: " + scheduleTypeSelector.getSelectedItem());
 
 	}
 
@@ -325,6 +329,9 @@ public class CanvasFetchPage extends OptionPage {
 			if (!CronExpression.isValidExpression(cronField.getText()))
 				throw new CronException("Invalid Cron expression");
 		}
+
+		// Save the schedule
+		dataStore.store("fetch_schedule", getScheduleJSON());
 
 	}
 
@@ -352,4 +359,61 @@ public class CanvasFetchPage extends OptionPage {
 			repaint();
 		});
 	}
+
+	private JSONObject getScheduleJSON() {
+
+		if (scheduleTypeSelector.getSelectedItem() == null)
+			throw new CanvaCordException("No fetch schedule type selected");
+
+		// Build a JSON representation of the user's schedule based on what they input in the GUI fields
+		fetchSchedule = new JSONObject();
+
+		switch (((String) scheduleTypeSelector.getSelectedItem()).toLowerCase()) {
+			case FREQUENT -> {
+				fetchSchedule.put("type", "interval");
+				fetchSchedule.put("round", false);
+				JSONObject interval = new JSONObject();
+				interval.put("unit", "minutes");
+				interval.put("value", frequentValueSpinner.getValue());
+				fetchSchedule.put("interval", interval);
+			}
+			case HOURLY -> {
+				fetchSchedule.put("type", "interval");
+				fetchSchedule.put("round", true);
+				JSONObject interval = new JSONObject();
+				interval.put("unit", "hours");
+				interval.put("amount", hourlyValueSpinner.getValue());
+				fetchSchedule.put("interval", interval);
+			}
+			case DAILY -> {
+				fetchSchedule.put("type", "daily");
+				fetchSchedule.put("hour", dailyHourSpinner.getValue());
+				fetchSchedule.put("minute", dailyMinuteSpinner.getValue());
+				fetchSchedule.put("ampm", dailyAmButton.isSelected() ? "am" : dailyPmButton.isSelected() ? "pm" : "");
+			}
+			case WEEKLY -> {
+				fetchSchedule.put("type", "weekly");
+				fetchSchedule.put("hour", weeklyHourSpinner.getValue());
+				fetchSchedule.put("minute", weeklyMinuteSpinner.getValue());
+				fetchSchedule.put("ampm", weeklyAmButton.isSelected() ? "am" : weeklyPmButton.isSelected() ? "pm" : "");
+				JSONArray days = new JSONArray();
+				for (JCheckBox dayCheckbox : weekdayButtons) {
+					if (dayCheckbox.isSelected())
+						days.put(dayCheckbox.getText().toLowerCase());
+				}
+				fetchSchedule.put("days", days);
+			}
+			case CRON -> {
+				fetchSchedule.put("type", "cron");
+				fetchSchedule.put("cron", cronField.getText());
+			}
+			default -> {
+				throw new CanvaCordException("what");
+			}
+		}
+
+		return fetchSchedule;
+
+	}
+
 }

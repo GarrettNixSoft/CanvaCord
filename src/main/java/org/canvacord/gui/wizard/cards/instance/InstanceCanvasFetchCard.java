@@ -514,7 +514,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 			result.put("round", false);
 			JSONObject interval = new JSONObject();
 			interval.put("unit", "minutes");
-			interval.put("amount", freqMinuteSpinner.getValue());
+			interval.put("value", freqMinuteSpinner.getValue());
 			result.put("interval", interval);
 		}
 		else if (hourlyButton.isSelected()) {
@@ -522,7 +522,7 @@ public class InstanceCanvasFetchCard extends InstanceConfigCard {
 			result.put("round", true);
 			JSONObject interval = new JSONObject();
 			interval.put("unit", "hours");
-			interval.put("amount", hourlyHoursSpinner.getValue());
+			interval.put("value", hourlyHoursSpinner.getValue());
 			result.put("interval", interval);
 		}
 		else if (dailyButton.isSelected()) {

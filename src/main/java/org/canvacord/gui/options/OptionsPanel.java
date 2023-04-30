@@ -120,6 +120,7 @@ public abstract class OptionsPanel extends JDialog {
 
 		// TODO build an error window listing all errors
 		if (inputErrors.isEmpty()) {
+			complete(true);
 			save();
 			return true;
 		}
@@ -129,6 +130,7 @@ public abstract class OptionsPanel extends JDialog {
 					"Configuration Errors",
 					"<html>The following errors were found when trying to save your modified configuration:</html>",
 					inputErrors);
+			complete(false);
 			return false;
 		}
 	}
@@ -137,11 +139,11 @@ public abstract class OptionsPanel extends JDialog {
 		// show the menu
 		setVisible(true);
 		// run the complete task
-		if (!cancelled) {
-			boolean verified = verifyInputs();
-			complete(verified);
-			if (verified) save();
-		}
+//		if (!cancelled) {
+//			boolean verified = verifyInputs();
+//			complete(verified);
+//			if (verified) save();
+//		}
 		// the user exits, dispose of the window
 		dispose();
 	}
@@ -257,7 +259,8 @@ public abstract class OptionsPanel extends JDialog {
 		buttonPanel.add(Box.createHorizontalStrut(buttonSpacing));
 		// program their behavior
 		okButton.addActionListener(event -> {
-			setVisible(false);
+			if (verifyInputs())
+				setVisible(false);
 		});
 		applyButton.addActionListener(event -> {
 			verifyInputs();
