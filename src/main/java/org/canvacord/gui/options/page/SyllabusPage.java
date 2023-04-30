@@ -18,7 +18,7 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.*;
 
 public class SyllabusPage extends OptionPage {
 
@@ -28,6 +28,7 @@ public class SyllabusPage extends OptionPage {
 	private JButton clearButton;
 
 	private File syllabusFile;
+	private boolean syllabusChanged;
 
 	private JLabel previewLabel;
 	private ImagePanel pdfPreview;
@@ -86,6 +87,7 @@ public class SyllabusPage extends OptionPage {
 					syllabusInfo -> {
 						syllabusFile = syllabusInfo.getSyllabusFile();
 						syllabusFileLabel.setText(syllabusFile.getName());
+						syllabusChanged = true;
 					},
 					() -> {
 						UserInput.showWarningMessage("Could not find a Syllabus on Canvas.", "No Results");
@@ -102,19 +104,21 @@ public class SyllabusPage extends OptionPage {
 						syllabusFile = file;
 						previewLabel.setVisible(true);
 						renderPreview();
+						syllabusChanged = true;
 					}
 			);
 		});
 
 		// ================ CLEARING SELECTION ================
 		clearButton.addActionListener(event -> {
-			if (UserInput.askToConfirm("Clear selection?", "Confirm Clear")) {
+			if (UserInput.askToConfirm("Clear selection?\n\n(This will delete the local\ncopy of the PDF file.)", "Confirm Clear")) {
 				syllabusFileLabel.setText("None");
 				syllabusFile = null;
 				previewLabel.setVisible(false);
 				pdfPreview.setImage(null);
 				revalidate();
 				repaint();
+				syllabusChanged = true;
 			}
 		});
 
@@ -133,7 +137,24 @@ public class SyllabusPage extends OptionPage {
 
 	@Override
 	protected void verifyInputs() throws Exception {
-		// TODO
+
+		// don't do anything for no change
+		if (!syllabusChanged) return;
+
+		dataStore.store("has_syllabus", syllabusFile != null);
+		Path syllabusPath = CanvaCordPaths.getInstanceSyllabusPath((Instance) dataStore.get("instance"));
+
+		if (syllabusFile == null) {
+			Files.deleteIfExists(syllabusPath);
+		}
+		else if (syllabusChanged) {
+			// Move the new file into the directory as the new syllabus file
+			Files.copy(syllabusFile.toPath(), syllabusPath, StandardCopyOption.REPLACE_EXISTING);
+			syllabusChanged = false;
+			System.out.println("Copied syllabus.pdf");
+			// If an error occurs in the copy, it will be thrown up to the OptionsPanel and added to the error list
+		}
+
 	}
 
 	private void renderPreview() {
