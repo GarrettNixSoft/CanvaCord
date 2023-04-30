@@ -99,6 +99,10 @@ public class CourseSchedulePage extends OptionPage {
 			}
 		});
 
+		setOnNavigateAway(() -> {
+			dataStore.store("class_schedule", classSchedule);
+		});
+
 	}
 
 	@Override

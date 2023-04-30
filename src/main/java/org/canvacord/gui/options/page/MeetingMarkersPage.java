@@ -1,11 +1,14 @@
 package org.canvacord.gui.options.page;
 
 import net.miginfocom.swing.MigLayout;
+import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.instance.Instance;
+import org.canvacord.util.gui.ComponentUtils;
 
 import javax.swing.*;
+import java.util.List;
 
 public class MeetingMarkersPage extends OptionPage {
 
@@ -32,6 +35,22 @@ public class MeetingMarkersPage extends OptionPage {
 		createMarkersRole = new JCheckBox("Create Markers Role");
 		createMarkersRole.setFont(CanvaCordFonts.LABEL_FONT_BIGGER_THAN_SMALL_BUT_SMALLER_THAN_MEDIUM);
 		add(createMarkersRole, "cell 0 4");
+
+		// TODO on navigate to, disable all if no course schedule is set
+		setOnNavigateTo(() -> {
+			if (((List<ClassMeeting>) dataStore.get("class_schedule")).isEmpty()) {
+				ComponentUtils.setComponentsEnabledRecursively(this, false);
+				doMeetingMarkers.setSelected(false);
+				createMarkersRole.setSelected(false);
+				doMeetingMarkers.setToolTipText("<html>You must configure a class schedule to<br/>enable meeting markers.</html>");
+				createMarkersRole.setToolTipText("<html>You must configure a class schedule to<br/>enable meeting markers.</html>");
+			}
+			else {
+				ComponentUtils.setComponentsEnabledRecursively(this, true);
+				doMeetingMarkers.setToolTipText(null);
+				createMarkersRole.setToolTipText(null);
+			}
+		});
 
 	}
 

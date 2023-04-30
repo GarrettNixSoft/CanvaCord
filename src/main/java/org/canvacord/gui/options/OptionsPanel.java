@@ -201,7 +201,6 @@ public abstract class OptionsPanel extends JDialog {
 		optionPageTree.addTreeSelectionListener(selection -> {
 			// grab the selection
 			DefaultMutableTreeNode node = (DefaultMutableTreeNode) optionPageTree.getLastSelectedPathComponent();
-			System.out.println("Selected: " + node);
 			// return if there is no selection
 			if (node == null) return;
 			// get the selected page
