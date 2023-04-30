@@ -8,6 +8,10 @@ public class CanvaCordModels {
 		return new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, 1);
 	}
 
+	public static SpinnerNumberModel getGenericNumberModel(int step) {
+		return new SpinnerNumberModel(1, 1, Integer.MAX_VALUE, step);
+	}
+
 	public static SpinnerNumberModel getMinutesModel() {
 		return new SpinnerNumberModel(0, 0, 59, 1);
 	}
