@@ -7,6 +7,7 @@ import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.Globals;
 import org.canvacord.util.input.UserInput;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class EditInstancePanel extends OptionsPanel {
@@ -88,6 +89,9 @@ public class EditInstancePanel extends OptionsPanel {
 		instanceConfiguration.setInstanceName((String) dataStore.get("name"));
 		instanceConfiguration.setIconPath((String) dataStore.get("icon_path"));
 		instanceConfiguration.setFetchSchedule((JSONObject) dataStore.get("fetch_schedule"));
+		instanceConfiguration.setConfiguredRoles((JSONArray) dataStore.get("configured_roles"));
+
+		System.out.println(dataStore.get("configured_roles"));
 
 	}
 

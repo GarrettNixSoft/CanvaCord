@@ -274,6 +274,10 @@ public class InstanceConfiguration {
 		configJSON.put("canvas_fetch_schedule", fetchSchedule);
 	}
 
+	public void setConfiguredRoles(JSONArray rolesArray) {
+		configJSON.put("roles", rolesArray);
+	}
+
 	public void setHasSyllabus(boolean hasSyllabus) {
 		configJSON.put("has_syllabus", hasSyllabus);
 	}

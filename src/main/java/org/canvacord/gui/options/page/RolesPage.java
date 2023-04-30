@@ -8,6 +8,7 @@ import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.RoleCreateDialog;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.util.input.UserInput;
+import org.json.JSONArray;
 
 import javax.swing.*;
 
@@ -126,6 +127,8 @@ public class RolesPage extends OptionPage {
 		if (roles.isEmpty())
 			throw new CanvaCordException("You must create at least one Role.");
 
+		dataStore.store("configured_roles", getRolesArray());
+
 	}
 
 	private static class RoleCellRenderer extends JLabel implements ListCellRenderer<CanvaCordRole> {
@@ -180,4 +183,13 @@ public class RolesPage extends OptionPage {
 		rolesList.updateUI();
 
 	}
+
+	private JSONArray getRolesArray() {
+		JSONArray result = new JSONArray();
+		for (CanvaCordRole role : roles) {
+			result.put(role.getJSON());
+		}
+		return result;
+	}
+
 }
