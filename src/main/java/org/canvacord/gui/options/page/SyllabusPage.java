@@ -122,6 +122,12 @@ public class SyllabusPage extends OptionPage {
 			}
 		});
 
+		// ================ SYLLABUS FLAG ================
+		setOnNavigateAway(() -> {
+			dataStore.store("has_syllabus", syllabusFile != null);
+			dataStore.store("syllabus_path", syllabusFileLabel.getText());
+		});
+
 	}
 
 	@Override

@@ -112,6 +112,18 @@ public class TextbooksPage extends OptionPage {
 
 		});
 
+		setOnNavigateTo(() -> {
+			boolean hasSyllabus = (Boolean) dataStore.get("has_syllabus");
+			if (hasSyllabus) {
+				scanButton.setEnabled(true);
+				scanButton.setToolTipText(null);
+			}
+			else {
+				scanButton.setEnabled(false);
+				scanButton.setToolTipText("<html>You must add a Syllabus file in<br/>order to scan for textbooks.</html>");
+			}
+		});
+
 	}
 
 	@Override
