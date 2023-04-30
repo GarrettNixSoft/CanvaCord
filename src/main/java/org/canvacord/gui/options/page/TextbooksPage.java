@@ -51,15 +51,15 @@ public class TextbooksPage extends OptionPage {
 		add(textbookPane, "cell 0 1 5 18, growx, growy");
 
 		newTextbookButton = new JButton(new ImageIcon("resources/new_icon.png"));
-		add(newTextbookButton, "cell 9 3");
+		add(newTextbookButton, "cell 9 3, growx");
 
 		editTextbookButton = new JButton(new ImageIcon("resources/edit_icon_wip.png"));
-		add(editTextbookButton, "cell 9 6");
+		add(editTextbookButton, "cell 9 6, growx");
 
 		deleteTextbookButton = new JButton(new ImageIcon("resources/delete_icon_non_beveled.png"));
-		add(deleteTextbookButton, "cell 9 9");
+		add(deleteTextbookButton, "cell 9 9, growx");
 
-		scanButton = new JButton("Scan");
+		scanButton = new JButton("<html>Scan<br/>Syllabus</html>");
 		scanButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		add(scanButton, "cell 9 12, growx");
 
