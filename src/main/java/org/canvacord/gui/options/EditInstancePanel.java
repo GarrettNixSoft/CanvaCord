@@ -91,8 +91,6 @@ public class EditInstancePanel extends OptionsPanel {
 		instanceConfiguration.setFetchSchedule((JSONObject) dataStore.get("fetch_schedule"));
 		instanceConfiguration.setConfiguredRoles((JSONArray) dataStore.get("configured_roles"));
 
-		System.out.println(dataStore.get("configured_roles"));
-
 	}
 
 	@Override
