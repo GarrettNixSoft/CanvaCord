@@ -7,9 +7,22 @@ import java.util.Optional;
 
 public class FileGetter {
 
+	private static File lastChooserDir;
+
 	static {
 		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
 		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {}
+		lastChooserDir = new File(System.getProperty("user.dir"));
+	}
+
+	/**
+	 * Prompt the user to select a file to open from the most recently opened directory.
+	 * @param filterDesc the description that will show in the file type box at the bottom of the dialog
+	 * @param extensions the file extensions that should be visible in the file chooser. If no extensions are provided, all files will be visible.
+	 * @return the file the user selected, or an empty Optional if they cancel or close the dialog
+	 */
+	public static Optional<File> getFileRecent(String filterDesc, String... extensions) {
+		return promptForFile(false, lastChooserDir.getAbsolutePath(), filterDesc, extensions);
 	}
 
 	/**
@@ -32,6 +45,10 @@ public class FileGetter {
 	 */
 	public static Optional<File> getSaveDestination(String startingDir, String filterDesc, String... extensions) {
 		return promptForFile(true, startingDir, filterDesc, extensions);
+	}
+
+	private static Optional<File> promptForFile(boolean save, String filterDesc, String... extensions) {
+		return promptForFile(save, lastChooserDir.getAbsolutePath(), filterDesc, extensions);
 	}
 
 	private static Optional<File> promptForFile(boolean save, String startingDir, String filterDesc, String... extensions) {
@@ -67,6 +84,9 @@ public class FileGetter {
 		File selectedFile = fileChooser.getSelectedFile();
 
 		parent.dispose();
+
+		// Save last dir
+		lastChooserDir = fileChooser.getCurrentDirectory();
 
 		if (selection == JFileChooser.APPROVE_OPTION)
 			return Optional.of(selectedFile);

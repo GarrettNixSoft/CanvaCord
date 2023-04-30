@@ -8,12 +8,16 @@ import org.canvacord.gui.dialog.TextbookManualDialog;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.util.file.FileHasher;
 import org.canvacord.util.file.FileUtil;
+import org.canvacord.util.file.TextbookDirectory;
 import org.canvacord.util.input.UserInput;
+import org.json.JSONArray;
 
 import javax.swing.*;
 
 import java.awt.*;
 import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -21,6 +25,9 @@ public class TextbooksPage extends OptionPage {
 
 	private List<TextbookInfo> textbooks;
 	private JList<TextbookInfo> textbookList;
+
+	private List<TextbookInfo> newTextbooks;
+	private List<TextbookInfo> removedTextbooks;
 
 	private JButton newTextbookButton;
 	private JButton editTextbookButton;
@@ -75,6 +82,7 @@ public class TextbooksPage extends OptionPage {
 			TextbookManualDialog.addNewTextbook().ifPresent(
 					textbookInfo -> {
 						textbooks.add(textbookInfo);
+						newTextbooks.add(textbookInfo);
 						updateTextbooksList();
 					}
 			);
@@ -99,7 +107,7 @@ public class TextbooksPage extends OptionPage {
 			int index = textbookList.getSelectedIndex();
 			if (index == -1) return;
 			if (UserInput.askToConfirm("Delete this textbook entry?\n(No original files will be affected.)", "Confirm Delete")) {
-				textbooks.remove(index);
+				removedTextbooks.add(textbooks.remove(index));
 				updateTextbooksList();
 			}
 		});
@@ -131,11 +139,28 @@ public class TextbooksPage extends OptionPage {
 	protected void prefillGUI() {
 		textbooks = (List<TextbookInfo>) dataStore.get("textbooks");
 		updateTextbooksList();
+
+		newTextbooks = new ArrayList<>();
+		removedTextbooks = new ArrayList<>();
 	}
 
 	@Override
 	protected void verifyInputs() throws Exception {
-		// TODO
+
+		// Clear files for removed textbooks
+		for (TextbookInfo removedTextbook : removedTextbooks) {
+			Files.deleteIfExists(removedTextbook.getTextbookFile().toPath());
+		}
+		removedTextbooks.clear();
+
+		// Copy new textbooks into the instance directory
+		for (TextbookInfo newTextbook : newTextbooks) {
+			newTextbook.storeAndConvert();
+		}
+		newTextbooks.clear();
+
+		dataStore.store("textbooks", getTextbooksArray());
+
 	}
 
 	private void updateTextbooksList() {
@@ -219,6 +244,14 @@ public class TextbooksPage extends OptionPage {
 
 		}
 
+	}
+
+	private JSONArray getTextbooksArray() {
+		JSONArray textbookFiles = new JSONArray();
+		for (TextbookInfo bookInfo : textbooks) {
+			textbookFiles.put(bookInfo.textbookJSON());
+		}
+		return textbookFiles;
 	}
 
 }

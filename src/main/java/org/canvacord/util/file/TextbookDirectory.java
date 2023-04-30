@@ -7,17 +7,19 @@ import java.util.Optional;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class TextbookDirectory {
+
     /**
-     * Checks for existings files and finds vacant number
-     * @param id
+     * Checks for existing files and finds vacant number
+     * @param instanceID Instance id
      * @return counter
      */
-    public static int getLatestNumber(String id) {
+    public static int getLatestNumber(String instanceID) {
         int counter = 1;
-        File outputFile = new File("./config/textbooks/" + id + "_" + counter + ".pdf");
+
+        File outputFile = new File(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + counter + ".pdf");
         while(outputFile.exists())
         {
-            outputFile = new File("./config/textbooks/" + id + "_" + ++counter + ".pdf");
+            outputFile = new File(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + ++counter + ".pdf");
         }
         return counter;
     }
@@ -36,19 +38,18 @@ public class TextbookDirectory {
 
     /**
      * Prompts User to Select a PDF file and stores it in the /config/textbooks folder.
-     * @param instanceID The course id of the course too add the textbook file too
+     * @param instanceID The course id of the course to add the textbook file too
      * @return the chosen pdf file that the user chosen
      */
     public static Optional<File> storeTextbook(String instanceID) {
-        Optional<File> testing = FileGetter.getFile(System.getProperty("user.dir"), "PDF File", ".pdf");
+        Optional<File> testing = FileGetter.getFileRecent( "PDF File", ".pdf");
         //Checks if user closes the prompt window
         if(testing.isEmpty()) {
             System.out.println("Unable to obtain file");
             return Optional.empty();
         }
         File inputFile = testing.get();
-        String courseID = CanvaCordPaths.parseID(instanceID)[1];
-        File outputFile = new File("instances/" + instanceID + "/" + courseID + "_" + getLatestNumber(instanceID) + ".pdf");
+        File outputFile = new File(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + getLatestNumber(instanceID) + ".pdf");
         //copies inputFile to outputFile
         try {
             Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
@@ -58,9 +59,8 @@ public class TextbookDirectory {
         return testing;
     }
 
-    public static Optional<File> storeTextbook(String id, File inputFile) {
-        String courseID = CanvaCordPaths.parseID(id)[1];
-        File outputFile = new File("instances/" + id + "/" + courseID + "_" + getLatestNumber(id) + ".pdf");
+    public static Optional<File> storeTextbook(String instanceID, File inputFile) {
+        File outputFile = new File(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + getLatestNumber(instanceID) + ".pdf");
         //copies inputFile to outputFile
         try {
             Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
@@ -72,7 +72,7 @@ public class TextbookDirectory {
     }
 
     public static Optional<File> chooseTextbook(){
-        Optional<File> testing = FileGetter.getFile("user.dir", "PDF File", ".pdf");
+        Optional<File> testing = FileGetter.getFileRecent("PDF File", ".pdf");
         //Checks if user closes the prompt window
         if(testing.isEmpty()) {
             System.out.println("Unable to obtain file");
@@ -83,11 +83,11 @@ public class TextbookDirectory {
 
     /**
      * Checks to see if a course already has a pdf associated with it in the /config/textbooks folder
-     * @param id course id
+     * @param instanceID Instance id
      * @return a boolean of whether the file exists or not
      */
-    public static boolean exists(String id){
-        File outputFile = new File("./config/textbooks/" + id + "_1.pdf");
+    public static boolean exists(String instanceID){
+        File outputFile = new File(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "textbook_1.pdf");
         return outputFile.exists();
     }
 

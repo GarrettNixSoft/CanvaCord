@@ -56,7 +56,6 @@ public class EditInstancePanel extends OptionsPanel {
 	}
 
 	private void populateDataStore() {
-		// TODO fill the data store with instance fields
 		dataStore.store("instance", instanceToEdit);
 		dataStore.store("course_id", instanceToEdit.getCourseID());
 		dataStore.store("server_id", instanceToEdit.getServerID());
@@ -93,7 +92,7 @@ public class EditInstancePanel extends OptionsPanel {
 		instanceConfiguration.setFetchSchedule((JSONObject) dataStore.get("fetch_schedule"));
 		instanceConfiguration.setConfiguredRoles((JSONArray) dataStore.get("configured_roles"));
 		instanceConfiguration.setConfiguredNotifications((JSONArray) dataStore.get("configured_notifications"));
-
+		instanceConfiguration.setTextbooks((JSONArray) dataStore.get("textbooks"));
 		instanceConfiguration.setDoMeetingReminders((Boolean) dataStore.get("do_meeting_reminders"));
 		instanceConfiguration.setCreateRemindersRole((Boolean) dataStore.get("create_reminders_role"));
 		instanceConfiguration.setClassRemindersSchedule((Integer) dataStore.get("class_reminders_schedule"));

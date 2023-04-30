@@ -286,6 +286,10 @@ public class InstanceConfiguration {
 		configJSON.put("has_syllabus", hasSyllabus);
 	}
 
+	public void setTextbooks(JSONArray textbooksArray) {
+		configJSON.put("textbook_files", textbooksArray);
+	}
+
 	public void setDoMeetingReminders(boolean doMeetingReminders) {
 		configJSON.put("do_meeting_reminders", doMeetingReminders);
 	}

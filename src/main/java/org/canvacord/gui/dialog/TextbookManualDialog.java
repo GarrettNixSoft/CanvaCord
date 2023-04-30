@@ -129,7 +129,7 @@ public class TextbookManualDialog extends CanvaCordDialog {
 
 		// ================ CHOOSE A FILE ================
 		chooseButton.addActionListener(event -> {
-			FileGetter.getFile(System.getProperty("user.dir"), "PDF files", "pdf").ifPresent(
+			FileGetter.getFileRecent("PDF files", "pdf").ifPresent(
 					file -> {
 						pathField.setText(file.getAbsolutePath());
 					}

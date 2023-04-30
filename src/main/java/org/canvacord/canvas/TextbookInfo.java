@@ -46,6 +46,7 @@ public record TextbookInfo(JSONObject textbookJSON) {
 			textbookData.put("title", getTitle());
 			textbookData.put("author", getAuthor());
 			textbookData.put("file_name", storedFile.get().getName());
+			System.out.println("Stored " + getTitle());
 			return new TextbookInfo(textbookData);
 		}
 		else {
