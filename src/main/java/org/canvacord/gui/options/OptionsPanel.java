@@ -179,7 +179,6 @@ public abstract class OptionsPanel extends JDialog {
 		currentPage.onNavigateTo();
 		// populate the content panel
 		pageLayout.show(pagePanel, currentPage.getName());
-		System.out.println("Navigated to " + currentPage);
 		repaint();
 	}
 
@@ -207,7 +206,6 @@ public abstract class OptionsPanel extends JDialog {
 			if (node == null) return;
 			// get the selected page
 			OptionPage selectedPage = (OptionPage) node.getUserObject();
-			System.out.println("Selected page: " + selectedPage);
 			navigateToPage(selectedPage);
 		});
 		optionPageTree.setRootVisible(false);

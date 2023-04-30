@@ -126,7 +126,6 @@ public class SyllabusPage extends OptionPage {
 
 	@Override
 	protected void prefillGUI() {
-
 		if ((Boolean) dataStore.get("has_syllabus")) {
 			Instance instance = (Instance) dataStore.get("instance");
 			syllabusFile = CanvaCordPaths.getInstanceSyllabusPath(instance).toFile();
