@@ -74,6 +74,8 @@
 		"assignments_active": true,
 		"assignment_details": true,
 		"announcements_search": true,
+		"module_list": true,
+		"module_search": true,
 		"textbooks": true,
 		"announcements_list": true
 	},
@@ -88,6 +90,7 @@
 		"announcements_search": -1,
 		"textbooks": -1,
 		"announcements_list": -1,
-		"module_list":  -1
+		"module_list": -1,
+		"module_search": -1
 	}
 }
