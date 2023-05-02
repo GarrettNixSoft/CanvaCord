@@ -49,6 +49,7 @@ public class CanvasNotifier {
 
 		// Add each assignment to the embed
 		for (Assignment assignment : assignments) {
+			if (assignment == null) continue;
 			embedBuilder.addField(assignment.getName(), "Due Date: " + assignment.getDueAt());
 		}
 
@@ -97,6 +98,7 @@ public class CanvasNotifier {
 		for (Pair<Assignment, Pair<Date, Date>> assignmentPair : assignments) {
 			Assignment assignment = assignmentPair.first();
 			Pair<Date, Date> datePair = assignmentPair.second();
+			if (assignment == null) continue;
 			embedBuilder.addField(assignment.getName(), "New Due Date: " + datePair.second());
 		}
 
@@ -138,6 +140,7 @@ public class CanvasNotifier {
 				.setDescription("The following assignments are due soon:");
 
 		for (Assignment assignment : assignments) {
+			if (assignment == null) continue;
 			embedBuilder.addField(assignment.getName(), "Due Date: " + assignment.getDueAt());
 		}
 
@@ -178,6 +181,7 @@ public class CanvasNotifier {
 
 		// Need to fix format for announcement message, also announcements dont contain to links
 		for (Announcement announcement : announcements) {
+			if (announcement == null) continue;
 			embedBuilder.addField(announcement.getTitle(),
 					"Posted at: "+announcement.getPostedAt().toString()+", "+announcement.getMessage());
 		}
