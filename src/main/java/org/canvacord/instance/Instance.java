@@ -3,6 +3,8 @@ package org.canvacord.instance;
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.discord.commands.Command;
+import org.canvacord.discord.initialize.CommandRegistration;
+import org.canvacord.discord.initialize.RoleRegistration;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.entity.ClassMeeting;
@@ -86,7 +88,10 @@ public class Instance {
 	 * @throws CanvaCordException if some error occurs during initialization
 	 */
 	public boolean initialize() throws CanvaCordException {
-		// TODO
+
+		RoleRegistration.registerRoles(this);
+		CommandRegistration.registerCommands(this);
+
 		return false;
 	}
 
