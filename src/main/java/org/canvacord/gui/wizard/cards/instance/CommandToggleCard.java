@@ -34,16 +34,18 @@ public class CommandToggleCard extends InstanceConfigCard {
 
 		// build list of commands that can be toggled
 		commands = new ArrayList<>();
-		addCommandRecord("Syllabus", true, null);
-		addCommandRecord("Textbooks", true, null);
-		addCommandRecord("Assignments List", true, null);
-		addCommandRecord("Assignments Search", true, null);
-		addCommandRecord("Assignments Active", true, null);
-		addCommandRecord("Assignment Details", true, null);
-		addCommandRecord("Announcements List", true, null);
-		addCommandRecord("Announcements Search", true, null);
-		addCommandRecord("Announcement Details", true, null);
-		addCommandRecord("Remind Me", false, null);
+		addCommandRecord("Syllabus", true);
+		addCommandRecord("Textbooks", true);
+		addCommandRecord("Assignments List", true);
+		addCommandRecord("Assignments Search", true);
+		addCommandRecord("Assignments Active", true);
+		addCommandRecord("Assignment Details", true);
+		addCommandRecord("Announcements List", true);
+		addCommandRecord("Announcements Search", true);
+		addCommandRecord("Announcement Details", true);
+		addCommandRecord("Module List", true);
+		addCommandRecord("Module Search", true);
+		addCommandRecord("Remind Me", false);
 
 		// store checkboxes to fetch their states later
 		checkBoxes = new ArrayList<>();
@@ -101,20 +103,20 @@ public class CommandToggleCard extends InstanceConfigCard {
 	public void prefillGUI(Instance instanceToEdit) {
 		// TODO Andrew
 		commands = new ArrayList<>();
-		addCommandRecord("Syllabus", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("syllabus"), null);
-		addCommandRecord("Textbooks", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("textbooks"), null);
-		addCommandRecord("Assignments List", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignments_list"), null);
-		addCommandRecord("Assignments Search", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignments_search"), null);
-		addCommandRecord("Assignments Active", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignments_active"), null);
-		addCommandRecord("Assignment Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignment_details"), null);
-		addCommandRecord("Announcements List", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_list"), null);
-		addCommandRecord("Announcements Search", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_search"), null);
-		addCommandRecord("Announcement Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcement_details"), null);
-		addCommandRecord("Remind Me", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("remindme"), RemindMeCommand.class);
+		addCommandRecord("Syllabus", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("syllabus"));
+		addCommandRecord("Textbooks", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("textbooks"));
+		addCommandRecord("Assignments List", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignments_list"));
+		addCommandRecord("Assignments Search", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignments_search"));
+		addCommandRecord("Assignments Active", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignments_active"));
+		addCommandRecord("Assignment Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("assignment_details"));
+		addCommandRecord("Announcements List", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_list"));
+		addCommandRecord("Announcements Search", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_search"));
+		addCommandRecord("Announcement Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcement_details"));
+		addCommandRecord("Remind Me", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("remindme"));
 		// TODO iterate and prefill gui
 	}
 
-	private void addCommandRecord(String name, boolean defaultState, Class<? extends Command> command) {
+	private void addCommandRecord(String name, boolean defaultState) {
 		commands.add(new CommandRecord(name, defaultState));
 	}
 
