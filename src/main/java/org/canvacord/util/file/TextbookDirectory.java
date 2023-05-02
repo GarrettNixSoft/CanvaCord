@@ -39,7 +39,6 @@ public class TextbookDirectory {
     /**
      * Prompts User to Select a PDF file and stores it in the /config/textbooks folder.
      * @param instanceID The course id of the course to add the textbook file too
-     * @return the chosen pdf file that the user chosen
      */
     public static Optional<File> storeTextbook(String instanceID) {
         Optional<File> testing = FileGetter.getFileRecent( "PDF File", ".pdf");
@@ -48,15 +47,7 @@ public class TextbookDirectory {
             System.out.println("Unable to obtain file");
             return Optional.empty();
         }
-        File inputFile = testing.get();
-        File outputFile = new File(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + getLatestNumber(instanceID) + ".pdf");
-        //copies inputFile to outputFile
-        try {
-            Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
-        } catch(Exception e) {
-            System.out.println("Failed to copy to path");
-        }
-        return testing;
+        return storeTextbook(instanceID, testing.get());
     }
 
     public static Optional<File> storeTextbook(String instanceID, File inputFile) {

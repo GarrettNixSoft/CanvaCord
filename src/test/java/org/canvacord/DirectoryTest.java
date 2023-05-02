@@ -2,7 +2,9 @@ package org.canvacord;
 
 import org.canvacord.util.file.TextbookDirectory;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class DirectoryTest {
@@ -18,7 +20,10 @@ public class DirectoryTest {
         }
         System.out.println("Please select a textbook to add to the local directory");
         //prompts the user to choose a file from a directory
-        TextbookDirectory.storeTextbook(instanceID);
-        System.out.println("There now exists: " + TextbookDirectory.getNumberOfTextbooks(instanceID) + " textbooks in instance: " + instanceID);
+        Optional<File> storedFile = TextbookDirectory.storeTextbook(instanceID);
+        if (storedFile.isEmpty())
+            System.err.println("Textbook store failed.");
+        else
+            System.out.println("There now exists: " + TextbookDirectory.getNumberOfTextbooks(instanceID) + " textbooks in instance: " + instanceID);
     }
 }
