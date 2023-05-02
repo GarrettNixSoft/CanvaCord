@@ -266,6 +266,14 @@ public class Instance {
 		return configuration.getAvailableCommands(refresh);
 	}
 
+	public JSONObject getCommandAvailability() {
+		return configuration.getCommandAvailability(false);
+	}
+
+	public JSONObject getCommandAvailability(boolean refresh) {
+		return configuration.getCommandAvailability(refresh);
+	}
+
 	public Map<Long, Class<? extends Command>> getRegisteredCommands() {
 		//TODO: actually populate this hashmap?
 		return configuration.getRegisteredCommands(false);

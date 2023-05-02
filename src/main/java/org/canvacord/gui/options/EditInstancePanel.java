@@ -73,7 +73,7 @@ public class EditInstancePanel extends OptionsPanel {
 		dataStore.store("class_reminder_schedule", instanceToEdit.getClassReminderSchedule());
 		dataStore.store("do_meeting_markers", instanceToEdit.doMeetingMarkers());
 		dataStore.store("create_markers_role", instanceToEdit.createMarkersRole());
-		dataStore.store("command_availability", instanceToEdit.getAvailableCommands());
+		dataStore.store("command_availability", instanceToEdit.getCommandAvailability());
 		dataStore.store("command_ids", instanceToEdit.getRegisteredCommands());
 	}
 
@@ -98,6 +98,7 @@ public class EditInstancePanel extends OptionsPanel {
 		instanceConfiguration.setClassRemindersSchedule((Integer) dataStore.get("class_reminders_schedule"));
 		instanceConfiguration.setDoMeetingMarkers((Boolean) dataStore.get("do_meeting_markers"));
 		instanceConfiguration.setCreateMarkersRole((Boolean) dataStore.get("create_markers_role"));
+		instanceConfiguration.setCommandAvailability((JSONObject) dataStore.get("command_availability"));
 
 	}
 

@@ -240,6 +240,11 @@ public class InstanceConfiguration {
 		return availableCommands;
 	}
 
+	public JSONObject getCommandAvailability(boolean refresh) {
+		if (refresh) refresh();
+		return configJSON.getJSONObject("command_availability");
+	}
+
 	public Map<Long, Class<? extends Command>> getRegisteredCommands(boolean refresh) {
 		// refresh from disk if requested or if the map is empty (probably never loaded)
 		if (refresh || registeredCommands.isEmpty()) {
