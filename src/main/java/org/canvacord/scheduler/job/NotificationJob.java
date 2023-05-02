@@ -31,16 +31,19 @@ public class NotificationJob implements Job {
         switch (notification.getEventType()) {
             case NEW_ASSIGNMENT -> {
                 List<Assignment> newAssignments = CacheManager.getNewAssignments(instance, notification);
+                if (newAssignments.isEmpty()) return;
                 boolean success = CanvasNotifier.notifyNewAssignments(notification, newAssignments);
                 if (!success) throw new CanvaCordException("New Assignments notification failed");
             }
             case NEW_ANNOUNCEMENT -> {
                 List<Announcement> newAnnouncements = CacheManager.getNewAnnouncements(instance, notification);
+                if (newAnnouncements.isEmpty()) return;
                 boolean success = CanvasNotifier.notifyNewAnnouncements(notification, newAnnouncements);
                 if (!success) throw new CanvaCordException("New Announcements notification failed");
             }
             case ASSIGNMENT_DUE_DATE_CHANGED -> {
                 List<Pair<Assignment, Pair<Date, Date>>> assignmentsWithChangedDueDates = AssignmentFilter.getAssignmentsWithChangedDueDates(instance);
+                if (assignmentsWithChangedDueDates.isEmpty()) return;
                 boolean success = CanvasNotifier.notifyDueDateChanged(notification, assignmentsWithChangedDueDates);
                 if (!success) throw new CanvaCordException("Changed due dates notification failed");
             }
