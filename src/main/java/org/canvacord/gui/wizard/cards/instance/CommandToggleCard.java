@@ -2,6 +2,7 @@ package org.canvacord.gui.wizard.cards.instance;
 
 import org.canvacord.discord.commands.Command;
 import org.canvacord.discord.commands.RemindMeCommand;
+import org.canvacord.entity.CommandRecord;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
@@ -75,10 +76,10 @@ public class CommandToggleCard extends InstanceConfigCard {
 		for (int i = 0; i < commands.size(); i++) {
 
 			CommandRecord commandRecord = commands.get(i);
-			JCheckBox checkBox = new JCheckBox(commandRecord.name);
+			JCheckBox checkBox = new JCheckBox(commandRecord.name());
 			checkBox.setFont(CanvaCordFonts.LABEL_FONT_BIGGER_THAN_SMALL_BUT_SMALLER_THAN_MEDIUM);
 			checkBox.setBounds(componentX + i / rowsPerColumn * (checkBoxWidth + horizontalSpacing), checkBoxStartY + i % rowsPerColumn * (checkBoxHeight + verticalSpacing), checkBoxWidth, checkBoxHeight);
-			checkBox.setSelected(commandRecord.defaultState);
+			checkBox.setSelected(commandRecord.defaultState());
 			contentPanel.add(checkBox);
 
 			checkBoxes.add(checkBox);
@@ -116,8 +117,6 @@ public class CommandToggleCard extends InstanceConfigCard {
 	private void addCommandRecord(String name, boolean defaultState, Class<? extends Command> command) {
 		commands.add(new CommandRecord(name, defaultState));
 	}
-
-	public record CommandRecord(String name, boolean defaultState) {}
 
 	public List<CommandRecord> getCommandStates() {
 		List<CommandRecord> result = new ArrayList<>();

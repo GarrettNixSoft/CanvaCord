@@ -2,6 +2,7 @@ package org.canvacord.setup;
 
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.entity.ClassMeeting;
+import org.canvacord.entity.CommandRecord;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.instance.*;
 import org.canvacord.instance.Instance;
@@ -354,7 +355,7 @@ public class InstanceCreateWizard extends CanvaCordWizard {
 
 		// configure command availability
 		JSONObject commandsRecord = new JSONObject();
-		for (CommandToggleCard.CommandRecord commandRecord : commandToggleCard.getCommandStates()) {
+		for (CommandRecord commandRecord : commandToggleCard.getCommandStates()) {
 			commandsRecord.put(commandRecord.name(), commandRecord.defaultState());
 		}
 		configJSON.put("command_availability", commandsRecord);
