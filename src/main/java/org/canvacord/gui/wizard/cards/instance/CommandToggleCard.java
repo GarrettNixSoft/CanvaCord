@@ -112,8 +112,8 @@ public class CommandToggleCard extends InstanceConfigCard {
 		addCommandRecord("Announcements List", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_list"));
 		addCommandRecord("Announcements Search", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcements_search"));
 		addCommandRecord("Announcement Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("announcement_details"));
-		addCommandRecord("Announcement Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("module_list"));
-		addCommandRecord("Announcement Details", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("module_search"));
+		addCommandRecord("Module List", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("module_list"));
+		addCommandRecord("Module Search", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("module_search"));
 		addCommandRecord("Remind Me", instanceToEdit.getConfiguration().getRawJSON().getJSONObject("command_availability").getBoolean("remindme"));
 		// TODO iterate and prefill gui
 	}
