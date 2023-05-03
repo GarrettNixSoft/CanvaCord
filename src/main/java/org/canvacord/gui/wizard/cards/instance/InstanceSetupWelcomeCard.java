@@ -32,7 +32,7 @@ public class InstanceSetupWelcomeCard extends WizardCard {
 		startPanel.setLayout(new BorderLayout());
 
 		// ================ SIDE BAR IMAGE ================
-		ImagePanel imagePanel = new ImagePanel("resources/setup_sidebar.png");
+		ImagePanel imagePanel = ImagePanel.loadFromResources("setup_sidebar.png");
 		startPanel.add(imagePanel, BorderLayout.WEST);
 		imagePanel.setPreferredSize(new Dimension(200, 450));
 

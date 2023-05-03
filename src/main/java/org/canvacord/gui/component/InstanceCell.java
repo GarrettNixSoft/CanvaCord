@@ -86,7 +86,9 @@ public class InstanceCell extends JPanel {
 		iconContainerPanel.setLayout(new MigLayout("", "[grow]", "[grow]"));
 
 		// Show the instance icon
-		ImagePanel iconPanel = new ImagePanel(iconPath);
+		ImagePanel iconPanel =	iconPath.equals(Globals.DEFAULT_INSTANCE_ICON_PATH) ?
+								ImagePanel.loadFromResources(iconPath) :
+								ImagePanel.loadFromDisk(iconPath);
 //		iconPanel.setMinimumSize(new Dimension(ICON_SIZE, ICON_SIZE));
 //		iconPanel.setPreferredSize(new Dimension(ICON_SIZE, ICON_SIZE));
 //		iconPanel.setMaximumSize(new Dimension(ICON_SIZE, ICON_SIZE));

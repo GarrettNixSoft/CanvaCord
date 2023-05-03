@@ -48,7 +48,7 @@ public abstract class InstanceConfigCard extends WizardCard {
 		cardPanel.setMaximumSize(new Dimension(CanvaCordWizard.WIDTH, CanvaCordWizard.HEIGHT - 30));
 
 		// ================ HEADER ================
-		ImagePanel topBar = new ImagePanel("resources/setup_topbar.png");
+		ImagePanel topBar = ImagePanel.loadFromResources("setup_topbar.png");
 		topBar.setLayout(null);
 //		topBar.setBorder(new EmptyBorder(10, 10, 10, 10));
 		topBar.setPreferredSize(new Dimension(CanvaCordWizard.WIDTH, 80));

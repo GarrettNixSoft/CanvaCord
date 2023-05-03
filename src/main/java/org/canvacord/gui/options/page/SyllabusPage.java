@@ -71,7 +71,7 @@ public class SyllabusPage extends OptionPage {
 		previewLabel.setVisible(false);
 		add(previewLabel, "cell 0 4");
 
-		pdfPreview = new ImagePanel("");
+		pdfPreview = ImagePanel.loadFromDisk("");
 		add(pdfPreview, "cell 0 5 2 1, width 360, height 470");
 
 		// TODO
