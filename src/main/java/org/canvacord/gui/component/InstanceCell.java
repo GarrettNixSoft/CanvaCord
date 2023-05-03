@@ -12,6 +12,7 @@ import org.canvacord.instance.InstanceManager;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.Globals;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.resources.ImageLoader;
 import org.quartz.SchedulerException;
 
 import javax.swing.*;
@@ -144,17 +145,17 @@ public class InstanceCell extends JPanel {
 		final int buttonSize = 50;
 
 		// Add start button
-		startButton = new JButton(new ImageIcon("resources/start_icon.png"));
+		startButton = new JButton(ImageLoader.loadIcon("start_icon.png"));
 		optionsButtonPanel.add(startButton, "cell 0 0, width " + buttonSize + ", height " + buttonSize);
 
 		// Add stop button
-		stopButton = new JButton(new ImageIcon("resources/stop_icon.png"));
+		stopButton = new JButton(ImageLoader.loadIcon("stop_icon.png"));
 		stopButton.setEnabled(false);
 		optionsButtonPanel.add(stopButton, "cell 1 0, width " + buttonSize + ", height " + buttonSize);
 
 		// Add a button for instance options
 		optionsButton = new JButton();
-		optionsButton.setIcon(new ImageIcon("resources/options_icon.png"));
+		optionsButton.setIcon(ImageLoader.loadIcon("options_icon.png"));
 		optionsButton.setEnabled(true);
 		optionsButtonPanel.add(optionsButton, "cell 2 0, width " + buttonSize + ", height " + buttonSize);
 

@@ -20,6 +20,7 @@ public class InstanceParser {
 			return new Instance(courseID, serverID, configuration);
 		}
 		catch (InstantiationException e) {
+			e.printStackTrace();
 			throw new CanvaCordException(e.getMessage());
 		}
 	}

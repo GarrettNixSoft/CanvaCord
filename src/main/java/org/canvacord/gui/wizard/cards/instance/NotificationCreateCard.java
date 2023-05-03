@@ -10,6 +10,7 @@ import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.instance.Instance;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.resources.ImageLoader;
 import org.canvacord.util.string.StringUtils;
 import org.json.JSONArray;
 
@@ -67,15 +68,15 @@ public class NotificationCreateCard extends InstanceConfigCard {
 		int buttonSize = 48;
 		int buttonSpacing = 20;
 
-		newNotificationButton = new JButton(new ImageIcon("resources/new_icon.png"));
+		newNotificationButton = new JButton(ImageLoader.loadIcon("new_icon.png"));
 		newNotificationButton.setBounds(buttonX, buttonY, buttonSize, buttonSize);
 		contentPanel.add(newNotificationButton);
 
-		editNotificationButton = new JButton(new ImageIcon("resources/edit_icon_wip.png"));
+		editNotificationButton = new JButton(ImageLoader.loadIcon("edit_icon_wip.png"));
 		editNotificationButton.setBounds(buttonX, buttonY + buttonSize + buttonSpacing, buttonSize, buttonSize);
 		contentPanel.add(editNotificationButton);
 
-		deleteNotificationButton = new JButton(new ImageIcon("resources/delete_icon_non_beveled.png"));
+		deleteNotificationButton = new JButton(ImageLoader.loadIcon("delete_icon_non_beveled.png"));
 		deleteNotificationButton.setBounds(buttonX, buttonY + (buttonSize + buttonSpacing) * 2, buttonSize, buttonSize);
 		contentPanel.add(deleteNotificationButton);
 

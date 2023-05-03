@@ -8,6 +8,7 @@ import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.instance.Instance;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.resources.ImageLoader;
 import org.json.JSONArray;
 
 import javax.swing.*;
@@ -66,15 +67,15 @@ public class RoleCreateCard extends InstanceConfigCard {
 		int buttonSize = 48;
 		int buttonSpacing = 20;
 
-		newRoleButton = new JButton(new ImageIcon("resources/new_icon.png"));
+		newRoleButton = new JButton(ImageLoader.loadIcon("new_icon.png"));
 		newRoleButton.setBounds(buttonX, buttonY, buttonSize, buttonSize);
 		contentPanel.add(newRoleButton);
 
-		editRoleButton = new JButton(new ImageIcon("resources/edit_icon_wip.png"));
+		editRoleButton = new JButton(ImageLoader.loadIcon("edit_icon_wip.png"));
 		editRoleButton.setBounds(buttonX, buttonY + buttonSize + buttonSpacing, buttonSize, buttonSize);
 		contentPanel.add(editRoleButton);
 
-		deleteRoleButton = new JButton(new ImageIcon("resources/delete_icon_non_beveled.png"));
+		deleteRoleButton = new JButton(ImageLoader.loadIcon("delete_icon_non_beveled.png"));
 		deleteRoleButton.setBounds(buttonX, buttonY + (buttonSize + buttonSpacing) * 2, buttonSize, buttonSize);
 		contentPanel.add(deleteRoleButton);
 

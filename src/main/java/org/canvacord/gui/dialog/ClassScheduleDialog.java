@@ -4,6 +4,7 @@ import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.resources.ImageLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,17 +79,17 @@ public class ClassScheduleDialog extends CanvaCordDialog {
 		classMeetingsPane.getViewport().setView(classMeetingList);
 
 		// create a new meeting
-		newMeetingButton = new JButton(new ImageIcon("resources/new_icon.png"));
+		newMeetingButton = new JButton(ImageLoader.loadIcon("new_icon.png"));
 		newMeetingButton.setBounds(buttonX, buttonY, buttonSize, buttonSize);
 		add(newMeetingButton);
 
 		// edit a meeting
-		editMeetingButton = new JButton(new ImageIcon("resources/edit_icon_wip.png"));
+		editMeetingButton = new JButton(ImageLoader.loadIcon("edit_icon_wip.png"));
 		editMeetingButton.setBounds(buttonX, buttonY + buttonSize + buttonSpacing, buttonSize, buttonSize);
 		add(editMeetingButton);
 
 		// delete a meeting
-		deleteMeetingButton = new JButton(new ImageIcon("resources/delete_icon_non_beveled.png"));
+		deleteMeetingButton = new JButton(ImageLoader.loadIcon("delete_icon_non_beveled.png"));
 		deleteMeetingButton.setBounds(buttonX, buttonY + (buttonSize + buttonSpacing) * 2, buttonSize, buttonSize);
 		add(deleteMeetingButton);
 

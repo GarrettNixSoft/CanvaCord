@@ -9,6 +9,7 @@ import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.NotificationCreateDialog;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.resources.ImageLoader;
 import org.canvacord.util.string.StringUtils;
 import org.json.JSONArray;
 
@@ -47,13 +48,13 @@ public class NotificationsPage extends OptionPage {
 		notificationPane.getViewport().setView(notificationsList);
 		add(notificationPane, "cell 0 1 5 10, growx, growy");
 
-		newNotificationButton = new JButton(new ImageIcon("resources/new_icon.png"));
+		newNotificationButton = new JButton(ImageLoader.loadIcon("new_icon.png"));
 		add(newNotificationButton, "cell 9 3");
 
-		editNotificationButton = new JButton(new ImageIcon("resources/edit_icon_wip.png"));
+		editNotificationButton = new JButton(ImageLoader.loadIcon("edit_icon_wip.png"));
 		add(editNotificationButton, "cell 9 6");
 
-		deleteNotificationButton = new JButton(new ImageIcon("resources/delete_icon_non_beveled.png"));
+		deleteNotificationButton = new JButton(ImageLoader.loadIcon("delete_icon_non_beveled.png"));
 		add(deleteNotificationButton, "cell 9 9");
 
 	}

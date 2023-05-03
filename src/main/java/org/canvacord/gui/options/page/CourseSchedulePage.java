@@ -7,6 +7,7 @@ import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.ClassMeetingDialog;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.resources.ImageLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,13 +47,13 @@ public class CourseSchedulePage extends OptionPage {
 		meetingPane.getViewport().setView(classMeetingList);
 		add(meetingPane, "cell 0 1 5 10, growx, growy");
 
-		newMeetingButton = new JButton(new ImageIcon("resources/new_icon.png"));
+		newMeetingButton = new JButton(ImageLoader.loadIcon("new_icon.png"));
 		add(newMeetingButton, "cell 9 3");
 
-		editMeetingButton = new JButton(new ImageIcon("resources/edit_icon_wip.png"));
+		editMeetingButton = new JButton(ImageLoader.loadIcon("edit_icon_wip.png"));
 		add(editMeetingButton, "cell 9 6");
 
-		deleteMeetingButton = new JButton(new ImageIcon("resources/delete_icon_non_beveled.png"));
+		deleteMeetingButton = new JButton(ImageLoader.loadIcon("delete_icon_non_beveled.png"));
 		add(deleteMeetingButton, "cell 9 9");
 
 		// TODO

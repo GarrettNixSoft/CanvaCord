@@ -41,3 +41,4 @@ build/
 /lib/
 /instances/
 /src/test/java/org/canvacord/DiscordServerTest.java
+/out/

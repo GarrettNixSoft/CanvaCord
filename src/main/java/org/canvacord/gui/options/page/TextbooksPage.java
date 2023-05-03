@@ -10,6 +10,7 @@ import org.canvacord.util.file.FileHasher;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.file.TextbookDirectory;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.resources.ImageLoader;
 import org.json.JSONArray;
 
 import javax.swing.*;
@@ -57,13 +58,13 @@ public class TextbooksPage extends OptionPage {
 		textbookPane.getViewport().setView(textbookList);
 		add(textbookPane, "cell 0 1 5 18, growx, growy");
 
-		newTextbookButton = new JButton(new ImageIcon("resources/new_icon.png"));
+		newTextbookButton = new JButton(ImageLoader.loadIcon("new_icon.png"));
 		add(newTextbookButton, "cell 9 3, growx");
 
-		editTextbookButton = new JButton(new ImageIcon("resources/edit_icon_wip.png"));
+		editTextbookButton = new JButton(ImageLoader.loadIcon("edit_icon_wip.png"));
 		add(editTextbookButton, "cell 9 6, growx");
 
-		deleteTextbookButton = new JButton(new ImageIcon("resources/delete_icon_non_beveled.png"));
+		deleteTextbookButton = new JButton(ImageLoader.loadIcon("delete_icon_non_beveled.png"));
 		add(deleteTextbookButton, "cell 9 9, growx");
 
 		scanButton = new JButton("<html>Scan<br/>Syllabus</html>");

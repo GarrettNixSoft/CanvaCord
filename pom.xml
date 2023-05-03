@@ -25,8 +25,6 @@
             <groupId>org.canvacord</groupId>
             <artifactId>canvas-api</artifactId>
             <version>2.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/canvas-api.jar</systemPath>
         </dependency>
 
         <!-- Javacord -->
@@ -117,6 +115,62 @@
                     <target>19</target>
                     <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>org.canvacord.main.CanvaCord</Main-Class>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>canvas-api</id>
+                        <inherited>false</inherited>
+                        <phase>validate</phase>
+                        <configuration>
+                            <groupId>org.canvacord</groupId>
+                            <artifactId>canvas-api</artifactId>
+                            <version>2.0.0</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/lib/canvas-api.jar</file>
+                            <generatePom>true</generatePom>
+                        </configuration>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

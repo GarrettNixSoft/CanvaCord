@@ -8,6 +8,7 @@ import org.canvacord.gui.component.ColorIcon;
 import org.canvacord.gui.dialog.RoleCreateDialog;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.resources.ImageLoader;
 import org.json.JSONArray;
 
 import javax.swing.*;
@@ -57,13 +58,13 @@ public class RolesPage extends OptionPage {
 
 		add(rolesPane, "cell 0 1 5 10, growx, growy");
 
-		newRoleButton = new JButton(new ImageIcon("resources/new_icon.png"));
+		newRoleButton = new JButton(ImageLoader.loadIcon("new_icon.png"));
 		add(newRoleButton, "cell 9 3");
 
-		editRoleButton = new JButton(new ImageIcon("resources/edit_icon_wip.png"));
+		editRoleButton = new JButton(ImageLoader.loadIcon("edit_icon_wip.png"));
 		add(editRoleButton, "cell 9 6");
 
-		deleteRoleButton = new JButton(new ImageIcon("resources/delete_icon_non_beveled.png"));
+		deleteRoleButton = new JButton(ImageLoader.loadIcon("delete_icon_non_beveled.png"));
 		add(deleteRoleButton, "cell 9 9");
 
 	}

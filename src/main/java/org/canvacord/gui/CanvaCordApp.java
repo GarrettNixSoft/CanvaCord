@@ -12,6 +12,7 @@ import org.canvacord.instance.InstanceManager;
 import org.canvacord.main.CanvaCord;
 import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.resources.ImageLoader;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -96,7 +97,7 @@ public class CanvaCordApp extends JFrame {
 		startAllButton.setLayout(new BoxLayout(startAllButton, BoxLayout.X_AXIS));
 		startAllButton.setMaximumSize(new Dimension(120, 40));
 		JLabel startIcon = new JLabel();
-		startIcon.setIcon(new ImageIcon("resources/start_icon.png"));
+		startIcon.setIcon(ImageLoader.loadIcon("start_icon.png"));
 		JLabel startLabel = new JLabel("Start All");
 		startAllButton.add(startIcon);
 		startAllButton.add(Box.createHorizontalStrut(8));
@@ -111,7 +112,7 @@ public class CanvaCordApp extends JFrame {
 		stopAllButton.setLayout(new BoxLayout(stopAllButton, BoxLayout.X_AXIS));
 		stopAllButton.setMaximumSize(new Dimension(120, 40));
 		JLabel stopIcon = new JLabel();
-		stopIcon.setIcon(new ImageIcon("resources/stop_icon.png"));
+		stopIcon.setIcon(ImageLoader.loadIcon("stop_icon.png"));
 		JLabel stopLabel = new JLabel("Stop All");
 		stopAllButton.add(stopIcon);
 		stopAllButton.add(Box.createHorizontalStrut(8));
@@ -133,7 +134,7 @@ public class CanvaCordApp extends JFrame {
 		newInstanceButton.setLayout(new BoxLayout(newInstanceButton, BoxLayout.X_AXIS));
 		newInstanceButton.setMaximumSize(new Dimension(120, 40));
 		JLabel newIcon = new JLabel();
-		newIcon.setIcon(new ImageIcon("resources/new_icon.png"));
+		newIcon.setIcon(ImageLoader.loadIcon("new_icon.png"));
 		JLabel newLabel = new JLabel("New...");
 		newInstanceButton.add(newIcon);
 		newInstanceButton.add(Box.createHorizontalStrut(8));
@@ -148,7 +149,7 @@ public class CanvaCordApp extends JFrame {
 		optionsButton.setLayout(new BoxLayout(optionsButton, BoxLayout.X_AXIS));
 		optionsButton.setMaximumSize(new Dimension(120, 40));
 		JLabel optionsIcon = new JLabel();
-		optionsIcon.setIcon(new ImageIcon("resources/options_icon.png"));
+		optionsIcon.setIcon(ImageLoader.loadIcon("options_icon.png"));
 		JLabel optionsLabel = new JLabel("Options");
 		optionsButton.add(optionsIcon);
 		optionsButton.add(Box.createHorizontalStrut(8));

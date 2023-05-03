@@ -45,6 +45,9 @@ public class InstanceManager {
 			File instancesDir = Paths.get("instances/").toFile();
 			File[] potentialInstances = instancesDir.listFiles();
 
+			// If there is no instances directory, there can be no instances to load, so don't try
+			if (potentialInstances == null) return;
+
 			// Iterate over the files and attempt to read them as instances
 			for (File file : potentialInstances) {
 
