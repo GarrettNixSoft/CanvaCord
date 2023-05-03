@@ -4,7 +4,9 @@ import org.canvacord.util.string.StringUtils;
 import org.json.JSONArray;
 import org.quartz.DateBuilder;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
@@ -108,6 +110,23 @@ public class CanvaCordTime {
 			case 3 -> "rd";
 			default -> "th";
 		};
+	}
+
+	public static int getDateBuilderIntForWeekday(DayOfWeek dayOfWeek) {
+		return switch (dayOfWeek) {
+			case MONDAY -> DateBuilder.MONDAY;
+			case TUESDAY -> DateBuilder.TUESDAY;
+			case WEDNESDAY -> DateBuilder.WEDNESDAY;
+			case THURSDAY -> DateBuilder.THURSDAY;
+			case FRIDAY -> DateBuilder.FRIDAY;
+			case SATURDAY -> DateBuilder.SATURDAY;
+			default -> DateBuilder.SUNDAY;
+		};
+	}
+
+	public static LocalDateTime offsetDateByMinutes(Date date, int minutes) {
+		LocalDateTime dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+		return dateTime.plusMinutes(minutes);
 	}
 
 }
