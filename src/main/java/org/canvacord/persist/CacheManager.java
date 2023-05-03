@@ -124,7 +124,9 @@ public class CacheManager {
 		List<Assignment> result = new ArrayList<>();
 
 		for (long id : newAssignmentIDs) {
-			result.add(cachedAssignments.get(id));
+			Assignment assignment = cachedAssignments.get(id);
+			if (assignment != null)
+				result.add(assignment);
 		}
 
 		return result;
@@ -140,7 +142,9 @@ public class CacheManager {
 		List<Announcement> result = new ArrayList<>();
 
 		for (long id : newAnnouncementIDs) {
-			result.add(cachedAnnouncements.get(id));
+			Announcement announcement = cachedAnnouncements.get(id);
+			if (announcement != null)
+				result.add(announcement);
 		}
 
 		return result;

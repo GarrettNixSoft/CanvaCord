@@ -69,6 +69,7 @@ public class InstanceData {
 	}
 
 	public Set<Long> getNewEntities(CanvaCordNotification notification) {
+		System.out.println("Notif name: " + notification.getName());
 		return entityPools.get(notification).getNewEntities();
 	}
 

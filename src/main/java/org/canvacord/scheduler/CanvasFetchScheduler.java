@@ -47,7 +47,7 @@ public class CanvasFetchScheduler {
 		// Set up the trigger builder
 		TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
 		triggerBuilder.withIdentity(instance.getInstanceID(), GROUP_ID);
-		triggerBuilder.startNow();
+//		triggerBuilder.startNow();
 		triggerBuilder.withSchedule(buildFetchSchedule(instance.getCanvasFetchSchedule(), triggerBuilder));
 
 		// Execute the build

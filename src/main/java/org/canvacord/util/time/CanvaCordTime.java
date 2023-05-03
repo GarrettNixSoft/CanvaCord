@@ -4,6 +4,9 @@ import org.canvacord.util.string.StringUtils;
 import org.json.JSONArray;
 import org.quartz.DateBuilder;
 
+import javax.swing.text.DateFormatter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -87,6 +90,8 @@ public class CanvaCordTime {
 		return DateTimeFormatter.ofPattern("MM-dd hh:mm a");
 	}
 
+	public static DateFormat getDateFormat() { return new SimpleDateFormat("MM/dd/yyyy"); }
+
 	public static String getFriendlyDateString(LocalDateTime localDateTime) {
 		String month = StringUtils.uppercaseWords(localDateTime.getMonth().name());
 		int day = localDateTime.getDayOfMonth();
@@ -100,6 +105,11 @@ public class CanvaCordTime {
 		else {
 			return month + " " + day + getNumberSuffix(day) + " at " + get24Hour(hour, minute);
 		}
+	}
+
+	public static String getFriendlyDateString(Date date) {
+		DateFormat formatter = getDateFormat();
+		return formatter.format(date);
 	}
 
 	public static String getNumberSuffix(int number) {
