@@ -80,7 +80,7 @@ public class CanvasFetchScheduler {
 				result = SimpleScheduleBuilder.simpleSchedule();
 				// interval types contain an interval object describing what unit and the amount
 				JSONObject intervalData = fetchScheduleData.getJSONObject("interval");
-				int amount = intervalData.getInt("amount");
+				int amount = intervalData.getInt("value");
 				// the InstanceCreateWizard sets frequent and hourly fetch types as minute and hour interval types
 				switch (intervalData.getString("unit")) {
 					case "minutes" -> ((SimpleScheduleBuilder) result).withIntervalInMinutes(amount);

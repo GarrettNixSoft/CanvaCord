@@ -298,4 +298,8 @@ public class InstanceManager {
 
 	}
 
+	public static boolean isInstanceRunning(String instanceID) {
+		return runningInstanceIDs.contains(instanceID);
+	}
+
 }

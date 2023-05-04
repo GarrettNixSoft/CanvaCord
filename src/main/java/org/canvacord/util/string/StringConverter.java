@@ -15,6 +15,14 @@ public class StringConverter {
 		return result.toString();
 	}
 
+	public static String combineAllSeparatedBy(List<String> strings, String separator) {
+		StringBuilder result = new StringBuilder();
+		for (String str : strings) {
+			result.append(str).append("\n").append(separator);
+		}
+		return result.toString();
+	}
+
 	public static String listToString(List<?> list) {
 		StringBuilder result = new StringBuilder();
 		result.append("List[");

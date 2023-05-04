@@ -24,18 +24,21 @@ public class CanvasEntityPool {
 	private void initData(JSONObject entityData) {
 		JSONArray newEntityData = entityData.optJSONArray(notificationName + "_new");
 		if (newEntityData == null) {
-			// TODO warning
+			System.err.println("No new array was found for " + notificationName);
 			newEntityData = new JSONArray();
 		}
-		for (int i = 0; i < newEntityData.length(); i++)
+		for (int i = 0; i < newEntityData.length(); i++) {
 			newEntities.add(newEntityData.getLong(i));
+		}
 		JSONArray oldEntityData = entityData.optJSONArray(notificationName + "_old");
 		if (oldEntityData == null) {
 			// TODO warning
+			System.err.println("No old array was found for " + notificationName);
 			oldEntityData = new JSONArray();
 		}
-		for (int i = 0; i < oldEntityData.length(); i++)
-			newEntities.add(oldEntityData.getLong(i));
+		for (int i = 0; i < oldEntityData.length(); i++) {
+			oldEntities.add(oldEntityData.getLong(i));
+		}
 	}
 
 	public void processEntity(long entityID) {
@@ -51,6 +54,7 @@ public class CanvasEntityPool {
 	}
 
 	public void moveToOld(long entityID) {
+		System.out.println("Moving " + entityID + " to new");
 		if (!newEntities.remove(entityID))
 			throw new CanvaCordException("Entity " + entityID + " not found!");
 		if (!oldEntities.add(entityID))

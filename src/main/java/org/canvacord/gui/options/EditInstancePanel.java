@@ -2,13 +2,22 @@ package org.canvacord.gui.options;
 
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.User;
+import org.canvacord.discord.DiscordBot;
+import org.canvacord.entity.CanvaCordNotificationTarget;
 import org.canvacord.gui.options.page.*;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.Globals;
 import org.canvacord.util.input.UserInput;
+import org.canvacord.util.time.LongTask;
+import org.canvacord.util.time.LongTaskDialog;
+import org.javacord.api.entity.channel.ServerChannel;
+import org.javacord.api.entity.channel.ServerTextChannel;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditInstancePanel extends OptionsPanel {
 
@@ -71,10 +80,13 @@ public class EditInstancePanel extends OptionsPanel {
 		dataStore.store("do_meeting_reminders", instanceToEdit.doMeetingReminders());
 		dataStore.store("create_reminders_role", instanceToEdit.createRemindersRole());
 		dataStore.store("class_reminder_schedule", instanceToEdit.getClassReminderSchedule());
+		dataStore.store("meeting_reminders_channel", instanceToEdit.getMeetingRemindersChannel());
 		dataStore.store("do_meeting_markers", instanceToEdit.doMeetingMarkers());
 		dataStore.store("create_markers_role", instanceToEdit.createMarkersRole());
+		dataStore.store("meeting_markers_channel", instanceToEdit.getMeetingMarkersChannel());
 		dataStore.store("command_availability", instanceToEdit.getCommandAvailability());
 		dataStore.store("command_ids", instanceToEdit.getRegisteredCommands());
+		refreshChannels();
 	}
 
 	@Override
@@ -97,8 +109,10 @@ public class EditInstancePanel extends OptionsPanel {
 		instanceConfiguration.setDoMeetingReminders((Boolean) dataStore.get("do_meeting_reminders"));
 		instanceConfiguration.setCreateRemindersRole((Boolean) dataStore.get("create_reminders_role"));
 		instanceConfiguration.setClassRemindersSchedule((Integer) dataStore.get("class_reminders_schedule"));
+		instanceConfiguration.setClassRemindersChannel((Long) dataStore.get("meeting_reminders_channel"));
 		instanceConfiguration.setDoMeetingMarkers((Boolean) dataStore.get("do_meeting_markers"));
 		instanceConfiguration.setCreateMarkersRole((Boolean) dataStore.get("create_markers_role"));
+		instanceConfiguration.setClassMarkersChannel((Long) dataStore.get("meeting_markers_channel"));
 		instanceConfiguration.setCommandAvailability((JSONObject) dataStore.get("command_availability"));
 
 	}
@@ -115,4 +129,34 @@ public class EditInstancePanel extends OptionsPanel {
 		else System.out.println("Changes saved");
 
 	}
+
+	private void refreshChannels() {
+		LongTask refreshTask = () -> {
+			// Fetch the server ID
+			long serverID = (Long) dataStore.get("server_id");
+			// Fetch the server
+			DiscordBot.getBotInstance().getServerByID(serverID).ifPresent(
+					// If the fetch succeeded,
+					server -> {
+						// Clear the channel list
+						List<CanvaCordNotificationTarget> availableChannels = new ArrayList<>();
+						// Get channels and filter them to just text channels
+						List<ServerChannel> channels = server.getChannels()
+								.stream().filter(ch -> ch instanceof ServerTextChannel).toList();
+						for (ServerChannel channel : channels) {
+							// This should be safe because of the above filter
+							ServerTextChannel textChannel = channel.asServerTextChannel().get();
+							// Put them into the selector
+							CanvaCordNotificationTarget target = new CanvaCordNotificationTarget(textChannel);
+							availableChannels.add(target);
+						}
+						// store the channels for other pages to use
+						dataStore.store("available_channels", availableChannels);
+					}
+			);
+		};
+		LongTaskDialog.runLongTask(refreshTask, "Loading Discord channels...", "Fetch");
+	}
+
+
 }

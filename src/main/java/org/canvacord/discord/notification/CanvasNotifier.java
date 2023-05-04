@@ -8,7 +8,9 @@ import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.gui.wizard.cards.instance.InstanceSetupWelcomeCard;
 import org.canvacord.instance.Instance;
 import org.canvacord.persist.CacheManager;
+import org.canvacord.util.data.ListSplitter;
 import org.canvacord.util.data.Pair;
+import org.canvacord.util.string.StringConverter;
 import org.canvacord.util.time.CanvaCordTime;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
@@ -20,9 +22,12 @@ import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.permission.RoleBuilder;
 
 import java.awt.*;
+import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CanvasNotifier {
 
@@ -50,40 +55,74 @@ public class CanvasNotifier {
 			// Initialize message builder
 			MessageBuilder messageBuilder = new MessageBuilder();
 
-			// Create an embed builder for the message
-			EmbedBuilder embedBuilder = new EmbedBuilder()
-					.setColor(Color.GREEN)
-					.setTitle("New Assignments Posted")
-					.setDescription("New assignments have been posted on Canvas!");
-
-			// Add each assignment to the embed
-			for (Assignment assignment : assignments) {
-				if (assignment == null) continue;
-				if (assignment.getDueAt() != null)
-					embedBuilder.addField(assignment.getName(), "Due Date: " + CanvaCordTime.getFriendlyDateString(assignment.getDueAt()));
-			}
-
 			// Who to send messages to
 			AllowedMentions allowedMentions = new AllowedMentionsBuilder()
 					.setMentionRoles(true)
 					.setMentionEveryoneAndHere(false)
 					.build();
+			messageBuilder.setAllowedMentions(allowedMentions);
 
+			// Append pings to the start of the message
 			List<CanvaCordRole> rolesToPing = notificationConfig.getRolesToPing();
-
-			for (int i = 0; i < rolesToPing.size(); i++) {
-				api.getRoleById(rolesToPing.get(i).getRoleID()).ifPresent(
-						role -> messageBuilder.append(role.getMentionTag())
+			AtomicInteger pingSizeAtomic = new AtomicInteger(0);
+			for (CanvaCordRole canvaCordRole : rolesToPing) {
+				MessageBuilder finalMessageBuilder = messageBuilder;
+				api.getRoleById(canvaCordRole.getRoleID()).ifPresent(
+						role -> {
+							finalMessageBuilder.append(role.getMentionTag());
+							pingSizeAtomic.set(pingSizeAtomic.get() + role.getMentionTag().length());
+						}
 				);
-
-
 			}
 
-			// add to message builder
-			messageBuilder
-					.addEmbed(embedBuilder)
-					.setAllowedMentions(allowedMentions)
-					.send(channel);
+			// Add newlines to move the body down
+			messageBuilder.append("\n\n");
+			int pingSize = pingSizeAtomic.get() + 2;
+
+			// Start formatting the message
+			String messageFormat = notificationConfig.getMessageFormat();
+			int messageLimit = 2000 - pingSize;
+			int totalLength = 0;
+
+			List<String> assignmentMessages = new ArrayList<>();
+
+			for (Assignment assignment : assignments) {
+				if (assignment == null) continue;
+				DateFormat dateFormat = CanvaCordTime.getDateFormat();
+				String assignmentMessage = messageFormat;
+				assignmentMessage = assignmentMessage.replace("${assignment.name}", assignment.getName());
+				if (assignment.getDueAt() != null)
+					assignmentMessage = assignmentMessage.replace("${assignment.due}", dateFormat.format(assignment.getDueAt()));
+				else
+					assignmentMessage = assignmentMessage.replace("${assignment.due}", "No Due Date");
+				assignmentMessage = assignmentMessage.replace("${assignment.date}", dateFormat.format(assignment.getCreatedAt()));
+				assignmentMessage = assignmentMessage.replace("${assignment.points}", String.format("%.2f", assignment.getPointsPossible()));
+				assignmentMessages.add(assignmentMessage);
+				totalLength += assignmentMessage.length();
+			}
+
+			// Check if we're under the limit
+			if (totalLength < messageLimit) {
+				String uberMessage = StringConverter.combineAllSeparatedBy(assignmentMessages, "\n");
+				messageBuilder.setContent(uberMessage).send(channel).join();
+			}
+			else {
+				// check divisors until we get a workable size
+				int divisor = 2;
+				while (totalLength / divisor >= messageLimit) divisor++;
+				// print a warning if the divisor is greater than 5 (this will hit Discord's rate limit and slow things down a bunch)
+				// split the list up into that many sublists
+				List<String>[] splitAssignments = new ListSplitter<String>().splitListIntoSublists(assignmentMessages, divisor);
+				int i = 0;
+				do {
+					List<String> thisBatch = splitAssignments[i];
+					String uberMessage = StringConverter.combineAllSeparatedBy(thisBatch, "\n");
+					messageBuilder.setContent(uberMessage).send(channel).join();
+					messageBuilder = new MessageBuilder();
+					messageBuilder.setAllowedMentions(allowedMentions);
+					i++;
+				} while (i < splitAssignments.length);
+			}
 
 			for (Assignment assignment : assignments) {
 				if (assignment != null) {

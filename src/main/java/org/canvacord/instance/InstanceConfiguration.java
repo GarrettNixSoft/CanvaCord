@@ -141,8 +141,16 @@ public class InstanceConfiguration {
 		return configJSON.getBoolean("create_reminders_role");
 	}
 
+	public long getMeetingRemindersChannel() {
+		return configJSON.getLong("meeting_reminders_channel");
+	}
+
 	public boolean createMarkersRole() {
 		return configJSON.getBoolean("create_markers_role");
+	}
+
+	public long getMeetingMarkersChannel() {
+		return configJSON.getLong("meeting_markers_channel");
 	}
 
 	public boolean generateExamEvents() {
@@ -311,8 +319,16 @@ public class InstanceConfiguration {
 		configJSON.put("reminders_schedule", remindersSchedule);
 	}
 
+	public void setClassRemindersChannel(long channelID) {
+		configJSON.put("meeting_reminders_channel", channelID);
+	}
+
 	public void setCreateMarkersRole(boolean createMarkersRole) {
 		configJSON.put("create_markers_role", createMarkersRole);
+	}
+
+	public void setClassMarkersChannel(long channelID) {
+		configJSON.put("meeting_markers_channel", channelID);
 	}
 
 	public void setGenerateExamEvents(boolean generateExamEvents) {
