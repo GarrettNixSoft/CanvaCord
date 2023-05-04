@@ -51,7 +51,7 @@ public class MeetingMarkersPage extends OptionPage {
 		createMarkersRole.setFont(CanvaCordFonts.LABEL_FONT_BIGGER_THAN_SMALL_BUT_SMALLER_THAN_MEDIUM);
 		add(createMarkersRole, "cell 0 4");
 
-		JLabel channelSelectLabel = new JLabel("Send reminders to channel:");
+		JLabel channelSelectLabel = new JLabel("Send markers to channel:");
 		channelSelectLabel.setFont(CanvaCordFonts.LABEL_FONT_BIGGER_THAN_SMALL_BUT_SMALLER_THAN_MEDIUM);
 		add(channelSelectLabel, "cell 0 6");
 
