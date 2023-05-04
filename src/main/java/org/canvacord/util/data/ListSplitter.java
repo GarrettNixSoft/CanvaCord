@@ -14,6 +14,8 @@ public class ListSplitter<E> {
 	 */
 	public List<E>[] splitListIntoSublists(List<E> list, int numSublists) {
 
+		if (numSublists == 0) throw new IllegalArgumentException("Cannot split into zero lists");
+
 		List<E>[] result = new List[numSublists];
 
 		// create the lists
