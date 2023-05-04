@@ -26,7 +26,7 @@ public class InstanceDetailsPanel extends JPanel {
 			return;
 		}
 
-		setLayout(new MigLayout("", "[grow, center]", "[][][][][]"));
+		setLayout(new MigLayout("", "[grow, center]", "[][][][][][]"));
 
 		JLabel nameLabel = new JLabel(instance.getName());
 		nameLabel.setFont(CanvaCordFonts.HEADER_FONT);
@@ -62,10 +62,25 @@ public class InstanceDetailsPanel extends JPanel {
 		descriptionLabel.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);;
 		add(descriptionLabel, "cell 0 2");
 
+		JButton updateButton = new JButton("Fetch Now");
+		updateButton.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
+		updateButton.setForeground(Color.GREEN.darker());
+		add(updateButton, "cell 0 4");
+
+		updateButton.addActionListener(event -> {
+			if (InstanceManager.isInstanceRunning(instance.getInstanceID())) {
+				new Thread(
+						() -> InstanceManager.updateInstance(instance.getInstanceID())
+				).start();
+				// TODO prevent this from happening more than once at a time
+			}
+			else UserInput.showErrorMessage("This instance is not running.", "Instance Stopped");
+		});
+
 		JButton deleteButton = new JButton("Delete Instance");
 		deleteButton.setFont(CanvaCordFonts.LABEL_FONT_MEDIUM);
 		deleteButton.setForeground(Color.RED);
-		add(deleteButton, "cell 0 4");
+		add(deleteButton, "cell 0 5");
 
 		deleteButton.addActionListener(event -> {
 
