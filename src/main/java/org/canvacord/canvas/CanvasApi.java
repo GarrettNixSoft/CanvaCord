@@ -65,7 +65,17 @@ public class CanvasApi {
 	}
 
 	// ******************************** CUSTOM SEARCHES ********************************
+	/**
+	 *
+	 * */
 	public Optional<SyllabusInfo> findSyllabus(String courseID) {
+		return SyllabusFetcher.fetchSyllabusFromCanvas(courseID);
+	}
+
+	/**
+	 *
+	 * */
+	public Optional<SyllabusInfo> findSyllabusComplete(String courseID) {
 		return SyllabusFetcher.fetchSyllabusForCourse(courseID);
 	}
 
