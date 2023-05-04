@@ -42,8 +42,6 @@ public class CanvasEntityPool {
 	}
 
 	public void processEntity(long entityID) {
-		if (newEntities.contains(entityID)) System.out.println(notificationName + " already has " + entityID + " in new");
-		else if (oldEntities.contains(entityID)) System.out.println(notificationName + " already sent " + entityID);
 		if (!newEntities.contains(entityID) && !oldEntities.contains(entityID)) newEntities.add(entityID);
 	}
 
