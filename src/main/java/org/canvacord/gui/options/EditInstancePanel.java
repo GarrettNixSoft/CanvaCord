@@ -104,6 +104,7 @@ public class EditInstancePanel extends OptionsPanel {
 		instanceConfiguration.setFetchSchedule((JSONObject) dataStore.get("fetch_schedule"));
 		instanceConfiguration.setConfiguredRoles((JSONArray) dataStore.get("configured_roles"));
 		instanceConfiguration.setConfiguredNotifications((JSONArray) dataStore.get("configured_notifications"));
+		instanceConfiguration.setHasSyllabus((Boolean) dataStore.get("has_syllabus"));
 		instanceConfiguration.setTextbooks((JSONArray) dataStore.get("textbooks"));
 		instanceConfiguration.setDoMeetingReminders((Boolean) dataStore.get("do_meeting_reminders"));
 		instanceConfiguration.setCreateRemindersRole((Boolean) dataStore.get("create_reminders_role"));
