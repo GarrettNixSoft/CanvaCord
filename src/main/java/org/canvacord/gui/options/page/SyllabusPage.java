@@ -138,6 +138,9 @@ public class SyllabusPage extends OptionPage {
 			syllabusFileLabel.setText("syllabus.pdf");
 			renderPreview();
 		}
+		else {
+			syllabusFileLabel.setText("None");
+		}
 	}
 
 	@Override
