@@ -41,8 +41,6 @@ public class CacheManager {
 
 			JSONObject emptyInstanceData = new JSONObject();
 
-			System.out.println("instance has " + instance.getConfiguredNotifications(false).size() + " notifications");
-
 			for (CanvaCordNotification notification : instance.getConfiguredNotifications(true)) {
 				emptyInstanceData.put(notification.getName() + "_new", new JSONArray());
 				emptyInstanceData.put(notification.getName() + "_old", new JSONArray());
@@ -124,6 +122,7 @@ public class CacheManager {
 		List<Assignment> result = new ArrayList<>();
 
 		for (long id : newAssignmentIDs) {
+			System.out.println("Assignment ID " + id + " is new for " + notification.getName());
 			Assignment assignment = cachedAssignments.get(id);
 			if (assignment != null)
 				result.add(assignment);
@@ -219,6 +218,10 @@ public class CacheManager {
 		// Get the saved due date and the current due date
 		Date savedDueDate = dueDates.get(assignment.getId());
 		Date currentDueDate = assignment.getDueAt();
+
+		// can't do anything if there's no due date
+		if (savedDueDate == null || currentDueDate == null)
+			return;
 
 		// Compare them, and if they differ, cache the change
 		if (!savedDueDate.equals(currentDueDate))
