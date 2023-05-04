@@ -5,6 +5,13 @@ import java.util.List;
 
 public class ListSplitter<E> {
 
+	/**
+	 * Split the given lists into smaller lists, in order. i.e., the resulting
+	 * sub-lists will be like ordered slices of the parent list
+	 * @param list the list to split
+	 * @param numSublists the number of smaller lists to split it into
+	 * @return an array of lists
+	 */
 	public List<E>[] splitListIntoSublists(List<E> list, int numSublists) {
 
 		List<E>[] result = new List[numSublists];
