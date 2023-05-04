@@ -249,9 +249,9 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 		// HashMap<String,EmbedBuilder>
 		HashMap<Command, EmbedBuilder> commandsWithTutorials = new HashMap<>();
 
-//		commandsWithTutorials.put(new AssignmentCommand(),new EmbedBuilder().addField("Finding Assignments", "The CanvaCord bot has many ways to access your Canvas course's assignments:")
-//				.addField("Active Assignments", "While an assignment is within its window of being assigned, but not yet past due, it can be viewed using */assignment list* alongside other active assignments.\n The command */assignment <search parameters>* can be used to see specifics.")
-//				.addField("Old Assignments", "After an assignment's due date is passed, it and its details will be added to a dedicated text channel as a log for previous assignments.\nAs always, assignments can be accessed through the use of */assignment <search parameters>*.\n\nMore details on the */assignment* command are available using the */help commands assignment* command."));
+		commandsWithTutorials.put(new AssignmentCommand(),new EmbedBuilder().addField("Finding Assignments", "The CanvaCord bot has many ways to access your Canvas course's assignments:")
+				.addField("Active Assignments", "While an assignment is within its window of being assigned, but not yet past due, it can be viewed using */assignment list* alongside other active assignments.\n The command */assignment <search parameters>* can be used to see specifics.")
+				.addField("Old Assignments", "After an assignment's due date is passed, it and its details will be added to a dedicated text channel as a log for previous assignments.\nAs always, assignments can be accessed through the use of */assignment <search parameters>*.\n\nMore details on the */assignment* command are available using the */help commands assignment* command."));
 
 		commandsWithTutorials.put(new RemindMeCommand(),new EmbedBuilder().addField("Custom Reminders", """
                     A custom reminder to ping the User can be created using the slash command: */remindme <parameters>*. This will be ephemeral, so no other server users will be able to see. Still, do not put any personal information in Discord, as a general rule.
@@ -264,7 +264,7 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 		// use the ABOVE to create the fields inside a new course information embed
 		HashMap<Command,String> commandsWithCourseInformation = new HashMap<>();
 
-//		commandsWithCourseInformation.put(new ModuleCommand(),"All users can request a list of Canvas course modules through the slash command */modules*");
+		commandsWithCourseInformation.put(new ModuleCommand(),"All users can request a list of Canvas course modules through the slash command */modules*");
 //		commandsWithCourseInformation.put(new TextbookCommand(),"""
 //                            *The following is for CanvaCord Owners only*
 //                            **Adding a textbook** is done through the Application Control Panel (ACP). For a specific course, there is a button labeled *"Add Textbook"*
@@ -278,15 +278,15 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 //                            CanvaCord does not host any of this material itself.
 //                            Check the legality in your area for what is or isn't allowed, and the responsibility of the User's safety from downloading fetched textbooks is exclusively the User's.*.
 //                            """); //todo: is the title and author thing true
-//		commandsWithCourseInformation.put(new SyllabusCommand(),"""
-//                            *The following is for CanvaCord Owners only*
-//                            **Adding a Syllabus** is done through the Application Control Panel (ACP). For a specific course, there is a button labeled *"Add Syllabus"*
-//                            Syllabi are either automatically fetched by the CanvaCord bot, or manually added by the Owner.
-//
-//                            *The following is for all Users*
-//                            **Fetching a Syllabus** can be done using the */syllabus* slash command. More details are available using the */help commands syllabus* command.
-//                            """);
-//		commandsWithCourseInformation.put(new AssignmentCommand(),"Course assignments can be accessed using */assignment*. For more details: see the tutorial *Find Assignments* or use the */help commands assignment* command");
+		commandsWithCourseInformation.put(new SyllabusCommand(),"""
+                            *The following is for CanvaCord Owners only*
+                            **Adding a Syllabus** is done through the Application Control Panel (ACP). For a specific course, there is a button labeled *"Add Syllabus"*
+                            Syllabi are either automatically fetched by the CanvaCord bot, or manually added by the Owner.
+
+                            *The following is for all Users*
+                            **Fetching a Syllabus** can be done using the */syllabus* slash command. More details are available using the */help commands syllabus* command.
+                            """);
+		commandsWithCourseInformation.put(new AssignmentCommand(),"Course assignments can be accessed using */assignment*. For more details: see the tutorial *Find Assignments* or use the */help commands assignment* command");
 
 		for (Command command:commandsWithTutorials.keySet()){
 			if (commandList.containsValue(command.getClass())){
