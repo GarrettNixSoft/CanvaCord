@@ -178,7 +178,7 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
     }
 
     @Override
-    protected SlashCommandBuilder getBuilder(Instance instance) {
+    public SlashCommandBuilder getBuilder(Instance instance) {
         return SlashCommand.with(getName(), getShortDescription(), Arrays.asList(
                 SlashCommandOption.createSubcommand("search", "input the name of an assignment to be found",
                         Arrays.asList(SlashCommandOption.createStringOption( "search", "name or description of assignment", true),
