@@ -31,7 +31,7 @@
         <dependency>
             <groupId>org.javacord</groupId>
             <artifactId>javacord</artifactId>
-            <version>3.7.0</version>
+            <version>3.8.0</version>
             <type>pom</type>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.json/json -->
