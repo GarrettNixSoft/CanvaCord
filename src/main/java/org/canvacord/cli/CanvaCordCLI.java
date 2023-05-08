@@ -33,7 +33,7 @@ public class CanvaCordCLI implements Runnable {
 		commandMap.put("stop", StopCommand.class);
 	}
 
-	private Scanner in;
+	private final Scanner in;
 
 	private CanvaCordCLI() {
 		in = new Scanner(System.in);
