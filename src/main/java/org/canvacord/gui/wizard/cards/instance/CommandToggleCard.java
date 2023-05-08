@@ -36,15 +36,9 @@ public class CommandToggleCard extends InstanceConfigCard {
 		commands = new ArrayList<>();
 		addCommandRecord("Syllabus", true);
 		addCommandRecord("Textbooks", true);
-		addCommandRecord("Assignments List", true);
-		addCommandRecord("Assignments Search", true);
-		addCommandRecord("Assignments Active", true);
-		addCommandRecord("Assignment Details", true);
-		addCommandRecord("Announcements List", true);
-		addCommandRecord("Announcements Search", true);
-		addCommandRecord("Announcement Details", true);
-		addCommandRecord("Module List", true);
-		addCommandRecord("Module Search", true);
+		addCommandRecord("Assignment", true);
+		addCommandRecord("Announcement", true);
+		addCommandRecord("Module", true);
 		addCommandRecord("Remind Me", false);
 
 		// store checkboxes to fetch their states later
