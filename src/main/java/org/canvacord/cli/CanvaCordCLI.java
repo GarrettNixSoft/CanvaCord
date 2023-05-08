@@ -34,12 +34,20 @@ public class CanvaCordCLI implements Runnable {
 		commandMap.put("stop", StopCommand.class);
 	}
 
+	// Singleton
+	private static CanvaCordCLI instance;
+
+	// Use a scanner for input
 	private final Scanner in;
 
+	// Constructor initializes input
 	private CanvaCordCLI() {
 		in = new Scanner(System.in);
 	}
 
+	/**
+	 * Run CanvaCord's CLI mode.
+	 */
 	public void run() {
 
 		printStartup();
@@ -71,17 +79,29 @@ public class CanvaCordCLI implements Runnable {
 
 	}
 
+	/**
+	 * Print the startup message to stdout
+	 */
 	private void printStartup() {
 		System.out.println();
 		System.out.println("======== CANVACORD " + CanvaCord.VERSION_ID + " ========");
 		System.out.println();
 	}
 
+	/**
+	 * Wait for the user to enter some input
+	 * @return the user's input trimmed
+	 */
 	private String await() {
 		System.out.print("> ");
 		return in.nextLine().trim();
 	}
 
+	/**
+	 * Process a user's command
+	 * @param command the command string
+	 * @return whether this command should terminate CanvaCord
+	 */
 	private boolean processCommand(String command) {
 
 		// catch empty strings
@@ -106,10 +126,16 @@ public class CanvaCordCLI implements Runnable {
 		}
 	}
 
+	private static CanvaCordCLI getInstance() {
+		if (instance == null)
+			instance = new CanvaCordCLI();
+		return instance;
+	}
+
 	public static void runCLI() {
 
 		// Run the CLI thread
-		new Thread(new CanvaCordCLI()).start();
+		new Thread(getInstance()).start();
 
 	}
 
