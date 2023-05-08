@@ -43,3 +43,4 @@ build/
 /src/test/java/org/canvacord/DiscordServerTest.java
 /out/
 dependency-reduced-pom.xml
+/logs/

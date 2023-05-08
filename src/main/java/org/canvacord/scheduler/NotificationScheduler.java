@@ -1,5 +1,7 @@
 package org.canvacord.scheduler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.exception.CanvaCordException;
@@ -16,6 +18,8 @@ import java.util.List;
 
 public class NotificationScheduler {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private static Scheduler notifyScheduler;
 	private static final String GROUP_ID = "discordNotify";
 
@@ -28,7 +32,7 @@ public class NotificationScheduler {
 
 		notifyScheduler = StdSchedulerFactory.getDefaultScheduler();
 
-		System.out.println("Notification Scheduler initialized");
+		LOGGER.debug("Notification Scheduler initialized");
 
 	}
 
@@ -43,7 +47,7 @@ public class NotificationScheduler {
 		for (CanvaCordNotification notification : notifications)
 			scheduleNotification(instance, notification);
 
-		System.out.println("Scheduled notifications for instance " + instance.getInstanceID());
+		LOGGER.debug("Scheduled notifications for instance " + instance.getInstanceID());
 
 	}
 
@@ -61,7 +65,7 @@ public class NotificationScheduler {
 			notifyScheduler.deleteJob(key);
 		}
 
-		System.out.println("Removed notifications for instance " + instance.getInstanceID());
+		LOGGER.debug("Removed notifications for instance " + instance.getInstanceID());
 
 	}
 

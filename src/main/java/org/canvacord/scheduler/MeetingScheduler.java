@@ -1,5 +1,7 @@
 package org.canvacord.scheduler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
@@ -20,6 +22,8 @@ import java.util.List;
 
 public class MeetingScheduler {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private static Scheduler meetingScheduler;
 	private static final String GROUP_ID = "meetings";
 
@@ -31,7 +35,7 @@ public class MeetingScheduler {
 	public static void init() throws SchedulerException {
 
 		meetingScheduler = StdSchedulerFactory.getDefaultScheduler();
-		System.out.println("Meeting Scheduler initialized");
+		LOGGER.debug("Meeting Scheduler initialized");
 
 	}
 
@@ -56,7 +60,7 @@ public class MeetingScheduler {
 				meetingScheduler.scheduleJob(reminderJob, trigger);
 
 			// Log it
-			System.out.println("Scheduled meeting reminders for instance " + instance.getInstanceID());
+			LOGGER.debug("Scheduled meeting reminders for instance " + instance.getInstanceID());
 
 			// TODO
 		}

@@ -1,5 +1,7 @@
 package org.canvacord.scheduler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.instance.Instance;
 import org.canvacord.reminder.Reminder;
 import org.canvacord.reminder.ReminderManager;
@@ -8,6 +10,8 @@ import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class ReminderScheduler {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	private static Scheduler reminderScheduler;
 	private static final String GROUP_ID = "remindMe";
@@ -30,7 +34,7 @@ public class ReminderScheduler {
 		for (Reminder reminder : ReminderManager.getRemindersForInstance(instance))
 			scheduleReminder(instance, reminder);
 
-		System.out.println("Scheduled reminders for instance " + instance.getName());
+		LOGGER.debug("Scheduled reminders for instance " + instance.getName());
 
 	}
 
@@ -41,7 +45,7 @@ public class ReminderScheduler {
 			reminderScheduler.deleteJob(key);
 		}
 
-		System.out.println("Removed reminders for instance " + instance.getInstanceID());
+		LOGGER.debug("Removed reminders for instance " + instance.getInstanceID());
 
 	}
 
@@ -69,7 +73,7 @@ public class ReminderScheduler {
 
 		reminderScheduler.scheduleJob(reminderJob, trigger);
 
-		System.out.println("Scheduled a reminder");
+		LOGGER.debug("Scheduled a reminder");
 
 	}
 

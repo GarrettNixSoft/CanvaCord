@@ -1,5 +1,7 @@
 package org.canvacord.scheduler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.scheduler.job.CanvasFetchJob;
@@ -13,6 +15,8 @@ import java.util.Date;
 
 public class CanvasFetchScheduler {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private static Scheduler fetchScheduler;
 	private static final String GROUP_ID = "canvasFetch";
 
@@ -25,7 +29,7 @@ public class CanvasFetchScheduler {
 
 		fetchScheduler = StdSchedulerFactory.getDefaultScheduler();
 
-		System.out.println("Canvas Fetch Scheduler initialized");
+		LOGGER.debug("Canvas Fetch Scheduler initialized");
 
 	}
 
@@ -57,7 +61,7 @@ public class CanvasFetchScheduler {
 		fetchScheduler.scheduleJob(fetchJob, trigger);
 
 		// Log it
-		System.out.println("Scheduled updates for instance " + instance.getInstanceID());
+		LOGGER.debug("Scheduled updates for instance " + instance.getInstanceID());
 
 	}
 
