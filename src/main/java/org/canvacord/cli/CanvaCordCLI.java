@@ -50,8 +50,6 @@ public class CanvaCordCLI implements Runnable {
 			if (close) break;
 		}
 
-		System.out.println("\nExiting.");
-
 		// Close the input
 		in.close();
 
@@ -64,6 +62,8 @@ public class CanvaCordCLI implements Runnable {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("\n");
 
 	}
 

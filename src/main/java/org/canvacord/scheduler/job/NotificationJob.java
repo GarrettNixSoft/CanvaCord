@@ -2,6 +2,8 @@ package org.canvacord.scheduler.job;
 
 import edu.ksu.canvas.model.announcement.Announcement;
 import edu.ksu.canvas.model.assignment.Assignment;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.discord.notification.CanvasNotifier;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.exception.CanvaCordException;
@@ -20,6 +22,8 @@ import java.util.List;
 
 public class NotificationJob implements Job {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
 
@@ -32,7 +36,7 @@ public class NotificationJob implements Job {
             case NEW_ASSIGNMENT -> {
                 List<Assignment> newAssignments = CacheManager.getNewAssignments(instance, notification);
                 if (newAssignments.isEmpty()) {
-                    System.out.println("No new assignments");
+                    LOGGER.debug("No new assignments");
                     return;
                 }
                 boolean success = CanvasNotifier.notifyNewAssignments(instance, notification, newAssignments);
@@ -41,7 +45,7 @@ public class NotificationJob implements Job {
             case NEW_ANNOUNCEMENT -> {
                 List<Announcement> newAnnouncements = CacheManager.getNewAnnouncements(instance, notification);
                 if (newAnnouncements.isEmpty()) {
-                    System.out.println("No new announcements");
+                    LOGGER.debug("No new announcements");
                     return;
                 }
                 boolean success = CanvasNotifier.notifyNewAnnouncements(instance, notification, newAnnouncements);
@@ -50,7 +54,7 @@ public class NotificationJob implements Job {
             case ASSIGNMENT_DUE_DATE_CHANGED -> {
                 List<Pair<Assignment, Pair<Date, Date>>> assignmentsWithChangedDueDates = AssignmentFilter.getAssignmentsWithChangedDueDates(instance);
                 if (assignmentsWithChangedDueDates.isEmpty()) {
-                    System.out.println("No due dates changed");
+                    LOGGER.debug("No due dates changed");
                     return;
                 }
                 boolean success = CanvasNotifier.notifyDueDateChanged(instance, notification, assignmentsWithChangedDueDates);
@@ -61,7 +65,7 @@ public class NotificationJob implements Job {
             }
         }
 
-        System.out.println("Sending notifications to server " + instance.getServerID());
+        LOGGER.trace("Sending notifications to server " + instance.getServerID());
 
     }
 
