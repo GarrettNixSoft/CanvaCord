@@ -1,10 +1,13 @@
 package org.canvacord.cli;
 
+import org.canvacord.cli.commands.*;
+import org.canvacord.cli.commands.start.StartCommand;
+import org.canvacord.cli.commands.stop.StopCommand;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.main.CanvaCord;
 import org.canvacord.scheduler.CanvaCordScheduler;
-import org.canvacord.util.input.UserInput;
+import org.canvacord.util.data.Stack;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,13 +15,22 @@ import java.util.Scanner;
 
 public class CanvaCordCLI implements Runnable {
 
-	private static final Map<String, CLICommandHandler> commandMap = new HashMap<>();
+	public static final Map<String, Class<? extends CLICommand>> commandMap = new HashMap<>();
 
 	static {
-		commandMap.put("quit", args -> true);
-		commandMap.put("exit", args -> true);
-		commandMap.put("list", CLICommands.listCommand);
-		commandMap.put("start", CLICommands.startCommand);
+		// HELP AND ITS ALIASES
+		commandMap.put("help", HelpCommand.class);
+		commandMap.put("h", HelpCommand.class);
+		commandMap.put("-h", HelpCommand.class);
+		commandMap.put("--h", HelpCommand.class);
+		commandMap.put("-help", HelpCommand.class);
+		commandMap.put("--help", HelpCommand.class);
+		// EVERYTHING ELSE
+		commandMap.put("quit", QuitCommand.class);
+		commandMap.put("exit", QuitCommand.class);
+		commandMap.put("list", ListCommand.class);
+		commandMap.put("start", StartCommand.class);
+		commandMap.put("stop", StopCommand.class);
 	}
 
 	private Scanner in;
@@ -63,7 +75,7 @@ public class CanvaCordCLI implements Runnable {
 
 	private String await() {
 		System.out.print("> ");
-		return in.nextLine();
+		return in.nextLine().trim();
 	}
 
 	private boolean processCommand(String command) {
@@ -72,13 +84,22 @@ public class CanvaCordCLI implements Runnable {
 		if (command.isBlank()) return false;
 
 		// parse the command arguments
-		String[] args = command.split("\\s+");
+		String[] argTokens = command.split("\\s+");
+
+		// Push arguments onto the stack in reverse order
+		Stack<String> args = new Stack<>();
+		for (int i = argTokens.length - 1; i >= 0; i--) {
+			args.push(argTokens[i]);
+		}
 
 		// follow the command map and execute whatever it points to
-		return commandMap.getOrDefault(args[0], arg -> {
-			System.out.println("Unknown command. Type help to list commands.");
+		try {
+			return commandMap.getOrDefault(args.poll(), UnknownCommand.class).getConstructor().newInstance().execute(args);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 			return false;
-		}).execute(args);
+		}
 	}
 
 	public static void runCLI() {
