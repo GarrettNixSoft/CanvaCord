@@ -1,5 +1,7 @@
 package org.canvacord.scheduler;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.instance.Instance;
 import org.canvacord.main.CanvaCord;
 import org.quartz.Scheduler;
@@ -7,6 +9,8 @@ import org.quartz.SchedulerException;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class CanvaCordScheduler {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	// A scheduler provided by Quartz
 	private static Scheduler scheduler;
@@ -40,7 +44,9 @@ public class CanvaCordScheduler {
 	 * @throws SchedulerException if something goes wrong shutting down the scheduler
 	 */
 	public static void shutDown() throws SchedulerException {
+		LOGGER.debug("Shutting down CanvaCordScheduler");
 		scheduler.shutdown(true);
+		LOGGER.debug("Shut down CanvaCordScheduler");
 	}
 
 	/**
@@ -50,9 +56,11 @@ public class CanvaCordScheduler {
 	 * @throws SchedulerException if something goes wrong scheduling the Instance's jobs
 	 */
 	public static void scheduleInstance(Instance instance) throws SchedulerException {
+		LOGGER.debug("Scheduling instance " + instance.getInstanceID());
 		CanvasFetchScheduler.scheduleInstance(instance);
 		NotificationScheduler.scheduleInstance(instance);
 		ReminderScheduler.scheduleInstance(instance);
+		LOGGER.debug("Scheduled instance " + instance.getInstanceID());
 	}
 
 	/**
@@ -62,9 +70,11 @@ public class CanvaCordScheduler {
 	 * @throws SchedulerException if something goes wrong terminating the Instance's jobs
 	 */
 	public static void removeInstance(Instance instance) throws SchedulerException {
+		LOGGER.debug("Removing instance " + instance.getInstanceID());
 		CanvasFetchScheduler.removeInstance(instance);
 		NotificationScheduler.removeInstance(instance);
 		ReminderScheduler.removeInstance(instance);
+		LOGGER.debug("Removed instance " + instance.getInstanceID());
 	}
 
 }

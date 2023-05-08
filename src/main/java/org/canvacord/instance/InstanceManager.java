@@ -126,11 +126,21 @@ public class InstanceManager {
 		return Optional.ofNullable(instancesByServerID.get(serverID));
 	}
 
-	public static boolean runInstance(String instanceID) throws SchedulerException {
+	/**
+	 * Run an instance.
+	 * @param instanceID the ID of the instance to run. Will accept a Course ID
+	 * @return {@code true} if the instance is now running
+	 * @throws Exception if something goes wrong or the instance is already running
+	 */
+	public static boolean runInstance(String instanceID) throws Exception {
+
+		// translate course IDs to instance IDs
+		if (getInstanceByCourseID(instanceID).isPresent())
+			instanceID = getInstanceByCourseID(instanceID).get().getInstanceID();
 
 		// check already running
 		if (runningInstanceIDs.contains(instanceID) || !instances.containsKey(instanceID))
-			return false;
+			throw new CanvaCordException(instanceID + " is already running.");
 
 		Instance instance = instances.get(instanceID);
 		instance.start();
@@ -143,11 +153,21 @@ public class InstanceManager {
 		return true;
 	}
 
-	public static boolean stopInstance(String instanceID) throws SchedulerException {
+	/**
+	 * Stop an instance.
+	 * @param instanceID the ID of the instance to stop. Will accept a Course ID
+	 * @return {@code true} if the instance is now stopped
+	 * @throws Exception
+	 */
+	public static boolean stopInstance(String instanceID) throws Exception {
+
+		// translate course IDs to instance IDs
+		if (getInstanceByCourseID(instanceID).isPresent())
+			instanceID = getInstanceByCourseID(instanceID).get().getInstanceID();
 
 		// check already running
 		if (!runningInstanceIDs.contains(instanceID) || !instances.containsKey(instanceID))
-			return false;
+			throw new CanvaCordException(instanceID + " is not running.");
 
 		Instance instance = instances.get(instanceID);
 		instance.stop();
@@ -160,7 +180,11 @@ public class InstanceManager {
 		return true;
 	}
 
-	public static void runAllInstances() throws SchedulerException {
+	public static void runAllInstances() throws Exception {
+		// check all instances already running
+		if (runningInstanceIDs.size() == instances.size())
+			throw new CanvaCordException("All instances are already running.");
+
 		for (String instanceID : instances.keySet()) {
 			if (!runningInstanceIDs.contains(instanceID))
 				if (!runInstance(instanceID))
@@ -168,7 +192,7 @@ public class InstanceManager {
 		}
 	}
 
-	public static void stopAllInstances() throws SchedulerException {
+	public static void stopAllInstances() throws Exception {
 		LOGGER.debug("Stopping all instances");
 		for (String runningInstanceID : runningInstanceIDs) {
 			if (!stopInstance(runningInstanceID))

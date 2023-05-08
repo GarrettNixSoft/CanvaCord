@@ -20,7 +20,7 @@ public class ListCommand extends CLICommand {
 		System.out.println("\nInstances:");
 		for (int i = 0; i < instances.size(); i++) {
 			Instance instance = instances.get(i);
-			System.out.println("\t" + (i + 1) + ". " + instance.getName() + " (" + instance.getInstanceID() + ")");
+			System.out.println("\t" + (i + 1) + ". " + instance.getName() + " (" + instance.getInstanceID() + ") -- Running: " + (InstanceManager.isInstanceRunning(instance.getInstanceID()) ? "Yes" : "No"));
 		}
 		System.out.println();
 

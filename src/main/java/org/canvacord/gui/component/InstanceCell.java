@@ -267,7 +267,7 @@ public class InstanceCell extends JPanel {
 
 			try {
 				InstanceManager.runInstance(instance.getInstanceID());
-			} catch (SchedulerException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				UserInput.showExceptionWarning(e);
 			}
@@ -278,7 +278,7 @@ public class InstanceCell extends JPanel {
 
 			try {
 				InstanceManager.stopInstance(instance.getInstanceID());
-			} catch (SchedulerException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				UserInput.showExceptionWarning(e);
 			}

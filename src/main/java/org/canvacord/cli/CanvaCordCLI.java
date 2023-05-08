@@ -1,5 +1,6 @@
 package org.canvacord.cli;
 
+import org.apache.logging.log4j.LogManager;
 import org.canvacord.cli.commands.*;
 import org.canvacord.cli.commands.start.StartCommand;
 import org.canvacord.cli.commands.stop.StopCommand;
@@ -64,6 +65,9 @@ public class CanvaCordCLI implements Runnable {
 		}
 
 		System.out.println("\n");
+
+		// Close the logger properly
+		LogManager.shutdown();
 
 	}
 
