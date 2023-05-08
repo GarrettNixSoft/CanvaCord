@@ -4,6 +4,10 @@ import org.canvacord.util.data.Stack;
 
 public class QuitCommand extends CLICommand {
 
+	public QuitCommand() {
+		super("quit");
+	}
+
 	@Override
 	public boolean execute(Stack<String> args) {
 		return true;
