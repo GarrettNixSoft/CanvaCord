@@ -2,6 +2,7 @@ package org.canvacord.cli;
 
 import org.apache.logging.log4j.LogManager;
 import org.canvacord.cli.commands.*;
+import org.canvacord.cli.commands.instance.InstanceCommand;
 import org.canvacord.cli.commands.start.StartCommand;
 import org.canvacord.cli.commands.stop.StopCommand;
 import org.canvacord.discord.DiscordBot;
@@ -10,28 +11,31 @@ import org.canvacord.main.CanvaCord;
 import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.util.data.Stack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class CanvaCordCLI implements Runnable {
 
 	public static final Map<String, Class<? extends CLICommand>> commandMap = new HashMap<>();
+	public static final List<String> COMMANDS = new ArrayList<>();
 
 	static {
 		// HELP AND ITS ALIASES
 		commandMap.put("help", HelpCommand.class);
 		commandMap.put("h", HelpCommand.class);
-		commandMap.put("-h", HelpCommand.class);
-		commandMap.put("--h", HelpCommand.class);
-		commandMap.put("-help", HelpCommand.class);
-		commandMap.put("--help", HelpCommand.class);
 		// EVERYTHING ELSE
 		commandMap.put("quit", QuitCommand.class);
 		commandMap.put("exit", QuitCommand.class);
 		commandMap.put("list", ListCommand.class);
 		commandMap.put("start", StartCommand.class);
 		commandMap.put("stop", StopCommand.class);
+		commandMap.put("instance", InstanceCommand.class);
+		// LIST OF COMMANDS FOR HELP
+		COMMANDS.add("help");
+		COMMANDS.add("quit");
+		COMMANDS.add("list");
+		COMMANDS.add("start");
+		COMMANDS.add("stop");
+		COMMANDS.add("instance");
 	}
 
 	// Singleton

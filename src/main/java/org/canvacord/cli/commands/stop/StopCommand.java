@@ -1,9 +1,8 @@
 package org.canvacord.cli.commands.stop;
 
-import org.canvacord.cli.commands.CLICommand;
-import org.canvacord.util.data.Stack;
+import org.canvacord.cli.commands.CLIHubCommand;
 
-public class StopCommand extends CLICommand {
+public class StopCommand extends CLIHubCommand {
 
 	public StopCommand() {
 		super("stop");
@@ -11,36 +10,6 @@ public class StopCommand extends CLICommand {
 		subCommands.put("-all", StopAllCommand.class);
 		subCommands.put("-i", StopInstanceCommand.class);
 		subCommands.put("-id", StopInstanceCommand.class);
-	}
-
-	@Override
-	public boolean execute(Stack<String> args) {
-
-		// if they did not supply a required argument
-		if (args.isEmpty()) {
-			System.out.println(getUsage());
-			return false;
-		}
-
-		// get the first argument string
-		String arg = args.poll();
-
-		// if it's a valid subcommand
-		if (subCommands.containsKey(arg)) {
-			try {
-				subCommands.get(arg).getConstructor().newInstance().execute(args);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		// otherwise show how to use this command
-		else {
-			printUsage();
-		}
-
-		// this command does not terminate the program
-		return false;
 	}
 
 	@Override

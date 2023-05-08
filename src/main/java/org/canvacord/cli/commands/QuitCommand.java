@@ -15,6 +15,6 @@ public class QuitCommand extends CLICommand {
 
 	@Override
 	public String getUsage() {
-		return "usage: [quit|exit]";
+		return "usage: [quit|exit]\n";
 	}
 }
