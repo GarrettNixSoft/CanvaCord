@@ -1,5 +1,7 @@
 package org.canvacord.instance;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.persist.CacheManager;
 import org.canvacord.util.file.FileUtil;
@@ -10,6 +12,8 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 public class InstanceLoader {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	/**
 	 * Load a saved CanvaCord instance configuration from disk.
@@ -47,7 +51,7 @@ public class InstanceLoader {
 			if (instanceJSON.isPresent()) {
 				Instance parsedInstance = InstanceParser.parseInstance(instanceID, instanceJSON.get());
 				CacheManager.loadInstanceData(parsedInstance);
-				System.out.println("Loaded instance " + instanceID);
+				LOGGER.debug("Loaded instance " + instanceID);
 				return Optional.of(parsedInstance);
 			}
 			else

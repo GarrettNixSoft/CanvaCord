@@ -2,6 +2,7 @@ package org.canvacord.main;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.canvacord.cli.CanvaCordCLI;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.discord.commands.CommandHandler;
 import org.canvacord.exception.ExplosionHandler;
@@ -19,10 +20,27 @@ import java.util.Optional;
 
 public class CanvaCord {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	public static final String VERSION_ID = "v0.0.1";
 
 	public static void main(String[] args) {
 
+		// examine args
+		if (args.length > 0) {
+			if (args[0].equals("nogui")) {
+				LOGGER.info("Running CanvaCord in headless mode.");
+				runHeadless();
+			}
+			else printUsage();
+		}
+
+		// no arguments, default to run with GUI
+		else runWithGUI();
+
+	}
+
+	private static void runWithGUI() {
 		// make CanvaCord look native
 		LookAndFeel.init();
 
@@ -34,6 +52,15 @@ public class CanvaCord {
 
 		// run the application!
 		CanvaCordApp.run();
+	}
+
+	private static void runHeadless() {
+
+		// initialize CanvaCord components
+		init();
+
+		// run the application in headless mode!
+		CanvaCordCLI.runCLI();
 
 	}
 
@@ -99,6 +126,10 @@ public class CanvaCord {
 
 		System.exit(-1);
 
+	}
+
+	private static void printUsage() {
+		System.out.println("Usage: CanvaCord.jar [nogui]");
 	}
 
 }

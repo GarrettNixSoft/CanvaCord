@@ -1,5 +1,7 @@
 package org.canvacord.instance;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.persist.CacheManager;
@@ -14,6 +16,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class InstanceManager {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	private static final Map<String, Instance> instances;
 	private static final List<Instance> runningInstances;
@@ -54,7 +58,7 @@ public class InstanceManager {
 				try {
 					// Instances are contained in subdirectories; if this is not a directory, skip it
 					if (!file.isDirectory()) {
-						System.out.println("Abandoning; not a directory");
+						LOGGER.debug("Abandoning; not a directory");
 						continue;
 					}
 
@@ -63,7 +67,7 @@ public class InstanceManager {
 
 					// Instances contain 2 files: config and data
 					if (instanceFiles.length < 2) {
-						System.out.println("Abandoning; too few files");
+						LOGGER.debug("Abandoning; too few files");
 						continue;
 					}
 
@@ -74,7 +78,7 @@ public class InstanceManager {
 							jsonCount++;
 					}
 					if (jsonCount < 2) {
-						System.out.println("Abandoning; too few JSON files");
+						LOGGER.debug("Abandoning; too few JSON files");
 						continue;
 					}
 
@@ -165,7 +169,7 @@ public class InstanceManager {
 	}
 
 	public static void stopAllInstances() throws SchedulerException {
-		System.out.println("Stop all");
+		LOGGER.debug("Stopping all instances");
 		for (String runningInstanceID : runningInstanceIDs) {
 			if (!stopInstance(runningInstanceID))
 				throw new CanvaCordException("Failed to shut down instance " + instances.get(runningInstanceID).getName());

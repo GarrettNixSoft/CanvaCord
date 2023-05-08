@@ -25,7 +25,7 @@ public class ReminderScheduler {
 
 		reminderScheduler = StdSchedulerFactory.getDefaultScheduler();
 
-		System.out.println("Reminder Scheduler initialized");
+		LOGGER.debug("Reminder Scheduler initialized");
 
 	}
 

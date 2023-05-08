@@ -33,7 +33,6 @@ public class ReminderManager {
 			storedReminders.put(instance.getInstanceID(), reminders);
 			// check the reminders file for the instance
 			JSONArray remindersData = checkRemindersFile(instance);
-			System.out.println(remindersData.toString(4));
 			// load all reminders for the instance
 			for (int i = 0; i < remindersData.length(); i++) {
 				JSONObject reminderData = remindersData.getJSONObject(i);
