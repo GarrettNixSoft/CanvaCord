@@ -3,6 +3,8 @@ package org.canvacord.persist;
 import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.model.announcement.Announcement;
 import edu.ksu.canvas.model.assignment.Assignment;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.exception.CanvaCordException;
@@ -20,6 +22,8 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class CacheManager {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	private static final HashMap<String, InstanceData> instanceData = new HashMap<>();
 
@@ -122,7 +126,7 @@ public class CacheManager {
 		List<Assignment> result = new ArrayList<>();
 
 		for (long id : newAssignmentIDs) {
-			System.out.println("Assignment ID " + id + " is new for " + notification.getName());
+			LOGGER.trace("Assignment ID " + id + " is new for " + notification.getName());
 			Assignment assignment = cachedAssignments.get(id);
 			if (assignment != null)
 				result.add(assignment);
@@ -206,10 +210,10 @@ public class CacheManager {
 		if (!dueDates.containsKey(assignment.getId())) {
 			if (assignment.getDueAt() == null) {
 				dueDates.put(assignment.getId(), new Date(Long.MAX_VALUE));
-				System.out.println("NO DUE DATE FOR ASSIGNMENT: " + assignment.getName());
+				LOGGER.debug("NO DUE DATE FOR ASSIGNMENT: " + assignment.getName());
 			}
 			else {
-				System.out.println("STORED DUE DATE: " + assignment.getDueAt());
+				LOGGER.trace("STORED DUE DATE: " + assignment.getDueAt());
 				dueDates.put(assignment.getId(), assignment.getDueAt());
 			}
 			return;
