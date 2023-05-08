@@ -1,4 +1,4 @@
-package org.canvacord.main;
+package org.canvacord;
 
 import org.canvacord.db.DBConnector;
 
