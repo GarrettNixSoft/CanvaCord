@@ -66,31 +66,19 @@
 		}
 	],
 	"command_availability": {
-		"assignments_list": true,
+		"assignment": true,
 		"syllabus": true,
-		"assignments_search": true,
 		"remindme": false,
-		"announcement_details": true,
-		"assignments_active": true,
-		"assignment_details": true,
-		"announcements_search": true,
-		"module_list": true,
-		"module_search": true,
-		"textbooks": true,
-		"announcements_list": true
+		"announcement": true,
+		"module": true,
+		"textbook": true
 	},
 	"command_ids": {
-		"assignments_list": -1,
+		"assignment": -1,
 		"syllabus": -1,
-		"assignments_search": -1,
 		"remindme": -1,
-		"announcement_details": -1,
-		"assignments_active": -1,
-		"assignment_details": -1,
-		"announcements_search": -1,
-		"textbooks": -1,
-		"announcements_list": -1,
-		"module_list": -1,
-		"module_search": -1
+		"announcement": -1,
+		"textbook": -1,
+		"module": -1
 	}
 }
