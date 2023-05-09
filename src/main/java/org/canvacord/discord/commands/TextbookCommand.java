@@ -2,7 +2,6 @@ package org.canvacord.discord.commands;
 
 import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 import org.canvacord.canvas.CanvasApi;
-import org.canvacord.canvas.SyllabusInfo;
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.exception.CanvaCordException;
@@ -22,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class TextbookCommand extends Command {
 
-	private static final EmbedBuilder errorMessage = new EmbedBuilder().setTitle("Unable to fetch Syllabus")
+	private static final EmbedBuilder errorMessage = new EmbedBuilder().setTitle("Unable to fetch Textbook")
 			.setDescription("We're sorry, but the requested file is not available. Contact the bot owner or consult the user manual for setup help.");
 	@Override
 	public String getDescription(){
@@ -67,7 +66,7 @@ public class TextbookCommand extends Command {
 				Optional<TextbookInfo> textbookDummy = Optional.of(textbook.get(0));
 				textbookDummy.ifPresentOrElse(textbookData -> {
 					interactionOriginalResponseUpdater
-							.addEmbed(new EmbedBuilder().setTitle(instanceForCourse.getCourseTitle() + " Syllabus")
+							.addEmbed(new EmbedBuilder().setTitle(instanceForCourse.getCourseTitle() + " Textbook")
 									.setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
 									.setColor(Color.RED)
 									.addField("Course ",instanceForCourse.getCourseTitle())
