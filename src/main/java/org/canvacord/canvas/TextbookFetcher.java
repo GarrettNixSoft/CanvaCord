@@ -4,7 +4,10 @@ import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.util.Globals;
+import org.canvacord.util.file.TextbookScraper;
+import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +19,15 @@ public class TextbookFetcher {
 	 * @return an Optional type containing information about what was found,
 	 * or empty if no results were found.
 	 */
-	public static Optional<TextbookInfo> fetchTextbookOnline(String searchTerm) {
+	public static Optional<TextbookInfo> fetchTextbookOnline(String searchTerm, String courseID) {
 		// TODO
-		return Optional.empty();
+		Instance instanceForCourse = InstanceManager.getInstanceByCourseID(courseID).orElseThrow(()->new CanvaCordException("Instance not found"));
+		File textbook = TextbookScraper.downloadTextbook(instanceForCourse.getInstanceID(), searchTerm);
+		JSONObject textbookData = new JSONObject();
+		textbookData.put("title", instanceForCourse.getName());
+		textbookData.put("author", "");
+		textbookData.put("file_name", textbook.getName());
+		return Optional.of(new TextbookInfo(textbookData));
 	}
 
 }

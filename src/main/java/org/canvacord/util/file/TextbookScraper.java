@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +49,7 @@ public class TextbookScraper {
      * Downloads a textbook from Libgen directory given a book name
      * @param bookName
      */
-    public static void downloadTextbook(String courseID, String bookName) {
+    public static File downloadTextbook(String instanceID, String bookName) {
         //Textbook URL Retrieval section of code
         String searchUrl = TextbookScraper.getTextbookURL(bookName);
         Document doc = new Document("Test");
@@ -71,28 +72,37 @@ public class TextbookScraper {
         //System.out.println(parts[parts.length - 1]);
 
         //Try catch to see if the url is valid
-        try {
-            //Instantiate the Java.net package
-            URL url = new URL(downloadURL);
-            URLConnection connection = url.openConnection();
-            InputStream inputStream = connection.getInputStream();
-            String id = "testing";
-            //Stores files in /config/textbooks numerically using the course ID
-            FileOutputStream outputStream = new FileOutputStream("./config/textbooks/" + courseID + "_" + TextbookDirectory.getLatestNumber(courseID) + "." + parts[parts.length - 1]);
-            //Number of Bytes downloaded for each loop
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            System.out.println("Downloading File");
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-            System.out.println("File Finished Downloading");
-            outputStream.close();
-            inputStream.close();
-        } catch (Exception E)
+        int count = 1;
+        int maxLoop = 10;
+        while(true)
         {
-            System.out.println("Failed to Download");
-            E.printStackTrace();
+            try {
+                System.out.printf("Downloading Attempt #%d\n", count);
+                //Instantiate the Java.net package
+                URL url = new URL(downloadURL);
+                URLConnection connection = url.openConnection();
+                InputStream inputStream = connection.getInputStream();
+                String id = "testing";
+                //Stores files in /config/textbooks numerically using the course ID
+                FileOutputStream outputStream = new FileOutputStream(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + TextbookDirectory.getLatestNumber(instanceID) + "." + parts[parts.length - 1]);
+                //Number of Bytes downloaded for each loop
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                System.out.println("Downloading File");
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                System.out.println("File Finished Downloading");
+                outputStream.close();
+                inputStream.close();
+                return new File(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + TextbookDirectory.getLatestNumber(instanceID) + "." + parts[parts.length - 1]);
+            } catch (Exception E)
+            {
+                if(++count == maxLoop) {
+                    System.out.println("Failed to Download");
+                    E.printStackTrace();
+                }
+            }
         }
 
     }
