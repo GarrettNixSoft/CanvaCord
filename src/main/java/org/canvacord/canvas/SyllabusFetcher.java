@@ -4,6 +4,8 @@ import com.google.protobuf.OptionOrBuilder;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
@@ -30,6 +32,8 @@ public class SyllabusFetcher {
 	private static final String[] validExtensions = {"txt","pdf", "doc","docx"};
 	private static final String token = ConfigManager.getCanvasToken();
 	private static final String canvasBaseUrl = ConfigManager.getCanvasURL();
+	private static final Logger LOGGER = LogManager.getLogger();
+
 
 	/**
 	 * Searches Canvas for a syllabus posted under the given course.
@@ -38,6 +42,7 @@ public class SyllabusFetcher {
 	 * was found on Canvas, or empty if nothing was found.
      **/
 	protected static Optional<SyllabusInfo> fetchSyllabusForCourse(String courseID) {
+
 		Instance instanceForCourse = InstanceManager.getInstanceByCourseID(courseID).orElseThrow(()-> new CanvaCordException("Instance not found"));
 		Optional<File> instanceFile = findSyllabusFromInstance(instanceForCourse);
 		syllabusPath = getInstanceDirPath(instanceForCourse);
@@ -53,13 +58,13 @@ public class SyllabusFetcher {
 			//HERE IS WHERE WE WOULD DO THE SCRAPING
 		}
 		catch(IOException e){
-			System.err.println("Syllabus fetching failed.");
+			LOGGER.debug("Syllabus fetching failed.");
 			return Optional.empty();
 		}
 
 		// Check for file validity
 		if (!FileUtil.isValidFile(syllabus,validExtensions)){
-			System.err.println("Syllabus file is of invalid extension.");
+			LOGGER.debug("Syllabus file is of invalid extension.");
 			// return it anyway
 		}
 
@@ -80,7 +85,7 @@ public class SyllabusFetcher {
 		}
 
 		if (!FileUtil.isValidFile(syllabus,validExtensions)){
-			System.err.println("Syllabus file is of invalid extension.");
+			LOGGER.debug("Syllabus file is of invalid extension.");
 		}
 
 		return (syllabusJSON.isEmpty())? Optional.empty(): Optional.of(new SyllabusInfo(syllabusJSON));
