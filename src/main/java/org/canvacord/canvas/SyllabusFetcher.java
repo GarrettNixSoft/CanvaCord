@@ -1,6 +1,5 @@
 package org.canvacord.canvas;
 
-import com.google.protobuf.OptionOrBuilder;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
@@ -72,7 +71,6 @@ public class SyllabusFetcher {
 	}
 
 	protected static Optional<SyllabusInfo> fetchSyllabusFromCanvas(String courseID){
-		Instance instanceForCourse = InstanceManager.getInstanceByCourseID(courseID).orElseThrow(()-> new CanvaCordException("Instance not found"));
 		File syllabus;
 		JSONObject syllabusJSON;
 
@@ -110,7 +108,7 @@ public class SyllabusFetcher {
 	private static Optional<File> findSyllabusFromCanvas(String courseID) throws IOException {
 		CanvasApi canvasApi = CanvasApi.getInstance();
 		List<Module> modules = canvasApi.getModules(courseID); // to be changed when modules class implemented
-		JSONObject downloadJSON = null;
+		JSONObject downloadJSON;
 
 		String syllabusBody = getSyllabusBody(canvasApi,courseID);
 
