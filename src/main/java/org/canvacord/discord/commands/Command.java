@@ -24,7 +24,7 @@ public abstract class Command {
 		COMMANDS_BY_NAME.put("remindme", RemindMeCommand.class);
 		COMMANDS_BY_NAME.put("module", ModuleCommand.class);
 		COMMANDS_BY_NAME.put("assignment", AssignmentCommand.class);
-		COMMANDS_BY_NAME.put("textbook", TextbookCommand.class);
+		COMMANDS_BY_NAME.put("textbooks", TextbookCommand.class);
 	}
 
 }
