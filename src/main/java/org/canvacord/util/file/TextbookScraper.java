@@ -83,8 +83,9 @@ public class TextbookScraper {
                 URLConnection connection = url.openConnection();
                 InputStream inputStream = connection.getInputStream();
                 String id = "testing";
+                int latestNumber = TextbookDirectory.getLatestNumber(instanceID);
                 //Stores files in /config/textbooks numerically using the course ID
-                FileOutputStream outputStream = new FileOutputStream(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + TextbookDirectory.getLatestNumber(instanceID) + "." + parts[parts.length - 1]);
+                FileOutputStream outputStream = new FileOutputStream(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + latestNumber + "." + parts[parts.length - 1]);
                 //Number of Bytes downloaded for each loop
                 byte[] buffer = new byte[1024];
                 int bytesRead;
@@ -95,7 +96,7 @@ public class TextbookScraper {
                 System.out.println("File Finished Downloading");
                 outputStream.close();
                 inputStream.close();
-                return new File(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + TextbookDirectory.getLatestNumber(instanceID) + "." + parts[parts.length - 1]);
+                return new File(CanvaCordPaths.getInstanceDirPath(instanceID).toAbsolutePath() + "/textbook_" + latestNumber + "." + parts[parts.length - 1]);
             } catch (Exception E)
             {
                 if(++count == maxLoop) {
