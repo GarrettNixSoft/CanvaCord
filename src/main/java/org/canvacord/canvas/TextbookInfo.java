@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.Optional;
 
 public record TextbookInfo(JSONObject textbookJSON) {
@@ -36,6 +37,13 @@ public record TextbookInfo(JSONObject textbookJSON) {
 
 	public String getAuthor() {
 		return textbookJSON.optString("author", "None Specified");
+	}
+
+	public String getFileSize(){
+		return textbookJSON.getString("file_size");
+	}
+	public Date getLastModified(){
+		return (Date) textbookJSON.get("last_modified");
 	}
 
 	public TextbookInfo storeAndConvert() {
