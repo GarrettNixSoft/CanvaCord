@@ -16,7 +16,7 @@ public class TextbookFinderCommandTest {
         // Load config and prepare server ID
         ConfigManager.loadConfig();
         InstanceManager.loadInstances();
-        long serverID = 1083546251661938829L;
+        long serverID = Long.parseLong(ConfigManager.getDiscordToken());
 
         // Log the bot in
         DiscordBot.getBotInstance().login();
