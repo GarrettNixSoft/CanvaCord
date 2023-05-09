@@ -99,7 +99,11 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
 			String bucket = interaction.getArgumentStringValueByName("bucket").orElse("future");
 
 			if (arguments != null && arguments.length()<2){
-				interactionOriginalResponseUpdater.setContent("Search arguments must be 2 or more characters!").update();
+				interactionOriginalResponseUpdater.addEmbed(
+						new EmbedBuilder()
+								.setColor(Color.RED)
+								.setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
+								.addField("Error","Search argument length must be greater than 2 characters!")).update();
 				return;
 			} // could maybe handle this a different way
 
@@ -107,11 +111,21 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
 				assignments = canvasApi.getAssignmentsOptions(courseID,arguments,bucketsFromString.get(bucket));
 			} catch (IOException e) {
 				interactionOriginalResponseUpdater.addEmbed(
-						new EmbedBuilder().addField("Error","An error has occurred! Results may be affected.")).update();
+						new EmbedBuilder()
+								.setColor(Color.RED)
+								.setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
+								.addField("Error","An error has occurred! Results may be affected.")).update();
 				e.printStackTrace();
 			}
 
-			if (!interaction.getFullCommandName().contains("details")){
+			if (assignments.size()==0){
+				interactionOriginalResponseUpdater.addEmbed(
+						new EmbedBuilder()
+								.setColor(Color.RED)
+								.setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
+								.addField("No Results","The requested search results are empty. Please try again with different parameters.")).update();
+			}
+			else if (!interaction.getFullCommandName().contains("details")){
 				sendAssignmentList(interactionOriginalResponseUpdater);
 			}
 			else{
