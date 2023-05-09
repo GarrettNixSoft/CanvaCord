@@ -3,6 +3,7 @@ package org.canvacord.canvas;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
+import org.canvacord.util.Globals;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,11 +19,6 @@ public class TextbookFetcher {
 	public static Optional<TextbookInfo> fetchTextbookOnline(String searchTerm) {
 		// TODO
 		return Optional.empty();
-	}
-
-	public static List<TextbookInfo> fetchTextbook(String courseID) {
-		Instance instanceForCourse = InstanceManager.getInstanceByCourseID(courseID).orElseThrow(()-> new CanvaCordException("Instance not found"));
-		return instanceForCourse.getTextbooks();
 	}
 
 }

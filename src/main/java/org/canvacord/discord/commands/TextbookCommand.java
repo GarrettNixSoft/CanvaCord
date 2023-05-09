@@ -7,6 +7,7 @@ import org.canvacord.discord.DiscordBot;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
+import org.canvacord.util.Globals;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.interaction.SlashCommand;
@@ -58,20 +59,18 @@ public class TextbookCommand extends Command {
 		response.thenAccept(interactionOriginalResponseUpdater -> {
 			Server server = interaction.getServer().orElseThrow(()->new CanvaCordException("Server not found"));
 			Instance instanceForCourse = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(()->new CanvaCordException("Instance not found"));
-
-
+			Globals.EDIT_INSTANCE_ID = instanceForCourse.getInstanceID();
+			List<TextbookInfo> textbook = instanceForCourse.getTextbooks();
+			Optional<TextbookInfo> textbookDummy = Optional.of(textbook.get(0));
 
 			if(!instanceForCourse.getTextbooks().isEmpty()){
-				List<TextbookInfo> textbook = instanceForCourse.getTextbooks();
-				Optional<TextbookInfo> textbookDummy = Optional.of(textbook.get(0));
+
 				textbookDummy.ifPresentOrElse(textbookData -> {
 					interactionOriginalResponseUpdater
-							.addEmbed(new EmbedBuilder().setTitle(instanceForCourse.getCourseTitle() + " Textbook")
+							.addEmbed(new EmbedBuilder().setTitle(textbookData.getTitle() + " Textbook")
 									.setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
 									.setColor(Color.RED)
-									.addField("Course ",instanceForCourse.getCourseTitle())
-									.addInlineField("Size ",textbookData.getFileSize())
-									.addInlineField("Last modified",textbookData.getLastModified().toString()))
+									.addField("Course ",instanceForCourse.getCourseTitle()))
 							.addAttachment(textbookData.getTextbookFile()).update();
 				}, () -> interactionOriginalResponseUpdater.addEmbed(errorMessage).update());
 			}
