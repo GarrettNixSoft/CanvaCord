@@ -23,7 +23,16 @@ public class RemindMeCommand extends Command {
 
 	@Override
 	public String getDescription() {
-		return "Set a custom reminder at the time you specify with the message you provide.";
+		return """
+				Set a custom reminder at the time you specify with the message you provide using */remindme <time> <units> <encrypted> <message>*!
+				
+				**Parameters:**
+				
+				**Time:** A long (decimal number) value specifying how many time units to wait before a reminder is sent.
+				**Units:** Days, hours, weeks, or minutes.
+				**Encrypted:** Boolean value (true or false) if you would like this message encrypted as it is waiting for the specified reminder time.
+				**Message (optional):** If you would like to give yourself a message of what the reminder is about, here is where it would be specified. If left empty, it sends a link to the channel where the */remindme* command was used!
+				""";
 	}
 
 	@Override

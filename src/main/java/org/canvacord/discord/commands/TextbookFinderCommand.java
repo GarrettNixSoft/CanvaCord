@@ -21,22 +21,24 @@ import java.util.concurrent.CompletableFuture;
 
 public class TextbookFinderCommand extends Command {
 
-    private static final EmbedBuilder errorMessage = new EmbedBuilder().setTitle("Unable to fetch Textbook")
+    private static final EmbedBuilder errorMessage = new EmbedBuilder().setTitle("Unable to find Textbook")
             .setDescription("We're sorry, but the requested file is not available. Contact the bot owner or consult the user manual for setup help.");
     @Override
     public String getDescription(){
         return """
-                This command fetches a Canvas course's Textbook file, and if it fails in doing that, the CanvaCord bot instance owner can provide one manually.
-                Call me using: */textbook* !
+                This command scrapes the internet for a textbook file based on the title parameter in the slash command.
+                Call me using: */textbookfinder <Title>*!
+                
+                ***Is this legal?***
+                CanvaCord claims no responsibility over the legality of where these files are hosted, simply that *we're* not the ones hosting them. Use your own discretion when downloading any files from outside sources!
                 
                 ***"Why isn't a file appearing..?"***
-                - *The CanvaCord bot instance owner has not performed the Textbook fetch.*
-                - *The file may have been moved or altered.*
+                - *The search terms didn't bring up any textbook matches*
                 """;
     }
     @Override
     public String getShortDescription(){
-        return "Fetch the textbook file for a course.";
+        return "Search for the textbook file for a course.";
     }
     @Override
     public String getName(){
