@@ -8,6 +8,13 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * The MultiErrorDialog implements an easy way for displaying complex error
+ * scenarios to a user. In a situation where several things can go wrong at
+ * once (e.g. editing an Instance), MultiErrorDialog allows a list of
+ * NamedErrors to be displayed in a neatly organized dialog so that the user
+ * can see at a glance what is going wrong and where.
+ */
 public class MultiErrorDialog extends CanvaCordDialog {
 
 	private static final int WIDTH = 480;
@@ -117,6 +124,12 @@ public class MultiErrorDialog extends CanvaCordDialog {
 		}
 	}
 
+	/**
+	 * Display a list of simultaneous errors to the user.
+	 * @param title the dialog window title
+	 * @param message the message to display above the error list
+	 * @param errors a list of errors to inform the user of
+	 */
 	public static void showMultiErrorDialog(String title, String message, List<NamedError> errors) {
 		MultiErrorDialog dialog = new MultiErrorDialog(title, message, errors);
 		dialog.setVisible(true);
