@@ -212,14 +212,13 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 	private HashMap<String,EmbedBuilder> getTutorials(){
 		if (tutorialDescriptions.isEmpty()) {
 			tutorialDescriptions.putAll(getCommandTutorials());
-			//todo: as we finish GUI/near the end, add image (maybe gif?) examples for tutorials
 			tutorialDescriptions.put("Editing an Instance", new EmbedBuilder().addField("Using the Application Control Panel", """
                     **(This applies to the CanvaCord bot instance owner only)**
                     *Preconditions: At least one initialized instance already exists.*
                                     
                     The owner of a bot instance has the option to change the CanvaCord bot's settings after it has been initialized using the Application Control Panel. Click on the settings button to access the properties of that specific CanvaCord instance.
                     There, you may access your stored tokens. It is recommended to change them immediately if it is suspected they have been accessed by a third party.
-                    """)); //todo: update as we (read: me, ian) figure out what else you can do in acp settings
+                    """));
 			tutorialDescriptions.put("Fetching Canvas data", new EmbedBuilder().addField("Fetching Canvas data", """
                             The CanvaCord bot fetches Canvas data, based on the course token, regularly. This is a background behaviour that allows the internal data cache to say up to date and permits the bot to perform all other Canvas course related functionality.
                                             
@@ -231,7 +230,7 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 			tutorialDescriptions.put("Getting notified", new EmbedBuilder().addField("Notifications", """
                     As Canvas data is updated (new assignments, assignment date changes, course announcements) the CanvaCord bot will mention Users by self-selected Discord roles. The bot will also ping users after being given a timestamp for a course's meeting times.
                                     
-                    To enter or exit out of being notified, react to the CanvaCord message with the appropriate emote, or request the Discord server owner to access the server settings, and manually enter you into/remove you from the specified role.
+                    To enter or exit out of being notified, request the Discord server owner to access the server settings and manually enter you into/remove you from the specified role.
                     """));
 			tutorialDescriptions.put("Cleaning up", new EmbedBuilder().addField("Deleting Your Data", """
                     The CanvaCord bot can be scheduled to delete or archive all stored Discord data and Canvas cache data after a certain due date, automatically set to the Canvas course's scheduled end date.
@@ -250,9 +249,9 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 		// HashMap<String,EmbedBuilder>
 		HashMap<Command, EmbedBuilder> commandsWithTutorials = new HashMap<>();
 
-		commandsWithTutorials.put(new AssignmentCommand(),new EmbedBuilder().addField("Finding Assignments", "The CanvaCord bot has many ways to access your Canvas course's assignments:")
-				.addField("Active Assignments", "While an assignment is within its window of being assigned, but not yet past due, it can be viewed using */assignment list* alongside other active assignments.\n The command */assignment <search parameters>* can be used to see specifics.")
-				.addField("Old Assignments", "After an assignment's due date is passed, it and its details will be added to a dedicated text channel as a log for previous assignments.\nAs always, assignments can be accessed through the use of */assignment <search parameters>*.\n\nMore details on the */assignment* command are available using the */help commands assignment* command."));
+		commandsWithTutorials.put(new TextbookFinderCommand(),new EmbedBuilder().addField("Finding Textbooks", "The CanvaCord bot has many ways to access your Canvas course's textbook:")
+				.addField("Already fetched", "Try the default */textbook* command to see if the bot owner has already specified a book for this course.")
+				.addField("Searching", "To look for a specific book, use */textbookfinder <book title>*. CanvaCord takes no responsibility for the files fetched. For more disclaimers, check the tutorial for the Textbook command."));
 
 		commandsWithTutorials.put(new RemindMeCommand(),new EmbedBuilder().addField("Custom Reminders", """
                     A custom reminder to ping the User can be created using the slash command: */remindme <parameters>*. This will be ephemeral, so no other server users will be able to see. Still, do not put any personal information in Discord, as a general rule.
@@ -266,19 +265,19 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 		HashMap<Command,String> commandsWithCourseInformation = new HashMap<>();
 
 		commandsWithCourseInformation.put(new ModuleCommand(),"All users can request a list of Canvas course modules through the slash command */modules*");
-//		commandsWithCourseInformation.put(new TextbookCommand(),"""
-//                            *The following is for CanvaCord Owners only*
-//                            **Adding a textbook** is done through the Application Control Panel (ACP). For a specific course, there is a button labeled *"Add Textbook"*
-//                            Textbooks are either automatically fetched, given a syllabus to get information from, or links to the files can be provided to the bot.
-//                            If there is no syllabus, the bot may also be given a title and author to attempt a search.
-//
-//                            *The following is for all Users*
-//                            **Fetching a textbook** can be done using the */textbook* slash command. For more details, use the */help commands textbook* command.
-//
-//                            *CanvaCord claims no responsibility for found resources based on the automatic search results, as it pulls only from what is available online.
-//                            CanvaCord does not host any of this material itself.
-//                            Check the legality in your area for what is or isn't allowed, and the responsibility of the User's safety from downloading fetched textbooks is exclusively the User's.*.
-//                            """); //todo: is the title and author thing true
+		commandsWithCourseInformation.put(new TextbookCommand(),"""
+                            *The following is for CanvaCord Owners only*
+                            **Adding a textbook** is done through the Application Control Panel (ACP). For a specific course, there is a button labeled *"Add Textbook"*
+                            Textbooks are either automatically fetched or files can be provided to the bot.
+
+                            *The following is for all Users*
+                            **Fetching a textbook** can be done using the */textbook* slash command. For more details, use the */help commands textbook* command.
+                            **Finding a textbook** can be done using */textbookfinder*. Check out the command tutorial for Finding a Textbook, or use *help commands textbookfinder*
+
+                            *CanvaCord claims no responsibility for found resources based on the automatic search results, as it pulls only from what is available online.
+                            CanvaCord does not host any of this material itself.
+                            Check the legality in your area for what is or isn't allowed, and the responsibility of the User's safety from downloading fetched textbooks is exclusively the User's.*.
+                            """);
 		commandsWithCourseInformation.put(new SyllabusCommand(),"""
                             *The following is for CanvaCord Owners only*
                             **Adding a Syllabus** is done through the Application Control Panel (ACP). For a specific course, there is a button labeled *"Add Syllabus"*
