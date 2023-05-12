@@ -155,12 +155,20 @@ public class InstanceConfiguration {
 		return configJSON.getLong("meeting_reminders_channel");
 	}
 
+	public long getMeetingRemindersRole() {
+		return configJSON.getLong("reminders_role_id");
+	}
+
 	public boolean createMarkersRole() {
 		return configJSON.getBoolean("create_markers_role");
 	}
 
 	public long getMeetingMarkersChannel() {
 		return configJSON.getLong("meeting_markers_channel");
+	}
+
+	public long getMeetingMarkersRole() {
+		return configJSON.getLong("markers_role_id");
 	}
 
 	public boolean generateExamEvents() {

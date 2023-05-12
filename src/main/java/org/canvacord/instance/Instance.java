@@ -231,12 +231,20 @@ public class Instance {
 		return configuration.getMeetingRemindersChannel();
 	}
 
+	public long getMeetingRemindersRole() {
+		return configuration.getMeetingRemindersRole();
+	}
+
 	public boolean createMarkersRole() {
 		return configuration.createMarkersRole();
 	}
 
 	public long getMeetingMarkersChannel() {
 		return configuration.getMeetingMarkersChannel();
+	}
+
+	public long getMeetingMarkersRole() {
+		return configuration.getMeetingMarkersRole();
 	}
 
 	public boolean generateExamEvents() {
