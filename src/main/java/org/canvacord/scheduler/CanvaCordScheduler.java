@@ -29,6 +29,7 @@ public class CanvaCordScheduler {
 			CanvasFetchScheduler.init();
 			NotificationScheduler.init();
 			ReminderScheduler.init();
+			MeetingScheduler.init();
 			scheduler.start();
 		}
 		catch (SchedulerException e) {
