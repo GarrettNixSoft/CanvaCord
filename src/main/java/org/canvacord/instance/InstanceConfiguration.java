@@ -51,7 +51,7 @@ public class InstanceConfiguration {
 	private final List<CanvaCordRole> registeredRoles = new ArrayList<>();
 	private final List<CanvaCordNotification> configuredNotifications = new ArrayList<>();
 	private final Map<String, Boolean> availableCommands = new HashMap<>();
-	private final Map<Long, Class<? extends Command>> registeredCommands = new HashMap<>();
+	private final Map<Long, Class<? extends Command>> storedCommandMap = new HashMap<>();
 
 	/**
 	 * Any values not set in the JSONObject passed to the constructor
@@ -288,10 +288,10 @@ public class InstanceConfiguration {
 
 	public Map<Long, Class<? extends Command>> getStoredCommandIDs(boolean refresh) {
 		// refresh from disk if requested or if the map is empty (probably never loaded)
-		if (refresh || registeredCommands.isEmpty()) {
+		if (refresh || storedCommandMap.isEmpty()) {
 			refresh();
 			// populate a map
-			registeredCommands.clear();
+			storedCommandMap.clear();
 			// load IDs from the config JSON
 			JSONObject commandIDs = configJSON.optJSONObject("command_ids");
 			if (commandIDs == null) commandIDs = new JSONObject();
@@ -299,12 +299,12 @@ public class InstanceConfiguration {
 			for (String key : commandIDs.keySet()) {
 				long id = commandIDs.getLong(key);
 				if (id != -1) {
-					registeredCommands.put(id, Command.COMMANDS_BY_NAME.get(key));
+					storedCommandMap.put(id, Command.COMMANDS_BY_NAME.get(key));
 				}
 			}
 		}
 		// send it back
-		return registeredCommands;
+		return storedCommandMap;
 	}
 
 	public JSONObject getCommandIDs(boolean refresh) {
