@@ -98,7 +98,6 @@ public abstract class OptionsPanel extends JDialog {
 		DefaultMutableTreeNode node = new DefaultMutableTreeNode(page);
 		nodeMap.put(page, node);
 		nodeMap.get(parent).add(node);
-		System.out.println("Added " + node + " to " + nodeMap.get(parent));
 		pagePanel.add(page.getName(), page);
 	}
 
