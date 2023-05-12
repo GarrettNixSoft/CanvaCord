@@ -269,7 +269,6 @@ public abstract class OptionsPanel extends JDialog {
 
 	private void updatePageList() {
 		optionPageTree.setModel(new DefaultTreeModel(topNode));
-		System.out.println("Updated page list, there are " + pages.size() + " available");
 	}
 
 }
