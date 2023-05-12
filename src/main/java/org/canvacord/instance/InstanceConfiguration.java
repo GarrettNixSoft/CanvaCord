@@ -1,6 +1,7 @@
 package org.canvacord.instance;
 
 import org.canvacord.canvas.TextbookInfo;
+import org.canvacord.discord.DiscordBot;
 import org.canvacord.discord.commands.Command;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
@@ -11,6 +12,9 @@ import org.canvacord.util.compare.ListComparator;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
+import org.javacord.api.DiscordApi;
+import org.javacord.api.entity.permission.Role;
+import org.javacord.api.entity.server.Server;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -217,6 +221,13 @@ public class InstanceConfiguration {
 			// Use api to get server
 			// Get roles from server
 			// For every role, make a CanvaCordRole out of it and put it in registeredRoles
+			DiscordApi api = DiscordBot.getBotInstance().getApi();
+			Server server = api.getServerById(getServerID()).orElseThrow();
+			List<Role> roles =  server.getRoles();
+			for(Role role : roles)
+			{
+				registeredRoles.add(new CanvaCordRole(role.getColor().orElseThrow(), role.getName(), role.getId()));
+			}
 		}
 		return registeredRoles;
 	}
