@@ -13,6 +13,8 @@ import org.canvacord.entity.ClassMeeting;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.FetchStage;
 import org.canvacord.exception.CanvaCordException;
+import org.canvacord.gui.dialog.MultiErrorDialog;
+import org.canvacord.gui.options.NamedError;
 import org.canvacord.persist.CacheManager;
 import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.util.file.FileUtil;
@@ -118,7 +120,13 @@ public class Instance {
 	 */
 	public boolean verify() throws CanvaCordException {
 
-		return configuration.verify();
+		List<NamedError> errors = configuration.verify();
+
+		if (!errors.isEmpty()) {
+			MultiErrorDialog.showMultiErrorDialog("Instance Errors Found", "CanvaCord found the following errors with your Instance:", errors);
+			return false;
+		}
+		else return true;
 
 	}
 

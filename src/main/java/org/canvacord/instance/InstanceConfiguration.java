@@ -6,6 +6,7 @@ import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.exception.CanvaCordException;
+import org.canvacord.gui.options.NamedError;
 import org.canvacord.util.compare.ListComparator;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileUtil;
@@ -73,7 +74,11 @@ public class InstanceConfiguration {
 			throw new CanvaCordException("Failed to refresh instance configuration");
 	}
 
-	public boolean verify() {
+	public List<NamedError> verify() {
+
+		// Prepare a list of errors
+		List<NamedError> errors = new ArrayList<>();
+
 		// ================ VERIFY ROLES ================
 		// refresh the roles from the config file and Discord
 		getConfiguredRoles(true);
@@ -88,6 +93,7 @@ public class InstanceConfiguration {
 				List<CanvaCordRole> unregisteredRoles = comparator.listDifference(configuredRoles, registeredRoles);
 				// Attempt to create all of those roles
 				// TODO this is part of Andrew's use case
+				// For every role in unregisteredRoles, add a NamedError to errors
 			}
 
 		}
@@ -96,7 +102,7 @@ public class InstanceConfiguration {
 		// TODO
 
 
-		return true;
+		return errors;
 
 	}
 
@@ -199,6 +205,10 @@ public class InstanceConfiguration {
 	public List<CanvaCordRole> getRegisteredRoles(boolean refresh) {
 		if (refresh || registeredRoles.isEmpty()) {
 			// TODO fetch from Discord
+			// Get API
+			// Use api to get server
+			// Get roles from server
+			// For every role, make a CanvaCordRole out of it and put it in registeredRoles
 		}
 		return registeredRoles;
 	}
