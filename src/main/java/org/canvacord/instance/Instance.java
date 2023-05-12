@@ -96,6 +96,8 @@ public class Instance {
 		try {
 			RoleRegistration.registerRoles(this);
 			CommandRegistration.registerCommands(this);
+			configuration.setInitialized(true);
+			configuration.writeChanges();
 			return true;
 		}
 		catch (Exception e) {
