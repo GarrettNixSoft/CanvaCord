@@ -511,6 +511,7 @@ public class NotificationCreateDialog extends CanvaCordDialog {
 					server -> {
 						// Clear the channel list
 						availableChannels.clear();
+						channelSelector.removeAllItems();
 						// Store the server reference
 						targetServer = server;
 						// Get channels and filter them to just text channels
