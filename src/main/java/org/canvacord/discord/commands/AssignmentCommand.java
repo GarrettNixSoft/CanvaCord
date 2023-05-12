@@ -71,7 +71,7 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
 
 	@Override
 	public String getShortDescription() {
-		return "see the course assignments";
+		return "View course assignments";
 	}
 
 	@Override

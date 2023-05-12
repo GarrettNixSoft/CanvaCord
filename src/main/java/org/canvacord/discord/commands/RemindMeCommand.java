@@ -24,7 +24,7 @@ public class RemindMeCommand extends Command {
 	@Override
 	public String getDescription() {
 		return """
-				Set a custom reminder at the time you specify with the message you provide using */remindme <time> <units> <encrypted> <message>*!
+				Set a custom reminder at the time you specify with the message you provide using */remindme <time> <units> <encrypted> [message]*!
 				
 				**Parameters:**
 				
@@ -168,7 +168,7 @@ public class RemindMeCommand extends Command {
 	public SlashCommandBuilder getBuilder(Instance instance) {
 		return SlashCommand.with(
 			getName(),
-			getDescription(),
+			getShortDescription(),
 			List.of(
 				SlashCommandOption.create(
 					SlashCommandOptionType.LONG,
