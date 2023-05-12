@@ -60,6 +60,7 @@ public class CanvaCordScheduler {
 		CanvasFetchScheduler.scheduleInstance(instance);
 		NotificationScheduler.scheduleInstance(instance);
 		ReminderScheduler.scheduleInstance(instance);
+		MeetingScheduler.scheduleInstance(instance);
 		LOGGER.debug("Scheduled instance " + instance.getInstanceID());
 	}
 
@@ -74,6 +75,7 @@ public class CanvaCordScheduler {
 		CanvasFetchScheduler.removeInstance(instance);
 		NotificationScheduler.removeInstance(instance);
 		ReminderScheduler.removeInstance(instance);
+		MeetingScheduler.removeInstance(instance);
 		LOGGER.debug("Removed instance " + instance.getInstanceID());
 	}
 
