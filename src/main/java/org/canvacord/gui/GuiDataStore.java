@@ -15,4 +15,8 @@ public class GuiDataStore {
 		return dataStore.get(key);
 	}
 
+	public boolean has(String key) {
+		return dataStore.containsKey(key);
+	}
+
 }
