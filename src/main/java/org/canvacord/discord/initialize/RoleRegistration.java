@@ -14,6 +14,7 @@ import org.javacord.api.entity.server.Server;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +60,23 @@ public class RoleRegistration {
 			role.setRoleID(createdRole.getId());
 			// Log the role creation
 			LOGGER.debug("Created role " + role.getName());
+		}
+
+		// Create roles for Meeting Reminders and Meeting Markers if configured to do so
+		if (instance.doMeetingReminders() && instance.createRemindersRole()) {
+			roleBuilder.setName("Meeting Reminders");
+			roleBuilder.setColor(Color.GREEN);
+			Role remindersRole = roleBuilder.create().join();
+			instance.getConfiguration().setRemindersRoleID(remindersRole.getId());
+			LOGGER.debug("Created reminders role");
+		}
+
+		if (instance.doMeetingMarkers() && instance.createMarkersRole()) {
+			roleBuilder.setName("Meeting Markers");
+			roleBuilder.setColor(Color.ORANGE);
+			Role markersRole = roleBuilder.create().join();
+			instance.getConfiguration().setMarkersRoleID(markersRole.getId());
+			LOGGER.debug("Created markers role");
 		}
 
 		// Save the roles

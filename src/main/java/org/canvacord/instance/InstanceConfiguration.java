@@ -357,6 +357,10 @@ public class InstanceConfiguration {
 		configJSON.put("create_reminders_role", createRemindersRole);
 	}
 
+	public void setRemindersRoleID(long roleID) {
+		configJSON.put("reminders_role_id", roleID);
+	}
+
 	public void setClassRemindersSchedule(int remindersSchedule) {
 		configJSON.put("reminders_schedule", remindersSchedule);
 	}
@@ -367,6 +371,10 @@ public class InstanceConfiguration {
 
 	public void setCreateMarkersRole(boolean createMarkersRole) {
 		configJSON.put("create_markers_role", createMarkersRole);
+	}
+
+	public void setMarkersRoleID(long roleID) {
+		configJSON.put("markers_role_id", roleID);
 	}
 
 	public void setClassMarkersChannel(long channelID) {
