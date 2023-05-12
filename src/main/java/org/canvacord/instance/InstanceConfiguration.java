@@ -15,12 +15,14 @@ import org.canvacord.util.input.UserInput;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.interaction.SlashCommand;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class InstanceConfiguration {
 
@@ -52,6 +54,7 @@ public class InstanceConfiguration {
 	private final List<CanvaCordNotification> configuredNotifications = new ArrayList<>();
 	private final Map<String, Boolean> availableCommands = new HashMap<>();
 	private final Map<Long, Class<? extends Command>> storedCommandMap = new HashMap<>();
+	private final Map<Long, Class<? extends Command>> registeredCommandMap = new HashMap<>();
 
 	/**
 	 * Any values not set in the JSONObject passed to the constructor
@@ -284,6 +287,17 @@ public class InstanceConfiguration {
 	public JSONObject getCommandAvailability(boolean refresh) {
 		if (refresh) refresh();
 		return configJSON.getJSONObject("command_availability");
+	}
+
+	public Map<Long, Class<? extends Command>> getRegisteredCommandIDs(boolean refresh) {
+		DiscordApi api = DiscordBot.getBotInstance().getApi();
+		Set<SlashCommand> commands = api.getServerSlashCommands(api.getServerById(getServerID()).orElseThrow()).join();
+		for(SlashCommand command : commands)
+		{
+			if(Command.COMMANDS_BY_NAME.containsValue(command.getName()))
+				registeredCommandMap.put(command.getId(), Command.COMMANDS_BY_NAME.get(command.getName()));
+		}
+		return registeredCommandMap;
 	}
 
 	public Map<Long, Class<? extends Command>> getStoredCommandIDs(boolean refresh) {
