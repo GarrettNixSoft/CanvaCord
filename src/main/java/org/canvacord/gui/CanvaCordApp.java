@@ -14,6 +14,7 @@ import org.canvacord.main.CanvaCord;
 import org.canvacord.scheduler.CanvaCordScheduler;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.resources.ImageLoader;
+import org.canvacord.util.time.LongTaskDialog;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -237,7 +238,6 @@ public class CanvaCordApp extends JFrame {
 		InstanceCell cell = new InstanceCell(instance);
 		instanceList.add(cell);
 		instanceCells.put(cell.getInstance().getInstanceID(), cell);
-		System.out.println("Added instance " + instance.getName() + " to panel");
 		if (!splitPane.getLeftComponent().equals(instancesPane))
 			splitPane.setLeftComponent(instancesPane);
 		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
@@ -333,6 +333,22 @@ public class CanvaCordApp extends JFrame {
 				case NEW_INSTANCE -> {
 					Instance newInstance = (Instance) event.getPayload()[0];
 					addInstanceCell(newInstance);
+					// Ask if user wants to initialize the instance
+					int response = UserInput.askToConfirmCustom("Would you like to initialize this\nnew instance now?", "Initialize Now?", new String[]{"Yes", "Not Now"}, 0, JOptionPane.PLAIN_MESSAGE);
+					if (response == 0) {
+						LongTaskDialog.runLongTask(
+								() -> {
+									boolean success = newInstance.initialize();
+									if (success) UserInput.showMessage("Instance initialized.", "Success");
+									else UserInput.showErrorMessage("Instance initialization failed. Check\nthe logs for more information.", "Failed");
+								},
+								"Initializing " + newInstance.getName(),
+								"Initialize Instance"
+						);
+					}
+					else {
+						UserInput.showMessage("You can initialize your instance any time\nfrom its settings menu. You will need\nto initialize it before you can run it.", "Initialize Later");
+					}
 				}
 				case INSTANCE_DELETED -> {
 					Instance deletedInstance = (Instance) event.getPayload()[0];

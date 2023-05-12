@@ -49,7 +49,7 @@ public class CommandHandler {
 			String instanceID = instance.getInstanceID();
 			Command commandObj = commandType.getConstructor().newInstance();
 			SlashCommand serverCommand = commandObj.getBuilder(instance).createForServer(server).join();
-			serverCommands.get(instanceID).put(serverCommand.getId(), commandType);
+			serverCommands.computeIfAbsent(instanceID, k -> new HashMap<>()).put(serverCommand.getId(), commandType);
 			return serverCommand.getId();
 		}
 		catch (Exception e) {

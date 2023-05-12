@@ -59,6 +59,7 @@ public class CanvaCordRole {
 		JSONObject result = new JSONObject();
 		result.put("name", name);
 		result.put("color", Integer.toHexString(color.getRGB()));
+		if (roleID != -1) result.put("id", roleID);
 		return result;
 	}
 

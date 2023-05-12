@@ -26,6 +26,7 @@ public abstract class Command {
 		COMMANDS_BY_NAME.put("assignment", AssignmentCommand.class);
 		COMMANDS_BY_NAME.put("textbooks", TextbookCommand.class);
 		COMMANDS_BY_NAME.put("textbookfinder", TextbookFinderCommand.class);
+		// TODO announcement
 	}
 
 }
