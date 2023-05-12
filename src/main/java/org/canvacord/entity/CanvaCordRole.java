@@ -17,6 +17,12 @@ public class CanvaCordRole {
 		this.name = name;
 	}
 
+	public CanvaCordRole(Color color, String name, long roleID) {
+		this.color = color;
+		this.name = name;
+		this.roleID = roleID;
+	}
+
 	public CanvaCordRole(JSONObject roleJSON) {
 		try {
 			this.name = roleJSON.getString("name");
