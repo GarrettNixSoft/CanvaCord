@@ -36,12 +36,20 @@ public class ModuleCommand extends Command implements ButtonClickListener {
 
 	@Override
 	public String getDescription() {
-		return "see course module list for specified class";
+		return """
+				See the modules for the specific course instance using */modulelist <refresh>*!
+				
+				**Parameter:
+				**Refresh (optional):** If you feel the modules list is out of date compared to what's listed on the Canvas course, this parameter can be used to attempt to refresh the list of modules stored in CanvaCord!
+    			
+				***What is a module?***
+				Canvas has groups of assignments and files listed under *"modules"*. CanvaCord provides links to the Canvas page which directs you to the overview for a specific module.
+				""";
 	}
 
 	@Override
 	public String getShortDescription() {
-		return "see course module list";
+		return "See the course modules list.";
 	}
 
 	@Override
