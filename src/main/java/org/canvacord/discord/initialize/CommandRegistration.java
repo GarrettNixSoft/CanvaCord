@@ -31,8 +31,15 @@ public class CommandRegistration {
 		for (String commandKey : commandAvailability.keySet()) {
 			// Only process enabled commands
 			if (commandAvailability.getBoolean(commandKey)) {
+				// Log the attempt
+				LOGGER.debug("Attempting to register command " + commandKey);
 				// Get the command class
 				Class<? extends Command> commandClass = Command.COMMANDS_BY_NAME.get(commandKey);
+				// Check for commands that aren't implemented yet and skip them
+				if (commandClass == null) {
+					LOGGER.warn("Command " + commandKey + " has no class available, skipping it for now");
+					continue;
+				}
 				// Register the command
 				long commandID = CommandHandler.registerCommandServer(commandClass, server);
 				// Store the ID

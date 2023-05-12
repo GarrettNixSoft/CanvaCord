@@ -364,6 +364,16 @@ public class InstanceConfiguration {
 		configJSON.put("initialized", initialized);
 	}
 
+	public void saveRoles() {
+
+		JSONArray rolesArray = new JSONArray();
+		for (CanvaCordRole role : configuredRoles) {
+			rolesArray.put(role.getJSON());
+		}
+		configJSON.put("roles", rolesArray);
+
+	}
+
 	// ================================ UTILITY ================================
 	public boolean writeChanges() {
 		return FileUtil.writeJSON(configJSON, CanvaCordPaths.getInstanceConfigPath(getCourseID(), getServerID()).toFile());
