@@ -42,7 +42,12 @@ public class InitializePage extends OptionPage {
 			LongTaskDialog.runLongTask(
 					() -> {
 						boolean success = instance.initialize();
-						if (success) UserInput.showMessage("Instance initialized.", "Success");
+						if (success) {
+							UserInput.showMessage("Instance initialized.", "Success");
+							initializeButton.setEnabled(false);
+							initializeButton.setToolTipText("This instance is already initialized.");
+
+						}
 						else UserInput.showErrorMessage("Instance initialization failed. Check\nthe logs for more information.", "Failed");
 					},
 					"Initializing " + instance.getName(),
