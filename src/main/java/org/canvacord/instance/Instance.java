@@ -325,7 +325,7 @@ public class Instance {
 
 	public Map<Long, Class<? extends Command>> getRegisteredCommands() {
 		//TODO: actually populate this hashmap?
-		return configuration.getRegisteredCommands(false);
+		return configuration.getStoredCommandIDs(false);
 	}
 
 	public String getStatus() {
