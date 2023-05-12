@@ -139,4 +139,8 @@ public class CanvaCordTime {
 		return dateTime.plusMinutes(minutes);
 	}
 
+	public static String getTodayString() {
+		return getFriendlyDateString(LocalDateTime.now());
+	}
+
 }
