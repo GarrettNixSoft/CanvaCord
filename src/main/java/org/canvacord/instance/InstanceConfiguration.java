@@ -278,6 +278,15 @@ public class InstanceConfiguration {
 		return registeredCommands;
 	}
 
+	public JSONObject getCommandIDs(boolean refresh) {
+		if (refresh) refresh();
+		return configJSON.getJSONObject("command_ids");
+	}
+
+	public boolean isInitialized() {
+		return configJSON.optBoolean("initialized", false);
+	}
+
 	// ================================ SETTERS ================================
 	public void setInstanceName(String name) {
 		configJSON.put("name", name);
@@ -345,6 +354,14 @@ public class InstanceConfiguration {
 
 	public void setCommandAvailability(JSONObject commandAvailability) {
 		configJSON.put("command_availability", commandAvailability);
+	}
+
+	public void setCommandIDs(JSONObject commandIDs) {
+		configJSON.put("command_ids", commandIDs);
+	}
+
+	public void setInitialized(boolean initialized) {
+		configJSON.put("initialized", initialized);
 	}
 
 	// ================================ UTILITY ================================

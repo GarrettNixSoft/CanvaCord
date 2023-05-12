@@ -281,6 +281,14 @@ public class Instance {
 		return configuration.getClassReminderSchedule();
 	}
 
+	public JSONObject getCommandIDs() {
+		return configuration.getCommandIDs(false);
+	}
+
+	public JSONObject getCommandIDs(boolean refresh) {
+		return configuration.getCommandIDs(refresh);
+	}
+
 	public Map<String, Boolean> getAvailableCommands() {
 		return configuration.getAvailableCommands(false);
 	}

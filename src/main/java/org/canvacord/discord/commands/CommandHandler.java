@@ -1,5 +1,7 @@
 package org.canvacord.discord.commands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
@@ -12,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandHandler {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	private static final Map<Long, Class<? extends Command>> globalCommands = new HashMap<>();
 	private static final Map<String, Map<Long, Class<? extends Command>>> serverCommands = new HashMap<>();
@@ -50,7 +54,9 @@ public class CommandHandler {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new CanvaCordException(e.getMessage());
+			LOGGER.error(e.getMessage());
+			LOGGER.trace(e.getStackTrace());
+			return -1;
 		}
 	}
 
