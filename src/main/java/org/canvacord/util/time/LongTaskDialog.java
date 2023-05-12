@@ -1,5 +1,7 @@
 package org.canvacord.util.time;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.gui.CanvaCordFonts;
 
 import javax.swing.*;
@@ -7,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class LongTaskDialog extends JDialog {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	private final LongTask task;
 
@@ -34,9 +38,9 @@ public class LongTaskDialog extends JDialog {
 	}
 
 	public void runTask() {
-		System.out.println("Running long task...");
+		LOGGER.debug("Running long task...");
 		long time = Profiler.executeProfiled(task::execute);
-		System.out.println("Ran long task in " + time + "ms");
+		LOGGER.debug("Ran long task in " + time + "ms");
 		int minTime = 100;
 		if (time < minTime) {
 			try {
