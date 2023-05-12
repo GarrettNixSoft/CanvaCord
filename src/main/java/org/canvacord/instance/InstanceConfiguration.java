@@ -21,9 +21,11 @@ import org.javacord.api.interaction.SlashCommand;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.awt.*;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class InstanceConfiguration {
@@ -232,7 +234,7 @@ public class InstanceConfiguration {
 			Server server = api.getServerById(getServerID()).orElseThrow();
 			List<Role> roles =  server.getRoles();
 			for(Role role : roles) {
-				registeredRoles.add(new CanvaCordRole(role.getColor().get(), role.getName(), role.getId()));
+				registeredRoles.add(new CanvaCordRole(role.getColor().orElse(Color.BLACK), role.getName(), role.getId()));
 			}
 		}
 		return registeredRoles;
