@@ -72,15 +72,9 @@ public class CommandTogglePage extends OptionPage {
 		JSONObject commandAvailability = (JSONObject) dataStore.get("command_availability");
 		checkBoxMap.get("Syllabus").setSelected(commandAvailability.getBoolean("syllabus"));
 		checkBoxMap.get("Textbooks").setSelected(commandAvailability.getBoolean("textbooks"));
-		checkBoxMap.get("Assignments List").setSelected(commandAvailability.getBoolean("assignments_list"));
-		checkBoxMap.get("Assignments Search").setSelected(commandAvailability.getBoolean("assignments_search"));
-		checkBoxMap.get("Assignments Active").setSelected(commandAvailability.getBoolean("assignments_active"));
-		checkBoxMap.get("Assignment Details").setSelected(commandAvailability.getBoolean("assignment_details"));
-		checkBoxMap.get("Announcements List").setSelected(commandAvailability.getBoolean("announcements_list"));
-		checkBoxMap.get("Announcements Search").setSelected(commandAvailability.getBoolean("announcements_search"));
-		checkBoxMap.get("Announcement Details").setSelected(commandAvailability.getBoolean("announcement_details"));
-		checkBoxMap.get("Module List").setSelected(commandAvailability.getBoolean("module_list"));
-		checkBoxMap.get("Module Search").setSelected(commandAvailability.getBoolean("module_search"));
+		checkBoxMap.get("Assignment").setSelected(commandAvailability.getBoolean("assignment"));
+		checkBoxMap.get("Announcement").setSelected(commandAvailability.getBoolean("announcement"));
+		checkBoxMap.get("Module").setSelected(commandAvailability.getBoolean("module"));
 		checkBoxMap.get("Remind Me").setSelected(commandAvailability.getBoolean("remindme"));
 	}
 
@@ -91,15 +85,9 @@ public class CommandTogglePage extends OptionPage {
 		JSONObject commandAvailability = (JSONObject) dataStore.get("command_availability");
 		commandAvailability.put("syllabus", checkBoxMap.get("Syllabus").isSelected());
 		commandAvailability.put("textbooks", checkBoxMap.get("Textbooks").isSelected());
-		commandAvailability.put("assignments_list", checkBoxMap.get("Assignments List").isSelected());
-		commandAvailability.put("assignments_search", checkBoxMap.get("Assignments Search").isSelected());
-		commandAvailability.put("assignments_active", checkBoxMap.get("Assignments Active").isSelected());
-		commandAvailability.put("assignment_details", checkBoxMap.get("Assignment Details").isSelected());
-		commandAvailability.put("announcements_list", checkBoxMap.get("Announcements List").isSelected());
-		commandAvailability.put("announcements_search", checkBoxMap.get("Announcements Search").isSelected());
-		commandAvailability.put("announcement_details", checkBoxMap.get("Announcement Details").isSelected());
-		commandAvailability.put("module_list", checkBoxMap.get("Module List").isSelected());
-		commandAvailability.put("module_search", checkBoxMap.get("Module Search").isSelected());
+		commandAvailability.put("assignment", checkBoxMap.get("Assignment").isSelected());
+		commandAvailability.put("announcement", checkBoxMap.get("Announcement").isSelected());
+		commandAvailability.put("module", checkBoxMap.get("Module").isSelected());
 		commandAvailability.put("remindme", checkBoxMap.get("Remind Me").isSelected());
 
 	}

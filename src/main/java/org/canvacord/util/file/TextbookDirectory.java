@@ -1,5 +1,8 @@
 package org.canvacord.util.file;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.File;
 import java.nio.file.Files;
 import java.util.Optional;
@@ -7,6 +10,8 @@ import java.util.Optional;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class TextbookDirectory {
+
+    private static final Logger LOGGER = LogManager.getLogger();
 
     /**
      * Checks for existing files and finds vacant number
@@ -44,7 +49,7 @@ public class TextbookDirectory {
         Optional<File> testing = FileGetter.getFileRecent( "PDF File", ".pdf");
         //Checks if user closes the prompt window
         if(testing.isEmpty()) {
-            System.out.println("Unable to obtain file");
+            LOGGER.error("Unable to obtain file");
             return Optional.empty();
         }
         return storeTextbook(instanceID, testing.get());
@@ -57,7 +62,7 @@ public class TextbookDirectory {
             Files.copy(inputFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
             return Optional.of(outputFile);
         } catch(Exception e) {
-            System.out.println("Failed to copy to path");
+            LOGGER.error("Failed to copy to path");
             return Optional.empty();
         }
     }

@@ -34,7 +34,7 @@ public class AssignmentCommandTest {
 
 		api.addSlashCommandCreateListener(event -> {
 			SlashCommandInteraction interaction = event.getSlashCommandInteraction();
-			if (interaction.getFullCommandName().toLowerCase().contains("syllabus"))
+			if (interaction.getFullCommandName().toLowerCase().contains("assignment"))
 				command.execute(event.getSlashCommandInteraction());
 		});
 

@@ -86,6 +86,7 @@ public class HelpCommand extends Command implements ButtonClickListener, SelectM
 			interaction.createImmediateResponder()
 					.setContent("An error has occurred. Sorry! Try again, or contact the bot owner.")
 					.setFlags(MessageFlag.EPHEMERAL).respond();
+			e.printStackTrace();
 			throw new CanvaCordException(e.getMessage());
 		}
 

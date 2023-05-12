@@ -42,7 +42,7 @@ public class ReminderManager {
 	}
 
 	public static List<Reminder> getRemindersForInstance(String instanceID) {
-		return Collections.unmodifiableList(storedReminders.get(instanceID));
+		return Collections.unmodifiableList(storedReminders.computeIfAbsent(instanceID, k -> new ArrayList<>()));
 	}
 
 	public static List<Reminder> getRemindersForInstance(Instance instance) {
