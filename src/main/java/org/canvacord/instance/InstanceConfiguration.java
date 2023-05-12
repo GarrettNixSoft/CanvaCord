@@ -73,7 +73,7 @@ public class InstanceConfiguration {
 			throw new CanvaCordException("Failed to refresh instance configuration");
 	}
 
-	public void verify() {
+	public boolean verify() {
 		// ================ VERIFY ROLES ================
 		// refresh the roles from the config file and Discord
 		getConfiguredRoles(true);
@@ -94,6 +94,10 @@ public class InstanceConfiguration {
 
 		// ================ VERIFY CHANNELS ================
 		// TODO
+
+
+		return true;
+
 	}
 
 	// TODO: getters
