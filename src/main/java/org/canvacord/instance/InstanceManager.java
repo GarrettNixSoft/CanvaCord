@@ -307,7 +307,7 @@ public class InstanceManager {
 
 		try {
 			// Stop the instance
-			stopInstance(instance.getInstanceID());
+			if (InstanceManager.isInstanceRunning(instance.getInstanceID())) stopInstance(instance.getInstanceID());
 
 			// Find the instance folder
 			File instanceDir = Paths.get("instances/" + instance.getInstanceID()).toFile();
