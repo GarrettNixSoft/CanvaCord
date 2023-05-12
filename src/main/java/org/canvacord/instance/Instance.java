@@ -1,5 +1,7 @@
 package org.canvacord.instance;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.discord.commands.Command;
@@ -25,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class Instance {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	// enforcing uniqueness
 	private static final Set<String> courseIDs = new HashSet<>();
@@ -89,8 +93,14 @@ public class Instance {
 	 */
 	public boolean initialize() throws CanvaCordException {
 
-		RoleRegistration.registerRoles(this);
-		CommandRegistration.registerCommands(this);
+		try {
+			RoleRegistration.registerRoles(this);
+			CommandRegistration.registerCommands(this);
+		}
+		catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			LOGGER.trace(e.getStackTrace());
+		}
 
 		return false;
 	}
@@ -104,9 +114,9 @@ public class Instance {
 	 * in Discord.
 	 * @throws CanvaCordException if some error occurs when creating missing entities
 	 */
-	public void verify() throws CanvaCordException {
+	public boolean verify() throws CanvaCordException {
 
-		configuration.verify();
+		return configuration.verify();
 
 	}
 
