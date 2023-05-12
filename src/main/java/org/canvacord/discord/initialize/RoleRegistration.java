@@ -40,8 +40,13 @@ public class RoleRegistration {
 		for (CanvaCordRole role : configuredRoles) {
 			// If this role already exists in the server, skip it
 			if (existingRoles.containsKey(role.getName())) {
-				if (existingRoles.get(role.getName()).getColor().get().equals(role.getColor())) {
+				Role existingRole = existingRoles.get(role.getName());
+				if (existingRole.getColor().get().equals(role.getColor())) {
 					LOGGER.debug("Found existing role " + role.getName() + ", skipping");
+					if (role.getRoleID() != existingRole.getId()) {
+						LOGGER.debug("Role IDs did not match, updating stored role ID");
+						role.setRoleID(existingRole.getId());
+					}
 					continue;
 				}
 			}
