@@ -53,9 +53,17 @@ public class ClassMeeting {
 		return StringUtils.uppercaseWords(weekday.name());
 	}
 
+	public String getStartDescription() {
+		return String.format("%d:%02d", startTime.getInt("hour"), startTime.getInt("minute"));
+	}
+
+	public String getEndDescription() {
+		return String.format("%d:%02d", endTime.getInt("hour"), endTime.getInt("minute"));
+	}
+
 	public String getTimeDescription() {
-		String startTimeStr = String.format("%d:%02d", startTime.getInt("hour"), startTime.getInt("minute"));
-		String endTimeStr = String.format("%d:%02d", endTime.getInt("hour"), endTime.getInt("minute"));
+		String startTimeStr = getStartDescription();
+		String endTimeStr = getEndDescription();
 		if (startTime.getString("ampm").equals(endTime.getString("ampm"))) {
 			return startTimeStr + " ---> " + endTimeStr + " " + startTime.getString("ampm");
 		}

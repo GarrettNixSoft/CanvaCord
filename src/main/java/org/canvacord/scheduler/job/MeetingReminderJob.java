@@ -29,7 +29,7 @@ public class MeetingReminderJob implements Job {
 
 		MessageBuilder messageBuilder = new MessageBuilder();
 
-		if (roleID != -1) {
+		if (instance.createMarkersRole() && roleID != -1) {
 			// Who to send messages to
 			AllowedMentions allowedMentions = new AllowedMentionsBuilder()
 					.setMentionRoles(true)
