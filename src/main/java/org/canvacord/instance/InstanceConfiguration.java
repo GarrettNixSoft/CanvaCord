@@ -1,5 +1,7 @@
 package org.canvacord.instance;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.discord.commands.Command;
@@ -25,6 +27,8 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 public class InstanceConfiguration {
+
+	private static Logger LOGGER = LogManager.getLogger();
 
 	private static JSONObject defaultConfigJSON;
 
@@ -227,9 +231,8 @@ public class InstanceConfiguration {
 			DiscordApi api = DiscordBot.getBotInstance().getApi();
 			Server server = api.getServerById(getServerID()).orElseThrow();
 			List<Role> roles =  server.getRoles();
-			for(Role role : roles)
-			{
-				registeredRoles.add(new CanvaCordRole(role.getColor().orElseThrow(), role.getName(), role.getId()));
+			for(Role role : roles) {
+				registeredRoles.add(new CanvaCordRole(role.getColor().get(), role.getName(), role.getId()));
 			}
 		}
 		return registeredRoles;
