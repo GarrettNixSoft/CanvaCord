@@ -96,13 +96,13 @@ public class Instance {
 		try {
 			RoleRegistration.registerRoles(this);
 			CommandRegistration.registerCommands(this);
+			return true;
 		}
 		catch (Exception e) {
 			LOGGER.error(e.getMessage());
 			LOGGER.trace(e.getStackTrace());
+			return false;
 		}
-
-		return false;
 	}
 
 	/**
