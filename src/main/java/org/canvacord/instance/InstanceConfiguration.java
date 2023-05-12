@@ -286,7 +286,7 @@ public class InstanceConfiguration {
 		return configJSON.getJSONObject("command_availability");
 	}
 
-	public Map<Long, Class<? extends Command>> getRegisteredCommands(boolean refresh) {
+	public Map<Long, Class<? extends Command>> getStoredCommandIDs(boolean refresh) {
 		// refresh from disk if requested or if the map is empty (probably never loaded)
 		if (refresh || registeredCommands.isEmpty()) {
 			refresh();
