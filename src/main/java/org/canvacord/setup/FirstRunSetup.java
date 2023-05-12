@@ -1,5 +1,7 @@
 package org.canvacord.setup;
 
+import org.canvacord.util.input.UserInput;
+
 public class FirstRunSetup {
 
 	/**
@@ -11,7 +13,13 @@ public class FirstRunSetup {
 		TokenSetupWizard tokenSetupWizard = new TokenSetupWizard();
 		tokenSetupWizard.runWizard();
 
-		return tokenSetupWizard.completedSuccessfully();
+		boolean success = tokenSetupWizard.completedSuccessfully();
+
+		if (success) {
+			UserInput.showMessage("You have successfully configured your\nAPI tokens. Do not share them with\nanyone; they are equivalent to your\nusername and password.", "Tokens Added");
+		}
+
+		return success;
 
 	}
 
