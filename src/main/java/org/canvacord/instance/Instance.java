@@ -336,6 +336,10 @@ public class Instance {
 		return configuration.getCleanUpAction();
 	}
 
+	public boolean isCleanedUp() {
+		return configuration.isCleanedUp();
+	}
+
 	public String getStatus() {
 		// TODO
 		return "Idle";

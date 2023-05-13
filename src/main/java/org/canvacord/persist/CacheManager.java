@@ -85,6 +85,14 @@ public class CacheManager {
 
 	}
 
+	public static void clearCacheForInstance(Instance instance) {
+		instanceData.remove(instance.getInstanceID());
+		assignmentCache.remove(instance.getInstanceID());
+		announcementCache.remove(instance.getInstanceID());
+		moduleCache.remove(instance.getInstanceID());
+		moduleEntityCache.remove(instance.getInstanceID());
+	}
+
 	public static void writeInstanceData(String instanceID) {
 
 		File targetFile = Paths.get("instances/" + instanceID + "/data.json").toFile();
@@ -121,7 +129,7 @@ public class CacheManager {
 
 		InstanceData instanceData = CacheManager.instanceData.get(instance.getInstanceID());
 		Set<Long> newAssignmentIDs = instanceData.getNewEntities(notification);
-		Map<Long, Assignment> cachedAssignments = CacheManager.getCachedAssignments(instance.getInstanceID());
+		Map<Long, Assignment> cachedAssignments = getCachedAssignments(instance.getInstanceID());
 
 		List<Assignment> result = new ArrayList<>();
 
@@ -140,7 +148,7 @@ public class CacheManager {
 
 		InstanceData instanceData = CacheManager.instanceData.get(instance.getInstanceID());
 		Set<Long> newAnnouncementIDs = instanceData.getNewEntities(notification);
-		Map<Long, Announcement> cachedAnnouncements = CacheManager.getCachedAnnouncements(instance.getInstanceID());
+		Map<Long, Announcement> cachedAnnouncements = getCachedAnnouncements(instance.getInstanceID());
 
 		List<Announcement> result = new ArrayList<>();
 

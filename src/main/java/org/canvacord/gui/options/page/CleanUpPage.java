@@ -3,13 +3,19 @@ package org.canvacord.gui.options.page;
 import net.miginfocom.swing.MigLayout;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.options.OptionPage;
+import org.canvacord.instance.Instance;
+import org.canvacord.instance.InstanceCleanUp;
+import org.canvacord.instance.InstanceConfiguration;
+import org.canvacord.util.input.UserInput;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class CleanUpPage extends OptionPage {
 
 	private JCheckBox doCleanUp;
 	private JRadioButton[] cleanUpOptions;
+	private JButton cleanUpNow;
 
 	public CleanUpPage() {
 		super("Clean Up");
@@ -46,6 +52,11 @@ public class CleanUpPage extends OptionPage {
 		buttonGroup.add(cleanUpOptions[0]);
 		buttonGroup.add(cleanUpOptions[1]);
 
+		cleanUpNow = new JButton("Clean Up Now");
+		cleanUpNow.setFont(CanvaCordFonts.LABEL_FONT_BIGGER_THAN_SMALL_BUT_SMALLER_THAN_MEDIUM);
+		cleanUpNow.setForeground(Color.RED);
+		add(cleanUpNow, "cell 0 8");
+
 		// Preselect default
 		cleanUpOptions[0].setSelected(true);
 
@@ -53,7 +64,16 @@ public class CleanUpPage extends OptionPage {
 
 	@Override
 	protected void initLogic() {
-		// TODO
+
+		cleanUpNow.addActionListener(event -> {
+
+			if (UserInput.askToConfirm("Are you sure you want to run clean up\non this Instance? It may not be recoverable.", "Confirm Clean-Up")) {
+				Instance instance = (Instance) dataStore.get("instance");
+				InstanceCleanUp.runInstanceCleanup(instance);
+			}
+
+		});
+
 	}
 
 	@Override

@@ -341,6 +341,10 @@ public class InstanceConfiguration {
 		return configJSON.getString("clean_up_action");
 	}
 
+	public boolean isCleanedUp() {
+		return configJSON.optBoolean("cleaned_up", false);
+	}
+
 	public boolean isInitialized() {
 		return configJSON.optBoolean("initialized", false);
 	}
@@ -436,6 +440,10 @@ public class InstanceConfiguration {
 
 	public void setCleanUpAction(String cleanUpAction) {
 		configJSON.put("clean_up_action", cleanUpAction);
+	}
+
+	public void markCleanedUp() {
+		configJSON.put("cleaned_up", true);
 	}
 
 	public void saveRoles() {

@@ -65,6 +65,11 @@ public class InstanceManager {
 					// List the instance files
 					File[] instanceFiles = file.listFiles();
 
+					if (instanceFiles == null) {
+						LOGGER.warn("Abandoning; could not list files");
+						continue;
+					}
+
 					// Instances contain 2 files: config and data
 					if (instanceFiles.length < 2) {
 						LOGGER.debug("Abandoning; too few files");
@@ -142,14 +147,25 @@ public class InstanceManager {
 		if (runningInstanceIDs.contains(instanceID) || !instances.containsKey(instanceID))
 			throw new CanvaCordException(instanceID + " is already running.");
 
+		// Get the instance
 		Instance instance = instances.get(instanceID);
+
+		// Check if it has been cleaned up
+		if (instance.isCleanedUp()) {
+			throw new CanvaCordException("Instance " + instance.getName() + " has been cleaned up");
+		}
+
+		// Run the instance and schedule its fetches, notifications, etc.
 		instance.start();
 
+		// Mark the instance as running
 		runningInstances.add(instance);
 		runningInstanceIDs.add(instanceID);
 
+		// Notify whatever GUI elements are interested that his instance has started
 		CanvaCordEvent.newEvent(CanvaCordEvent.Type.INSTANCE_STARTED, instance);
 
+		// Return successfully
 		return true;
 	}
 
