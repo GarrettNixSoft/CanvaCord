@@ -16,6 +16,8 @@
 	"textbook_files": [],
 	"end_of_semester_action": "archive",
 	"generate_exam_events": false,
+	"do_clean_up": false,
+	"clean_up_action": "archive",
 	"class_schedule": [],
 	"canvas_fetch_schedule": {
 		"type": "interval",
