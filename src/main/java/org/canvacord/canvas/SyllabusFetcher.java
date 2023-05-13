@@ -1,5 +1,6 @@
 package org.canvacord.canvas;
 
+import edu.ksu.canvas.exception.ObjectNotFoundException;
 import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
@@ -12,9 +13,11 @@ import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.util.net.RemoteFileGetter;
+import org.checkerframework.checker.nullness.Opt;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.swing.text.html.Option;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -43,8 +46,8 @@ public class SyllabusFetcher {
 	protected static Optional<SyllabusInfo> fetchSyllabusForCourse(String courseID) {
 
 		Instance instanceForCourse = InstanceManager.getInstanceByCourseID(courseID).orElseThrow(()-> new CanvaCordException("Instance not found"));
-		Optional<File> instanceFile = findSyllabusFromInstance(instanceForCourse);
 		syllabusPath = getInstanceDirPath(instanceForCourse);
+		Optional<File> instanceFile = findSyllabusFromInstance(instanceForCourse);
 		JSONObject syllabusJSON;
 		File syllabus;
 
@@ -71,6 +74,15 @@ public class SyllabusFetcher {
 	}
 
 	protected static Optional<SyllabusInfo> fetchSyllabusFromCanvas(String courseID){
+		System.out.println(courseID);
+		Instance instanceForCourse;
+		try{
+			instanceForCourse = InstanceManager.getInstanceByCourseID(courseID).orElseThrow(()-> new CanvaCordException("Instance not found"));
+		}
+		catch (Exception e){
+			return Optional.empty();
+		}
+		syllabusPath = getInstanceDirPath(instanceForCourse);
 		File syllabus;
 		JSONObject syllabusJSON;
 
@@ -107,17 +119,28 @@ public class SyllabusFetcher {
 	}
 	private static Optional<File> findSyllabusFromCanvas(String courseID) throws IOException {
 		CanvasApi canvasApi = CanvasApi.getInstance();
+		String syllabusBody = null;
 		List<Module> modules = canvasApi.getModules(courseID); // to be changed when modules class implemented
 		JSONObject downloadJSON;
+		String dataApiReturnType = null;
+		String dataApiEndpoint = null;
 
-		String syllabusBody = getSyllabusBody(canvasApi,courseID);
+
+		try {
+			syllabusBody = getSyllabusBody(canvasApi, courseID);
+			dataApiReturnType = extractFromHtml(syllabusBody,"data-api-returntype");
+			dataApiEndpoint = extractFromHtml(syllabusBody,"data-api-endpoint");
+		}
+		catch(IOException e){
+			LOGGER.error("Error fetching specified course.");
+		}
+		catch (ObjectNotFoundException ignore){
+			// there is no syllabus body for the course
+		}
 
 		// from the HTML extracted in the syllabus body, if there is a link to another page
 		//
 		// https://canvas.instructure.com/doc/api/file.endpoint_attributes.html
-
-		String dataApiReturnType = extractFromHtml(syllabusBody,"data-api-returntype");
-		String dataApiEndpoint = extractFromHtml(syllabusBody,"data-api-endpoint");
 
 		if (dataApiReturnType == null || dataApiEndpoint == null) { //todo use modules class methods
 
@@ -150,7 +173,7 @@ public class SyllabusFetcher {
 			}
 		}
 
-		// todo: change instance config has_syllabus = true
+
 		return downloadFile(downloadJSON);
 	}
 
@@ -180,7 +203,7 @@ public class SyllabusFetcher {
 
 		try{
 			filePath = Path.of(syllabusPath.toString() + "\\" + downloadFileName);
-		} catch (NoSuchElementException e){
+		} catch (NoSuchElementException | NullPointerException e){
 			UserInput.showWarningMessage("There was an error locating the Instance folder.","Error");
 			return Optional.empty();
 		}
