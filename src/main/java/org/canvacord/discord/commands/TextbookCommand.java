@@ -2,17 +2,19 @@ package org.canvacord.discord.commands;
 
 import org.apache.logging.log4j.core.tools.picocli.CommandLine;
 import org.canvacord.canvas.CanvasApi;
+import org.canvacord.canvas.TextbookFetcher;
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.util.Globals;
+import org.canvacord.util.string.StringUtils;
+import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
-import org.javacord.api.interaction.SlashCommand;
-import org.javacord.api.interaction.SlashCommandBuilder;
-import org.javacord.api.interaction.SlashCommandInteraction;
+import org.javacord.api.interaction.*;
+import org.javacord.api.interaction.callback.InteractionImmediateResponseBuilder;
 import org.javacord.api.interaction.callback.InteractionOriginalResponseUpdater;
 
 import java.awt.*;
@@ -45,38 +47,195 @@ public class TextbookCommand extends Command {
 	}
 	@Override
 	public SlashCommandBuilder getBuilder(Instance instance){
-		return SlashCommand.with(getName(),getShortDescription());
+		return SlashCommand.with(
+				getName(),
+				getShortDescription(),
+				List.of(
+						SlashCommandOption.createWithOptions(
+								SlashCommandOptionType.SUB_COMMAND,
+								"search",
+								"Search online for a textbook",
+								List.of(
+										SlashCommandOption.create(
+										SlashCommandOptionType.STRING,
+										"title",
+										"The title to search for",
+										true
+										)
+								)
+						),
+						SlashCommandOption.create(
+								SlashCommandOptionType.SUB_COMMAND,
+								"list",
+								"List all textbooks for this course"
+								),
+						SlashCommandOption.createWithOptions(
+								SlashCommandOptionType.SUB_COMMAND,
+								"get",
+								"Get a textbook from this course",
+								List.of(
+										SlashCommandOption.create(
+												SlashCommandOptionType.STRING,
+												"title",
+												"The title to search for",
+												true
+										)
+								)
+						)
+				));
 	}
 
 	@Override
 	public void execute(SlashCommandInteraction interaction) {
 
-		CompletableFuture<InteractionOriginalResponseUpdater> response;
-		// Use respondLater to send a response that takes longer than 3 seconds
-		// set the value to true to make it ephemeral
-		response = interaction.respondLater(true);
+		// Check the Instance context for this command
+		Optional<Server> server = interaction.getServer();
+		if (server.isEmpty()) {
+			interaction.createImmediateResponder().setContent("Could not fetch the server context. Please contact the server Owner.").respond();
+			return;
+		}
 
-		response.thenAccept(interactionOriginalResponseUpdater -> {
-			Server server = interaction.getServer().orElseThrow(()->new CanvaCordException("Server not found"));
-			Instance instanceForCourse = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(()->new CanvaCordException("Instance not found"));
-			Globals.EDIT_INSTANCE_ID = instanceForCourse.getInstanceID();
-			List<TextbookInfo> textbook = instanceForCourse.getTextbooks();
-			Optional<TextbookInfo> textbookDummy = Optional.of(textbook.get(0));
+		Optional<Instance> instanceOpt = InstanceManager.getInstanceByServerID(server.get().getId());
+		if (instanceOpt.isEmpty()) {
+			interaction.createImmediateResponder().setContent("Could not fetch the CanvaCord instance for this server. Please contact the server Owner.").respond();
+			return;
+		}
 
-			if(!instanceForCourse.getTextbooks().isEmpty()){
+		Instance instance = instanceOpt.get();
 
-				textbookDummy.ifPresentOrElse(textbookData -> {
-					interactionOriginalResponseUpdater
-							.addEmbed(new EmbedBuilder().setTitle(textbookData.getTitle() + " Textbook")
-									.setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
-									.setColor(Color.RED)
-									.addField("Course ",instanceForCourse.getCourseTitle()))
-							.addAttachment(textbookData.getTextbookFile()).update();
-				}, () -> interactionOriginalResponseUpdater.addEmbed(errorMessage).update());
+		// Check that this instance textbook commands
+		if (!instance.getAvailableCommands().containsKey("textbooks")) {
+			interaction.createImmediateResponder().setContent("This CanvaCord instance has disabled textbook commands.").respond();
+			return;
+		}
+
+		// Grab the subcommand value
+		SlashCommandInteractionOption subcommand = interaction.getOptionByIndex(0).orElseThrow();
+
+		try {
+			switch (subcommand.getName()) {
+				case "search" -> {
+
+					// Grab the search term
+					SlashCommandInteractionOption searchTermOption = interaction.getOptionByIndex(0).orElseThrow().getOptionByIndex(0).orElseThrow();
+					String searchTerm = searchTermOption.getStringValue().orElseThrow().toLowerCase();
+
+					// Prepare to respond in the future
+					CompletableFuture<InteractionOriginalResponseUpdater> response;
+					// Use respondLater to send a response that takes longer than 3 seconds
+					// set the value to true to make it ephemeral
+					response = interaction.respondLater(true);
+
+					response.thenAccept(interactionOriginalResponseUpdater -> {
+
+						Globals.EDIT_INSTANCE_ID = instance.getInstanceID();
+						Optional<TextbookInfo> textbookDummy = TextbookFetcher.fetchTextbookOnline(searchTerm, instance.getCourseID());
+
+						if(!instance.getTextbooks().isEmpty()){
+
+							textbookDummy.ifPresentOrElse(textbookData -> {
+								interactionOriginalResponseUpdater
+										.addEmbed(new EmbedBuilder().setTitle(textbookData.getTitle() + " Textbook")
+												.setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
+												.setColor(Color.RED)
+												.addField("Course ",instance.getCourseTitle()))
+										.addAttachment(textbookData.getTextbookFile()).update();
+							}, () -> interactionOriginalResponseUpdater.addEmbed(errorMessage).update());
+						}
+						else {
+							interactionOriginalResponseUpdater.addEmbed(errorMessage).update();
+						}
+					});
+
+				}
+				case "list" -> {
+
+					Globals.EDIT_INSTANCE_ID = instance.getInstanceID();
+					List<TextbookInfo> textbooks = instance.getTextbooks();
+
+					if (textbooks.isEmpty()) {
+						interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL).setContent("No textbooks have been added for this course.").respond();
+					} else {
+
+						if (textbooks.size() <= 10) {
+
+							// Prepare to respond in the future
+							CompletableFuture<InteractionOriginalResponseUpdater> response;
+							// Use respondLater to send a response that takes longer than 3 seconds
+							// set the value to true to make it ephemeral
+							response = interaction.respondLater(true);
+
+							response.thenAccept(interactionOriginalResponseUpdater -> {
+								for (TextbookInfo textbookInfo : textbooks) {
+									EmbedBuilder embedBuilder = new EmbedBuilder();
+									embedBuilder.setTitle(textbookInfo.getTitle() + " Textbook")
+											.setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
+											.setColor(Color.RED)
+											.addField("Course ", instance.getCourseTitle());
+									interactionOriginalResponseUpdater.addEmbed(embedBuilder);
+									interactionOriginalResponseUpdater.addAttachment(textbookInfo.getTextbookFile());
+								}
+								interactionOriginalResponseUpdater.update();
+							});
+						} else {
+							interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL).setContent("There are too many textbooks configured for this course to list.").respond();
+						}
+
+					}
+
+				}
+				case "get" -> {
+
+					Globals.EDIT_INSTANCE_ID = instance.getInstanceID();
+					List<TextbookInfo> textbooks = instance.getTextbooks();
+
+					if (textbooks.isEmpty()) {
+						interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL).setContent("No textbooks have been added for this course.").respond();
+					} else {
+
+						SlashCommandInteractionOption searchTermOption = interaction.getOptionByIndex(0).orElseThrow().getOptionByIndex(0).orElseThrow();
+						String searchTerm = searchTermOption.getStringValue().orElseThrow().toLowerCase();
+
+						int bestScore = 0;
+						TextbookInfo bestMatch = null;
+
+						for (TextbookInfo textbookInfo : textbooks) {
+							int score = StringUtils.getSimilarityScore(textbookInfo.getTitle().toLowerCase(), searchTerm);
+							if (score > bestScore) {
+								bestScore = score;
+								bestMatch = textbookInfo;
+							}
+						}
+
+						if (bestMatch != null) {
+							CompletableFuture<InteractionOriginalResponseUpdater> response;
+							response = interaction.respondLater(true);
+							TextbookInfo finalBestMatch = bestMatch;
+							response.thenAccept(interactionOriginalResponseUpdater -> {
+								EmbedBuilder embedBuilder = new EmbedBuilder();
+								embedBuilder.setTitle(finalBestMatch.getTitle() + " Textbook")
+										.setAuthor(DiscordBot.getBotInstance().getApi().getYourself())
+										.setColor(Color.RED)
+										.addField("Course ", instance.getCourseTitle());
+								interactionOriginalResponseUpdater.addAttachment(finalBestMatch.getTextbookFile());
+								interactionOriginalResponseUpdater.update();
+							});
+						}
+						else {
+							interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL).setContent("No matches were found.").respond();
+						}
+
+						// TODO
+					}
+
+				}
+				default -> throw new CanvaCordException("Invalid textbook subcommand name: " + subcommand.getName());
 			}
-			else {
-				interactionOriginalResponseUpdater.addEmbed(errorMessage).update();
-			}
-		});
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL).setContent("CanvaCord encountered an exception: " + e.getMessage() + "; Please contact the server Owner.").respond();
+		}
+
 	}
 }

@@ -69,4 +69,13 @@ public class StringUtils {
 		return Pattern.compile("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]").matcher(str).find();
 	}
 
+	public static int getSimilarityScore(String str1, String str2) {
+
+		// TODO improve this
+		if (str1.contains(str2)) return str2.length();
+		if (str2.contains(str1)) return str1.length();
+		else return 0;
+
+	}
+
 }
