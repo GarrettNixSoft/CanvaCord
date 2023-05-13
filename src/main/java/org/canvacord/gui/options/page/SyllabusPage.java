@@ -82,7 +82,7 @@ public class SyllabusPage extends OptionPage {
 
 		// ================ FINDING SYLLABUS AUTOMATICALLY ================
 		findSyllabusButton.addActionListener(event -> {
-			String courseID = (String) dataStore.get("courseID");
+			String courseID = (String) dataStore.get("course_id");
 			CanvasApi.getInstance().findSyllabus(courseID).ifPresentOrElse(
 					syllabusInfo -> {
 						syllabusFile = syllabusInfo.getSyllabusFile();
