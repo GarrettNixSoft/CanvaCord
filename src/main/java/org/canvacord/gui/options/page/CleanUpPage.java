@@ -58,11 +58,16 @@ public class CleanUpPage extends OptionPage {
 
 	@Override
 	protected void prefillGUI() {
-		// TODO
+		boolean cleanUpFlag = (Boolean) dataStore.get("do_clean_up");
+		doCleanUp.setSelected(cleanUpFlag);
+		String cleanUpAction = (String) dataStore.get("clean_up_action");
+		if (cleanUpAction.equals("archive")) cleanUpOptions[0].setSelected(true);
+		else if (cleanUpAction.equals("delete")) cleanUpOptions[1].setSelected(true);
 	}
 
 	@Override
 	protected void verifyInputs() throws Exception {
-		// TODO
+		dataStore.store("do_clean_up", doCleanUp.isSelected());
+		dataStore.store("clean_up_action", cleanUpOptions[0].isSelected() ? "archive" : cleanUpOptions[1].isSelected() ? "delete" : "none");
 	}
 }

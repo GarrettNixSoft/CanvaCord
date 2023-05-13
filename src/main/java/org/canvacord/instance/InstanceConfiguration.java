@@ -333,6 +333,14 @@ public class InstanceConfiguration {
 		return configJSON.getJSONObject("command_ids");
 	}
 
+	public boolean doCleanUp() {
+		return configJSON.getBoolean("do_clean_up");
+	}
+
+	public String getCleanUpAction() {
+		return configJSON.getString("clean_up_action");
+	}
+
 	public boolean isInitialized() {
 		return configJSON.optBoolean("initialized", false);
 	}
@@ -420,6 +428,14 @@ public class InstanceConfiguration {
 
 	public void setInitialized(boolean initialized) {
 		configJSON.put("initialized", initialized);
+	}
+
+	public void setDoCleanUp(boolean doCleanUp) {
+		configJSON.put("do_clean_up", doCleanUp);
+	}
+
+	public void setCleanUpAction(String cleanUpAction) {
+		configJSON.put("clean_up_action", cleanUpAction);
 	}
 
 	public void saveRoles() {

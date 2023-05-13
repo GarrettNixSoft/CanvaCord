@@ -58,8 +58,8 @@ public class EditInstancePanel extends OptionsPanel {
 		addOptionPage(commandInfoPage = new CommandInfoPage());
 		addOptionPage(commandInfoPage, new CommandTogglePage());
 		addOptionPage(commandInfoPage, new CommandOptionsPage());
-		addOptionPage(new InitializePage());
 		addOptionPage(new CleanUpPage());
+		addOptionPage(new InitializePage());
 	}
 
 	private void initLogic() {
@@ -88,6 +88,8 @@ public class EditInstancePanel extends OptionsPanel {
 		dataStore.store("meeting_markers_channel", instanceToEdit.getMeetingMarkersChannel());
 		dataStore.store("command_availability", instanceToEdit.getCommandAvailability());
 		dataStore.store("command_ids", instanceToEdit.getRegisteredCommands());
+		dataStore.store("do_clean_up", instanceToEdit.doCleanUp());
+		dataStore.store("clean_up_action", instanceToEdit.getCleanUpAction());
 		refreshChannels();
 	}
 
@@ -116,6 +118,8 @@ public class EditInstancePanel extends OptionsPanel {
 		instanceConfiguration.setCreateMarkersRole((Boolean) dataStore.get("create_markers_role"));
 		instanceConfiguration.setClassMarkersChannel((Long) dataStore.get("meeting_markers_channel"));
 		instanceConfiguration.setCommandAvailability((JSONObject) dataStore.get("command_availability"));
+		instanceConfiguration.setDoCleanUp((Boolean) dataStore.get("do_clean_up"));
+		instanceConfiguration.setCleanUpAction((String) dataStore.get("clean_up_action"));
 
 	}
 

@@ -328,6 +328,14 @@ public class Instance {
 		return configuration.getStoredCommandIDs(false);
 	}
 
+	public boolean doCleanUp() {
+		return configuration.doCleanUp();
+	}
+
+	public String getCleanUpAction() {
+		return configuration.getCleanUpAction();
+	}
+
 	public String getStatus() {
 		// TODO
 		return "Idle";
