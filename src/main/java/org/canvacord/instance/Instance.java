@@ -187,6 +187,10 @@ public class Instance {
 		return instanceID;
 	}
 
+	public boolean isInitialized() {
+		return configuration.isInitialized();
+	}
+
 	public String getCourseID() {
 		return courseID;
 	}

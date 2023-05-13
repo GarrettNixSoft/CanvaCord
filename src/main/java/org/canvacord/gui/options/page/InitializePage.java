@@ -72,19 +72,15 @@ public class InitializePage extends OptionPage {
 
 	@Override
 	protected void prefillGUI() {
-
-		if (dataStore.has("initialized")) {
-			boolean verified = (Boolean) dataStore.get("initialized");
-			if (verified) {
-				initializeButton.setEnabled(false);
-				initializeButton.setToolTipText("This instance is already initialized.");
-			}
-			else {
-				initializeButton.setEnabled(true);
-				initializeButton.setToolTipText(null);
-			}
+		boolean verified = (Boolean) dataStore.get("initialized");
+		if (verified) {
+			initializeButton.setEnabled(false);
+			initializeButton.setToolTipText("This instance is already initialized.");
 		}
-
+		else {
+			initializeButton.setEnabled(true);
+			initializeButton.setToolTipText(null);
+		}
 	}
 
 	@Override

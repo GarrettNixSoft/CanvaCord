@@ -69,6 +69,7 @@ public class EditInstancePanel extends OptionsPanel {
 
 	private void populateDataStore() {
 		dataStore.store("instance", instanceToEdit);
+		dataStore.store("initialized", instanceToEdit.isInitialized());
 		dataStore.store("course_id", instanceToEdit.getCourseID());
 		dataStore.store("server_id", instanceToEdit.getServerID());
 		dataStore.store("name", instanceToEdit.getName());
