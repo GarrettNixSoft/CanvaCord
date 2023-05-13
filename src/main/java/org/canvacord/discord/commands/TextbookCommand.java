@@ -101,6 +101,7 @@ public class TextbookCommand extends Command {
 			return;
 		}
 
+		// The instance should be available
 		Instance instance = instanceOpt.get();
 
 		// Check that this instance textbook commands
@@ -112,7 +113,9 @@ public class TextbookCommand extends Command {
 		// Grab the subcommand value
 		SlashCommandInteractionOption subcommand = interaction.getOptionByIndex(0).orElseThrow();
 
+		// Use a try/catch to avoid any exceptions preventing a response
 		try {
+			// Branch based on the subcommand name
 			switch (subcommand.getName()) {
 				case "search" -> {
 
@@ -126,11 +129,14 @@ public class TextbookCommand extends Command {
 					// set the value to true to make it ephemeral
 					response = interaction.respondLater(true);
 
+					// Run the actual response code
 					response.thenAccept(interactionOriginalResponseUpdater -> {
 
+						// Download a textbook
 						Globals.EDIT_INSTANCE_ID = instance.getInstanceID();
 						Optional<TextbookInfo> textbookDummy = TextbookFetcher.fetchTextbookOnline(searchTerm, instance.getCourseID());
 
+						// If the download succeeded, send the new file
 						if(!instance.getTextbooks().isEmpty()){
 
 							textbookDummy.ifPresentOrElse(textbookData -> {
@@ -142,6 +148,7 @@ public class TextbookCommand extends Command {
 										.addAttachment(textbookData.getTextbookFile()).update();
 							}, () -> interactionOriginalResponseUpdater.addEmbed(errorMessage).update());
 						}
+						// Otherwise send an error message
 						else {
 							interactionOriginalResponseUpdater.addEmbed(errorMessage).update();
 						}
@@ -150,13 +157,16 @@ public class TextbookCommand extends Command {
 				}
 				case "list" -> {
 
+					// Grab all the textbooks
 					Globals.EDIT_INSTANCE_ID = instance.getInstanceID();
 					List<TextbookInfo> textbooks = instance.getTextbooks();
 
+					// If there are none, let the user know
 					if (textbooks.isEmpty()) {
 						interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL).setContent("No textbooks have been added for this course.").respond();
-					} else {
-
+					}
+					else {
+						// If there are few enough to fit, send them
 						if (textbooks.size() <= 10) {
 
 							// Prepare to respond in the future
@@ -177,7 +187,9 @@ public class TextbookCommand extends Command {
 								}
 								interactionOriginalResponseUpdater.update();
 							});
-						} else {
+						}
+						// Otherwise inform the user that there are too many to show
+						else {
 							interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL).setContent("There are too many textbooks configured for this course to list.").respond();
 						}
 
@@ -186,19 +198,26 @@ public class TextbookCommand extends Command {
 				}
 				case "get" -> {
 
+					// Grab all the textbooks
 					Globals.EDIT_INSTANCE_ID = instance.getInstanceID();
 					List<TextbookInfo> textbooks = instance.getTextbooks();
 
+					// If there are none, let the user know
 					if (textbooks.isEmpty()) {
 						interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL).setContent("No textbooks have been added for this course.").respond();
-					} else {
+					}
+					// Otherwise, check what they searched and find a match
+					else {
 
+						// Get their search term
 						SlashCommandInteractionOption searchTermOption = interaction.getOptionByIndex(0).orElseThrow().getOptionByIndex(0).orElseThrow();
 						String searchTerm = searchTermOption.getStringValue().orElseThrow().toLowerCase();
 
+						// Prepare to find the best match
 						int bestScore = 0;
 						TextbookInfo bestMatch = null;
 
+						// Iterate
 						for (TextbookInfo textbookInfo : textbooks) {
 							int score = StringUtils.getSimilarityScore(textbookInfo.getTitle().toLowerCase(), searchTerm);
 							if (score > bestScore) {

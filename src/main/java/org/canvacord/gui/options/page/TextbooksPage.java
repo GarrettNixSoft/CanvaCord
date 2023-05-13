@@ -1,6 +1,7 @@
 package org.canvacord.gui.options.page;
 
 import net.miginfocom.swing.MigLayout;
+import org.canvacord.canvas.TextbookFetcher;
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ColorIcon;
@@ -8,9 +9,9 @@ import org.canvacord.gui.dialog.TextbookManualDialog;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.util.file.FileHasher;
 import org.canvacord.util.file.FileUtil;
-import org.canvacord.util.file.TextbookDirectory;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.resources.ImageLoader;
+import org.canvacord.util.time.LongTaskDialog;
 import org.json.JSONArray;
 
 import javax.swing.*;
@@ -20,7 +21,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TextbooksPage extends OptionPage {
 
@@ -34,6 +37,7 @@ public class TextbooksPage extends OptionPage {
 	private JButton editTextbookButton;
 	private JButton deleteTextbookButton;
 	private JButton scanButton;
+	private JButton searchButton;
 
 	public TextbooksPage() {
 		super("Textbooks");
@@ -70,6 +74,10 @@ public class TextbooksPage extends OptionPage {
 		scanButton = new JButton("<html>Scan<br/>Syllabus</html>");
 		scanButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
 		add(scanButton, "cell 9 12, growx");
+
+		searchButton = new JButton("<html>Search<br/>Online</html>");
+		searchButton.setFont(CanvaCordFonts.LABEL_FONT_SMALL);
+		add(searchButton, "cell 9 15, growx");
 
 		// TODO
 	}
@@ -130,6 +138,33 @@ public class TextbooksPage extends OptionPage {
 			else {
 				scanButton.setEnabled(false);
 				scanButton.setToolTipText("<html>You must add a Syllabus file in<br/>order to scan for textbooks.</html>");
+			}
+		});
+
+		// ================ SEARCHING FOR TEXTBOOKS ================
+		searchButton.addActionListener(event -> {
+			String searchTerm = UserInput.getUserString("Enter a title to search:");
+			if (searchTerm != null && !searchTerm.isBlank()) {
+
+				AtomicReference<Optional<TextbookInfo>> result = new AtomicReference<>();
+
+				LongTaskDialog.runLongTask(() -> {
+					result.set(TextbookFetcher.fetchTextbookOnline(searchTerm, (String) dataStore.get("course_id")));
+				}, "Searching online for " + searchTerm, "Searching");
+
+
+				result.get().ifPresentOrElse(
+						textbookInfo -> {
+							// TODO more here
+							UserInput.showMessage("Downloaded: " + textbookInfo.getTitle(), "Success");
+							textbooks.add(textbookInfo);
+							updateTextbooksList();
+						},
+				() -> {
+							UserInput.showMessage("No results were found.", "No Results");
+						}
+				);
+
 			}
 		});
 
