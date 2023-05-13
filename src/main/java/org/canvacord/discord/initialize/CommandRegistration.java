@@ -47,6 +47,10 @@ public class CommandRegistration {
 			}
 		}
 
+		// Register the help command
+		long helpCommandID = CommandHandler.registerCommandServer(Command.COMMANDS_BY_NAME.get("help"), server);
+		commandIDs.put("help", helpCommandID);
+
 		// Save the IDs to the Instance configuration
 		instance.getConfiguration().setCommandIDs(commandIDs);
 
