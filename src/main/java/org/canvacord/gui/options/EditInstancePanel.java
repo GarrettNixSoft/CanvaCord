@@ -59,6 +59,7 @@ public class EditInstancePanel extends OptionsPanel {
 		addOptionPage(commandInfoPage, new CommandTogglePage());
 		addOptionPage(commandInfoPage, new CommandOptionsPage());
 		addOptionPage(new InitializePage());
+		addOptionPage(new CleanUpPage());
 	}
 
 	private void initLogic() {

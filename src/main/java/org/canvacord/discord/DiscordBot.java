@@ -45,7 +45,7 @@ public class DiscordBot {
 
 	public boolean login() {
 		try {
-			api = API_BUILDER.login().get();
+			api = API_BUILDER.login().join();
 			connected = true;
 			api.addSlashCommandCreateListener(event -> CommandHandler.executeCommand(event.getSlashCommandInteraction()));
 			return true;

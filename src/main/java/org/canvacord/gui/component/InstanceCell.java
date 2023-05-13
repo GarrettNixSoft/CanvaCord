@@ -189,7 +189,7 @@ public class InstanceCell extends JPanel {
 				switch (event.getType()) {
 
 					case INSTANCE_STARTED -> {
-						statusLabel.setText("Status: Idle");
+						statusLabel.setText("Status: Fetching...");
 						startButton.setEnabled(false);
 						stopButton.setEnabled(true);
 					}

@@ -229,6 +229,8 @@ public class InstanceConfiguration {
 			// Get API
 			// Use api to get server
 			// Get roles from server
+			// Make sure it's logged in to get roles
+			DiscordBot.getBotInstance().login();
 			// For every role, make a CanvaCordRole out of it and put it in registeredRoles
 			DiscordApi api = DiscordBot.getBotInstance().getApi();
 			Server server = api.getServerById(getServerID()).orElseThrow();
