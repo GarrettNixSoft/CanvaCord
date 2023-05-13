@@ -63,7 +63,11 @@ public class RoleRegistration {
 		}
 
 		// Create roles for Meeting Reminders and Meeting Markers if configured to do so
-		if (instance.doMeetingReminders() && instance.createRemindersRole()) {
+		if (existingRoles.containsKey("Meeting Reminders")) {
+			Role remindersRole = existingRoles.get("Meeting Reminders");
+			instance.getConfiguration().setRemindersRoleID(remindersRole.getId());
+		}
+		else if (instance.doMeetingReminders() && instance.createRemindersRole()) {
 			roleBuilder.setName("Meeting Reminders");
 			roleBuilder.setColor(Color.GREEN);
 			Role remindersRole = roleBuilder.create().join();
@@ -71,7 +75,11 @@ public class RoleRegistration {
 			LOGGER.debug("Created reminders role");
 		}
 
-		if (instance.doMeetingMarkers() && instance.createMarkersRole()) {
+		if (existingRoles.containsKey("Meeting Markers")) {
+			Role markersRole = existingRoles.get("Meeting Markers");
+			instance.getConfiguration().setMarkersRoleID(markersRole.getId());
+		}
+		else if (instance.doMeetingMarkers() && instance.createMarkersRole()) {
 			roleBuilder.setName("Meeting Markers");
 			roleBuilder.setColor(Color.ORANGE);
 			Role markersRole = roleBuilder.create().join();

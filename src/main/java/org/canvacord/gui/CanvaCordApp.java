@@ -241,6 +241,7 @@ public class CanvaCordApp extends JFrame {
 		if (!splitPane.getLeftComponent().equals(instancesPane))
 			splitPane.setLeftComponent(instancesPane);
 		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
+		addInstanceDescription(instance);
 	}
 
 	/**
@@ -255,6 +256,7 @@ public class CanvaCordApp extends JFrame {
 		SwingUtilities.invokeLater(() -> splitPane.setDividerLocation(0.75));
 		if (instanceCells.isEmpty())
 			splitPane.setLeftComponent(noInstancesPanel);
+		removeInstanceDescription(cell.getInstance());
 	}
 
 	private void addInstanceDescription(Instance instance) {
@@ -262,7 +264,7 @@ public class CanvaCordApp extends JFrame {
 		detailsPanel.add(instance.getInstanceID(), instanceDetailsPanel);
 	}
 
-	private void removeInstanceDescription(InstanceDetailsPanel instanceDetailsPanel) {
+	private void removeInstanceDescription(Instance instance) {
 		// TODO
 	}
 
@@ -368,7 +370,7 @@ public class CanvaCordApp extends JFrame {
 				// User clicked an Instance
 				InstanceCell clickedCell = (InstanceCell) event.getPayload()[0];
 
-				System.out.println("User clicked " + clickedCell.getInstance().getName());
+//				System.out.println("User clicked " + clickedCell.getInstance().getName());
 
 				((CardLayout) detailsPanel.getLayout()).show(detailsPanel, clickedCell.getInstance().getInstanceID());
 
