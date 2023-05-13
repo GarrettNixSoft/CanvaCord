@@ -1,5 +1,7 @@
 package org.canvacord.scheduler.job;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.instance.Instance;
@@ -17,6 +19,8 @@ import org.quartz.JobExecutionException;
 
 public class MeetingMarkerJob implements Job {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 
@@ -26,6 +30,8 @@ public class MeetingMarkerJob implements Job {
 		String type = StringUtils.uppercaseWords(dataMap.getString("type"));
 		long channelID = instance.getMeetingRemindersChannel();
 		long roleID = instance.getMeetingRemindersRole();
+
+		LOGGER.debug("Meeting marker role ID: " + roleID);
 
 		DiscordApi api = DiscordBot.getBotInstance().getApi();
 		ServerTextChannel channel = api.getTextChannelById(channelID).get().asServerTextChannel().get();
@@ -37,14 +43,16 @@ public class MeetingMarkerJob implements Job {
 			AllowedMentions allowedMentions = new AllowedMentionsBuilder()
 					.setMentionRoles(true)
 					.setMentionEveryoneAndHere(false)
+					.addRole(roleID)
 					.build();
 			messageBuilder.setAllowedMentions(allowedMentions);
-			messageBuilder.append(api.getRoleById(roleID));
+			messageBuilder.append(api.getRoleById(roleID).get().getMentionTag());
+//			LOGGER.debug("Appended role to Meeting Marker message");
 		}
 
 		String timeString = type.equals("Start") ? meeting.getStartDescription() : meeting.getEndDescription();
 
-		messageBuilder.setContent(" " + type + " of meeting for " + CanvaCordTime.getTodayString() + " at " + timeString);
+		messageBuilder.append(" " + type + " of meeting for " + CanvaCordTime.getTodayString() + " at " + timeString);
 		messageBuilder.send(channel);
 
 	}

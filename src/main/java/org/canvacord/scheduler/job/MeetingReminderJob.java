@@ -36,10 +36,10 @@ public class MeetingReminderJob implements Job {
 					.setMentionEveryoneAndHere(false)
 					.build();
 			messageBuilder.setAllowedMentions(allowedMentions);
-			messageBuilder.append(api.getRoleById(roleID));
+			messageBuilder.append(api.getRoleById(roleID).get().getMentionTag());
 		}
 
-		messageBuilder.setContent(" The next class meeting begins in " + reminderSchedule + " minutes!");
+		messageBuilder.append(" The next class meeting begins in " + reminderSchedule + " minutes!");
 		messageBuilder.send(channel);
 
 	}

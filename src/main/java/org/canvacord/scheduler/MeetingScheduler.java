@@ -2,6 +2,7 @@ package org.canvacord.scheduler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
@@ -46,6 +47,11 @@ public class MeetingScheduler {
 	 */
 	public static void scheduleInstance(Instance instance) throws SchedulerException {
 
+		LOGGER.debug("Adding " + instance.getName() + " to the MeetingScheduler");
+
+		// Add a list to the key map
+		meetingJobs.put(instance, new ArrayList<>());
+
 		if (instance.doMeetingReminders()) {
 			// Build a job for sending meeting reminders
 			JobDetail reminderJob = JobBuilder.newJob(MeetingReminderJob.class)
@@ -60,11 +66,8 @@ public class MeetingScheduler {
 			for (Trigger trigger : triggers)
 				meetingScheduler.scheduleJob(reminderJob, trigger);
 
-			// Add a list to the key map
-			meetingJobs.put(instance, new ArrayList<>());
-
 			// Log it
-			LOGGER.debug("Scheduled meeting reminders for instance " + instance.getInstanceID());
+			LOGGER.debug("Scheduled meeting reminders for instance " + instance.getName());
 		}
 
 		if (instance.doMeetingMarkers()) {
@@ -108,6 +111,8 @@ public class MeetingScheduler {
 				// SAVE THE KEYS
 				meetingJobs.get(instance).add(new JobKey(instance.getInstanceID() + classMeeting.getTimeDescription() + "_marker_start", GROUP_ID));
 				meetingJobs.get(instance).add(new JobKey(instance.getInstanceID() + classMeeting.getTimeDescription() + "_marker_end", GROUP_ID));
+
+				LOGGER.debug("Scheduled meeting markers for instance " + instance.getName());
 			}
 		}
 
@@ -154,6 +159,8 @@ public class MeetingScheduler {
 			// apply the schedule
 			triggerBuilder.withSchedule(CronScheduleBuilder.weeklyOnDayAndHourAndMinute(weekday, hour, minute));
 
+			LOGGER.debug("Reminders for " + instance.getName() + " are scheduled weekly for " + classMeeting.getWeekdayStr() + " at " + startHour + ":" + startMinute);
+
 			// add the trigger to the list
 			triggers.add(triggerBuilder.build());
 
@@ -167,11 +174,13 @@ public class MeetingScheduler {
 
 			// extract the meeting start time values
 			int weekday = CanvaCordTime.getDateBuilderIntForWeekday(classMeeting.getWeekday());
-			int startHour = classMeeting.getStartTime().getInt("hour");
+			String startAmpm = classMeeting.getStartTime().getString("ampm");
+			int startHour = CanvaCordTime.get24Hour(classMeeting.getStartTime().getInt("hour"), startAmpm);
 			int startMinute = classMeeting.getStartTime().getInt("minute");
 
 			// extract the meeting end time values
-			int endHour = classMeeting.getEndTime().getInt("hour");
+			String endAmpm = classMeeting.getEndTime().getString("ampm");
+			int endHour = CanvaCordTime.get24Hour(classMeeting.getEndTime().getInt("hour"), endAmpm);
 			int endMinute = classMeeting.getEndTime().getInt("minute");
 
 			// create a trigger builder with a unique identity for the start and end triggers
@@ -187,6 +196,8 @@ public class MeetingScheduler {
 			// build the trigger schedules
 			startTriggerBuilder.withSchedule(CronScheduleBuilder.weeklyOnDayAndHourAndMinute(weekday, startHour, startMinute));
 			endTriggerBuilder.withSchedule(CronScheduleBuilder.weeklyOnDayAndHourAndMinute(weekday, endHour, endMinute));
+
+			LOGGER.debug("Markers for this meeting within instance " + instance.getName() + " are scheduled weekly for " + classMeeting.getWeekdayStr() + " at " + startHour + ":" + startMinute + " and " + endHour + ":" + endMinute);
 
 			// build the triggers and add them to the list
 			triggers.add(new Pair<>(startTriggerBuilder.build(), endTriggerBuilder.build()));
