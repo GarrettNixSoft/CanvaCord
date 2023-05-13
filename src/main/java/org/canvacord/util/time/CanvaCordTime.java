@@ -107,6 +107,19 @@ public class CanvaCordTime {
 		}
 	}
 
+	public static String getFriendlyDateStringNoTime(LocalDateTime localDateTime) {
+		String month = StringUtils.uppercaseWords(localDateTime.getMonth().name());
+		int day = localDateTime.getDayOfMonth();
+
+		// check if years are important
+		if (localDateTime.getYear() != LocalDateTime.now().getYear()) {
+			return month + " " + day + getNumberSuffix(day) + ", " + localDateTime.getYear();
+		}
+		else {
+			return month + " " + day + getNumberSuffix(day);
+		}
+	}
+
 	public static String getFriendlyDateString(Date date) {
 		DateFormat formatter = getDateFormat();
 		return formatter.format(date);
@@ -115,9 +128,9 @@ public class CanvaCordTime {
 	public static String getNumberSuffix(int number) {
 		int onesPlace = number % 10;
 		return switch (onesPlace) {
-			case 1 -> "st";
-			case 2 -> "nd";
-			case 3 -> "rd";
+			case 1 -> number != 11 ? "st" : "th";
+			case 2 -> number != 12 ? "nd" : "th";
+			case 3 -> number != 13 ? "rd" : "th";
 			default -> "th";
 		};
 	}
@@ -140,7 +153,7 @@ public class CanvaCordTime {
 	}
 
 	public static String getTodayString() {
-		return getFriendlyDateString(LocalDateTime.now());
+		return getFriendlyDateStringNoTime(LocalDateTime.now());
 	}
 
 }
