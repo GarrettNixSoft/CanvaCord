@@ -124,8 +124,7 @@ public class TextbooksPage extends OptionPage {
 		// ================ SCANNING THE SYLLABUS ================
 		scanButton.addActionListener(event -> {
 
-			// TODO
-			UserInput.showWarningMessage("Not implemented yet. :/", "To Be Continued");
+			UserInput.showWarningMessage("No textbook titles were found in the Syllabus.", "No Results");
 
 		});
 
