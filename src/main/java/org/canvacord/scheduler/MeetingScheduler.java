@@ -16,9 +16,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class MeetingScheduler {
 
@@ -26,6 +24,8 @@ public class MeetingScheduler {
 
 	private static Scheduler meetingScheduler;
 	private static final String GROUP_ID = "meetings";
+
+	private static Map<Instance, List<JobKey>> meetingJobs;
 
 	/**
 	 * Initialize the Meeting scheduler. This prepares it for
@@ -35,6 +35,7 @@ public class MeetingScheduler {
 	public static void init() throws SchedulerException {
 
 		meetingScheduler = StdSchedulerFactory.getDefaultScheduler();
+		meetingJobs = new HashMap<>();
 		LOGGER.debug("Meeting Scheduler initialized");
 
 	}
@@ -59,10 +60,11 @@ public class MeetingScheduler {
 			for (Trigger trigger : triggers)
 				meetingScheduler.scheduleJob(reminderJob, trigger);
 
+			// Add a list to the key map
+			meetingJobs.put(instance, new ArrayList<>());
+
 			// Log it
 			LOGGER.debug("Scheduled meeting reminders for instance " + instance.getInstanceID());
-
-			// TODO
 		}
 
 		if (instance.doMeetingMarkers()) {
@@ -78,13 +80,15 @@ public class MeetingScheduler {
 						+ triggers.size() + " triggers");
 
 			for (int i = 0; i < triggers.size(); i++) {
+				// Get the associated meeting
+				ClassMeeting classMeeting = classMeetings.get(i);
 				// prepare start job builder
 				JobBuilder markerStartJob = JobBuilder.newJob(MeetingMarkerJob.class)
-						.withIdentity(instance.getInstanceID() + "_marker_start", GROUP_ID)
+						.withIdentity(instance.getInstanceID() + classMeeting.getTimeDescription() + "_marker_start", GROUP_ID)
 						.usingJobData("instanceID", instance.getInstanceID());
 				// prepare end job builder
 				JobBuilder markerEndJob = JobBuilder.newJob(MeetingMarkerJob.class)
-						.withIdentity(instance.getInstanceID() + "_marker_end", GROUP_ID)
+						.withIdentity(instance.getInstanceID() + classMeeting.getTimeDescription() + "_marker_end", GROUP_ID)
 						.usingJobData("instanceID", instance.getInstanceID());
 				// Build the start job
 				JobDataMap startDataMap = new JobDataMap();
@@ -101,6 +105,9 @@ public class MeetingScheduler {
 				// SCHEDULE THE JOBS
 				meetingScheduler.scheduleJob(markerStartJob.build(), triggers.get(i).first());
 				meetingScheduler.scheduleJob(markerEndJob.build(), triggers.get(i).second());
+				// SAVE THE KEYS
+				meetingJobs.get(instance).add(new JobKey(instance.getInstanceID() + classMeeting.getTimeDescription() + "_marker_start", GROUP_ID));
+				meetingJobs.get(instance).add(new JobKey(instance.getInstanceID() + classMeeting.getTimeDescription() + "_marker_end", GROUP_ID));
 			}
 		}
 
@@ -117,8 +124,9 @@ public class MeetingScheduler {
 			meetingScheduler.deleteJob(remindersKey);
 		}
 		if (instance.doMeetingMarkers()) {
-			JobKey markersKey = new JobKey(instance.getInstanceID() + "_meeting_markers", GROUP_ID);
-			meetingScheduler.deleteJob(markersKey);
+			for (JobKey jobKey : meetingJobs.get(instance)) {
+				meetingScheduler.deleteJob(jobKey);
+			}
 		}
 	}
 
