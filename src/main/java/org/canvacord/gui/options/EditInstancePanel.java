@@ -4,6 +4,7 @@ import edu.ksu.canvas.model.Course;
 import edu.ksu.canvas.model.User;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.entity.CanvaCordNotificationTarget;
+import org.canvacord.entity.ClassMeeting;
 import org.canvacord.gui.options.page.*;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceConfiguration;
@@ -94,6 +95,7 @@ public class EditInstancePanel extends OptionsPanel {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	protected void complete(boolean success) {
 
 		// Don't write any changes if the editor failed
@@ -110,6 +112,7 @@ public class EditInstancePanel extends OptionsPanel {
 		instanceConfiguration.setConfiguredNotifications((JSONArray) dataStore.get("configured_notifications"));
 		instanceConfiguration.setHasSyllabus((Boolean) dataStore.get("has_syllabus"));
 		instanceConfiguration.setTextbooks((JSONArray) dataStore.get("textbooks"));
+		instanceConfiguration.setClassSchedule((List<ClassMeeting>) dataStore.get("class_schedule"));
 		instanceConfiguration.setDoMeetingReminders((Boolean) dataStore.get("do_meeting_reminders"));
 		instanceConfiguration.setCreateRemindersRole((Boolean) dataStore.get("create_reminders_role"));
 		instanceConfiguration.setClassRemindersSchedule((Integer) dataStore.get("class_reminders_schedule"));

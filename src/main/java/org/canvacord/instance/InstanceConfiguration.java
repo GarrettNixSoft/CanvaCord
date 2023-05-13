@@ -362,6 +362,14 @@ public class InstanceConfiguration {
 		configJSON.put("canvas_fetch_schedule", fetchSchedule);
 	}
 
+	public void setClassSchedule(List<ClassMeeting> classSchedule) {
+		JSONArray meetingArray = new JSONArray();
+		for (ClassMeeting classMeeting : classSchedule) {
+			meetingArray.put(classMeeting.getJSON());
+		}
+		configJSON.put("class_schedule", meetingArray);
+	}
+
 	public void setConfiguredRoles(JSONArray rolesArray) {
 		configJSON.put("roles", rolesArray);
 	}

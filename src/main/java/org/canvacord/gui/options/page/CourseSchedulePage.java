@@ -115,7 +115,7 @@ public class CourseSchedulePage extends OptionPage {
 
 	@Override
 	protected void verifyInputs() throws Exception {
-		// TODO
+		dataStore.store("class_schedule", classSchedule);
 	}
 
 	private static class ClassMeetingCellRenderer extends JLabel implements ListCellRenderer<ClassMeeting> {
