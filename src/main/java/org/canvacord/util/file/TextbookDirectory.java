@@ -11,7 +11,7 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class TextbookDirectory {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(TextbookDirectory.class);
 
     /**
      * Checks for existing files and finds vacant number

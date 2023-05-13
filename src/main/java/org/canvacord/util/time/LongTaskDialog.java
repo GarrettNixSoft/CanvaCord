@@ -10,7 +10,7 @@ import java.awt.*;
 
 public class LongTaskDialog extends JDialog {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(LongTaskDialog.class);
 
 	private final LongTask task;
 

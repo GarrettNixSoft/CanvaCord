@@ -18,7 +18,7 @@ import java.util.List;
 
 public class NotificationScheduler {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(NotificationScheduler.class);
 
 	private static Scheduler notifyScheduler;
 	private static final String GROUP_ID = "discordNotify";

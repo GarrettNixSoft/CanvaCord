@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 public class CommandRegistration {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(CommandRegistration.class);
 
 	public static void registerCommands(Instance instance) {
 

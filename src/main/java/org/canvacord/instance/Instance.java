@@ -30,7 +30,7 @@ import java.util.Set;
 
 public class Instance {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(Instance.class);
 
 	// enforcing uniqueness
 	private static final Set<String> courseIDs = new HashSet<>();

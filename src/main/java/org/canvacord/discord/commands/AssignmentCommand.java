@@ -8,6 +8,7 @@ import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.*;
 import org.javacord.api.entity.message.component.Button;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -90,6 +91,10 @@ public class AssignmentCommand extends Command implements ButtonClickListener {
 		instance = InstanceManager.getInstanceByServerID(server.getId()).orElseThrow(()->new CanvaCordException("Instance not found"));
 		CanvasApi canvasApi = CanvasApi.getInstance();
 		String courseID = instance.getCourseID();
+
+		if (!instance.getCommandAvailability().getBoolean("assignment")) {
+			interaction.createImmediateResponder().setFlags(MessageFlag.EPHEMERAL).setContent("Assignment commands are disabled for this CanvaCord instance.").respond();
+		}
 
 		// Use respondLater to send a response that takes longer than 3 seconds
 		// set the value to true to make it ephemeral

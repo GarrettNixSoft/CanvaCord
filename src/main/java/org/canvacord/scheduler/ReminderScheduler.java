@@ -11,7 +11,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 public class ReminderScheduler {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(ReminderScheduler.class);
 
 	private static Scheduler reminderScheduler;
 	private static final String GROUP_ID = "remindMe";

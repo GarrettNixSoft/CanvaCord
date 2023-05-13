@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class InstanceLoader {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(InstanceLoader.class);
 
 	/**
 	 * Load a saved CanvaCord instance configuration from disk.

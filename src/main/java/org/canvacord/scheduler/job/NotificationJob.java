@@ -22,7 +22,7 @@ import java.util.List;
 
 public class NotificationJob implements Job {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(NotificationJob.class);
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {

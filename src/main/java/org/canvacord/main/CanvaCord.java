@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class CanvaCord {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(CanvaCord.class);
 
 	public static final String VERSION_ID = "v0.0.1";
 

@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class InstanceConfiguration {
 
-	private static Logger LOGGER = LogManager.getLogger();
+	private static Logger LOGGER = LogManager.getLogger(InstanceConfiguration.class);
 
 	private static JSONObject defaultConfigJSON;
 

@@ -23,7 +23,7 @@ import java.util.*;
 
 public class CacheManager {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(CacheManager.class);
 
 	private static final HashMap<String, InstanceData> instanceData = new HashMap<>();
 

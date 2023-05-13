@@ -9,7 +9,7 @@ import org.quartz.JobExecutionException;
 
 public class CanvasFetchJob implements Job {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(CanvasFetchJob.class);
 
     private String instanceID;
 

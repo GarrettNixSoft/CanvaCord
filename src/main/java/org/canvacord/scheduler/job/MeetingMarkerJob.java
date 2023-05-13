@@ -19,7 +19,7 @@ import org.quartz.JobExecutionException;
 
 public class MeetingMarkerJob implements Job {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(MeetingMarkerJob.class);
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {

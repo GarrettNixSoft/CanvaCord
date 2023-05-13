@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class InstanceManager {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(InstanceManager.class);
 
 	private static final Map<String, Instance> instances;
 	private static final List<Instance> runningInstances;

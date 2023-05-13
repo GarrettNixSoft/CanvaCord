@@ -34,7 +34,7 @@ public class SyllabusFetcher {
 	private static final String[] validExtensions = {"txt","pdf", "doc","docx"};
 	private static final String token = ConfigManager.getCanvasToken();
 	private static final String canvasBaseUrl = ConfigManager.getCanvasURL();
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(SyllabusFetcher.class);
 
 
 	/**

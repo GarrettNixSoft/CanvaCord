@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class CanvasFetchScheduler {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(CanvasFetchScheduler.class);
 
 	private static Scheduler fetchScheduler;
 	private static final String GROUP_ID = "canvasFetch";

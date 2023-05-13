@@ -10,7 +10,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 public class CanvaCordScheduler {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(CanvaCordScheduler.class);
 
 	// A scheduler provided by Quartz
 	private static Scheduler scheduler;

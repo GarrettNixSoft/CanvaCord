@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class CommandHandler {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(CommandHandler.class);
 
 	private static final Map<Long, Class<? extends Command>> globalCommands = new HashMap<>();
 	private static final Map<String, Map<Long, Class<? extends Command>>> serverCommands = new HashMap<>();

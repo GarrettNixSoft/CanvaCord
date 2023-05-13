@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class RoleRegistration {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(RoleRegistration.class);
 
 	public static void registerRoles(Instance instance) {
 

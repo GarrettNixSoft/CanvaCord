@@ -9,7 +9,7 @@ import java.nio.file.Files;
 
 public class InstanceCleanUp {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(InstanceCleanUp.class);
 
 	public static void runInstanceCleanup(Instance instance) {
 		// delete the cache data

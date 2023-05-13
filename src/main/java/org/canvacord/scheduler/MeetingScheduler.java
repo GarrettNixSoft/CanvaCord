@@ -21,7 +21,7 @@ import java.util.*;
 
 public class MeetingScheduler {
 
-	private static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger(MeetingScheduler.class);
 
 	private static Scheduler meetingScheduler;
 	private static final String GROUP_ID = "meetings";
