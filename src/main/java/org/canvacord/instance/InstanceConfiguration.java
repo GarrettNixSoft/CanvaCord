@@ -23,6 +23,8 @@ import org.json.JSONObject;
 
 import java.awt.*;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
@@ -35,8 +37,8 @@ public class InstanceConfiguration {
 	private static JSONObject defaultConfigJSON;
 
 	static {
-		File defaultConfigJSONFile = Paths.get("resources/default_config.json").toFile();
-		Optional<JSONObject> defaultConfigJSON = FileUtil.getJSON(defaultConfigJSONFile);
+		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(("default_config.json"));
+		Optional<JSONObject> defaultConfigJSON = FileUtil.getJSON(inputStream);
 		if (defaultConfigJSON.isPresent()) {
 			InstanceConfiguration.defaultConfigJSON = defaultConfigJSON.get();
 		}

@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -50,7 +51,37 @@ public class FileUtil {
 		return Optional.of(data);
 	}
 
+	public static Optional<List<String>> getFileData(InputStream file) {
+		List<String> data = new ArrayList<>();
+		try {
+			InputStream in = file;
+//			if (in == null)
+//				in = ResourceLoader.getResourceAsStream(file.getPath());
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			while (true) {
+				String line = reader.readLine();
+				if (line == null) break;
+				data.add(line);
+			}
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Optional.empty();
+		}
+		return Optional.of(data);
+	}
+
 	public static Optional<JSONObject> getJSON(File file) {
+		Optional<List<String>> fileData = getFileData(file);
+		if (fileData.isEmpty())
+			return Optional.empty();
+		else {
+			String combined = StringConverter.combineAll(fileData.get());
+			return Optional.of(new JSONObject(combined));
+		}
+	}
+
+	public static Optional<JSONObject> getJSON(InputStream file) {
 		Optional<List<String>> fileData = getFileData(file);
 		if (fileData.isEmpty())
 			return Optional.empty();
