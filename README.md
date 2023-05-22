@@ -1,3 +1,5 @@
+![CanvaCord Logo](/resources/logo.png)
+
 # CanvaCord
 
 CanvaCord is an open-source tool for creating links between a student Canvas account and the Discord social platform.
