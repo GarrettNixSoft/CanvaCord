@@ -1,4 +1,4 @@
-![CanvaCord logo>](/resources/logo.png|width=200)
+<img src="https://github.com/GarrettNixSoft/CanvaCord/blob/master/resources/logo.png?raw=true" width="200" />
 
 # CanvaCord
 
