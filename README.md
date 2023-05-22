@@ -1,4 +1,4 @@
-![CanvaCord Logo](/resources/logo.png)
+![<img src="./resources/logo.png" width="200" />](/resources/logo.png)
 
 # CanvaCord
 
