@@ -1,4 +1,4 @@
-<p align="center>
+<p align="center">
   <img src="https://github.com/GarrettNixSoft/CanvaCord/blob/master/resources/logo.png?raw=true" width="200" />
 </p>
 
