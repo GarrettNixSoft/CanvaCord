@@ -1,7 +1,6 @@
 package org.canvacord;
 
 import org.canvacord.instance.Instance;
-import org.canvacord.instance.InstanceLoader;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.CacheManager;
 

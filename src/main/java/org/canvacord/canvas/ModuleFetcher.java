@@ -1,7 +1,6 @@
 package org.canvacord.canvas;
 
 import edu.ksu.canvas.model.Module;
-import org.canvacord.persist.CacheManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

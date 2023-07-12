@@ -8,7 +8,6 @@ import org.canvacord.gui.dialog.NotificationCreateDialog;
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.WizardCard;
 import org.canvacord.instance.Instance;
-import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.resources.ImageLoader;
 import org.canvacord.util.string.StringUtils;

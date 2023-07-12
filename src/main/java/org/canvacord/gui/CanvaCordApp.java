@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.event.CanvaCordEvent;
 import org.canvacord.event.CanvaCordEventHandler;
-import org.canvacord.event.CanvaCordEventListener;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.component.InstanceCell;
 import org.canvacord.gui.component.InstanceDetailsPanel;

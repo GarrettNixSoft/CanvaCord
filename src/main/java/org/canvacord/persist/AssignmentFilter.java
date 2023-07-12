@@ -4,7 +4,10 @@ import edu.ksu.canvas.model.assignment.Assignment;
 import org.canvacord.instance.Instance;
 import org.canvacord.util.data.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class AssignmentFilter {
 

@@ -1,16 +1,10 @@
 package org.canvacord;
 
 import edu.ksu.canvas.model.announcement.Announcement;
-import edu.ksu.canvas.model.assignment.Assignment;
 import org.canvacord.canvas.CanvasApi;
-import org.canvacord.discord.DiscordBot;
 import org.canvacord.persist.ConfigManager;
-import org.javacord.api.DiscordApi;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Date;
 import java.util.List;
 
 public class AnnouncementTest {

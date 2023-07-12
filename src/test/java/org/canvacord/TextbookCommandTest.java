@@ -5,7 +5,6 @@ import org.canvacord.discord.commands.TextbookCommand;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
 import org.javacord.api.DiscordApi;
-
 import org.javacord.api.interaction.SlashCommandInteraction;
 
 public class TextbookCommandTest {

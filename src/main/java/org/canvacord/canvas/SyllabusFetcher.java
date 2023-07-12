@@ -6,24 +6,22 @@ import edu.ksu.canvas.model.Module;
 import edu.ksu.canvas.requestOptions.GetSingleCourseOptions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
-import org.canvacord.exception.CanvaCordException;
 import org.canvacord.util.net.RemoteFileGetter;
-import org.checkerframework.checker.nullness.Opt;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.swing.text.html.Option;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
-import java.util.List;
 
 import static org.canvacord.util.file.CanvaCordPaths.getInstanceDirPath;
 

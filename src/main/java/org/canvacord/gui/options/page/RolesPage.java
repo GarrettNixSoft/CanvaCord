@@ -12,7 +12,6 @@ import org.canvacord.util.resources.ImageLoader;
 import org.json.JSONArray;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;

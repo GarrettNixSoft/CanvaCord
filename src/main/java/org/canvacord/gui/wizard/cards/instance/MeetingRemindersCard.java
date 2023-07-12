@@ -13,7 +13,6 @@ import org.canvacord.util.input.UserInput;
 import org.javacord.api.entity.channel.ServerChannel;
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.server.Server;
-import org.json.JSONObject;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

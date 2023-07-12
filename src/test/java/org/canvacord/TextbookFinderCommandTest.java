@@ -1,12 +1,10 @@
 package org.canvacord;
 
 import org.canvacord.discord.DiscordBot;
-import org.canvacord.discord.commands.TextbookCommand;
 import org.canvacord.discord.commands.TextbookFinderCommand;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
 import org.javacord.api.DiscordApi;
-
 import org.javacord.api.interaction.SlashCommandInteraction;
 
 public class TextbookFinderCommandTest {

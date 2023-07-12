@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.discord.commands.Command;
-import org.canvacord.discord.commands.CommandBuilder;
 import org.canvacord.discord.commands.CommandHandler;
 import org.canvacord.instance.Instance;
 import org.javacord.api.DiscordApi;

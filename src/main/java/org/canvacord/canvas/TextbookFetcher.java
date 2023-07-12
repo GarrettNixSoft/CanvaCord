@@ -3,12 +3,10 @@ package org.canvacord.canvas;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
-import org.canvacord.util.Globals;
 import org.canvacord.util.file.TextbookScraper;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.List;
 import java.util.Optional;
 
 public class TextbookFetcher {

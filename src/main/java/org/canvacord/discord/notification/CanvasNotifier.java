@@ -5,7 +5,6 @@ import edu.ksu.canvas.model.assignment.Assignment;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.entity.CanvaCordNotification;
 import org.canvacord.entity.CanvaCordRole;
-import org.canvacord.gui.wizard.cards.instance.InstanceSetupWelcomeCard;
 import org.canvacord.instance.Instance;
 import org.canvacord.persist.CacheManager;
 import org.canvacord.util.data.ListSplitter;
@@ -18,15 +17,12 @@ import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.message.mention.AllowedMentions;
 import org.javacord.api.entity.message.mention.AllowedMentionsBuilder;
-import org.javacord.api.entity.permission.Role;
-import org.javacord.api.entity.permission.RoleBuilder;
 
 import java.awt.*;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CanvasNotifier {

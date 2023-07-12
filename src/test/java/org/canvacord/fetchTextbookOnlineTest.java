@@ -4,7 +4,6 @@ import org.canvacord.canvas.TextbookFetcher;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
-import org.canvacord.util.file.TextbookScraper;
 
 import java.io.IOException;
 

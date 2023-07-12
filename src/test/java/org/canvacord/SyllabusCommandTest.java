@@ -1,7 +1,6 @@
 package org.canvacord;
 
 import org.canvacord.discord.DiscordBot;
-import org.canvacord.discord.commands.RemindMeCommand;
 import org.canvacord.discord.commands.SyllabusCommand;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;

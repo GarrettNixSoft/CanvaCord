@@ -9,15 +9,12 @@ import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.options.EditInstancePanel;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
-import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.Globals;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.resources.ImageLoader;
-import org.quartz.SchedulerException;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;

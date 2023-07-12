@@ -1,7 +1,5 @@
 package org.canvacord.gui.options;
 
-import edu.ksu.canvas.model.Course;
-import edu.ksu.canvas.model.User;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.entity.CanvaCordNotificationTarget;
 import org.canvacord.entity.ClassMeeting;

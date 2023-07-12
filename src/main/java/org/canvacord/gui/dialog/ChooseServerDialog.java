@@ -1,17 +1,11 @@
 package org.canvacord.gui.dialog;
 
-import edu.ksu.canvas.model.Course;
-import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.DiscordBot;
-import org.canvacord.entity.CourseWrapper;
 import org.canvacord.entity.ServerWrapper;
 import org.canvacord.gui.CanvaCordFonts;
-import org.canvacord.persist.ConfigManager;
 import org.canvacord.util.input.UserInput;
 import org.canvacord.util.time.LongTask;
 import org.canvacord.util.time.LongTaskDialog;
-import org.javacord.api.DiscordApi;
-import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.server.Server;
 
 import javax.swing.*;

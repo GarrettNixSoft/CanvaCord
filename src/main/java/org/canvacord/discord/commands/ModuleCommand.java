@@ -8,6 +8,7 @@ import org.canvacord.persist.CacheManager;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.ActionRow;
+import org.javacord.api.entity.message.component.Button;
 import org.javacord.api.entity.message.component.LowLevelComponent;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
@@ -17,13 +18,11 @@ import org.javacord.api.interaction.callback.ComponentInteractionOriginalMessage
 import org.javacord.api.interaction.callback.InteractionOriginalResponseUpdater;
 import org.javacord.api.listener.interaction.ButtonClickListener;
 import org.json.JSONArray;
-import org.javacord.api.entity.message.component.Button;
-import org.json.JSONObject;
 
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 public class ModuleCommand extends Command implements ButtonClickListener {

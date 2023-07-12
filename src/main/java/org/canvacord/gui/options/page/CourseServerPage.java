@@ -4,8 +4,6 @@ import net.miginfocom.swing.MigLayout;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.options.OptionPage;
-import org.canvacord.gui.options.OptionsPanel;
-import org.canvacord.instance.Instance;
 
 import javax.swing.*;
 import java.awt.*;

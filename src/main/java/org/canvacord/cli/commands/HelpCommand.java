@@ -1,7 +1,6 @@
 package org.canvacord.cli.commands;
 
 import org.canvacord.cli.CanvaCordCLI;
-import org.canvacord.discord.commands.Command;
 import org.canvacord.util.data.Stack;
 
 public class HelpCommand extends CLICommand {

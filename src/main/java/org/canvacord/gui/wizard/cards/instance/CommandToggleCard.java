@@ -1,7 +1,5 @@
 package org.canvacord.gui.wizard.cards.instance;
 
-import org.canvacord.discord.commands.Command;
-import org.canvacord.discord.commands.RemindMeCommand;
 import org.canvacord.entity.CommandRecord;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.wizard.CanvaCordWizard;

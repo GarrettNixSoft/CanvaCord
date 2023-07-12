@@ -1,9 +1,8 @@
 package org.canvacord.discord.commands;
-import org.canvacord.exception.CanvaCordException;
 
+import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
-import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.component.*;
@@ -16,7 +15,10 @@ import org.javacord.api.interaction.callback.InteractionImmediateResponseBuilder
 import org.javacord.api.listener.interaction.ButtonClickListener;
 import org.javacord.api.listener.interaction.SelectMenuChooseListener;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeUnit;
 

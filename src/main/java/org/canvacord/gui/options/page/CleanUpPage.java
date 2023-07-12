@@ -5,7 +5,6 @@ import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceCleanUp;
-import org.canvacord.instance.InstanceConfiguration;
 import org.canvacord.util.input.UserInput;
 
 import javax.swing.*;

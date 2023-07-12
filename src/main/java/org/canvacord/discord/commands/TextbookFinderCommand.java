@@ -1,7 +1,5 @@
 package org.canvacord.discord.commands;
 
-import org.apache.logging.log4j.core.tools.picocli.CommandLine;
-import org.canvacord.canvas.CanvasApi;
 import org.canvacord.canvas.TextbookFetcher;
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.discord.DiscordBot;

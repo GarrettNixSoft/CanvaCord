@@ -1,7 +1,5 @@
 package org.canvacord.discord.commands;
 
-import org.apache.logging.log4j.core.tools.picocli.CommandLine;
-import org.canvacord.canvas.CanvasApi;
 import org.canvacord.canvas.TextbookFetcher;
 import org.canvacord.canvas.TextbookInfo;
 import org.canvacord.discord.DiscordBot;
@@ -14,7 +12,6 @@ import org.javacord.api.entity.message.MessageFlag;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.interaction.*;
-import org.javacord.api.interaction.callback.InteractionImmediateResponseBuilder;
 import org.javacord.api.interaction.callback.InteractionOriginalResponseUpdater;
 
 import java.awt.*;

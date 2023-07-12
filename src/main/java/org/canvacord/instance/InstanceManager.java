@@ -8,7 +8,6 @@ import org.canvacord.persist.CacheManager;
 import org.canvacord.setup.InstanceCreateWizard;
 import org.canvacord.util.file.FileUtil;
 import org.canvacord.util.input.UserInput;
-import org.quartz.SchedulerException;
 
 import java.io.File;
 import java.nio.file.Paths;

@@ -1,7 +1,6 @@
 package org.canvacord;
 
 import org.canvacord.discord.DiscordBot;
-import org.canvacord.instance.InstanceLoader;
 import org.canvacord.instance.InstanceManager;
 
 

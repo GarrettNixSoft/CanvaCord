@@ -1,21 +1,16 @@
 package org.canvacord;
 
-import edu.ksu.canvas.model.Conversation;
 import edu.ksu.canvas.model.assignment.Assignment;
 import edu.ksu.canvas.requestOptions.ListCourseAssignmentsOptions;
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.persist.ConfigManager;
 import org.javacord.api.DiscordApi;
-import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.channel.*;
-import org.javacord.api.entity.message.*;
-import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageSet;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

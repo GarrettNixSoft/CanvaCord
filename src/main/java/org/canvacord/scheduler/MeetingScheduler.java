@@ -2,11 +2,9 @@ package org.canvacord.scheduler;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.canvacord.entity.CanvaCordRole;
 import org.canvacord.entity.ClassMeeting;
 import org.canvacord.exception.CanvaCordException;
 import org.canvacord.instance.Instance;
-import org.canvacord.scheduler.job.CanvasFetchJob;
 import org.canvacord.scheduler.job.MeetingMarkerJob;
 import org.canvacord.scheduler.job.MeetingReminderJob;
 import org.canvacord.util.data.Pair;
@@ -14,10 +12,11 @@ import org.canvacord.util.time.CanvaCordTime;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MeetingScheduler {
 

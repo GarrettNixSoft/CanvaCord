@@ -1,7 +1,7 @@
 package org.canvacord.setup;
+
 import org.canvacord.gui.wizard.CanvaCordWizard;
 import org.canvacord.gui.wizard.cards.TokenSetupCard;
-import org.canvacord.util.input.UserInput;
 import org.canvacord.util.string.StringUtils;
 
 /**

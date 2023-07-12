@@ -8,7 +8,6 @@ import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.options.OptionPage;
 import org.canvacord.main.CanvaCord;
 import org.canvacord.util.CanvaCordModels;
-import org.canvacord.util.string.StringConverter;
 import org.canvacord.util.string.StringUtils;
 import org.canvacord.util.time.CanvaCordTime;
 import org.json.JSONArray;
@@ -16,7 +15,6 @@ import org.json.JSONObject;
 import org.quartz.CronExpression;
 
 import javax.swing.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -4,14 +4,10 @@ import org.canvacord.canvas.CanvasApi;
 import org.canvacord.discord.DiscordBot;
 import org.canvacord.discord.commands.CommandHandler;
 import org.canvacord.discord.commands.ModuleCommand;
-import org.canvacord.discord.commands.RemindMeCommand;
 import org.canvacord.instance.InstanceManager;
 import org.canvacord.persist.ConfigManager;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.server.Server;
-import org.javacord.api.interaction.SlashCommand;
-import org.javacord.api.interaction.SlashCommandInteraction;
-import org.json.JSONArray;
 
 import java.io.IOException;
 

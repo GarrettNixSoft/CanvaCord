@@ -2,13 +2,11 @@ package org.canvacord.gui.options.page;
 
 import net.miginfocom.swing.MigLayout;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import org.canvacord.canvas.CanvasApi;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.component.ImagePanel;
 import org.canvacord.gui.options.OptionPage;
-import org.canvacord.gui.wizard.cards.instance.CourseAndServerCard;
 import org.canvacord.instance.Instance;
 import org.canvacord.util.file.CanvaCordPaths;
 import org.canvacord.util.file.FileGetter;
@@ -18,7 +16,9 @@ import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 public class SyllabusPage extends OptionPage {
 

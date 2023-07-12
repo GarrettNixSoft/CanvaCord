@@ -1,6 +1,7 @@
 package org.canvacord.discord.commands;
 
 import org.javacord.api.entity.server.Server;
+
 import java.util.Set;
 
 import static org.canvacord.discord.commands.CommandHandler.registerCommandServer;

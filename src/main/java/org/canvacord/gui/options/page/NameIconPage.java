@@ -1,14 +1,11 @@
 package org.canvacord.gui.options.page;
 
 import net.miginfocom.swing.MigLayout;
-import org.canvacord.exception.CanvaCordException;
 import org.canvacord.exception.FileFormatException;
 import org.canvacord.gui.CanvaCordFonts;
 import org.canvacord.gui.options.OptionPage;
-import org.canvacord.instance.Instance;
 import org.canvacord.util.file.FileGetter;
 import org.canvacord.util.file.FileUtil;
-import org.canvacord.util.input.UserInput;
 
 import javax.swing.*;
 import java.io.File;

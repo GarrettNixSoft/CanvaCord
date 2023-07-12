@@ -11,8 +11,6 @@ import org.javacord.api.entity.Nameable;
 import org.javacord.api.entity.permission.Role;
 import org.javacord.api.entity.permission.RoleBuilder;
 import org.javacord.api.entity.server.Server;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.awt.*;
 import java.util.List;

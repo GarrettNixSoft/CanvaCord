@@ -9,8 +9,9 @@ import org.canvacord.instance.Instance;
 import org.canvacord.instance.InstanceManager;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageFlag;
-import org.javacord.api.entity.message.component.*;
+import org.javacord.api.entity.message.component.ActionRow;
 import org.javacord.api.entity.message.component.Button;
+import org.javacord.api.entity.message.component.LowLevelComponent;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.event.interaction.ButtonClickEvent;
@@ -21,8 +22,8 @@ import org.javacord.api.listener.interaction.ButtonClickListener;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
