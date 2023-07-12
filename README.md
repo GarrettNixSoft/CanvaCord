@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/GarrettNixSoft/CanvaCord/blob/master/resources/logo.png?raw=true" width="200" />
+</p>
+
 # CanvaCord
 
 CanvaCord is an open-source tool for creating links between a student Canvas account and the Discord social platform.
